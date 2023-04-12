@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\GradingSystemController;
 use App\Http\Controllers\Api\ProgramController;
 use App\Http\Controllers\Api\ProgramDurationController;
+use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -52,8 +53,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/view-courses', [CourseController::class, 'index']);
     Route::get('/course/{id}', [CourseController::class, 'show']);
 
+    Route::post('/add-user', [UserController::class, 'store']);
+
+
+    Route::get('/view-roles', [RolesController::class, 'index']);
+
 
     Route::post('/upload-excel-file', [ExcelController::class, 'uploadExcelFile']);
+
+
+
 
     /////////////////// users controller ////////////
     Route::get('/view-users', [UserController::class, 'index']);

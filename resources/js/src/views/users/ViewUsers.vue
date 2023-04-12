@@ -48,36 +48,43 @@
     <!-- Add user duration dialog -->
     <v-dialog v-model="addUserDialog" max-width="750px">
       <v-card>
-        <v-card-title>Add Course</v-card-title>
+        <v-card-title>Add User</v-card-title>
         <v-card-text>
           <v-form ref="addUserForm">
             <v-row>
               <v-col cols="6">
-                <v-text-field outlined v-model="addUserFormData.first_name" label="First Name"></v-text-field>
+                <v-text-field outlined v-model="addUserFormData.firstname" label="First Name"></v-text-field>
               </v-col>
               <v-col cols="6">
-                <v-text-field outlined v-model="addUserFormData.last_name" label="Middle Name"></v-text-field>
+                <v-text-field outlined v-model="addUserFormData.middlename" label="Middle Name"></v-text-field>
               </v-col>
             </v-row>
-            <v-text-field outlined v-model="addUserFormData.course_name" label="Last Name"></v-text-field>
+            <v-text-field outlined v-model="addUserFormData.lastname" label="Last Name"></v-text-field>
             <v-text-field outlined v-model="addUserFormData.username" label="Username"></v-text-field>
-            <v-text-field outlined v-model="addUserFormData.password" label="Password"></v-text-field>
-            <v-text-field outlined v-model="addUserFormData.confirm_password" label="Confirm Password"></v-text-field>
+            <v-text-field outlined v-model="addUserFormData.email" label="Email"></v-text-field>
+            <v-row>
+              <v-col cols="6">
+                <v-text-field outlined v-model="addUserFormData.password" label="Password"></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  outlined
+                  v-model="addUserFormData.password_confirmation"
+                  label="Confirm Password"
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
             <v-select
               outlined
-              v-model="addUserFormData.program_id"
-              :items="roles.map(program => ({ id: role.id, name: program.rank }))"
+              v-model="addUserFormData.role_id"
+              :items="roles.map(role => ({ id: role.id, name: role.rank }))"
               item-value="id"
               item-text="name"
               label="User Type"
             ></v-select>
-            <v-text-field
-              outlined
-              v-model="addUserFormData.residential_address"
-              label="Residential Address"
-            ></v-text-field>
-            <v-text-field outlined v-model="addUserFormData.phone_number" label="Phone Number"></v-text-field>
+            <v-text-field outlined v-model="addUserFormData.address" label="Residential Address"></v-text-field>
+            <v-text-field outlined v-model="addUserFormData.phonenumber" label="Phone Number"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -145,9 +152,16 @@ export default {
       //////////////// add new User /////////
       addUserDialog: false,
       addUserFormData: {
-        course_code: '',
-        course_name: '',
-        program_id: '',
+        firstname: '',
+        middlename: '',
+        lastname: '',
+        address: '',
+        phonenumber: '',
+        password: '',
+        password_confirmation: '',
+        role_id: '',
+        username: '',
+        email: '',
       },
 
       // edit User
