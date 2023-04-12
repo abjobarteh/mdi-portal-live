@@ -6,9 +6,20 @@ import store from '@/store'
 Vue.use(VueRouter)
 
 const routes = [
+  // {
+  //   path: '/',
+  //   redirect: 'registrar-dashboard',
+  // },
   {
     path: '/',
-    redirect: 'admin-dashboard',
+    beforeEnter: (to, from, next) => {
+      const userRole = store.getters.currentUser.role_id; // implement a function to retrieve the user's role
+      if (userRole === 1) {
+        next('/admin-dashboard'); // redirect to admin dashboard for role 1
+      } else if (userRole === 2) {
+        next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
+      }
+    }
   },
   {
     path: '/admin-dashboard',
@@ -63,7 +74,7 @@ const routes = [
   {
     path: '/add-employee',
     name: 'add-employee',
-    component: () => import('@/views/employees/AddEmployee.vue'),
+    component: () => import('@/views/Registrar/employees/AddEmployee.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -72,7 +83,7 @@ const routes = [
   {
     path: '/view-employees',
     name: 'view-employees',
-    component: () => import('@/views/employees/ViewEmployees.vue'),
+    component: () => import('@/views/Registrar/employees/ViewEmployees.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -81,7 +92,7 @@ const routes = [
   {
     path: '/add-grading',
     name: 'add-grading',
-    component: () => import('@/views/gradings/AddGrading.vue'),
+    component: () => import('@/views/Registrar/gradings/AddGrading.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -90,7 +101,7 @@ const routes = [
   {
     path: '/view-gradings',
     name: 'view-gradings',
-    component: () => import('@/views/gradings/ViewGradings.vue'),
+    component: () => import('@/views/Registrar/gradings/ViewGradings.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -100,7 +111,7 @@ const routes = [
   {
     path: '/view-departments',
     name: 'view-departments',
-    component: () => import('@/views/departments/ViewDepartments.vue'),
+    component: () => import('@/views/Registrar/departments/ViewDepartments.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -111,7 +122,7 @@ const routes = [
   {
     path: '/view-program-durations',
     name: 'view-program-durations',
-    component: () => import('@/views/program-duration/ViewProgramDurations.vue'),
+    component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -122,7 +133,7 @@ const routes = [
   {
     path: '/view-programs',
     name: 'view-programs',
-    component: () => import('@/views/programs/ViewPrograms.vue'),
+    component: () => import('@/views/Registrar/programs/ViewPrograms.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -133,7 +144,7 @@ const routes = [
   {
     path: '/view-courses',
     name: 'view-courses',
-    component: () => import('@/views/courses/ViewCourses.vue'),
+    component: () => import('@/views/Registrar/courses/ViewCourses.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -144,7 +155,7 @@ const routes = [
   {
     path: '/view-users',
     name: 'view-users',
-    component: () => import('@/views/users/ViewUsers.vue'),
+    component: () => import('@/views/Admin/users/ViewUsers.vue'),
     meta: {
       requiresAuth: true,
       roles: [1],

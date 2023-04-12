@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
-use App\Models\Program;
+use App\Models\ProgramDuration;
 use Illuminate\Http\Request;
 
-class ProgramController extends Controller
+class ProgramDurationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,10 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        $programs = Program::with(['department', 'duration'])->paginate(13);
+        $programDuration = ProgramDuration::paginate(13);
         return response()->json([
             'status' => 200,
-            'result' => $programs
+            'result' => $programDuration
         ]);
     }
 
@@ -40,24 +40,20 @@ class ProgramController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
-            'program_name' => 'required|max:255',
-            'program_abbreviation' => 'required',
-            'fee' => 'required',
-            'department_id' => 'required',
-            'program_duration_id' => 'required',
+            'duration' => 'required|max:255',
+            'description' => 'required',
 
         ]);
-        Program::create([
-            'name' => $validatedData['program_name'],
-            'program_abbreviation' => $validatedData['program_abbreviation'],
-            'fee' => $validatedData['fee'],
-            'department_id' => $validatedData['department_id'],
-            'program_duration_id' => $validatedData['program_duration_id'],
+        ProgramDuration::create([
+            'duration' => $validatedData['duration'],
+            'description' => $validatedData['description'],
+
 
         ]);
 
-        return response()->json(['message' => 'Program created successfully.']);
+        return response()->json(['message' => 'ProgramDuration created successfully.']);
     }
 
     /**
@@ -68,7 +64,7 @@ class ProgramController extends Controller
      */
     public function show($id)
     {
-        $employee = Program::find($id);
+        $employee = ProgramDuration::find($id);
 
         return response()->json([
             'status' => 200,

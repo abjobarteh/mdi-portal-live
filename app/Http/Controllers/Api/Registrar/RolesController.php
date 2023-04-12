@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
-use App\Models\Employee;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
-class EmployeeController extends Controller
+class RolesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::paginate(13);
+        $programs = Role::paginate(13);
         return response()->json([
             'status' => 200,
-            'result' => $employees
+            'result' => $programs
         ]);
     }
 
@@ -40,21 +40,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'firstname' => 'required|max:255',
-            'lastname' => 'required',
-            'address' => 'required',
-            'telephone' => 'required|min:4',
-        ]);
-        Employee::create([
-            'firstname' => $validatedData['firstname'],
-            'lastname' => $validatedData['lastname'],
-            'address' => $validatedData['address'],
-            'telephone' => $validatedData['telephone'],
-
-        ]);
-
-        return response()->json(['message' => 'Employee created successfully.']);
+        //
     }
 
     /**
@@ -65,12 +51,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = Employee::find($id);
-
-        return response()->json([
-            'status' => 200,
-            'result' => $employee
-        ]);
+        //
     }
 
     /**

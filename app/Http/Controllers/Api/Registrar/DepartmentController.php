@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
+use App\Models\Department;
 use Illuminate\Http\Request;
 
-class RolesController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,10 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $programs = Role::paginate(13);
+        $departments = Department::paginate(13);
         return response()->json([
             'status' => 200,
-            'result' => $programs
+            'result' => $departments
         ]);
     }
 
@@ -40,7 +40,14 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+        ]);
+        Department::create([
+            'name' => $validatedData['name'],
+        ]);
+
+        return response()->json(['message' => 'Department created successfully.']);
     }
 
     /**
@@ -51,7 +58,12 @@ class RolesController extends Controller
      */
     public function show($id)
     {
-        //
+        $department = Department::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'result' => $department
+        ]);
     }
 
     /**

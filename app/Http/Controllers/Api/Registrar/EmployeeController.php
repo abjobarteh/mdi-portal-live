@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
-use App\Models\GradingSystem;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
-class GradingSystemController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class GradingSystemController extends Controller
      */
     public function index()
     {
-        $employees = GradingSystem::paginate(13);
+        $employees = Employee::paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $employees
@@ -41,20 +41,20 @@ class GradingSystemController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'mark_from' => 'required|max:255',
-            'mark_to' => 'required',
-            'grade' => 'required',
-            'interpretation' => 'required|min:4',
+            'firstname' => 'required|max:255',
+            'lastname' => 'required',
+            'address' => 'required',
+            'telephone' => 'required|min:4',
         ]);
-        GradingSystem::create([
-            'mark_from' => $validatedData['mark_from'],
-            'mark_to' => $validatedData['mark_to'],
-            'grade' => $validatedData['grade'],
-            'interpretation' => $validatedData['interpretation'],
+        Employee::create([
+            'firstname' => $validatedData['firstname'],
+            'lastname' => $validatedData['lastname'],
+            'address' => $validatedData['address'],
+            'telephone' => $validatedData['telephone'],
 
         ]);
 
-        return response()->json(['message' => 'GradingSystem created successfully.']);
+        return response()->json(['message' => 'Employee created successfully.']);
     }
 
     /**
@@ -65,7 +65,7 @@ class GradingSystemController extends Controller
      */
     public function show($id)
     {
-        $employee = GradingSystem::find($id);
+        $employee = Employee::find($id);
 
         return response()->json([
             'status' => 200,
