@@ -20,7 +20,7 @@
             class="elevation-1"
             hide-default-footer
           >
-            <template v-slot:item.status="{ item }">
+            <template v-slot:status="{ item }">
               <fas
                 @click="blockUser(item.id)"
                 v-if="item.is_active == 1"
@@ -29,13 +29,13 @@
               />
               <fas @click="UnBlockUser(item.id)" v-else icon="fa-solid fa-ban" style="color: red; font-size: 24px" />
             </template>
-            <template v-slot:item.fullname="{ item }">
+            <template v-slot:fullname="{ item }">
               {{ item.firstname + ' ' + item.lastname }}
             </template>
-            <template v-slot:item.created_at_abbreviated="{ item }">
+            <template v-slot:created_at_abbreviated="{ item }">
               {{ item.created_at.substring(0, 10) }}
             </template>
-            <template v-slot:item.action="{ item }">
+            <template v-slot:action="{ item }">
               <v-btn small color="primary" @click="editUser(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteUser(item)">Delete</v-btn>
             </template>

@@ -20,10 +20,10 @@
             class="elevation-1"
             hide-default-footer
           >
-            <template v-slot:item.duration="{ item }">
+            <template v-slot:duration="{ item }">
               {{ item.duration.duration }} {{ item.duration.description }}
             </template>
-            <template v-slot:item.action="{ item }">
+            <template v-slot:action="{ item }">
               <v-btn small color="primary" @click="editProgram(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteProgram(item)">Delete</v-btn>
             </template>

@@ -20,7 +20,7 @@
             class="elevation-1"
             hide-default-footer
           >
-            <template v-slot:item.action="{ item }">
+            <template v-slot:action="{ item }">
               <v-btn small color="primary" @click="editCourse(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteCourse(item)">Delete</v-btn>
             </template>
