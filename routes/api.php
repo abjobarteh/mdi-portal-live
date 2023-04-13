@@ -58,8 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/course/{id}', [CourseController::class, 'show']);
 
         Route::post('/add-user', [UserController::class, 'store']);
-
-        Route::get('/view-roles', [RolesController::class, 'index']);
     });
 
 
@@ -69,6 +67,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
+
+        Route::get('/view-roles', [RolesController::class, 'index']);
     });
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
 });

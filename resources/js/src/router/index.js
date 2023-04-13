@@ -13,11 +13,18 @@ const routes = [
   {
     path: '/',
     beforeEnter: (to, from, next) => {
-      const userRole = store.getters.currentUser.role_id; // implement a function to retrieve the user's role
-      if (userRole === 1) {
-        next('/admin-dashboard'); // redirect to admin dashboard for role 1
-      } else if (userRole === 2) {
-        next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
+      const currentUser = store.getters.currentUser; // get the current user object
+      if (currentUser === null) {
+        next('/login'); // redirect to login if currentUser is null
+      } else {
+        const userRole = currentUser.role_id; // get the user's role
+        if (userRole === undefined) {
+          next('/login'); // redirect to login if user role is undefined
+        } else if (userRole === 1) {
+          next('/admin-dashboard'); // redirect to admin dashboard for role 1
+        } else if (userRole === 2) {
+          next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
+        }
       }
     }
   },
@@ -212,9 +219,17 @@ router.beforeEach(async (to, from, next) => {
   if (requiresAuth && !isLoggedIn) {
     next({ name: 'pages-login' })
   } else if (isLoggedIn && (to.name === 'pages-login' || to.name === 'pages-register')) {
-    next({ name: 'dashboard' })
+    // next({ name: 'dashboard' })
+    const userRole = currentUser.role_id; // get the user's role
+    if (userRole === undefined) {
+      next('/login'); // redirect to login if user role is undefined
+    } else if (userRole === 1) {
+      next('/admin-dashboard'); // redirect to admin dashboard for role 1
+    } else if (userRole === 2) {
+      next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
+    }
   }
-  else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) {
+  else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this
     next('/error-404')
   }
   else {
