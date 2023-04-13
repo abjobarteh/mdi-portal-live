@@ -32,7 +32,7 @@
             <v-text-field
               v-model="auth.email"
               outlined
-              label="Email"
+              label="Email/Username"
               placeholder="john@example.com"
               hide-details
               class="mb-3"
