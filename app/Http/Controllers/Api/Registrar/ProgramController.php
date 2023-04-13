@@ -107,6 +107,7 @@ class ProgramController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = Program::find($id);
+        $department->delete();
     }
 }

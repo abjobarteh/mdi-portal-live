@@ -101,6 +101,7 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = Course::find($id);
+        $department->delete();
     }
 }

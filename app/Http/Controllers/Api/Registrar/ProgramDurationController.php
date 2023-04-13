@@ -103,6 +103,7 @@ class ProgramDurationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = ProgramDuration::find($id);
+        $department->delete();
     }
 }

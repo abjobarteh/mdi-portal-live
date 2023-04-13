@@ -25,7 +25,7 @@
             </template>
             <template v-slot:item.action="{ item }">
               <v-btn small color="primary" @click="editProgram(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteItem(item)">Delete</v-btn>
+              <v-btn small color="error" @click="deleteProgram(item)">Delete</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -229,9 +229,9 @@ export default {
       this.editedIndex = -1
     },
 
-    deleteItem(item) {
+    deleteProgram(item) {
       // perform delete action on item
-      console.log(`Deleting item ${item.id}`)
+      console.log(`Deleting department ${item.id}`)
       swal
         .fire({
           title: 'Are you sure?',
@@ -244,7 +244,20 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            axios.delete(`/api/delete-program/${item.id}`).then(result => {
+              // show success alert
+              swal
+                .fire({
+                  title: 'Success!',
+                  text: 'Program deleted successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+                .then(() => {
+                  this.getResults()
+                })
+            })
+            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })
     },

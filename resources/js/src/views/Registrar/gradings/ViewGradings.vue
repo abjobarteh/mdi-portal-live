@@ -20,7 +20,7 @@
           >
             <template v-slot:item.action="{ item }">
               <v-btn small color="primary" @click="editItem(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteItem(item)">Delete</v-btn>
+              <v-btn small color="error" @click="deleteGrading(item)">Delete</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -150,9 +150,9 @@ export default {
       this.editedIndex = -1
     },
 
-    deleteItem(item) {
+    deleteGrading(item) {
       // perform delete action on item
-      console.log(`Deleting item ${item.id}`)
+      console.log(`Deleting grading ${item.id}`)
       swal
         .fire({
           title: 'Are you sure?',
@@ -165,7 +165,20 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            axios.delete(`/api/delete-grading/${item.id}`).then(result => {
+              // show success alert
+              swal
+                .fire({
+                  title: 'Success!',
+                  text: 'Grading deleted successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+                .then(() => {
+                  this.getResults()
+                })
+            })
+            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })
     },

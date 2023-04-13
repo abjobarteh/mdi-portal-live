@@ -104,6 +104,7 @@ class GradingSystemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = GradingSystem::find($id);
+        $department->delete();
     }
 }
