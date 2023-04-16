@@ -1,49 +1,4 @@
-<!-- <template>
-  <div>
-    <v-container fluid>
-      <v-card>
-        <v-toolbar color="primary" dark>
-          <v-toolbar-title>Grading System</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
-          <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
-        </v-toolbar>
 
-        <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="filteredDepartments"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
-            <template v-slot:item.action="{ item }">
-              <v-btn small color="primary" @click="editItem(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteDepartment(item)">Delete</v-btn>
-            </template>
-          </v-data-table>
-          <v-pagination v-model="page" :length="pageCount" @input="getResults" />
-        </v-card-text>
-      </v-card>
-    </v-container>
-
-    <v-dialog v-model="dialog" max-width="500px">
-      <v-card>
-        <v-card-title> Edit Customer Information </v-card-title>
-        <v-card-text>
-          <v-form ref="form">
-            <v-text-field outlined v-model="editedItem.name" label="Department Name"></v-text-field>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="saveItem">Save</v-btn>
-          <v-btn color="secondary" @click="cancelEdit">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
-</template> -->
 <template>
   <div>
     <v-container fluid>
@@ -67,7 +22,7 @@
             hide-default-footer
           >
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="editItem(item)">Edit</v-btn>
+              <v-btn small color="primary" @click="editDepartment(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteDepartment(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -82,7 +37,7 @@
         <v-card-title>Add Department</v-card-title>
         <v-card-text>
           <v-form ref="addDepartmentForm">
-            <v-text-field v-model="addDepartmentFormData.name" label="Department Name"></v-text-field>
+            <v-text-field outlined v-model="addDepartmentFormData.name" label="Department Name"></v-text-field>
             <!-- <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
               v-for="error in v$.name.$errors"
@@ -99,17 +54,17 @@
     </v-dialog>
 
     <!-- Edit department dialog -->
-    <v-dialog v-model="addDialog" max-width="500px">
+    <v-dialog v-model="editDepartmentDialog" max-width="500px">
       <v-card>
-        <v-card-title> Add Department </v-card-title>
+        <v-card-title> Edit Department </v-card-title>
         <v-card-text>
           <v-form ref="form">
-            <v-text-field outlined v-model="addDepartmentFormData.name" label="Department Name"></v-text-field>
+            <v-text-field outlined v-model="editDepartmentFormData.name" label="Department Name"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitaddDepartmentForm">Add</v-btn>
-          <v-btn color="secondary" @click="cancelAdd">Cancel</v-btn>
+          <v-btn color="primary" @click="submitEditDepartmentForm">Update</v-btn>
+          <v-btn color="secondary" @click="cancelEdit">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -136,10 +91,9 @@ export default {
         { text: 'Department Name', value: 'name' },
         { text: 'Action', value: 'action', sortable: false },
       ],
-      items: [],
-      dialog: false,
+      editDepartmentDialog: false,
       editedIndex: -1,
-      editedItem: {
+      editDepartmentFormData: {
         id: null,
         name: '',
       },
@@ -151,11 +105,6 @@ export default {
 
       //////////////// add new department /////////
       addDepartmentDialog: false,
-
-      // edit department
-      editDepartmentFormData: {
-        name: '',
-      },
 
       addDepartmentFormData: {
         name: '',
@@ -194,24 +143,43 @@ export default {
       XLSX.writeFile(workbook, 'departments.xlsx')
     },
 
-    editItem(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+    editDepartment(item) {
+      this.editedIndex = this.departments.indexOf(item)
+      this.editDepartmentFormData = Object.assign({}, item)
+      this.editDepartmentDialog = true
     },
 
-    saveItem() {
+    submitEditDepartmentForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/departments/${this.editedItem.id}`, this.editedItem).then(response => {
-        // show a success notification
-        this.$toast.success('Customer information has been updated.')
-        // refresh the data table
-        this.getResults()
-      })
+      axios
+        .put(`/api/department/${this.editDepartmentFormData.id}`, this.editDepartmentFormData)
+        .then(response => {
+          // show success alert
+          this.editDepartmentDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Department updated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to update department.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
       // hide the dialog
-      this.dialog = false
+      this.editDepartmentDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editDepartmentFormData = {
         id: null,
         name: '',
       }
@@ -219,9 +187,9 @@ export default {
     },
     cancelEdit() {
       // hide the dialog
-      this.dialog = false
+      this.editDepartmentDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editDepartmentFormData = {
         id: null,
         name: '',
       }
@@ -262,16 +230,9 @@ export default {
     },
 
     showAddDialog() {
-      this.addDialog = true
+      this.addDepartmentDialog = true
     },
-    // addDepartment() {
-    //   // Perform any necessary validation on the newDepartmentName property
-    //   // Add the new department to the list of items
-    //   // hit the endpoint here
 
-    //   // Hide the add dialog
-    //   this.addDialog = false
-    // },
     cancelAdd() {
       // Clear the new department name and hide the add dialog
       this.newDepartmentName = ''
@@ -285,11 +246,11 @@ export default {
           .post('/api/add-department', this.addDepartmentFormData)
           .then(result => {
             // show success alert
-            this.addDialog = false
+            this.addDepartmentDialog = false
             swal
               .fire({
                 title: 'Success!',
-                text: 'Employee added successfully.',
+                text: 'Department added successfully.',
                 icon: 'success',
                 confirmButtonText: 'OK',
               })
@@ -301,7 +262,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to add employee.',
+              text: 'Failed to add department.',
               icon: 'error',
               confirmButtonText: 'OK',
             })
@@ -309,7 +270,7 @@ export default {
       } else {
         swal.fire({
           title: 'Error!',
-          text: 'Failed to add employee.',
+          text: 'Failed to add department.',
           icon: 'error',
           confirmButtonText: 'OK',
         })

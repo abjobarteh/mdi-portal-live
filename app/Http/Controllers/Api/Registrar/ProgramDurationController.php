@@ -92,7 +92,22 @@ class ProgramDurationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'duration' => 'required|max:255',
+            'description' => 'required',
+        ]);
+
+        $programDuration = ProgramDuration::find($id);
+        if (!$programDuration) {
+            return response()->json(['message' => 'Program duration not found.'], 404);
+        }
+
+        $programDuration->update([
+            'duration' => $validatedData['duration'],
+            'description' => $validatedData['description'],
+        ]);
+
+        return response()->json(['message' => 'Program duration updated successfully.']);
     }
 
     /**
@@ -103,7 +118,25 @@ class ProgramDurationController extends Controller
      */
     public function destroy($id)
     {
-        $department = ProgramDuration::find($id);
-        $department->delete();
+        try {
+            $department = ProgramDuration::find($id);
+            $department->delete();
+            return response()->json([
+                'message' => 'Record deleted successfully'
+            ], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == 1451) {
+                // The error is a foreign key constraint violation
+                return response()->json([
+                    'error' => 'You must delete the program associated with this program duration first.'
+                ], 400);
+            } else {
+                // The error is something else
+                return response()->json([
+                    'error' => 'Error deleting record: ' . $e->getMessage()
+                ], 500);
+            }
+        }
     }
 }

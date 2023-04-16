@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('program_abbreviation');
             $table->double('fee');
-            $table->foreignId('department_id')->constrained('departments')->onUpdate('cascade');
-            $table->foreignId('program_duration_id')->constrained('program_durations')->onUpdate('cascade');
+            $table->foreignId('department_id')->constrained('departments')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('program_duration_id')->constrained('program_durations')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

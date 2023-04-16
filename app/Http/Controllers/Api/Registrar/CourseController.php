@@ -90,7 +90,24 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'course_code' => 'required|max:255',
+            'course_name' => 'required|max:255',
+            'program_id' => 'required|max:255',
+        ]);
+
+        $course = Course::find($id);
+        if (!$course) {
+            return response()->json(['message' => 'Course not found.'], 404);
+        }
+
+        $course->update([
+            'course_code' => $validatedData['course_code'],
+            'course_name' => $validatedData['course_name'],
+            'program_id' => $validatedData['program_id'],
+        ]);
+
+        return response()->json(['message' => 'Course updated successfully.']);
     }
 
     /**

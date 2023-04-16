@@ -19,7 +19,7 @@
             hide-default-footer
           >
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="editItem(item)">Edit</v-btn>
+              <v-btn small color="primary" @click="editGrading(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteGrading(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -28,19 +28,19 @@
       </v-card>
     </v-container>
 
-    <v-dialog v-model="dialog" max-width="500px">
+    <v-dialog v-model="editGradingDialog" max-width="500px">
       <v-card>
-        <v-card-title> Edit Customer Information </v-card-title>
+        <v-card-title> Edit Grading </v-card-title>
         <v-card-text>
           <v-form ref="form">
-            <v-text-field outlined v-model="editedItem.mark_from" label="Mark From"></v-text-field>
-            <v-text-field outlined v-model="editedItem.mark_to" label="Mark To"></v-text-field>
-            <v-text-field outlined v-model="editedItem.grade" label="Grade"></v-text-field>
-            <v-text-field outlined v-model="editedItem.interpretation" label="Interpretation"></v-text-field>
+            <v-text-field outlined v-model="editGradingFormData.mark_from" label="Mark From"></v-text-field>
+            <v-text-field outlined v-model="editGradingFormData.mark_to" label="Mark To"></v-text-field>
+            <v-text-field outlined v-model="editGradingFormData.grade" label="Grade"></v-text-field>
+            <v-text-field outlined v-model="editGradingFormData.interpretation" label="Interpretation"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="saveItem">Save</v-btn>
+          <v-btn color="primary" @click="submitEditGradingForm">Save</v-btn>
           <v-btn color="secondary" @click="cancelEdit">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -70,9 +70,9 @@ export default {
         { text: 'Action', value: 'action', sortable: false },
       ],
       items: [],
-      dialog: false,
+      editGradingDialog: false,
       editedIndex: -1,
-      editedItem: {
+      editGradingFormData: {
         id: null,
         mark_from: '',
         mark_to: '',
@@ -110,24 +110,43 @@ export default {
       XLSX.writeFile(workbook, 'customers.xlsx')
     },
 
-    editItem(item) {
+    editGrading(item) {
       this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+      this.editGradingFormData = Object.assign({}, item)
+      this.editGradingDialog = true
     },
 
-    saveItem() {
+    submitEditGradingForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/customers/${this.editedItem.id}`, this.editedItem).then(response => {
-        // show a success notification
-        this.$toast.success('Customer information has been updated.')
-        // refresh the data table
-        this.getResults()
-      })
+      axios
+        .put(`/api/grading/${this.editGradingFormData.id}`, this.editGradingFormData)
+        .then(response => {
+          // show success alert
+          this.editDepartmentDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Grade updated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to update grade.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
       // hide the dialog
-      this.dialog = false
+      this.editGradingDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editGradingFormData = {
         id: null,
         mark_from: '',
         mark_to: '',
@@ -137,10 +156,10 @@ export default {
       this.editedIndex = -1
     },
     cancelEdit() {
-      // hide the dialog
-      this.dialog = false
+      // hide the editGradingDialog
+      this.editGradingDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editGradingFormData = {
         id: null,
         mark_from: '',
         mark_to: '',

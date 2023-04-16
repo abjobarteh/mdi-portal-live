@@ -96,7 +96,28 @@ class ProgramController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'program_name' => 'required|max:255',
+            'program_abbreviation' => 'required',
+            'fee' => 'required',
+            'department_id' => 'required',
+            'program_duration_id' => 'required',
+        ]);
+
+        $program = Program::find($id);
+        if (!$program) {
+            return response()->json(['message' => 'Program not found.'], 404);
+        }
+
+        $program->update([
+            'name' => $validatedData['program_name'],
+            'program_abbreviation' => $validatedData['program_abbreviation'],
+            'fee' => $validatedData['fee'],
+            'department_id' => $validatedData['department_id'],
+            'program_duration_id' => $validatedData['program_duration_id'],
+        ]);
+
+        return response()->json(['message' => 'Program updated successfully.']);
     }
 
     /**

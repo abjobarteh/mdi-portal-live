@@ -55,10 +55,16 @@
     <!-- Edit program duration dialog -->
     <v-dialog v-model="editProgramDurationDialog" max-width="500px">
       <v-card>
-        <v-card-title> Edit Department </v-card-title>
+        <v-card-title> Edit Program Duration </v-card-title>
         <v-card-text>
           <v-form ref="form">
-            <v-text-field outlined v-model="addProgramDurationFormData.name" label="Department Name"></v-text-field>
+            <v-text-field outlined v-model="editProgramDurationFormData.duration" label="Duration"></v-text-field>
+            <v-select
+              outlined
+              v-model="editProgramDurationFormData.description"
+              :items="['month', 'year']"
+              label="Description"
+            ></v-select>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -91,13 +97,7 @@ export default {
         { text: 'Description', value: 'description' },
         { text: 'Action', value: 'action', sortable: false },
       ],
-      items: [],
-      dialog: false,
       editedIndex: -1,
-      editedItem: {
-        id: null,
-        name: '',
-      },
       page: 1,
       pageCount: 0,
       search: '',
@@ -105,14 +105,16 @@ export default {
       //////////////// add new department /////////
       addProgramDurationDialog: false,
       addProgramDurationFormData: {
-        name: '',
+        duration: '',
         description: '',
       },
 
       // edit department
       editProgramDurationDialog: false,
-      editDepartmentFormData: {
-        name: '',
+      editProgramDurationFormData: {
+        id: null,
+        duration: '',
+        description: '',
       },
 
       rules: {
@@ -149,25 +151,46 @@ export default {
     },
 
     editProgramDuration(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editedIndex = this.programDurations.indexOf(item)
+      this.editProgramDurationFormData = Object.assign({}, item)
+      console.log('program ', this.editProgramDurationFormData, ' ', item)
       this.editProgramDurationDialog = true
     },
 
     submitupdateProgramDurationForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/program-duration/${this.editedItem.id}`, this.editedItem).then(response => {
-        // show a success notification
-        this.$toast.success('programDurations information has been updated.')
-        // refresh the data table
-        this.getResults()
-      })
+      axios
+        .put(`/api/program-duration/${this.editProgramDurationFormData.id}`, this.editProgramDurationFormData)
+        .then(response => {
+          // show success alert
+          this.editProgramDurationDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Program Duration updated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to update program duration.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
       // hide the dialog
       this.editProgramDurationDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.addProgramDurationFormData = {
         id: null,
-        name: '',
+        duration: '',
+        description: '',
       }
       this.editedIndex = -1
     },
@@ -175,9 +198,10 @@ export default {
       // hide the dialog
       this.editProgramDurationDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editProgramDuration = {
         id: null,
-        name: '',
+        duration: '',
+        description: '',
       }
       this.editedIndex = -1
     },
@@ -197,19 +221,31 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.delete(`/api/delete-program-duration/${item.id}`).then(result => {
-              // show success alert
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'Program Duration deleted successfully.',
-                  icon: 'success',
+            axios
+              .delete(`/api/delete-program-duration/${item.id}`)
+              .then(result => {
+                // show success alert
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'Program Duration deleted successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.getResults()
+                  })
+              })
+              .catch(error => {
+                console.error('good', error.response.data.error)
+                // show error alert
+                swal.fire({
+                  title: 'Error!',
+                  text: error.response.data.error,
+                  icon: 'error',
                   confirmButtonText: 'OK',
                 })
-                .then(() => {
-                  this.getResults()
-                })
-            })
+              })
             // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })

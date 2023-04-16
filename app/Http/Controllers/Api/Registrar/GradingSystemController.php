@@ -93,7 +93,26 @@ class GradingSystemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'mark_from' => 'required|max:255',
+            'mark_to' => 'required',
+            'grade' => 'required',
+            'interpretation' => 'required|min:4',
+        ]);
+
+        $gradingSystem = GradingSystem::find($id);
+        if (!$gradingSystem) {
+            return response()->json(['message' => 'GradingSystem not found.'], 404);
+        }
+
+        $gradingSystem->update([
+            'mark_from' => $validatedData['mark_from'],
+            'mark_to' => $validatedData['mark_to'],
+            'grade' => $validatedData['grade'],
+            'interpretation' => $validatedData['interpretation'],
+        ]);
+
+        return response()->json(['message' => 'GradingSystem updated successfully.']);
     }
 
     /**

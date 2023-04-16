@@ -41,31 +41,36 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/add-grading', [GradingSystemController::class, 'store']);
         Route::get('/view-gradings', [GradingSystemController::class, 'index']);
-        Route::get('/grding/{id}', [GradingSystemController::class, 'show']);
+        Route::get('/grading/{id}', [GradingSystemController::class, 'show']);
+        Route::put('/grading/{id}', [GradingSystemController::class, 'update']);
         Route::delete('/delete-grading/{id}', [GradingSystemController::class, 'destroy']);
 
 
         Route::post('/add-department', [DepartmentController::class, 'store']);
         Route::get('/view-departments', [DepartmentController::class, 'index']);
         Route::get('/department/{id}', [DepartmentController::class, 'show']);
+        Route::put('/department/{id}', [DepartmentController::class, 'update']);
         Route::delete('/delete-department/{id}', [DepartmentController::class, 'destroy']);
 
 
         Route::post('/add-program-duration', [ProgramDurationController::class, 'store']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
         Route::get('/program-duration/{id}', [ProgramDurationController::class, 'show']);
+        Route::put('/program-duration/{id}', [ProgramDurationController::class, 'update']);
         Route::delete('/delete-program-duration/{id}', [ProgramDurationController::class, 'destroy']);
 
 
         Route::post('/add-program', [ProgramController::class, 'store']);
         Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/program/{id}', [ProgramController::class, 'show']);
+        Route::put('/program/{id}', [ProgramController::class, 'update']);
         Route::delete('/delete-program/{id}', [ProgramController::class, 'destroy']);
 
 
         Route::post('/add-course', [CourseController::class, 'store']);
         Route::get('/view-courses', [CourseController::class, 'index']);
         Route::get('/course/{id}', [CourseController::class, 'show']);
+        Route::put('/course/{id}', [CourseController::class, 'update']);
         Route::delete('/delete-course/{id}', [CourseController::class, 'destroy']);
 
 
