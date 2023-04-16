@@ -58,14 +58,23 @@
     <!-- Edit course duration dialog -->
     <v-dialog v-model="editCourseDialog" max-width="500px">
       <v-card>
-        <v-card-title> Edit Department </v-card-title>
+        <v-card-title> Edit Course </v-card-title>
         <v-card-text>
-          <v-form ref="form">
-            <v-text-field outlined v-model="addCourseFormData.name" label="Department Name"></v-text-field>
+          <v-form ref="addCourseForm">
+            <v-text-field outlined v-model="editCourseFormData.course_code" label="Course Code"></v-text-field>
+            <v-text-field outlined v-model="editCourseFormData.course_name" label="Coure Name"></v-text-field>
+            <v-select
+              outlined
+              v-model="editCourseFormData.program_id"
+              :items="programs.map(program => ({ id: program.id, name: program.name }))"
+              item-value="id"
+              item-text="name"
+              label="Course Category"
+            ></v-select>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitupdateProgramDurationForm">Add</v-btn>
+          <v-btn color="primary" @click="submitupdateProgramDurationForm">Update</v-btn>
           <v-btn color="secondary" @click="cancelAdd">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -101,7 +110,7 @@ export default {
       items: [],
       dialog: false,
       editedIndex: -1,
-      editedItem: {
+      editCourseFormData: {
         id: null,
         name: '',
       },
@@ -120,6 +129,7 @@ export default {
       // edit department
       editCourseDialog: false,
       editCourseFormData: {
+        id: null,
         course_code: '',
         course_name: '',
         program_id: '',
@@ -171,24 +181,64 @@ export default {
 
     editCourse(item) {
       this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editCourseFormData = Object.assign({}, item)
       this.editCourseDialog = true
     },
 
+    // submitupdateProgramDurationForm() {
+    //   // make a PUT request to update the gradingSystem data
+    //   axios.put(`/api/course/${this.editCourseFormData.id}`, this.editCourseFormData).then(response => {
+    //     // show a success notification
+    //     this.$toast.success('courses information has been updated.')
+    //     // refresh the data table
+    //     this.getResults()
+    //   })
+    //   // hide the dialog
+    //   this.editCourseDialog = false
+    //   // clear the edited item
+    //   this.editCourseFormData = {
+    //     id: null,
+    //     course_code: '',
+    //     course_name: '',
+    //     program_id: '',
+    //   }
+    //   this.editedIndex = -1
+    // },
     submitupdateProgramDurationForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/course/${this.editedItem.id}`, this.editedItem).then(response => {
-        // show a success notification
-        this.$toast.success('courses information has been updated.')
-        // refresh the data table
-        this.getResults()
-      })
+      axios
+        .put(`/api/course/${this.editCourseFormData.id}`, this.editCourseFormData)
+        .then(response => {
+          // show success alert
+          this.editCourseDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'course  updated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to update course.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
       // hide the dialog
       this.editCourseDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editCourseFormData = {
         id: null,
-        name: '',
+        course_code: '',
+        course_name: '',
+        program_id: '',
       }
       this.editedIndex = -1
     },
@@ -196,9 +246,11 @@ export default {
       // hide the dialog
       this.editCourseDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editCourseFormData = {
         id: null,
-        name: '',
+        course_code: '',
+        course_name: '',
+        program_id: '',
       }
       this.editedIndex = -1
     },

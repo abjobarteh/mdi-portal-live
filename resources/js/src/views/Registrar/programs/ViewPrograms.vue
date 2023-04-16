@@ -74,14 +74,36 @@
     <!-- Edit program duration dialog -->
     <v-dialog v-model="editProgramDialog" max-width="500px">
       <v-card>
-        <v-card-title> Edit Department </v-card-title>
+        <v-card-title> Edit Program </v-card-title>
         <v-card-text>
           <v-form ref="form">
-            <v-text-field outlined v-model="addProgramFormData.name" label="Department Name"></v-text-field>
+            <v-select
+              outlined
+              v-model="editProgramFormData.department_id"
+              :items="departments.map(department => ({ id: department.id, name: department.name }))"
+              item-value="id"
+              item-text="name"
+              label="Department"
+            ></v-select>
+            <v-text-field outlined v-model="editProgramFormData.program_name" label="Program Name"></v-text-field>
+            <v-text-field
+              outlined
+              v-model="editProgramFormData.program_abbreviation"
+              label="Program Abbreviation"
+            ></v-text-field>
+            <v-select
+              outlined
+              v-model="editProgramFormData.program_duration_id"
+              :items="programDurations.map(duration => ({ id: duration.id, name: duration.duration }))"
+              item-value="id"
+              item-text="name"
+              label="Program Duration"
+            ></v-select>
+            <v-text-field outlined v-model="editProgramFormData.fee" label="Program Fee"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitupdateProgramDurationForm">Add</v-btn>
+          <v-btn color="primary" @click="submitupdateProgramForm">Update</v-btn>
           <v-btn color="secondary" @click="cancelAdd">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -118,10 +140,6 @@ export default {
       items: [],
       dialog: false,
       editedIndex: -1,
-      editedItem: {
-        id: null,
-        name: '',
-      },
       page: 1,
       pageCount: 0,
       search: '',
@@ -138,8 +156,13 @@ export default {
 
       // edit department
       editProgramDialog: false,
-      editDepartmentFormData: {
-        name: '',
+      editProgramFormData: {
+        id: null,
+        program_name: '',
+        program_abbreviation: '',
+        department_id: '',
+        program_duration_id: '',
+        fee: '',
       },
 
       rules: {
@@ -196,25 +219,51 @@ export default {
     },
 
     editProgram(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editedIndex = this.programs.indexOf(item)
+      this.editProgramFormData = Object.assign({}, item)
+      this.editProgramFormData.program_name = item.name
+
+      console.log(this.editProgramFormData)
       this.editProgramDialog = true
     },
 
-    submitupdateProgramDurationForm() {
+    submitupdateProgramForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/program/${this.editedItem.id}`, this.editedItem).then(response => {
-        // show a success notification
-        this.$toast.success('programs information has been updated.')
-        // refresh the data table
-        this.getResults()
-      })
+      axios
+        .put(`/api/program/${this.editProgramFormData.id}`, this.editProgramFormData)
+        .then(response => {
+          // show success alert
+          this.editProgramDurationDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Program  updated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to update program.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
       // hide the dialog
       this.editProgramDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editProgramFormData = {
         id: null,
-        name: '',
+        program_name: '',
+        program_abbreviation: '',
+        department_id: '',
+        program_duration_id: '',
+        fee: '',
       }
       this.editedIndex = -1
     },
@@ -222,9 +271,13 @@ export default {
       // hide the dialog
       this.editProgramDialog = false
       // clear the edited item
-      this.editedItem = {
+      this.editProgramFormData = {
         id: null,
-        name: '',
+        program_name: '',
+        program_abbreviation: '',
+        department_id: '',
+        program_duration_id: '',
+        fee: '',
       }
       this.editedIndex = -1
     },
