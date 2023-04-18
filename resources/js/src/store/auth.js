@@ -10,13 +10,49 @@ export default {
         setUser(state, user) {
             state.user = user;
         },
+        // setToken(state, token) {
+        //     const expirationTime = new Date(Date.now() + 60000); // 1 minute from now
+        //     state.token = token;
+        //     Cookies.set('token', token, { expires: expirationTime }); // set the token in a cookie that expires after 1 minute (60 seconds)
+
+        //     // set a timer to redirect to the login page when the token expires
+        //     const expirationMs = expirationTime.getTime() - Date.now();
+        //     setTimeout(() => {
+        //         localStorage.removeItem('vuex');
+        //         Cookies.remove('token');
+        //         window.location.href = '/login'; // replace '/login' with the URL of your login page
+        //     }, expirationMs);
+        // },
+
         setToken(state, token) {
             state.token = token;
-            Cookies.set('token', token); // set the token in a cookie
+            Cookies.set('token', token); // set the token in a cookie without an expiry date
+
+            // set a timer to remove the token and vuex state from storage after 30 seconds of inactivity
+            const inactivityTime = 120000; // 30 seconds in milliseconds
+            let timer = setTimeout(() => {
+                Cookies.remove('token');
+                localStorage.removeItem('vuex');
+                window.location.href = '/login'; // redirect to login page after removing token and vuex state
+            }, inactivityTime);
+
+            // reset the timer on user activity (e.g. click, keypress)
+            const resetTimer = () => {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    Cookies.remove('token');
+                    localStorage.removeItem('vuex');
+                    window.location.href = '/login'; // redirect to login page after removing token and vuex state
+                }, inactivityTime);
+            };
+            window.addEventListener('click', resetTimer);
+            window.addEventListener('keypress', resetTimer);
         },
+
         removeToken(state) {
             state.token = null;
             Cookies.remove('token'); // remove the token from the cookie
+            localStorage.removeItem('vuex'); // clear the local storage
         },
     },
     actions: {
@@ -84,3 +120,4 @@ export default {
         currentUser: state => state.user,
     },
 };
+
