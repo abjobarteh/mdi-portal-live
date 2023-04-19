@@ -77,7 +77,7 @@
       <nav-menu-link
         v-if="currentUser && currentUser.role_id == '2'"
         title="Admission Codes"
-        :to="{ name: 'view-courses' }"
+        :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 

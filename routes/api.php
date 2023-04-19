@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Registrar\ProgramController;
 use App\Http\Controllers\Api\Registrar\ProgramDurationController;
 use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -72,6 +73,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/course/{id}', [CourseController::class, 'show']);
         Route::put('/course/{id}', [CourseController::class, 'update']);
         Route::delete('/delete-course/{id}', [CourseController::class, 'destroy']);
+
+
+        Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']);
+        Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
+
 
 
         Route::post('/add-user', [UserController::class, 'store']);

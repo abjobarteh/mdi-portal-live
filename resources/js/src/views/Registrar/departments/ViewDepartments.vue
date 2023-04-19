@@ -38,12 +38,12 @@
         <v-card-text>
           <v-form ref="addDepartmentForm">
             <v-text-field outlined v-model="addDepartmentFormData.name" label="Department Name"></v-text-field>
-            <!-- <span
+            <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.name.$errors"
+              v-for="error in v$.value.name.$errors"
               :key="error.$uid"
               >{{ error.$message }}</span
-            > -->
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -76,7 +76,7 @@ import Vue from 'vue'
 import Vue2Filters from 'vue2-filters'
 import 'vuetify/dist/vuetify.min.css'
 import useVuelidate from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, minLength } from '@vuelidate/validators'
 
 Vue.use(Vue2Filters)
 
@@ -111,18 +111,22 @@ export default {
       },
 
       rules: {
-        name: { required },
+        name: { required, minLength: minLength(2) },
       },
 
-      v$: useVuelidate(this.rules, this.addDepartmentFormData),
+      v$: null,
     }
   },
 
   created() {
     this.getResults()
+    this.setupValidation()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.addDepartmentFormData)
+    },
     getResults() {
       axios
         .get('/api/view-departments?page=' + this.page)

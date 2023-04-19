@@ -145,7 +145,6 @@ const routes = [
       requiresAuth: true,
       roles: [2],
     }
-
   },
 
   {
@@ -157,6 +156,26 @@ const routes = [
       roles: [2],
     }
 
+  },
+
+  {
+    path: '/view-admission-codes-locations',
+    name: 'view-admission-codes-locations',
+    component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
+    path: '/view-admission-codes/:id',
+    name: 'view-admission-codes',
+    component: () => import('@/views/Registrar/admission-codes/AdmissionCodes.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
   },
 
   {
