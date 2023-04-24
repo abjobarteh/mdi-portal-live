@@ -81,6 +81,20 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '2'"
+        title="Sessions"
+        :to="{ name: 'view-sessions' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '2'"
+        title="Semesters"
+        :to="{ name: 'view-semesters' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
       <!-- <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title> -->
       <!-- <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
       <nav-menu-link title="Icons" :to="{ name: 'icons' }" :icon="icons.mdiEyeOutline"></nav-menu-link>

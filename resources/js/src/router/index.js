@@ -179,6 +179,26 @@ const routes = [
   },
 
   {
+    path: '/view-sessions',
+    name: 'view-sessions',
+    component: () => import('@/views/Registrar/sessions/ViewSessions.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
+    path: '/view-semesters',
+    name: 'view-semesters',
+    component: () => import('@/views/Registrar/semesters/ViewSemesters.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
     path: '/view-users',
     name: 'view-users',
     component: () => import('@/views/Admin/users/ViewUsers.vue'),

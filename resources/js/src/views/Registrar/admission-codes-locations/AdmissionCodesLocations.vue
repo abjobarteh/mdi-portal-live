@@ -23,7 +23,7 @@
           >
             <template v-slot:[`item.action`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
-              <v-btn @click="openAdmissionCodesPopup(item.admission_codes)">Open Popup</v-btn>
+              <v-btn @click="openAdmissionCodesPopup(item.admission_codes)">View Codes</v-btn>
               <v-btn small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn>
               <v-btn small color="secondary">Add Codes</v-btn>
             </template>
@@ -71,7 +71,7 @@
       <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>
-          My Table Popup
+          Admission Codes
           <v-spacer></v-spacer>
           <fas
             style="
@@ -114,6 +114,7 @@
                   width: 36px;
                   height: 36px;
                 "
+                @click="handleSold(item)"
               ></fas>
               <fas
                 v-else
@@ -338,6 +339,92 @@ export default {
           confirmButtonText: 'OK',
         })
       }
+    },
+
+    handleSold(item) {
+      console.log('item', item)
+      this.showAdmissionCodesPopup = false
+      swal
+        .fire({
+          title: 'Are you sure you want to sell this code?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'What would you like to do next?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Send',
+                cancelButtonText: 'Done',
+                cancelButtonColor: '#aaa',
+              })
+              .then(result => {
+                this.showAdmissionCodesPopup = false
+
+                if (result.isConfirmed) {
+                  swal
+                    .fire({
+                      title: 'Please enter your email address',
+                      input: 'email',
+                      confirmButtonText: 'Send',
+                      showCancelButton: true,
+                      cancelButtonText: 'Cancel',
+                      cancelButtonColor: '#aaa',
+                    })
+                    .then(result => {
+                      if (result.isConfirmed) {
+                        console.log(`Email: ${result.value}`)
+                        swal
+                          .fire({
+                            title: 'Code sold successfully!',
+                            icon: 'success',
+                          })
+                          .then(() => {
+                            this.showAdmissionCodesPopup = true
+                          })
+                      } else if (result.dismiss === swal.DismissReason.cancel) {
+                        console.log('Cancelled')
+                      }
+                    })
+                } else if (result.dismiss === swal.DismissReason.cancel) {
+                  // this is when done is selected
+                  axios
+                    .put(`/api/sell-code/${item.id}`)
+                    .then(response => {
+                      // show success alert
+                      this.editCourseDialog = false
+                      swal
+                        .fire({
+                          title: 'Success!',
+                          text: 'Code sold successfully.',
+                          icon: 'success',
+                          confirmButtonText: 'OK',
+                        })
+                        .then(() => {
+                          // this.showAdmissionCodesPopup = true
+                          this.getResults()
+                        })
+                    })
+                    .catch(error => {
+                      // show error alert
+                      swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to update course.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                      })
+                    })
+                }
+              })
+          } else if (result.dismiss === swal.DismissReason.cancel) {
+            console.log('Cancelled')
+          }
+        })
     },
   },
 

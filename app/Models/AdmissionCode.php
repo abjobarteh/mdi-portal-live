@@ -14,7 +14,7 @@ class AdmissionCode extends Model
     protected $fillable = [
         'admission_code',
         'admission_code_location_id',
-        'is_active',
+        'is_sold',
         'price',
     ];
 

@@ -9,7 +9,10 @@ use App\Http\Controllers\Api\Registrar\ProgramController;
 use App\Http\Controllers\Api\Registrar\ProgramDurationController;
 use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
+use App\Http\Controllers\Api\Registrar\SemesterController;
+use App\Http\Controllers\Api\Registrar\SessionController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -79,8 +82,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
 
 
+        Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
+
 
         Route::post('/add-user', [UserController::class, 'store']);
+
+
+        Route::post('/add-session', [SessionController::class, 'store']);
+        Route::get('/view-sessions', [SessionController::class, 'index']);
+
+        Route::post('/add-semester', [SemesterController::class, 'store']);
+        Route::get('/view-semesters', [SemesterController::class, 'index']);
     });
 
 
