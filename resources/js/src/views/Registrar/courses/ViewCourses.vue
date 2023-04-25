@@ -231,6 +231,7 @@ export default {
             confirmButtonText: 'OK',
           })
         })
+      // sell-code/{id}
       // hide the dialog
       this.editCourseDialog = false
       // clear the edited item

@@ -85,7 +85,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
 
 
-        Route::post('/add-user', [UserController::class, 'store']);
 
 
         Route::post('/add-session', [SessionController::class, 'store']);
@@ -98,6 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware(['admin'])->group(function () {
         /////////////////// users controller ////////////
+        Route::post('/add-user', [UserController::class, 'store']);
         Route::get('/view-users', [UserController::class, 'index']);
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
