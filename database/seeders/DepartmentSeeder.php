@@ -16,11 +16,7 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         Department::create([
-            'name' => 'National Diploma in Banking & Finance',
-        ]);
-
-        Department::create([
-            'name' => 'National Diploma in Computer Science',
+            'name' => 'DEPARTMENT OF BANKING & FINANCE',
         ]);
     }
 }

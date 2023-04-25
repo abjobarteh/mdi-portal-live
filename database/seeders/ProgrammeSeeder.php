@@ -28,7 +28,7 @@ class ProgrammeSeeder extends Seeder
             'name' => 'Higher National Diploma in Banking & Finance',
             'program_abbreviation' => 'HND',
             'fee' => 50500,
-            'department_id' => 2,
+            'department_id' => 1,
             'program_duration_id' => 1,
         ]);
     }

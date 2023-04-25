@@ -17,7 +17,7 @@ class CourseSeeder extends Seeder
     {
         Course::create([
             'course_code' => 'BFN101',
-            'course_name' => 'National Diploma in Banking & Finance',
+            'course_name' => 'Introduction to National Diploma in Banking & Finance',
             'program_id' => 1
         ])->create([
             'course_code' => 'BFN102',
