@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('username');
             $table->string('email')->unique();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('addresss');
+            $table->string('address');
             $table->string('phonenumber');
             $table->timestamps();
         });

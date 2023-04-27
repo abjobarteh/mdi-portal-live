@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
-use App\Models\Semester;
-use App\Models\SemesterCourse;
+use App\Models\Lecturer;
 use Illuminate\Http\Request;
 
-class SemesterController extends Controller
+class LecturerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +15,10 @@ class SemesterController extends Controller
      */
     public function index()
     {
-        $semesters = Semester::with('session')->paginate(13);
+        $lecturers = Lecturer::with('semesterCourses')->paginate(13);
         return response()->json([
             'status' => 200,
-            'result' => $semesters
+            'result' => $lecturers
         ]);
     }
 
@@ -42,38 +40,7 @@ class SemesterController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'semester_name' => 'required|max:255',
-            'is_current_semester' => 'required',
-            'session_id' => 'required',
-            'next_semester' => 'required',
-        ]);
-
-        // Check if the incoming session is set to current
-        if ($validatedData['is_current_semester'] == 1) {
-            // Set all other sessions to not current
-            Semester::where('is_current_semester', 1)->update(['is_current_semester' => 0]);
-        }
-
-        $semester = Semester::create([
-            'semester_name' => $validatedData['semester_name'],
-            'is_current_semester' => $validatedData['is_current_semester'],
-            'session_id' => $validatedData['session_id'],
-            'next_semester' => $validatedData['next_semester'],
-        ]);
-
-        // Get all courses
-        $courses = Course::all();
-
-        // Loop through each course and create a SemesterCourse
-        foreach ($courses as $course) {
-            SemesterCourse::create([
-                'course_id' => $course->id,
-                'semester_id' => $semester->id,
-            ]);
-        }
-
-        return response()->json(['message' => 'Semester created successfully.']);
+        //
     }
 
     /**

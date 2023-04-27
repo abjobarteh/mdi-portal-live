@@ -199,6 +199,16 @@ const routes = [
   },
 
   {
+    path: '/view-lecturers',
+    name: 'view-lecturers',
+    component: () => import('@/views/Registrar/lecturers/ViewLecturers.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
     path: '/view-users',
     name: 'view-users',
     component: () => import('@/views/Admin/users/ViewUsers.vue'),

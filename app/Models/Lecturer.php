@@ -30,4 +30,17 @@ class Lecturer extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    public function semesterCourses()
+    {
+        return $this->hasMany(SemesterCourse::class)
+            ->whereHas('semester', function ($query) {
+                $query->where('is_current_semester', 1);
+            })->with('course');
+
+        // return $this->hasMany(SemesterCourse::class)
+        // ->join('semesters', 'semesters.id', '=', 'semester_courses.semester_id')
+        // ->where('semesters.is_current_semester', 1);
+    }
 }

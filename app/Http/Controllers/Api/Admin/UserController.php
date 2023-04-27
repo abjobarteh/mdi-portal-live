@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Lecturer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -82,7 +83,7 @@ class UserController extends Controller
 
 
         ]);
-        User::create([
+        $user = User::create([
             'firstname' => $validatedData['firstname'],
             'lastname' => $validatedData['lastname'],
             'middlename' => $validatedData['middlename'],
@@ -94,6 +95,18 @@ class UserController extends Controller
             'password' => Hash::make($validatedData['password'])
 
         ]);
+
+        if ($validatedData['role_id'] == 3) {
+            Lecturer::create([
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'address' => $user->address,
+                'phonenumber' => $user->phonenumber,
+                'username' => $user->username,
+                'user_id' => $user->id
+            ]);
+        }
 
         return response()->json(['message' => 'User created successfully.']);
     }
