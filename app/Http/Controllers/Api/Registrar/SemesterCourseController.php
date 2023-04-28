@@ -16,29 +16,43 @@ class SemesterCourseController extends Controller
     public function index()
     {
         // bring semester courses, which is for the current semester and the lecture_id is not null;
-        // $availableSemesterCourses = SemesterCourse::whereHas('semester', function ($query) {
-        //     $query->where('is_current_semester', 1);
-        // })
-        //     ->whereNull('lecturer_id')
-        //     ->with('course')
-        //     ->paginate(13);
-
-        // return response()->json([
-        //     'status' => 200,
-        //     'result' => $availableSemesterCourses
-        // ]);
-
-        $lecturerCourses = SemesterCourse::whereHas('semester', function ($query) {
+        $availableSemesterCourses = SemesterCourse::whereHas('semester', function ($query) {
             $query->where('is_current_semester', 1);
         })
-            ->whereNotNull('lecturer_id')
+            ->whereNull('lecturer_id')
             ->with('course')
             ->paginate(13);
 
         return response()->json([
             'status' => 200,
-            'result' => $lecturerCourses
+            'result' => $availableSemesterCourses
         ]);
+
+        // $lecturerCourses = SemesterCourse::whereHas('semester', function ($query) {
+        //     $query->where('is_current_semester', 1);
+        // })
+        //     ->whereNotNull('lecturer_id')
+        //     ->with('course')
+        //     ->paginate(13);
+
+        // return response()->json([
+        //     'status' => 200,
+        //     'result' => $lecturerCourses
+        // ]);
+    }
+
+    // i have to update the lecturer_id to be the comming lecturer_id where the course_id
+    // is the courses_id coming
+    public function allocateSemesterCourses(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'lecturer_id' => 'required',
+            'semester_courses_ids' => 'required',
+        ]);
+
+        SemesterCourse::whereIn('course_id', $validatedData['semester_courses_ids'])
+            ->update(['lecturer_id' => $validatedData['lecturer_id']]);
     }
 
     /**

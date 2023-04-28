@@ -98,7 +98,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
 
-        Route::get('/view-semester-courses', [SemesterCourseController::class, 'index']);
+        Route::get('/view-semester-available-courses', [SemesterCourseController::class, 'index']);
+        Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
     });
 
 

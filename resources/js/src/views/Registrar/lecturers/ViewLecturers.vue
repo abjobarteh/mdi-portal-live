@@ -7,6 +7,9 @@
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
           <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
+          <v-btn color="primary" small class="white--text" @click="showAllocateSemesterCoursesDialog"
+            >Allocate Courses</v-btn
+          >
         </v-toolbar>
 
         <v-card-text>
@@ -85,6 +88,45 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <!-- // allocate courses //  -->
+    <v-dialog v-model="allocateCoursesDialog" max-width="500px">
+      <v-card>
+        <v-card-title>Allocate Courses</v-card-title>
+        <v-card-text>
+          <v-form ref="addDepartmentForm">
+            <v-select
+              outlined
+              v-model="allocateCourseFormData.lecturer_id"
+              :items="
+                lecturers.map(lecturer => ({ id: lecturer.id, name: lecturer.firstname + ' ' + lecturer.lastname }))
+              "
+              item-value="id"
+              item-text="name"
+              label="Lecturers"
+            ></v-select>
+            <v-select
+              multiple
+              outlined
+              v-model="allocateCourseFormData.semester_courses_ids"
+              :items="
+                semesterAvailableCourses.map(semesterCourse => ({
+                  id: semesterCourse.id,
+                  name: semesterCourse.course.course_name,
+                }))
+              "
+              item-value="id"
+              item-text="name"
+              label="Courses"
+            ></v-select>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="submitallocateCourseForm">Add</v-btn>
+          <!-- <v-btn color="secondary" @click="addProgramDialog = false">Cancel</v-btn> -->
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -104,8 +146,10 @@ export default {
       showLecturerSemesterCoursesPopup: false,
       lecturerSemesterCoursesArr: [],
       canCloseLecturerSemesterCoursesPopup: false,
+      allocateCoursesDialog: false,
       lecturerSemesterCoursesHeaders: [],
       lecturers: [],
+      semesterAvailableCourses: [],
       headers: [
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
@@ -123,6 +167,10 @@ export default {
         mark_to: '',
         grade: '',
         interpretation: '',
+      },
+      allocateCourseFormData: {
+        lecturer_id: '',
+        semester_courses_ids: [],
       },
       page: 1,
       pageCount: 0,
@@ -144,6 +192,17 @@ export default {
         })
         .catch(err => {
           this.lecturers = []
+          this.pageCount = 0
+        })
+
+      axios
+        .get('/api/view-semester-available-courses?page=' + this.page)
+        .then(response => {
+          this.semesterAvailableCourses = response.data.result.data
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.semesterAvailableCourses = []
           this.pageCount = 0
         })
     },
@@ -262,6 +321,39 @@ export default {
       if (this.canCloseLecturerSemesterCoursesPopup) {
         this.showLecturerSemesterCoursesPopup = false
       }
+    },
+
+    //////////////  Allocate courses ///////////////////
+    showAllocateSemesterCoursesDialog() {
+      this.allocateCoursesDialog = true
+    },
+
+    submitallocateCourseForm() {
+      axios
+        .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
+        .then(result => {
+          this.allocateCoursesDialog = false
+          // show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'course allocated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to allocate.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
     },
   },
 }
