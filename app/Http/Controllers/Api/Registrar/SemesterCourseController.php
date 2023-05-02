@@ -13,19 +13,24 @@ class SemesterCourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($lecturerId)
     {
-        // bring semester courses, which is for the current semester and the lecture_id is not null;
-        $availableSemesterCourses = SemesterCourse::whereHas('semester', function ($query) {
+
+        $teachableAvailableSemesterCourses = SemesterCourse::whereHas('semester', function ($query) {
             $query->where('is_current_semester', 1);
         })
             ->whereNull('lecturer_id')
+            ->whereIn('course_id', function ($query) use ($lecturerId) {
+                $query->select('teachable_course_id')
+                    ->from('lecturer_teachable_course')
+                    ->where('lecturer_id', $lecturerId);
+            })
             ->with('course')
             ->paginate(13);
 
         return response()->json([
             'status' => 200,
-            'result' => $availableSemesterCourses
+            'result' => $teachableAvailableSemesterCourses
         ]);
 
         // $lecturerCourses = SemesterCourse::whereHas('semester', function ($query) {
@@ -46,14 +51,22 @@ class SemesterCourseController extends Controller
     public function allocateSemesterCourses(Request $request)
     {
 
-        $validatedData = $request->validate([
-            'lecturer_id' => 'required',
-            'semester_courses_ids' => 'required',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'lecturer_id' => 'required',
+                'semester_courses_ids' => 'required',
+            ]);
 
-        SemesterCourse::whereIn('course_id', $validatedData['semester_courses_ids'])
-            ->update(['lecturer_id' => $validatedData['lecturer_id']]);
+            SemesterCourse::whereIn('course_id', $validatedData['semester_courses_ids'])
+                ->update(['lecturer_id' => $validatedData['lecturer_id']]);
+
+            return response()->json(['message' => 'Courses allocated successfully.']);
+        } catch (\Exception $e) {
+            // Handle the exception here
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.

@@ -65,16 +65,7 @@
         <v-card-title>Add Semester</v-card-title>
         <v-card-text>
           <v-form ref="addSessionForm">
-            <v-text-field outlined v-model="addSemesterFormData.semester_name" label="Session"></v-text-field>
-            <v-select
-              outlined
-              v-model="addSemesterFormData.is_current_semester"
-              label="Is current semester"
-              :items="[
-                { text: 'Yes', value: 1 },
-                { text: 'No', value: 0 },
-              ]"
-            ></v-select>
+            <v-text-field outlined v-model="addSemesterFormData.semester_name" label="Semester Name"></v-text-field>
             <v-select
               outlined
               v-model="addSemesterFormData.session_id"
@@ -105,11 +96,7 @@
         <v-card-text>
           <v-form ref="form">
             <v-text-field outlined v-model="addSemesterFormData.session_name" label="Session"></v-text-field>
-            <v-text-field
-              outlined
-              v-model="addSemesterFormData.is_current_session"
-              label="Is current session"
-            ></v-text-field>
+
             <v-text-field outlined v-model="addSemesterFormData.next_session" label="Next Session"></v-text-field>
           </v-form>
         </v-card-text>
@@ -157,7 +144,6 @@ export default {
       addSemesterDialog: false,
       addSemesterFormData: {
         semester_name: '',
-        is_current_semester: '',
         next_semester: '',
         session_id: '',
       },
@@ -167,7 +153,6 @@ export default {
       editSemesterFormData: {
         id: null,
         session_name: '',
-        is_current_session: '',
         next_session: '',
       },
 

@@ -83,6 +83,27 @@
               item-text="name"
               label="User Type"
             ></v-select>
+            <v-select
+              v-if="showDepartments"
+              outlined
+              v-model="addUserFormData.department_id"
+              :items="departments.map(department => ({ id: department.id, name: department.name }))"
+              item-value="id"
+              item-text="name"
+              label="Department"
+              @input="onDepartmentSelected"
+            ></v-select>
+
+            <v-select
+              v-if="selectedDepartment && showDepartments"
+              v-model="addUserFormData.course_ids"
+              multiple
+              :items="selectedDepartment.courses.map(course => ({ id: course.id, name: course.course_name }))"
+              item-value="id"
+              item-text="name"
+              label="Teachable Courses"
+              outlined
+            ></v-select>
             <v-text-field outlined v-model="addUserFormData.address" label="Residential Address"></v-text-field>
             <v-text-field outlined v-model="addUserFormData.phonenumber" label="Phone Number"></v-text-field>
           </v-form>
@@ -129,6 +150,10 @@ export default {
     return {
       roles: [],
       users: [],
+      departments: [],
+      showDepartments: false,
+      selectedDepartment: null,
+
       headers: [
         { text: 'Full Name', value: 'fullname' },
         { text: 'Username', value: 'username' },
@@ -162,6 +187,8 @@ export default {
         role_id: '',
         username: '',
         email: '',
+        department_id: '',
+        course_ids: [],
       },
 
       // edit User
@@ -180,11 +207,31 @@ export default {
     }
   },
 
+  watch: {
+    'addUserFormData.role_id': function (newVal, oldVal) {
+      if (newVal === 3) {
+        this.showDepartments = true
+      } else {
+        this.showDepartments = false
+      }
+    },
+  },
+
   created() {
     this.getResults()
   },
 
   methods: {
+    onDepartmentSelected() {
+      if (this.addUserFormData.department_id) {
+        this.selectedDepartment = this.departments.find(
+          department => department.id === this.addUserFormData.department_id,
+        )
+      } else {
+        this.selectedDepartment = null
+      }
+      this.addUserFormData.course_id = null
+    },
     getResults() {
       axios
         .get('/api/view-users?page=' + this.page)
@@ -205,6 +252,17 @@ export default {
         })
         .catch(err => {
           this.programs = []
+          this.pageCount = 0
+        })
+
+      axios
+        .get('/api/view-departments?page=' + this.page)
+        .then(response => {
+          this.departments = response.data.result.data
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.departments = []
           this.pageCount = 0
         })
     },

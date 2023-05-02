@@ -42,20 +42,15 @@ class SessionController extends Controller
     {
         $validatedData = $request->validate([
             'session_name' => 'required|max:255',
-            'is_current_session' => 'required',
             'next_session' => 'required',
         ]);
 
-        // Check if the incoming session is set to current
-        if ($validatedData['is_current_session'] == 1) {
-            // Set all other sessions to not current
-            Session::where('is_current_session', 1)->update(['is_current_session' => 0]);
-        }
 
         Session::create([
             'session_name' => $validatedData['session_name'],
             'is_current_session' => $validatedData['is_current_session'],
             'next_session' => $validatedData['next_session'],
+            'is_current_session' => 1,
         ]);
 
         return response()->json(['message' => 'Session created successfully.']);

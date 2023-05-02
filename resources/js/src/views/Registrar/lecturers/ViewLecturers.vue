@@ -111,7 +111,7 @@
               v-model="allocateCourseFormData.semester_courses_ids"
               :items="
                 semesterAvailableCourses.map(semesterCourse => ({
-                  id: semesterCourse.id,
+                  id: semesterCourse.course_id,
                   name: semesterCourse.course.course_name,
                 }))
               "
@@ -178,6 +178,23 @@ export default {
     }
   },
 
+  watch: {
+    'allocateCourseFormData.lecturer_id'(newLecturerId) {
+      if (newLecturerId) {
+        axios
+          .get(`/api/view-semester-available-courses/${newLecturerId}?page=` + this.page)
+          .then(response => {
+            this.semesterAvailableCourses = response.data.result.data
+            this.pageCount = response.data.result.last_page
+          })
+          .catch(err => {
+            this.semesterAvailableCourses = []
+            this.pageCount = 0
+          })
+      }
+    },
+  },
+
   created() {
     this.getResults()
   },
@@ -192,17 +209,6 @@ export default {
         })
         .catch(err => {
           this.lecturers = []
-          this.pageCount = 0
-        })
-
-      axios
-        .get('/api/view-semester-available-courses?page=' + this.page)
-        .then(response => {
-          this.semesterAvailableCourses = response.data.result.data
-          this.pageCount = response.data.result.last_page
-        })
-        .catch(err => {
-          this.semesterAvailableCourses = []
           this.pageCount = 0
         })
     },
@@ -334,16 +340,17 @@ export default {
         .then(result => {
           this.allocateCoursesDialog = false
           // show success alert
-          swal
-            .fire({
-              title: 'Success!',
-              text: 'course allocated successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            .then(() => {
-              this.getResults()
-            })
+          ;(this.allocateCourseFormData.semester_courses_ids = ''),
+            swal
+              .fire({
+                title: 'Success!',
+                text: 'course allocated successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              })
+              .then(() => {
+                this.getResults()
+              })
         })
         .catch(error => {
           // show error alert

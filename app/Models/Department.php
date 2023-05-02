@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Program;
+use App\Models\Course;
 
 class Department extends Model
 {
@@ -17,5 +18,10 @@ class Department extends Model
     public function programs()
     {
         return $this->hasMany(Program::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasManyThrough(Course::class, Program::class);
     }
 }

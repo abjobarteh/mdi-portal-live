@@ -26,6 +26,8 @@ class Program extends Model
         return $this->belongsTo(Department::class);
     }
 
+
+
     public function duration()
     {
         return $this->belongsTo(ProgramDuration::class, 'program_duration_id');

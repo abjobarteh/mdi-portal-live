@@ -44,22 +44,16 @@ class SemesterController extends Controller
     {
         $validatedData = $request->validate([
             'semester_name' => 'required|max:255',
-            'is_current_semester' => 'required',
             'session_id' => 'required',
             'next_semester' => 'required',
         ]);
 
-        // Check if the incoming session is set to current
-        if ($validatedData['is_current_semester'] == 1) {
-            // Set all other sessions to not current
-            Semester::where('is_current_semester', 1)->update(['is_current_semester' => 0]);
-        }
 
         $semester = Semester::create([
             'semester_name' => $validatedData['semester_name'],
-            'is_current_semester' => $validatedData['is_current_semester'],
             'session_id' => $validatedData['session_id'],
             'next_semester' => $validatedData['next_semester'],
+            'is_current_semester' => 1,
         ]);
 
         // Get all courses

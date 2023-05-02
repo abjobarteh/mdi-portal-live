@@ -7,6 +7,8 @@ use App\Models\Lecturer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 
 class UserController extends Controller
 {
@@ -80,35 +82,45 @@ class UserController extends Controller
             'role_id' => 'required',
             'phonenumber' => 'required',
             'password' => 'required|confirmed|min:6'
-
-
-        ]);
-        $user = User::create([
-            'firstname' => $validatedData['firstname'],
-            'lastname' => $validatedData['lastname'],
-            'middlename' => $validatedData['middlename'],
-            'username' => $validatedData['username'],
-            'email' => $validatedData['email'],
-            'address' => $validatedData['address'],
-            'role_id' => $validatedData['role_id'],
-            'phonenumber' => $validatedData['phonenumber'],
-            'password' => Hash::make($validatedData['password'])
-
         ]);
 
-        if ($validatedData['role_id'] == 3) {
-            Lecturer::create([
-                'firstname' => $user->firstname,
-                'lastname' => $user->lastname,
-                'email' => $user->email,
-                'address' => $user->address,
-                'phonenumber' => $user->phonenumber,
-                'username' => $user->username,
-                'user_id' => $user->id
+        DB::beginTransaction();
+
+        try {
+            $user = User::create([
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'middlename' => $validatedData['middlename'],
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+                'address' => $validatedData['address'],
+                'role_id' => $validatedData['role_id'],
+                'phonenumber' => $validatedData['phonenumber'],
+                'password' => Hash::make($validatedData['password'])
             ]);
-        }
 
-        return response()->json(['message' => 'User created successfully.']);
+            if ($validatedData['role_id'] == 3) {
+                $lecturer = Lecturer::create([
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'email' => $user->email,
+                    'address' => $user->address,
+                    'phonenumber' => $user->phonenumber,
+                    'username' => $user->username,
+                    'user_id' => $user->id
+                ]);
+
+
+                $lecturer->teachables()->attach($request->course_ids);
+            }
+
+            DB::commit();
+
+            return response()->json(['message' => 'User created successfully.']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()]);
+        }
     }
 
     /**

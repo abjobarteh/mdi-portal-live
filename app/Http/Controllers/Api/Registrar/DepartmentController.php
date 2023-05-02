@@ -15,7 +15,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::paginate(13);
+        $departments = Department::with('courses')->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $departments

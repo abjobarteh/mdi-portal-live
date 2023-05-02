@@ -53,7 +53,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         Route::post('/add-department', [DepartmentController::class, 'store']);
-        Route::get('/view-departments', [DepartmentController::class, 'index']);
         Route::get('/department/{id}', [DepartmentController::class, 'show']);
         Route::put('/department/{id}', [DepartmentController::class, 'update']);
         Route::delete('/delete-department/{id}', [DepartmentController::class, 'destroy']);
@@ -98,10 +97,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
 
-        Route::get('/view-semester-available-courses', [SemesterCourseController::class, 'index']);
+        Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
     });
 
+    Route::get('/view-departments', [DepartmentController::class, 'index']);
 
     Route::middleware(['admin'])->group(function () {
         /////////////////// users controller ////////////
@@ -110,7 +110,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
-
         Route::get('/view-roles', [RolesController::class, 'index']);
     });
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\TeachableCourse;
 
 class Lecturer extends Model
 {
@@ -20,11 +21,6 @@ class Lecturer extends Model
         'phonenumber'
     ];
 
-    // firstname');
-    //         $table->string('lastname');
-    //         $table->string('username');
-    //         $table->string('email')->unique();
-    //         $table->foreignId('user_id'
 
     public function user()
     {
@@ -42,5 +38,10 @@ class Lecturer extends Model
         // return $this->hasMany(SemesterCourse::class)
         // ->join('semesters', 'semesters.id', '=', 'semester_courses.semester_id')
         // ->where('semesters.is_current_semester', 1);
+    }
+
+    public function teachables()
+    {
+        return $this->belongsToMany(TeachableCourse::class);
     }
 }

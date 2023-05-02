@@ -97,11 +97,6 @@
         <v-card-text>
           <v-form ref="form">
             <v-text-field outlined v-model="addSessionFormData.session_name" label="Session"></v-text-field>
-            <v-text-field
-              outlined
-              v-model="addSessionFormData.is_current_session"
-              label="Is current session"
-            ></v-text-field>
             <v-text-field outlined v-model="addSessionFormData.next_session" label="Next Session"></v-text-field>
           </v-form>
         </v-card-text>
@@ -147,7 +142,6 @@ export default {
       addSessionDialog: false,
       addSessionFormData: {
         session_name: '',
-        is_current_session: '',
         next_session: '',
       },
 
@@ -156,7 +150,6 @@ export default {
       editSessionFormData: {
         id: null,
         session_name: '',
-        is_current_session: '',
         next_session: '',
       },
 
