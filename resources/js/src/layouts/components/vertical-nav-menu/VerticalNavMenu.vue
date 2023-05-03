@@ -74,12 +74,12 @@
         <nav-menu-link title="Users" :to="{ name: 'view-users' }"></nav-menu-link>
         <nav-menu-link title="Logs" :to="{ name: 'view-program-durations' }"></nav-menu-link>
       </nav-menu-group>
-      <!-- <nav-menu-link
+      <nav-menu-link
         v-if="currentUser && currentUser.role_id == '2'"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"
-      ></nav-menu-link> -->
+      ></nav-menu-link>
 
       <nav-menu-link
         v-if="currentUser && currentUser.role_id == '2'"

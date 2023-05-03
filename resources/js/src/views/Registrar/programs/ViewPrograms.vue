@@ -47,12 +47,30 @@
               item-text="name"
               label="Department"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.department_id.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field outlined v-model="addProgramFormData.program_name" label="Program Name"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.program_name.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field
               outlined
               v-model="addProgramFormData.program_abbreviation"
               label="Program Abbreviation"
             ></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.program_abbreviation.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-select
               outlined
               v-model="addProgramFormData.program_duration_id"
@@ -61,7 +79,19 @@
               item-text="name"
               label="Program Duration"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.program_duration_id.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field outlined v-model="addProgramFormData.fee" label="Program Fee"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.fee.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -166,7 +196,11 @@ export default {
       },
 
       rules: {
-        name: { required },
+        program_name: { required },
+        program_abbreviation: { required },
+        department_id: { required },
+        program_duration_id: { required },
+        fee: { required },
       },
 
       v$: useVuelidate(this.rules, this.addProgramFormData),
@@ -175,9 +209,13 @@ export default {
 
   created() {
     this.getResults()
+    this.setupValidation()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.addProgramFormData)
+    },
     getResults() {
       axios
         .get('/api/view-programs?page=' + this.page)
@@ -351,7 +389,7 @@ export default {
       } else {
         swal.fire({
           title: 'Error!',
-          text: 'Failed to add employee.',
+          text: 'Failed to add Program.',
           icon: 'error',
           confirmButtonText: 'OK',
         })

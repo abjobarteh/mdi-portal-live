@@ -36,13 +36,30 @@
         <v-card-title>Add Program Duration</v-card-title>
         <v-card-text>
           <v-form ref="addDepartmentForm">
-            <v-text-field outlined v-model="addProgramDurationFormData.duration" label="Duration"></v-text-field>
+            <v-text-field
+              outlined
+              v-model="addProgramDurationFormData.duration"
+              type="number"
+              label="Duration"
+            ></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.duration.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-select
               outlined
               v-model="addProgramDurationFormData.description"
               :items="['month', 'year']"
               label="Description"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.description.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -81,7 +98,7 @@ import Vue from 'vue'
 import Vue2Filters from 'vue2-filters'
 import 'vuetify/dist/vuetify.min.css'
 import useVuelidate from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, minLength } from '@vuelidate/validators'
 
 Vue.use(Vue2Filters)
 
@@ -118,18 +135,23 @@ export default {
       },
 
       rules: {
-        name: { required },
+        duration: { required, minLength: minLength(1) },
+        description: { required },
       },
 
-      v$: useVuelidate(this.rules, this.addProgramDurationFormData),
+      v$: null,
     }
   },
 
   created() {
     this.getResults()
+    this.setupValidation()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.addProgramDurationFormData)
+    },
     getResults() {
       axios
         .get('/api/view-program-durations?page=' + this.page)

@@ -51,7 +51,6 @@
             </template>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="editSession(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteSession(item)">Delete</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -66,21 +65,24 @@
         <v-card-text>
           <v-form ref="addSessionForm">
             <v-text-field outlined v-model="addSessionFormData.session_name" label="Session"></v-text-field>
-            <v-select
-              outlined
-              v-model="addSessionFormData.is_current_session"
-              label="Is current session"
-              :items="[
-                { text: 'Yes', value: 1 },
-                { text: 'No', value: 0 },
-              ]"
-            ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.session_name.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field
               outlined
               v-model="addSessionFormData.next_session"
               label="Next Session"
               type="date"
             ></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.next_session.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -154,7 +156,8 @@ export default {
       },
 
       rules: {
-        name: { required },
+        session_name: { required },
+        next_session: { required },
       },
 
       v$: useVuelidate(this.rules, this.addSessionFormData),
@@ -163,9 +166,13 @@ export default {
 
   created() {
     this.getResults()
+    this.setupValidation()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.addSessionFormData)
+    },
     getResults() {
       axios
         .get('/api/view-sessions?page=' + this.page)
@@ -248,39 +255,6 @@ export default {
         fee: '',
       }
       this.editedIndex = -1
-    },
-
-    deleteSession(item) {
-      // perform delete action on item
-      console.log(`Deleting department ${item.id}`)
-      swal
-        .fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!',
-        })
-        .then(result => {
-          if (result.isConfirmed) {
-            axios.delete(`/api/delete-session/${item.id}`).then(result => {
-              // show success alert
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'Program deleted successfully.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                })
-                .then(() => {
-                  this.getResults()
-                })
-            })
-            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
-          }
-        })
     },
 
     showeditProgramDialog() {

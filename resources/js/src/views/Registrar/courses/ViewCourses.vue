@@ -37,7 +37,19 @@
         <v-card-text>
           <v-form ref="addCourseForm">
             <v-text-field outlined v-model="addCourseFormData.course_code" label="Course Code"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.course_code.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field outlined v-model="addCourseFormData.course_name" label="Coure Name"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.course_name.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-select
               outlined
               v-model="addCourseFormData.program_id"
@@ -46,6 +58,12 @@
               item-text="name"
               label="Course Category"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.program_id.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -136,7 +154,9 @@ export default {
       },
 
       rules: {
-        name: { required },
+        course_code: { required },
+        course_name: { required },
+        program_id: { required },
       },
 
       v$: useVuelidate(this.rules, this.addCourseFormData),
@@ -145,9 +165,13 @@ export default {
 
   created() {
     this.getResults()
+    this.setupValidation()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.addCourseFormData)
+    },
     getResults() {
       axios
         .get('/api/view-courses?page=' + this.page)
@@ -325,7 +349,7 @@ export default {
       } else {
         swal.fire({
           title: 'Error!',
-          text: 'Failed to add employee.',
+          text: 'Failed to add course.',
           icon: 'error',
           confirmButtonText: 'OK',
         })

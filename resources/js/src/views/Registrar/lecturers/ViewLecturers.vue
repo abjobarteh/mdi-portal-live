@@ -105,6 +105,12 @@
               item-text="name"
               label="Lecturers"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.lecturer_id.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-select
               multiple
               outlined
@@ -119,6 +125,12 @@
               item-text="name"
               label="Courses"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.semester_courses_ids.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -134,6 +146,8 @@ import * as XLSX from 'xlsx'
 import Vue from 'vue'
 import Vue2Filters from 'vue2-filters'
 import 'vuetify/dist/vuetify.min.css'
+import useVuelidate from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
 Vue.use(Vue2Filters)
 
@@ -175,6 +189,13 @@ export default {
       page: 1,
       pageCount: 0,
       search: '',
+
+      rules: {
+        lecturer_id: { required },
+        semester_courses_ids: { required },
+      },
+
+      v$: null,
     }
   },
 
@@ -196,10 +217,14 @@ export default {
   },
 
   created() {
+    this.setupValidation()
     this.getResults()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.allocateCourseFormData)
+    },
     getResults() {
       axios
         .get('/api/view-lecturers?page=' + this.page)
@@ -334,33 +359,43 @@ export default {
       this.allocateCoursesDialog = true
     },
 
-    submitallocateCourseForm() {
-      axios
-        .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
-        .then(result => {
-          this.allocateCoursesDialog = false
-          // show success alert
-          ;(this.allocateCourseFormData.semester_courses_ids = ''),
-            swal
-              .fire({
-                title: 'Success!',
-                text: 'course allocated successfully.',
-                icon: 'success',
-                confirmButtonText: 'OK',
-              })
-              .then(() => {
-                this.getResults()
-              })
-        })
-        .catch(error => {
-          // show error alert
-          swal.fire({
-            title: 'Error!',
-            text: 'Failed to allocate.',
-            icon: 'error',
-            confirmButtonText: 'OK',
+    async submitallocateCourseForm() {
+      const result = await this.v$.value.$validate()
+      if (result) {
+        axios
+          .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
+          .then(result => {
+            this.allocateCoursesDialog = false
+            // show success alert
+            ;(this.allocateCourseFormData.semester_courses_ids = ''),
+              swal
+                .fire({
+                  title: 'Success!',
+                  text: 'course allocated successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+                .then(() => {
+                  this.getResults()
+                })
           })
+          .catch(error => {
+            // show error alert
+            swal.fire({
+              title: 'Error!',
+              text: 'Failed to allocate.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            })
+          })
+      } else {
+        swal.fire({
+          title: 'Error!',
+          text: 'Failed to allocate courses.',
+          icon: 'error',
+          confirmButtonText: 'OK',
         })
+      }
     },
   },
 }

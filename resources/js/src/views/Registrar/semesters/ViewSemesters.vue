@@ -50,8 +50,7 @@
               ></fas>
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="editSession(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteSession(item)">Delete</v-btn>
+              <v-btn small color="primary" @click="editSemester(item)">Edit</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -66,6 +65,12 @@
         <v-card-text>
           <v-form ref="addSessionForm">
             <v-text-field outlined v-model="addSemesterFormData.semester_name" label="Semester Name"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.semester_name.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-select
               outlined
               v-model="addSemesterFormData.session_id"
@@ -74,12 +79,24 @@
               item-text="name"
               label="Session"
             ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.session_id.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field
               outlined
               v-model="addSemesterFormData.next_semester"
               label="Next Semester"
               type="date"
             ></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.next_semester.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -90,7 +107,7 @@
     </v-dialog>
 
     <!-- Edit sessioni dialog -->
-    <v-dialog v-model="editSessionDialog" max-width="500px">
+    <v-dialog v-model="editSemesterDialog" max-width="500px">
       <v-card>
         <v-card-title> Edit Program </v-card-title>
         <v-card-text>
@@ -149,15 +166,18 @@ export default {
       },
 
       // edit department
-      editSessionDialog: false,
+      editSemesterDialog: false,
       editSemesterFormData: {
         id: null,
-        session_name: '',
-        next_session: '',
+        semester_name: '',
+        next_semester: '',
+        session_id: '',
       },
 
       rules: {
-        name: { required },
+        semester_name: { required },
+        next_semester: { required },
+        session_id: { required },
       },
 
       v$: useVuelidate(this.rules, this.addSemesterFormData),
@@ -166,9 +186,13 @@ export default {
 
   created() {
     this.getResults()
+    this.setupValidation()
   },
 
   methods: {
+    setupValidation() {
+      this.v$ = useVuelidate(this.rules, this.addSemesterFormData)
+    },
     getResults() {
       axios
         .get('/api/view-semesters?page=' + this.page)
@@ -200,13 +224,13 @@ export default {
       XLSX.writeFile(workbook, 'semesters.xlsx')
     },
 
-    editSession(item) {
+    editSemester(item) {
       this.editedIndex = this.semesters.indexOf(item)
       this.editSemesterFormData = Object.assign({}, item)
       this.editSemesterFormData.program_name = item.name
 
       console.log(this.editSemesterFormData)
-      this.editSessionDialog = true
+      this.editSemesterDialog = true
     },
 
     submitupdateSemesterForm() {
@@ -215,7 +239,7 @@ export default {
         .put(`/api/session/${this.editSemesterFormData.id}`, this.editSemesterFormData)
         .then(response => {
           // show success alert
-          this.editSessionDurationDialog = false
+          this.editSemesterDurationDialog = false
           swal
             .fire({
               title: 'Success!',
@@ -237,7 +261,7 @@ export default {
           })
         })
       // hide the dialog
-      this.editSessionDialog = false
+      this.editSemesterDialog = false
       // clear the edited item
       this.editSemesterFormData = {
         id: null,
@@ -251,7 +275,7 @@ export default {
     },
     cancelEdit() {
       // hide the dialog
-      this.editSessionDialog = false
+      this.editSemesterDialog = false
       // clear the edited item
       this.editSemesterFormData = {
         id: null,
@@ -264,41 +288,8 @@ export default {
       this.editedIndex = -1
     },
 
-    deleteSession(item) {
-      // perform delete action on item
-      console.log(`Deleting department ${item.id}`)
-      swal
-        .fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!',
-        })
-        .then(result => {
-          if (result.isConfirmed) {
-            axios.delete(`/api/delete-session/${item.id}`).then(result => {
-              // show success alert
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'Program deleted successfully.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                })
-                .then(() => {
-                  this.getResults()
-                })
-            })
-            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
-          }
-        })
-    },
-
     showeditProgramDialog() {
-      this.editSessionDialog = true
+      this.editSemesterDialog = true
     },
 
     ////////  Adding ///////
@@ -325,7 +316,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to add session duration.',
+              text: 'Failed to add semester.',
               icon: 'error',
               confirmButtonText: 'OK',
             })
@@ -333,7 +324,7 @@ export default {
       } else {
         swal.fire({
           title: 'Error!',
-          text: 'Failed to add employee.',
+          text: 'Failed to semester.',
           icon: 'error',
           confirmButtonText: 'OK',
         })
@@ -346,7 +337,7 @@ export default {
     cancelAdd() {
       // Clear the new department name and hide the add dialog
       this.newDepartmentName = ''
-      this.editSessionDialog = false
+      this.editSemesterDialog = false
     },
   },
 

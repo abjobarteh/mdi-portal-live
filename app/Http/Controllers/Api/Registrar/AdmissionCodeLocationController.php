@@ -19,7 +19,7 @@ class AdmissionCodeLocationController extends Controller
      */
     public function index()
     {
-        $admissionCodeLocations = AdmissionCodeLocation::with(['admissionCodes'])->paginate(13);
+        $admissionCodeLocations = AdmissionCodeLocation::with(['admissionCodes', 'semester.session'])->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $admissionCodeLocations
@@ -48,12 +48,11 @@ class AdmissionCodeLocationController extends Controller
         try {
             $validatedData = $request->validate([
                 'location_name' => 'required|max:255',
-                'semester' => 'required|max:255',
+                'semester_id' => 'required|max:255',
                 'total_number' => 'required|max:255',
                 'price' => 'required|numeric',
             ]);
             $validatedData['total_remains'] = $request->get('total_number');
-
 
             // Generate the random strings before inserting the records
             $randomStrings = [];

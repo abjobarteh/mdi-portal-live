@@ -45,10 +45,10 @@ class SessionController extends Controller
             'next_session' => 'required',
         ]);
 
+        Session::where('is_current_session', 1)->update(['is_current_session' => 0]);
 
         Session::create([
             'session_name' => $validatedData['session_name'],
-            'is_current_session' => $validatedData['is_current_session'],
             'next_session' => $validatedData['next_session'],
             'is_current_session' => 1,
         ]);

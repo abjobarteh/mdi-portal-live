@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('admission_code_locations', function (Blueprint $table) {
             $table->id();
             $table->string('location_name');
-            $table->string('semester');
+            $table->foreignId('semester_id')->constrained('semesters')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('total_number');
             $table->integer('total_sold')->default(0);
             $table->integer('total_remains');

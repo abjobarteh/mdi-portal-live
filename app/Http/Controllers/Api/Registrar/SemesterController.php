@@ -48,6 +48,7 @@ class SemesterController extends Controller
             'next_semester' => 'required',
         ]);
 
+        Semester::where('is_current_semester', 1)->update(['is_current_semester' => 0]);
 
         $semester = Semester::create([
             'semester_name' => $validatedData['semester_name'],

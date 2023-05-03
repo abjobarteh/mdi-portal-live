@@ -44,19 +44,49 @@
               v-model="addAdmissionCodeLocationFormData.location_name"
               label="Location Name"
             ></v-text-field>
-            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.semester" label="Semester"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.location_name.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
+            <v-select
+              outlined
+              v-model="addAdmissionCodeLocationFormData.semester_id"
+              :items="
+                semesters.map(semester => ({
+                  id: semester.id,
+                  name: semester.semester_name + '(' + semester.session.session_name + ')',
+                }))
+              "
+              item-value="id"
+              item-text="name"
+              label="Semester Name"
+            ></v-select>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.semester_id.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
             <v-text-field
               outlined
               v-model="addAdmissionCodeLocationFormData.total_number"
               label="Total Number"
             ></v-text-field>
-            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.price" label="Price"></v-text-field>
-            <!-- <span
+            <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.name.$errors"
+              v-for="error in v$.value.total_number.$errors"
               :key="error.$uid"
               >{{ error.$message }}</span
-            > -->
+            >
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.price" label="Price"></v-text-field>
+            <span
+              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.price.$errors"
+              :key="error.$uid"
+              >{{ error.$message }}</span
+            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -155,6 +185,7 @@ export default {
   data() {
     return {
       //////////// admission codes ////////
+      semesters: [],
       showAdmissionCodesPopup: false,
       admissionCodesHeaders: [],
       items: [],
@@ -163,7 +194,7 @@ export default {
       admissionCodeLocations: [],
       headers: [
         { text: 'Issued To', value: 'location_name' },
-        { text: 'Semester', value: 'semester' },
+        { text: 'Semester', value: 'semester.semester_name' },
         { text: 'Total Admission Codes', value: 'total_number' },
         { text: 'Total Sold', value: 'total_sold' },
         { text: 'Total Remains', value: 'total_remains' },
@@ -183,13 +214,16 @@ export default {
 
       addAdmissionCodeLocationFormData: {
         location_name: '',
-        semester: '',
+        semester_id: '',
         total_number: '',
         price: '',
       },
 
       rules: {
-        name: { required, minLength: minLength(2) },
+        location_name: { required, minLength: minLength(2) },
+        semester_id: { required },
+        total_number: { required, minLength: minLength(1) },
+        price: { required, minLength: minLength(2) },
       },
 
       v$: null,
@@ -230,6 +264,17 @@ export default {
         })
         .catch(err => {
           this.admissionCodeLocations = []
+          this.pageCount = 0
+        })
+
+      axios
+        .get('/api/view-semesters?page=' + this.page)
+        .then(response => {
+          this.semesters = response.data.result.data
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.semesters = []
           this.pageCount = 0
         })
     },
@@ -304,7 +349,7 @@ export default {
     },
 
     async submitaddAdmissionCodeLocationForm() {
-      const result = true
+      const result = await this.v$.value.$validate()
       if (result) {
         axios
           .post('/api/add-admission_codes_location', this.addAdmissionCodeLocationFormData)

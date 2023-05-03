@@ -245,6 +245,7 @@ export default {
 
     async submitaddDepartmentForm() {
       const result = await this.v$.value.$validate()
+      console.log(this.v$)
       if (result) {
         axios
           .post('/api/add-department', this.addDepartmentFormData)
