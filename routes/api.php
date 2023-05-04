@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Registrar\ProgramController;
 use App\Http\Controllers\Api\Registrar\ProgramDurationController;
 use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
 use App\Http\Controllers\Api\Registrar\LecturerController;
@@ -81,6 +82,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']);
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
+        Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
+
+
+        Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
+
 
 
         Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
@@ -99,6 +105,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
+
+        Route::post('/send-email', [EmailController::class, 'sendEmail']);
     });
 
     Route::get('/view-departments', [DepartmentController::class, 'index']);

@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Egulias\EmailValidator\EmailValidator;
+
 
 class AuthController extends Controller
 {

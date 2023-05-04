@@ -93,6 +93,47 @@ class AdmissionCodeLocationController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    public function addAdmissionCodes(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'total_number' => 'required|max:255',
+                'admission_code_location_id' => 'required',
+                'price' => 'required',
+            ]);
+
+            // Generate the random strings for the new admission codes
+            $randomStrings = [];
+            for ($count = 0; $count < $request->get('total_number'); $count++) {
+                $randomStrings[] = Str::random(10);
+            }
+
+            // Retrieve the existing admission codes from the database with the same admission_location_id
+            $existingAdmissionCodes = AdmissionCode::where('admission_code_location_id', $validatedData['admission_code_location_id'])->get();
+
+            // Create AdmissionCode models for the new admission codes and append them to the existing admission codes collection
+            foreach ($randomStrings as $randomString) {
+                $admissionCode = new AdmissionCode([
+                    'admission_code' => $randomString,
+                    'is_sold' => 0,
+                    'price' => $validatedData['price'],
+                    'admission_code_location_id' => $validatedData['admission_code_location_id']
+                ]);
+                $existingAdmissionCodes->push($admissionCode);
+            }
+
+            // Save all the admission codes back to the database
+            foreach ($existingAdmissionCodes as $admissionCode) {
+                $admissionCode->save();
+            }
+
+            // Return a success response
+            return response()->json(['message' => 'Admission codes added successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -135,6 +176,7 @@ class AdmissionCodeLocationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $admissionCodeLocation = AdmissionCodeLocation::find($id);
+        $admissionCodeLocation->delete();
     }
 }

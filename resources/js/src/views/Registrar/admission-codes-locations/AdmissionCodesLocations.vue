@@ -11,6 +11,11 @@
           <v-btn color="primary" small class="white--text" @click="showAddDialog">Add AdmissionCodeLocation</v-btn>
         </v-toolbar>
 
+        <div v-if="isLoading" class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+
         <!-- Data table -->
         <v-card-text>
           <v-data-table
@@ -25,7 +30,7 @@
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
               <v-btn @click="openAdmissionCodesPopup(item.admission_codes)">View Codes</v-btn>
               <v-btn small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn>
-              <v-btn small color="secondary">Add Codes</v-btn>
+              <v-btn small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -91,6 +96,26 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="submitaddAdmissionCodeLocationForm">Add</v-btn>
+          <v-btn color="secondary" @click="addAdmissionCodeLocationDialog = false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Increase AdmissionCodes to a location dialog -->
+    <v-dialog v-model="inceaseAdmissionCodeToLocationDialog" max-width="500px">
+      <v-card>
+        <v-card-title>Increase Admission Codes</v-card-title>
+        <v-card-text>
+          <v-form ref="IncreaseAdmissionCodeLocationForm">
+            <v-text-field
+              outlined
+              v-model="increaseAdmissionCodesToLocationFormData.number_to_add"
+              label="Number of Codes to Add"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="submitIncreaseAdmissionCodesInLocationForm">Add</v-btn>
           <v-btn color="secondary" @click="addAdmissionCodeLocationDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -184,7 +209,10 @@ export default {
   components: {},
   data() {
     return {
+      admissionCodeLocationItem: null,
+
       //////////// admission codes ////////
+      isLoading: false,
       semesters: [],
       showAdmissionCodesPopup: false,
       admissionCodesHeaders: [],
@@ -201,6 +229,9 @@ export default {
 
         { text: 'Action', value: 'action', sortable: false },
       ],
+
+      /////////////// increase admission codes   ///
+      inceaseAdmissionCodeToLocationDialog: false,
       //////////// admission codes ends ////////
 
       page: 1,
@@ -211,6 +242,9 @@ export default {
 
       //////////////// add new AdmissionCodeLocation /////////
       addAdmissionCodeLocationDialog: false,
+      increaseAdmissionCodesToLocationFormData: {
+        number_to_add: '',
+      },
 
       addAdmissionCodeLocationFormData: {
         location_name: '',
@@ -305,7 +339,7 @@ export default {
       XLSX.writeFile(workbook, 'admissionCodeLocations.xlsx')
     },
 
-    deleteDepartment(item) {
+    deleteAdmissionCodeLocation(item) {
       // perform delete action on item
       console.log(`Deleting admissionCodeLocations ${item.id}`)
       swal
@@ -320,12 +354,12 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.delete(`/api/delete-admissionCodeLocations/${item.id}`).then(result => {
+            axios.delete(`/api/delete-admission_codes_location/${item.id}`).then(result => {
               // show success alert
               swal
                 .fire({
                   title: 'Success!',
-                  text: 'Department deleted successfully.',
+                  text: 'Admission Code Location deleted successfully.',
                   icon: 'success',
                   confirmButtonText: 'OK',
                 })
@@ -359,7 +393,7 @@ export default {
             swal
               .fire({
                 title: 'Success!',
-                text: 'Department added successfully.',
+                text: 'Admission Codes location added successfully.',
                 icon: 'success',
                 confirmButtonText: 'OK',
               })
@@ -423,14 +457,51 @@ export default {
                     })
                     .then(result => {
                       if (result.isConfirmed) {
-                        console.log(`Email: ${result.value}`)
-                        swal
-                          .fire({
-                            title: 'Code sold successfully!',
-                            icon: 'success',
+                        // console.log(`Email: ${result.value}`)
+                        this.isLoading = true
+                        axios
+                          .post('/api/send-email', { email: result.value, admission_code: item.admission_code })
+                          .then(result => {
+                            this.isLoading = false
+
+                            // show success alert
+                            this.addDepartmentDialog = false
+                            axios
+                              .put(`/api/sell-code/${item.id}`)
+                              .then(response => {
+                                // show success alert
+                                this.editCourseDialog = false
+                                swal
+                                  .fire({
+                                    title: 'Success!',
+                                    text: 'Code sold successfully.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                  })
+                                  .then(() => {
+                                    // this.showAdmissionCodesPopup = true
+                                    this.getResults()
+                                  })
+                              })
+                              .catch(error => {
+                                // show error alert
+                                swal.fire({
+                                  title: 'Error!',
+                                  text: 'Failed to update course.',
+                                  icon: 'error',
+                                  confirmButtonText: 'OK',
+                                })
+                              })
                           })
-                          .then(() => {
-                            this.showAdmissionCodesPopup = true
+                          .catch(error => {
+                            this.isLoading = false
+                            // show error alert
+                            swal.fire({
+                              title: 'Error!',
+                              text: error.response.data.error,
+                              icon: 'error',
+                              confirmButtonText: 'OK',
+                            })
                           })
                       } else if (result.dismiss === swal.DismissReason.cancel) {
                         console.log('Cancelled')
@@ -466,9 +537,51 @@ export default {
                     })
                 }
               })
+              .finally(() => {
+                // Set isLoading to false when the request completes
+                this.isLoading = false
+              })
           } else if (result.dismiss === swal.DismissReason.cancel) {
             console.log('Cancelled')
           }
+        })
+    },
+
+    addAdmissionCode(item) {
+      console.log('item', item)
+      this.inceaseAdmissionCodeToLocationDialog = true
+      this.admissionCodeLocationItem = item // set the instance variable to the item value
+    },
+
+    submitIncreaseAdmissionCodesInLocationForm() {
+      console.log('here ' + this.admissionCodeLocationItem.id)
+      axios
+        .post('/api/add-admission_codes_to_location', {
+          admission_code_location_id: this.admissionCodeLocationItem.id,
+          price: this.admissionCodeLocationItem.price,
+          total_number: this.increaseAdmissionCodesToLocationFormData.number_to_add,
+        })
+        .then(result => {
+          // show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Admission Codes location added successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to add admissionCodeLocations.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
         })
     },
   },
@@ -482,6 +595,47 @@ export default {
   // },
 }
 </script>
+
+<style scoped>
+.spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  z-index: 9999;
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  animation-delay: -1s;
+}
+
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+</style>
 
 
 
