@@ -188,11 +188,9 @@ export default {
         .get('/api/view-programs?page=' + this.page)
         .then(response => {
           this.programs = response.data.result.data
-          this.pageCount = response.data.result.last_page
         })
         .catch(err => {
           this.programs = []
-          this.pageCount = 0
         })
     },
 
