@@ -128,6 +128,12 @@ class AdmissionCodeLocationController extends Controller
                 $admissionCode->save();
             }
 
+            // then update the total admission codes, and the total remains
+            $admissionCodeLocation = AdmissionCodeLocation::find($validatedData['admission_code_location_id']);
+            $admissionCodeLocation->increment('total_number', $validatedData['total_number']);
+            $admissionCodeLocation->increment('total_remains', $validatedData['total_number']);
+
+
             // Return a success response
             return response()->json(['message' => 'Admission codes added successfully']);
         } catch (\Exception $e) {

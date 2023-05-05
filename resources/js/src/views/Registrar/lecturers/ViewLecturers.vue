@@ -22,9 +22,7 @@
             hide-default-footer
           >
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn @click="openLecturerSemesterCoursesPopup(item.semester_courses.map(course => course.course))"
-                >View Courses</v-btn
-              >
+              <v-btn @click="openLecturerSemesterCoursesPopup(item)">View Courses</v-btn>
               <v-btn small color="primary" @click="editlecturer(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
             </template>
@@ -57,7 +55,9 @@
       <!-- <template v-slot:activator="{ on }"></template> -->
       <v-card>
         <v-card-title>
-          Lecturers courses
+          <p>
+            <span style="font-weight: bold">{{ lecturerFullName }}'s</span> Courses
+          </p>
           <v-spacer></v-spacer>
           <fas
             style="
@@ -163,6 +163,7 @@ export default {
       allocateCoursesDialog: false,
       lecturerSemesterCoursesHeaders: [],
       lecturers: [],
+      lecturerFullName: '',
       semesterAvailableCourses: [],
       headers: [
         { text: 'Firstname', value: 'firstname' },
@@ -337,13 +338,14 @@ export default {
         })
     },
 
-    openLecturerSemesterCoursesPopup(lecturerSemesterCourses) {
-      console.log(lecturerSemesterCourses)
+    openLecturerSemesterCoursesPopup(lecturer) {
+      this.lecturerFullName = lecturer.firstname + ' ' + lecturer.lastname
+      console.log(lecturer)
       ;(this.lecturerSemesterCoursesHeaders = [
         { text: 'Course Code', value: 'course_code' },
         { text: 'Course Name', value: 'course_name' },
       ]),
-        (this.lecturerSemesterCoursesArr = lecturerSemesterCourses),
+        (this.lecturerSemesterCoursesArr = lecturer.semester_courses.map(course => course.course)),
         (this.showLecturerSemesterCoursesPopup = true)
       this.canCloseLecturerSemesterCoursesPopup = false
     },

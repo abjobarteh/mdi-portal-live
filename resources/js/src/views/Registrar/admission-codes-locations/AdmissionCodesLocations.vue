@@ -7,7 +7,6 @@
           <v-toolbar-title>Admission Codes Locations</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
-          <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
           <v-btn color="primary" small class="white--text" @click="showAddDialog">Add AdmissionCodeLocation</v-btn>
         </v-toolbar>
 
@@ -28,7 +27,7 @@
           >
             <template v-slot:[`item.action`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
-              <v-btn @click="openAdmissionCodesPopup(item.admission_codes)">View Codes</v-btn>
+              <v-btn @click="openAdmissionCodesPopup(item)">View Codes</v-btn>
               <v-btn small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn>
               <v-btn small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn>
             </template>
@@ -116,7 +115,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="submitIncreaseAdmissionCodesInLocationForm">Add</v-btn>
-          <v-btn color="secondary" @click="addAdmissionCodeLocationDialog = false">Cancel</v-btn>
+          <v-btn color="secondary" @click="inceaseAdmissionCodeToLocationDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -126,10 +125,14 @@
       <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>
-          Admission Codes
+          <p>
+            Admission Codes for <span style="font-weight: bold">{{ location }}</span>
+          </p>
           <v-spacer></v-spacer>
+          <v-btn color="purple darken-2" @click="exportCodesToExcel" small class="white--text">Export Codes</v-btn>
           <fas
             style="
+              margin-left: 30px;
               font-size: 24px;
               cursor: pointer;
               display: inline-block;
@@ -209,6 +212,7 @@ export default {
   components: {},
   data() {
     return {
+      location: '',
       admissionCodeLocationItem: null,
 
       //////////// admission codes ////////
@@ -232,6 +236,11 @@ export default {
 
       /////////////// increase admission codes   ///
       inceaseAdmissionCodeToLocationDialog: false,
+
+      increaseAdmissionCodesToLocationFormData: {
+        number_to_add: '',
+      },
+
       //////////// admission codes ends ////////
 
       page: 1,
@@ -242,9 +251,6 @@ export default {
 
       //////////////// add new AdmissionCodeLocation /////////
       addAdmissionCodeLocationDialog: false,
-      increaseAdmissionCodesToLocationFormData: {
-        number_to_add: '',
-      },
 
       addAdmissionCodeLocationFormData: {
         location_name: '',
@@ -272,11 +278,12 @@ export default {
   methods: {
     openAdmissionCodesPopup(admissionCodes) {
       console.log(admissionCodes)
+      this.location = admissionCodes.location_name
       ;(this.admissionCodesHeaders = [
         { text: 'Admission Code', value: 'admission_code' },
         { text: 'Status', value: 'is_sold' },
       ]),
-        (this.items = admissionCodes),
+        (this.items = admissionCodes.admission_codes),
         (this.showAdmissionCodesPopup = true)
       this.canCloseAdminssionCodesPopup = false
     },
@@ -332,10 +339,20 @@ export default {
       })
     },
 
-    exportToExcel() {
-      const worksheet = XLSX.utils.json_to_sheet(this.admissionCodeLocations)
+    exportCodesToExcel() {
+      const excludedProperties = ['id', 'created_at', 'updated_at', 'admission_code_location_id']
+      const data = this.items.map(item => {
+        const newItem = {}
+        for (const [key, value] of Object.entries(item)) {
+          if (!excludedProperties.includes(key)) {
+            newItem[key] = value
+          }
+        }
+        return newItem
+      })
+      const worksheet = XLSX.utils.json_to_sheet(data)
       const workbook = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'admissionCodeLocations')
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Admission Codes')
       XLSX.writeFile(workbook, 'admissionCodeLocations.xlsx')
     },
 
@@ -563,10 +580,11 @@ export default {
         })
         .then(result => {
           // show success alert
+          this.inceaseAdmissionCodeToLocationDialog = false
           swal
             .fire({
               title: 'Success!',
-              text: 'Admission Codes location added successfully.',
+              text: 'Admission Codes Increased successfully.',
               icon: 'success',
               confirmButtonText: 'OK',
             })
