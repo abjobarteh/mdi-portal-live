@@ -49,6 +49,16 @@ const routes = [
   },
 
   {
+    path: '/student',
+    name: 'student',
+    component: () => import('@/views/Student/home/Home.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [4],
+    }
+  },
+
+  {
     path: '/typography',
     name: 'typography',
     component: () => import('@/views/typography/Typography.vue'),
@@ -275,7 +285,10 @@ router.beforeEach(async (to, from, next) => {
     } else if (userRole === 1) {
       next('/admin-dashboard'); // redirect to admin dashboard for role 1
     } else if (userRole === 2) {
-      next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
+      next('/registrar-dashboard'); // redirect to registrar for role 2
+    }
+    else if (userRole === 4) {
+      next('/student'); // redirect to student dashboard for role 4
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

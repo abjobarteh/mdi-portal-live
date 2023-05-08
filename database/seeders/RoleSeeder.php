@@ -29,5 +29,10 @@ class RoleSeeder extends Seeder
             'rank' => 'lecturer',
             'description' => 'responsible for adding student grades'
         ]);
+
+        Role::create([
+            'rank' => 'student',
+            'description' => 'responsible for registering courses, thought by lecturers'
+        ]);
     }
 }

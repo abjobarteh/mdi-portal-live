@@ -102,6 +102,13 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '4'"
+        title="Student"
+        :to="{ name: 'student' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
       <!-- <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title> -->
       <!-- <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
       <nav-menu-link title="Icons" :to="{ name: 'icons' }" :icon="icons.mdiEyeOutline"></nav-menu-link>
