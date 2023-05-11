@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Registrar\AdmissionStatusController;
 use App\Http\Controllers\Api\Registrar\CourseController;
 use App\Http\Controllers\Api\Registrar\DepartmentController;
 use App\Http\Controllers\Api\Registrar\EmployeeController;
@@ -10,12 +11,15 @@ use App\Http\Controllers\Api\Registrar\ProgramDurationController;
 use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\EmailController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
 use App\Http\Controllers\Api\Registrar\LecturerController;
 use App\Http\Controllers\Api\Registrar\SemesterController;
 use App\Http\Controllers\Api\Registrar\SemesterCourseController;
 use App\Http\Controllers\Api\Registrar\SessionController;
+use App\Http\Controllers\Api\Student\ApplicantCertificateController;
+use App\Http\Controllers\Api\Student\ApplicantEducationController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -121,6 +125,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-roles', [RolesController::class, 'index']);
     });
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
+    Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
+
+    Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
+    Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

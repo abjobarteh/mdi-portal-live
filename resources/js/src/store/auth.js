@@ -4,26 +4,13 @@ import router from '@/router';
 export default {
     state: {
         user: null,
+        userProfileData: [],
         token: Cookies.get('token') || null,
     },
     mutations: {
         setUser(state, user) {
             state.user = user;
         },
-        // setToken(state, token) {
-        //     const expirationTime = new Date(Date.now() + 60000); // 1 minute from now
-        //     state.token = token;
-        //     Cookies.set('token', token, { expires: expirationTime }); // set the token in a cookie that expires after 1 minute (60 seconds)
-
-        //     // set a timer to redirect to the login page when the token expires
-        //     const expirationMs = expirationTime.getTime() - Date.now();
-        //     setTimeout(() => {
-        //         localStorage.removeItem('vuex');
-        //         Cookies.remove('token');
-        //         window.location.href = '/login'; // replace '/login' with the URL of your login page
-        //     }, expirationMs);
-        // },
-
         setToken(state, token) {
             state.token = token;
             Cookies.set('token', token); // set the token in a cookie without an expiry date
@@ -54,6 +41,10 @@ export default {
             Cookies.remove('token'); // remove the token from the cookie
             localStorage.removeItem('vuex'); // clear the local storage
         },
+
+        userProfileMutate(state, data) {
+            return (state.userProfileData = data);
+        },
     },
     actions: {
         async login({ commit, dispatch, state }, credentials) {
@@ -74,6 +65,20 @@ export default {
             } catch (error) {
                 throw error;
             }
+        },
+
+        userProfile(context) {
+            axios
+                .get("/api/profile")
+
+                .then(response => {
+                    console.log(response.data)
+                    context.commit("userProfileMutate", response.data); //categories will be run from mutation
+                })
+
+                .catch(() => {
+                    console.log("Error........");
+                });
         },
         async logout({ commit, state }) {
             try {
@@ -120,6 +125,9 @@ export default {
     },
     getters: {
         currentUser: state => state.user,
+        getUserProfile(state) {
+            return state.userProfileData;
+        },
     },
 };
 

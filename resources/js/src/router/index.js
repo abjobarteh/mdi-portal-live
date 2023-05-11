@@ -59,6 +59,46 @@ const routes = [
   },
 
   {
+    path: '/applicant-personal-info',
+    name: 'applicant-personal-info',
+    component: () => import('@/components/student/ApplicantPersonalInfoForm.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [4],
+    }
+  },
+
+  {
+    path: '/applicant-academic-info',
+    name: 'applicant-academic-info',
+    component: () => import('@/components/student/ApplicantAcademicInfoForm.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [4],
+    }
+  },
+
+  {
+    path: '/applicant-certificate-info',
+    name: 'applicant-certificate-info',
+    component: () => import('@/components/student/ApplicantCertificateInfoForm.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [4],
+    }
+  },
+
+  {
+    path: '/applicant-declaration',
+    name: 'applicant-declaration',
+    component: () => import('@/components/student/ApplicantDeclarationAndPreview.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [4],
+    }
+  },
+
+  {
     path: '/typography',
     name: 'typography',
     component: () => import('@/views/typography/Typography.vue'),

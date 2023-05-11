@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AdmissionCode;
+use App\Models\AdmissionCodeVerification;
+use Carbon\Carbon;
 
 class AdmissionCodeController extends Controller
 {
@@ -35,6 +37,26 @@ class AdmissionCodeController extends Controller
         ]);
 
         return response()->json(['message' => 'Code sold successfully.']);
+    }
+
+    public function redeemAdmissionCode(Request $request)
+    {
+        $validatedData = $request->validate([
+            'admission_code' => 'required|max:255',
+        ]);
+
+        $admissionCodeExist = AdmissionCode::where('admission_code', $validatedData['admission_code'])->first();
+        if (!is_null($admissionCodeExist)) {
+            if ($admissionCodeExist->expired === 0) {
+                $admissionCodeExist->update(['is_sold' => 1, 'expired' => 1]);
+                AdmissionCodeVerification::create(['user_id' => auth()->user()->id, 'verified_at' => Carbon::now()]);
+                return response()->json(['message' => 'Code Redeemed successfully.'], 200);
+            } else {
+                return response()->json(['message' => 'Code already taken.'], 409);
+            }
+        } else {
+            return response()->json(['message' => 'Code does not exist.'], 422);
+        }
     }
 
     /**

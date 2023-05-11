@@ -16,6 +16,7 @@ class AdmissionCode extends Model
         'admission_code_location_id',
         'is_sold',
         'price',
+        'expired'
     ];
 
     public function admissionCodeLocation()
