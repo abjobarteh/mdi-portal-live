@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +29,37 @@ class AuthController extends Controller
         }
 
         return $user->createToken($request->device_name)->plainTextToken;
+    }
+
+    public function register(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required|max:255',
+            'username' => 'required|max:255',
+            'email' => 'required|max:255',
+            'password' => 'required|max:255',
+        ]);
+
+        $user = User::create([
+            'username' => $validatedData['username'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'role_id' => 4,
+            'is_active' => 1,
+        ]);
+
+        $student = Student::create([
+            'username' => $user->username,
+            'email' => $user->email,
+            'user_id' => $user->id,
+            'is_applicant' => 1,
+            'application_completed' => 0,
+            'accepted' => 'pending'
+        ]);
+
+        return response()->json(['message' => 'User created successfully.']);
+
+        // return $user->createToken($request->device_name)->plainTextToken;
     }
 
     public function logout(Request $request)

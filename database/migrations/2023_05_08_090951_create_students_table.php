@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
             $table->string('username');
             $table->string('email')->unique();
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('department_id')->constrained('departments')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('address');
-            $table->string('phonenumber');
+            $table->foreignId('department_id')->nullable()->constrained('departments')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('address')->nullable();
+            $table->string('phonenumber')->nullable();
             $table->boolean('is_applicant')->default(1)->comment('1 = applicant, 0 = student');
             $table->boolean('application_completed')->default(0)->comment('0 = incomplete, 1 = complete');
             $table->enum('accepted', ['rejected', 'accepted', 'pending'])->default('pending')->comment('rejected, accepted, or pending');

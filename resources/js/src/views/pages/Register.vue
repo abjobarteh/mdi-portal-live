@@ -14,7 +14,7 @@
         <v-card-text>
           <v-form>
             <v-text-field
-              v-model="username"
+              v-model="registrationFormData.username"
               outlined
               label="Username"
               placeholder="JohnDoe"
@@ -23,7 +23,7 @@
             ></v-text-field>
 
             <v-text-field
-              v-model="email"
+              v-model="registrationFormData.email"
               outlined
               label="Email"
               placeholder="john@example.com"
@@ -32,7 +32,7 @@
             ></v-text-field>
 
             <v-text-field
-              v-model="password"
+              v-model="registrationFormData.password"
               outlined
               :type="isPasswordVisible ? 'text' : 'password'"
               label="Password"
@@ -50,7 +50,7 @@
               </template>
             </v-checkbox>
 
-            <v-btn block color="primary" class="mt-6"> Sign Up </v-btn>
+            <v-btn @click="register" block color="primary" class="mt-6"> Sign Up </v-btn>
           </v-form>
         </v-card-text>
 
@@ -88,23 +88,58 @@ import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
 
 export default {
-  setup() {
-    const isPasswordVisible = ref(false)
-    const username = ref('')
-    const email = ref('')
-    const password = ref('')
-
+  data() {
     return {
-      isPasswordVisible,
-      username,
-      email,
-      password,
-
+      isPasswordVisible: false,
+      registrationFormData: {
+        username: '',
+        email: '',
+        password: '',
+      },
       icons: {
         mdiEyeOutline,
         mdiEyeOffOutline,
       },
     }
+  },
+
+  methods: {
+    register() {
+      if (true) {
+        axios
+          .post('/api/register', this.registrationFormData)
+          .then(result => {
+            // show success alert
+            this.addUserDialog = false
+            swal
+              .fire({
+                title: 'Success!',
+                text: 'User added successfully. Go Login',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              })
+              .then(() => {
+                this.$router.push('/login')
+              })
+          })
+          .catch(error => {
+            // show error alert
+            swal.fire({
+              title: 'Error!',
+              text: 'Failed to add user.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            })
+          })
+      } else {
+        swal.fire({
+          title: 'Error!',
+          text: 'Failed to add user.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
+      }
+    },
   },
 }
 </script>

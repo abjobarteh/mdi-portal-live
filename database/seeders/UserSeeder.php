@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             'email' => 'student@gmail.com',
             'address' => '123 Main St',
             'phonenumber' => '7199012',
-            'role_id' => 5,  // student is having the role_of 5
+            'role_id' => 4,  // student is having the role_of 5
             'password' => Hash::make('password'),
         ]);
     }
