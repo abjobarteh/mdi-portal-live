@@ -103,8 +103,14 @@
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '4'"
+        v-if="currentUser && currentUser.role_id == '4' && studentInfo.is_applicant == 0"
         title="Student"
+        :to="{ name: 'student' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '4' && studentInfo.is_applicant == 1"
+        title="Applicant"
         :to="{ name: 'student' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
@@ -140,6 +146,14 @@ import store from '@/store'
 export default {
   computed: {
     ...mapGetters(['currentUser']),
+    getUserProfile() {
+      return this.$store.getters.getUserProfile
+    },
+  },
+  data() {
+    return {
+      studentInfo: '',
+    }
   },
   components: {
     NavMenuSectionTitle,
@@ -170,6 +184,25 @@ export default {
       },
     }
   },
+
+  watch: {
+    getUserProfile: function () {
+      this.studentInfo = this.getUserProfile
+      console.log(this.studentInfo)
+      this.education = this.studentInfo.education
+      this.certificates = this.studentInfo.certificates
+    },
+  },
+
+  mounted() {
+    this.$store.dispatch('userProfile')
+  },
+  // computed: {
+  //   getUserProfile() {
+  //     //final output from here
+  //     return this.$store.getters.getUserProfile
+  //   },
+  // },
 }
 </script>
 

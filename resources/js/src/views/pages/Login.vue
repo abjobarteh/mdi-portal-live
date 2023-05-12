@@ -3,27 +3,15 @@
     <div class="auth-inner">
       <v-card class="auth-card">
         <!-- logo -->
-        <v-card-title class="d-flex align-center justify-center py-7">
-          <router-link to="/" class="d-flex align-center">
-            <v-img
-              :src="require('@/assets/images/logos/mdi_logo_square.png').default"
-              max-height="70px"
-              max-width="70px"
-              alt="logo"
-              contain
-              class="me-3"
-            ></v-img>
-
-            <h2 class="text-2xl font-weight-semibold">Materio</h2>
-          </router-link>
-        </v-card-title>
 
         <!-- title -->
-        <v-card-text>
-          <p class="text-2xl font-weight-semibold text--primary mb-2">
-            Welcome to <span style="color: green">MDI</span> Portal! 👋🏻
-          </p>
-          <p class="mb-2">Please sign-in to your account and start the adventure</p>
+        <!-- <v-card-text>
+          <p class="text-2xl font-weight-semibold text--primary mb-2">MDI PORTAL 👋🏻</p>
+          <p class="text-2xl font-weight-semibold text--primary mb-2">Welcome! Please Signin</p>
+        </v-card-text> -->
+        <v-card-text class="d-flex flex-column align-center justify-center">
+          <p class="text-h4 font-weight-semibold text-center mb-2">MDI PORTAL</p>
+          <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Sign in</p>
         </v-card-text>
 
         <!-- login form -->

@@ -12,6 +12,10 @@ class Student extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'application_completed',
+    ];
+
 
     public function user()
     {

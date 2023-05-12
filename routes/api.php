@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\Registrar\SemesterController;
 use App\Http\Controllers\Api\Registrar\SemesterCourseController;
 use App\Http\Controllers\Api\Registrar\SessionController;
 use App\Http\Controllers\Api\Student\ApplicantCertificateController;
+use App\Http\Controllers\Api\Student\ApplicantDeclarationController;
 use App\Http\Controllers\Api\Student\ApplicantEducationController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -131,6 +132,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
     Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
+    Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
+
+    // submitApplication
 });
 
 Route::post('login', [AuthController::class, 'login']);

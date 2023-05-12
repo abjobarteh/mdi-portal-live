@@ -88,13 +88,7 @@
                   </tr>
                   <tr>
                     <td><router-link to="/applicant-declaration">Declaration and Preview</router-link></td>
-                    <td
-                      v-if="progress.declaration == 'Completed'"
-                      style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
-                    >
-                      Completed
-                    </td>
-                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
+                    <td style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
                   </tr>
                 </tbody>
               </template>
