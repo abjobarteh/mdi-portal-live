@@ -7,28 +7,13 @@
         </v-card-title>
         <v-row>
           <v-col cols="12" md="6">
-            <v-select outlined v-model="prefix" :items="prefixOptions" label="Prefix *" required></v-select>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field outlined v-model="familyName" label="Family Name *" required></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field outlined v-model="firstAndMiddleName" label="First & Middle Name *" required></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field outlined v-model="phoneNumber" label="Phone Number *" required></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field outlined v-model="email" label="Email Address *" type="email" required></v-text-field>
+            <v-text-field outlined v-model="middleName" label="Middle Name *" required></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
             <v-select outlined v-model="gender" :items="genderOptions" label="Gender *" required></v-select>
           </v-col>
         </v-row>
+
         <v-row>
           <v-col cols="12" md="6">
             <v-select
@@ -85,6 +70,9 @@
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
+            <v-text-field outlined v-model="phoneNumber" label="Phone Number *" required></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
             <v-select
               outlined
               v-model="employmentStatus"
@@ -92,9 +80,6 @@
               label="Employment Status *"
               required
             ></v-select>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field outlined v-model="ministryOrDepartment" label="Ministry/Department *" required></v-text-field>
           </v-col>
         </v-row>
       </v-card>

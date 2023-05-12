@@ -15,6 +15,12 @@ class Student extends Model
     protected $fillable = [
         'firstname',
         'lastname',
+        'middlename',
+        'gender',
+        'dob',
+        'marital_status',
+        'nationality',
+        'employment_status',
         'username',
         'address',
         'email',
@@ -26,7 +32,6 @@ class Student extends Model
         'accepted',
         'application_completed',
     ];
-
 
     public function user()
     {

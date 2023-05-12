@@ -14,6 +14,22 @@
         <v-card-text>
           <v-form>
             <v-text-field
+              v-model="registrationFormData.firstname"
+              outlined
+              label="Firstname"
+              placeholder="John"
+              hide-details
+              class="mb-3"
+            ></v-text-field
+            ><v-text-field
+              v-model="registrationFormData.lastname"
+              outlined
+              label="Lastname"
+              placeholder="Doe"
+              hide-details
+              class="mb-3"
+            ></v-text-field>
+            <v-text-field
               v-model="registrationFormData.username"
               outlined
               label="Username"
@@ -92,6 +108,8 @@ export default {
     return {
       isPasswordVisible: false,
       registrationFormData: {
+        firstname: '',
+        lastname: '',
         username: '',
         email: '',
         password: '',

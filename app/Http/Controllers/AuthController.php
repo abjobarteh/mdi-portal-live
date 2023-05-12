@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Egulias\EmailValidator\EmailValidator;
-
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -34,30 +34,45 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'username' => 'required|max:255',
+            'firstname' => 'required|max:255',
+            'lastname' => 'required|max:255',
             'username' => 'required|max:255',
             'email' => 'required|max:255',
             'password' => 'required|max:255',
         ]);
 
-        $user = User::create([
-            'username' => $validatedData['username'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'role_id' => 4,
-            'is_active' => 1,
-        ]);
+        DB::beginTransaction();
 
-        $student = Student::create([
-            'username' => $user->username,
-            'email' => $user->email,
-            'user_id' => $user->id,
-            'is_applicant' => 1,
-            'application_completed' => 0,
-            'accepted' => 'pending'
-        ]);
+        try {
+            $user = User::create([
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'role_id' => 4,
+                'is_active' => 1,
+            ]);
 
-        return response()->json(['message' => 'User created successfully.']);
+            $student = Student::create([
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'username' => $user->username,
+                'email' => $user->email,
+                'user_id' => $user->id,
+                'is_applicant' => 1,
+                'application_completed' => 0,
+                'accepted' => 'pending'
+            ]);
+
+            DB::commit();
+
+            return response()->json(['message' => 'User created successfully.']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return response()->json(['message' => 'Error creating user.'], 500);
+        }
 
         // return $user->createToken($request->device_name)->plainTextToken;
     }
