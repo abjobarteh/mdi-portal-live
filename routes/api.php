@@ -113,9 +113,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         // applications
-        Route::get('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
-        Route::get('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
-        Route::get('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
+        Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
+        Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
+        Route::post('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
 
 
 

@@ -75,7 +75,7 @@ export default {
 
     getResults() {
       axios
-        .get('/api/view-incoming-applications?page=' + this.page)
+        .post(`/api/view-incoming-applications?page=` + this.page, { userId: this.$route.params.id })
         .then(response => {
           this.education = response.data.result.data[0].education
           this.certificates = response.data.result.data[0].certificates

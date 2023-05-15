@@ -313,7 +313,7 @@ const routes = [
   },
 
   {
-    path: '/view-application-preview',
+    path: '/view-application-preview/:id',
     name: 'view-application-preview',
     component: () => import('@/views/Registrar/student/ApplicantDeclarationAndPreview.vue'),
     meta: {

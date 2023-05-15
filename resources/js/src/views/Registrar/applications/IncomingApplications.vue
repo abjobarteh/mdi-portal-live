@@ -21,8 +21,7 @@
             hide-default-footer
           >
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="editCourse(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteCourse(item)">Delete</v-btn>
+              <v-btn small color="primary" @click="viewApplicationData(item)">View</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -148,7 +147,7 @@ export default {
     },
     getResults() {
       axios
-        .get('/api/view-incoming-applications?page=' + this.page)
+        .post('/api/view-incoming-applications?page=' + this.page)
         .then(response => {
           this.incomingApplications = response.data.result.data
           this.pageCount = response.data.result.last_page
@@ -165,6 +164,11 @@ export default {
       const workbook = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(workbook, worksheet, 'incomingApplications')
       XLSX.writeFile(workbook, 'incomingApplications.xlsx')
+    },
+
+    viewApplicationData(item) {
+      console.log(item)
+      this.$router.push('/view-application-preview/' + item.user_id)
     },
 
     editSession(item) {
