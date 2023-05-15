@@ -14,13 +14,17 @@ use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
+use App\Http\Controllers\Api\Registrar\ApplicationsController;
 use App\Http\Controllers\Api\Registrar\LecturerController;
 use App\Http\Controllers\Api\Registrar\SemesterController;
 use App\Http\Controllers\Api\Registrar\SemesterCourseController;
 use App\Http\Controllers\Api\Registrar\SessionController;
 use App\Http\Controllers\Api\Student\ApplicantCertificateController;
 use App\Http\Controllers\Api\Student\ApplicantDeclarationController;
+use App\Http\Controllers\Api\Student\ApplicantDeparmentInfoController;
 use App\Http\Controllers\Api\Student\ApplicantEducationController;
+use App\Http\Controllers\Api\Student\ApplicantPersonalInfoController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -108,6 +112,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
 
+        // applications
+        Route::get('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
+        Route::get('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
+        Route::get('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
+
+
+
+
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
 
@@ -132,7 +144,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
     Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
+    Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
     Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
+    Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
+
+
+
+
 
     // submitApplication
 });

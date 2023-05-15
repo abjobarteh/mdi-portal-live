@@ -16,9 +16,11 @@
 </template>
 
 <script>
-import EducationCard from '../../components/student/DeclarationAndPreview/EducationCard.vue'
-import CertificateCard from '../../components/student/DeclarationAndPreview/CertificateCard.vue'
-import DepartmentCard from '../../components/student/DeclarationAndPreview/Department.vue'
+// import EducationCard from '../../components/student/DeclarationAndPreview/EducationCard.vue'
+import EducationCard from '../student/DeclarationAndPreview/EducationCard.vue'
+import CertificateCard from '../student/DeclarationAndPreview/CertificateCard.vue'
+import DepartmentCard from '../student/DeclarationAndPreview/DepartmentCard.vue'
+
 import 'vuetify/dist/vuetify.min.css'
 
 export default {
@@ -29,11 +31,14 @@ export default {
   },
   data() {
     return {
-      studentInfo: '',
       education: [],
       certificates: [],
       department: '',
     }
+  },
+
+  created() {
+    this.getResults()
   },
   methods: {
     submitApplication() {
@@ -67,24 +72,20 @@ export default {
           }
         })
     },
-  },
 
-  watch: {
-    getUserProfile: function () {
-      this.studentInfo = this.getUserProfile
-      this.education = this.studentInfo.education
-      this.certificates = this.studentInfo.certificates
-      this.department = this.studentInfo.name // this is actually the department name
-    },
-  },
-
-  mounted() {
-    this.$store.dispatch('userProfile')
-  },
-  computed: {
-    getUserProfile() {
-      //final output from here
-      return this.$store.getters.getUserProfile
+    getResults() {
+      axios
+        .get('/api/view-incoming-applications?page=' + this.page)
+        .then(response => {
+          this.education = response.data.result.data[0].education
+          this.certificates = response.data.result.data[0].certificates
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          console.log('applications')
+          this.incomingApplications = []
+          this.pageCount = 0
+        })
     },
   },
 }

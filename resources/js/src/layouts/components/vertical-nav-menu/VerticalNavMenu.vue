@@ -102,6 +102,16 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
+      <nav-menu-group
+        v-if="currentUser && currentUser.role_id == '2'"
+        title="Applications"
+        :icon="icons.mdiFileOutline"
+      >
+        <nav-menu-link title="Incoming Applications" :to="{ name: 'view-incoming-applications' }"></nav-menu-link>
+        <nav-menu-link title="Accepted Applications" :to="{ name: 'view-accepted-applications' }"></nav-menu-link>
+        <nav-menu-link title="Rejected Applications" :to="{ name: 'view-rejected-applications' }"></nav-menu-link>
+      </nav-menu-group>
+
       <nav-menu-link
         v-if="currentUser && currentUser.role_id == '4' && studentInfo.is_applicant == 0"
         title="Student"

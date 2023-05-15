@@ -99,6 +99,16 @@ const routes = [
   },
 
   {
+    path: '/applicant-applied-department',
+    name: 'applicant-applied-department',
+    component: () => import('@/components/student/ApplicantAppliedDepartmentForm.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [4],
+    }
+  },
+
+  {
     path: '/typography',
     name: 'typography',
     component: () => import('@/views/typography/Typography.vue'),
@@ -265,6 +275,50 @@ const routes = [
     meta: {
       requiresAuth: true,
       roles: [1],
+    }
+
+  },
+
+
+
+  {
+    path: '/view-incoming-applications',
+    name: 'view-incoming-applications',
+    component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
+    path: '/view-accepted-applications',
+    name: 'view-accepted-applications',
+    component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+
+  },
+
+  {
+    path: '/view-rejected-applications',
+    name: 'view-rejected-applications',
+    component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
+    path: '/view-application-preview',
+    name: 'view-application-preview',
+    component: () => import('@/views/Registrar/student/ApplicantDeclarationAndPreview.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
     }
 
   },

@@ -21,8 +21,9 @@ class ProfileController extends Controller
         if (auth()->user()->role_id == 4) {
             $student = User::leftJoin('students', 'users.id', '=', 'students.user_id')
                 ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
+                ->leftJoin('departments', 'students.department_id', '=', 'departments.id') // Join the departments table
                 ->where('users.id', auth()->user()->id)
-                ->select('users.*', 'students.is_applicant', 'students.application_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
+                ->select('users.*', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
                 ->first();
             $student['education'] = ApplicantEducation::where('user_id', $student->id)->get();
             $student['certificates'] = ApplicantCertificate::where('user_id', $student->id)->get();

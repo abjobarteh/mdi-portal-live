@@ -63,18 +63,22 @@
                   <tr>
                     <td><router-link to="/applicant-personal-info">Personal Information</router-link></td>
                     <td
-                      v-if="progress.personal == 'Completed'"
+                      v-if="studentInfo.personal_info_completed == 1"
                       style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
                     >
                       Completed
                     </td>
-                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">
-                      {{ progress.academic }}
-                    </td>
+                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
                   </tr>
                   <tr>
-                    <td>Course Details</td>
-                    <td>{{ progress.academicInfo }}</td>
+                    <td><router-link to="/applicant-applied-department">Course Details</router-link></td>
+                    <td
+                      v-if="studentInfo.department_id != null"
+                      style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
+                    >
+                      Completed
+                    </td>
+                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
                   </tr>
                   <tr>
                     <td><router-link to="/applicant-certificate-info">Upload Documents</router-link></td>
