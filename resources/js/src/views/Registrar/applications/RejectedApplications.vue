@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-card>
         <v-toolbar color="primary" dark>
-          <v-toolbar-title>Incoming Applications</v-toolbar-title>
+          <v-toolbar-title>Rejected Applications</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
         </v-toolbar>
@@ -12,7 +12,7 @@
         <v-card-text>
           <v-data-table
             :headers="headers"
-            :items="incomingApplications"
+            :items="rejectedApplications"
             :items-per-page="13"
             :search="search"
             class="elevation-1"
@@ -43,7 +43,7 @@ export default {
   components: {},
   data() {
     return {
-      incomingApplications: [],
+      rejectedApplications: [],
       headers: [
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
@@ -73,14 +73,14 @@ export default {
     },
     getResults() {
       axios
-        .post('/api/view-incoming-applications?page=' + this.page)
+        .post('/api/view-rejected-applications?page=' + this.page)
         .then(response => {
-          this.incomingApplications = response.data.result.data
+          this.rejectedApplications = response.data.result.data
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {
           console.log('applications')
-          this.incomingApplications = []
+          this.rejectedApplications = []
           this.pageCount = 0
         })
     },
@@ -90,7 +90,7 @@ export default {
       this.$router.push({
         name: 'view-application-preview',
         params: { id: item.user_id },
-        query: { param: 'incoming' },
+        query: { param: 'rejected' },
       })
     },
   },

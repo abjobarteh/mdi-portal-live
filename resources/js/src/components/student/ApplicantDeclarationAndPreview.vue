@@ -2,6 +2,9 @@
   <v-card style="background-color: #fcfbfe">
     <v-container class="my-5">
       <v-col cols="12" md="12" class="mb-4">
+        <UserInfoCard :studentProfile="applicantProfile" />
+      </v-col>
+      <v-col cols="12" md="12" class="mb-4">
         <education-card :education="education"></education-card>
       </v-col>
       <v-col cols="12" md="12" class="mb-4">
@@ -19,6 +22,7 @@
 import EducationCard from '../../components/student/DeclarationAndPreview/EducationCard.vue'
 import CertificateCard from '../../components/student/DeclarationAndPreview/CertificateCard.vue'
 import DepartmentCard from '../../components/student/DeclarationAndPreview/Department.vue'
+import UserInfoCard from '../../components/student/DeclarationAndPreview/UserInfoCard.vue'
 import 'vuetify/dist/vuetify.min.css'
 
 export default {
@@ -26,6 +30,7 @@ export default {
     EducationCard,
     CertificateCard,
     DepartmentCard,
+    UserInfoCard,
   },
   data() {
     return {
@@ -33,6 +38,7 @@ export default {
       education: [],
       certificates: [],
       department: '',
+      applicantProfile: [],
     }
   },
   methods: {
@@ -75,6 +81,19 @@ export default {
       this.education = this.studentInfo.education
       this.certificates = this.studentInfo.certificates
       this.department = this.studentInfo.name // this is actually the department name
+      this.applicantProfile = [
+        {
+          firstname: this.studentInfo.firstname,
+          lastname: this.studentInfo.lastname,
+          address: this.studentInfo.address,
+          phonenumber: this.studentInfo.phonenumber,
+          gender: this.studentInfo.gender,
+          nationality: this.studentInfo.nationality,
+          employment_status: this.studentInfo.employment_status,
+          email: this.studentInfo.email,
+          dob: this.studentInfo.dob,
+        },
+      ]
     },
   },
 

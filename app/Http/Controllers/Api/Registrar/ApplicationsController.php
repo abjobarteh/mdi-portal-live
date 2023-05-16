@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ApplicantCertificate;
 use App\Models\ApplicantEducation;
 use App\Models\Lecturer;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('departments', 'students.department_id', '=', 'departments.id') // Join the departments table
-            ->select('users.*', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
+            ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'accepted')
             ->paginate(10);
@@ -43,7 +44,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('departments', 'students.department_id', '=', 'departments.id') // Join the departments table
-            ->select('users.*', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
+            ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'rejected')
             ->paginate(10);
@@ -64,7 +65,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('departments', 'students.department_id', '=', 'departments.id')
-            ->select('users.*', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at')
+            ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at')
             ->where('role_id', 4)
             ->where('application_completed', 1)
             ->where('accepted', 'pending')
@@ -83,6 +84,27 @@ class ApplicationsController extends Controller
             'result' => $students
         ]);
     }
+
+    public function acceptStudentApplication(Request $request)
+    {
+        $student = Student::where('user_id', $request->get('userId'))->first();
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted',]);
+        return response()->json([
+            'status' => 200,
+            'result' => 'Accepted Successful'
+        ]);
+    }
+
+    public function rejectStudentApplication(Request $request)
+    {
+        $student = Student::where('user_id', $request->get('userId'))->first();
+        $student->update(['accepted' => 'rejected',]);
+        return response()->json([
+            'status' => 200,
+            'result' => 'Accepted Successful'
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

@@ -294,7 +294,7 @@ const routes = [
   {
     path: '/view-accepted-applications',
     name: 'view-accepted-applications',
-    component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
+    component: () => import('@/views/Registrar/applications/AcceptedApplications.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],
@@ -305,7 +305,7 @@ const routes = [
   {
     path: '/view-rejected-applications',
     name: 'view-rejected-applications',
-    component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
+    component: () => import('@/views/Registrar/applications/RejectedApplications.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],

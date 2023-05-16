@@ -34,7 +34,7 @@ class ApplicantDeparmentInfoController extends Controller
         }
 
         $student->update([
-            'department_id' => 1,
+            'department_id' => $request->get('department_id'),
         ]);
 
         return response()->json([
