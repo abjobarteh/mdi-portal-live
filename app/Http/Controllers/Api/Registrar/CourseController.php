@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Semester;
+use App\Models\SemesterCourse;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -120,5 +123,27 @@ class CourseController extends Controller
     {
         $department = Course::find($id);
         $department->delete();
+    }
+
+    public function runningCourses()
+    {
+        $studentDepartmentId = Student::where('user_id', auth()->user()->id)->value('department_id');
+
+        $runningCourses = SemesterCourse::with('course')
+            ->with('lecturer')
+            ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
+            ->whereNotNull('lecturer_id')
+            ->whereHas('course', function ($query) use ($studentDepartmentId) {
+                $query->whereHas('program', function ($query) use ($studentDepartmentId) {
+                    $query->where('department_id', $studentDepartmentId);
+                });
+            })
+            ->get();
+
+        // where the course belong to the department of the login user, if he is a student
+        return response()->json([
+            'status' => 200,
+            'result' => $runningCourses
+        ]);
     }
 }

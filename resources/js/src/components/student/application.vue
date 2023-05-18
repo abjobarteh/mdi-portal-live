@@ -125,6 +125,7 @@ export default {
   watch: {
     getUserProfile: function () {
       this.studentInfo = this.getUserProfile
+      console.log('info student', this.studentInfo.education.length)
     },
   },
 

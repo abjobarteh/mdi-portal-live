@@ -123,6 +123,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+
+
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
 
@@ -130,6 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/view-departments', [DepartmentController::class, 'index']);
+
 
     Route::middleware(['admin'])->group(function () {
         /////////////////// users controller ////////////
@@ -150,6 +153,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
     Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
     Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
+
+    Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);  // for the student middleware
+
+    Route::get('/running-courses', [CourseController::class, 'runningCourses']);  // for the student middleware
 
 
 

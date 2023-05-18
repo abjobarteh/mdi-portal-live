@@ -110,10 +110,10 @@
       style="background-color: #eae4f0"
     >
       <v-row align="center" justify="center">
-        <v-col cols="12" md="8" lg="6">
+        <v-col cols="12" md="8" lg="12">
           <div outlined class="text-center">
-            <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-              You are now a student here
+            <v-card-title class="headline text-center mb-5" style="font-weight: bold">
+              <AccountSettings />
             </v-card-title>
           </div>
         </v-col>
@@ -147,11 +147,13 @@
 <script>
 import 'vuetify/dist/vuetify.min.css'
 import NewApplication from '../../../components/student/application.vue'
+import AccountSettings from '../../Student/account-settings/AccountSettings'
 
 export default {
   name: 'Home',
   components: {
     NewApplication,
+    AccountSettings,
   },
 
   data() {

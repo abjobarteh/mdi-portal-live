@@ -22,6 +22,15 @@ class DepartmentController extends Controller
         ]);
     }
 
+    public function deparmentCourses(Request $request)
+    {
+        $departmentCourses = Department::with('courses')->where('id', $request->get('department_id'))->paginate(13);
+        return response()->json([
+            'status' => 200,
+            'result' => $departmentCourses
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
