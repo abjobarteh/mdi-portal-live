@@ -102,13 +102,13 @@ export default {
     axios
       .get('/api/running-courses?page=' + this.page)
       .then(response => {
-        // this.runnings = response.data.result.map(course => course.course)
-        this.runnings = response.data.result.map(course => {
-          return {
-            ...course.course,
-            lecturer: course.lecturer.firstname + ' ' + course.lecturer.lastname,
-          }
-        })
+        this.runnings = response.data.result
+        // this.runnings = response.data.result.map(course => {
+        //   return {
+        //     ...course.course,
+        //     lecturer: course.lecturer.firstname + ' ' + course.lecturer.lastname,
+        //   }
+        // })
         console.log('running courses', this.runnings)
         this.pageCount = response.data.result.last_page
       })
