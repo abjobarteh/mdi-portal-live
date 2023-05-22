@@ -23,7 +23,7 @@ class ProfileController extends Controller
                 ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
                 ->leftJoin('departments', 'students.department_id', '=', 'departments.id') // Join the departments table
                 ->where('users.id', auth()->user()->id)
-                ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
+                ->select('users.*', 'students.gender', 'students.id', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
                 ->first();
             $student['education'] = ApplicantEducation::where('user_id', $student->id)->get();
             $student['certificates'] = ApplicantCertificate::where('user_id', $student->id)->get();

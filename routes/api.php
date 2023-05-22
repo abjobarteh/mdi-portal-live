@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\Student\ApplicantDeclarationController;
 use App\Http\Controllers\Api\Student\ApplicantDeparmentInfoController;
 use App\Http\Controllers\Api\Student\ApplicantEducationController;
 use App\Http\Controllers\Api\Student\ApplicantPersonalInfoController;
+use App\Http\Controllers\Api\Student\RegisterCoursesController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -157,6 +158,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);  // for the student middleware
 
     Route::get('/running-courses', [CourseController::class, 'runningCourses']);  // for the student middleware
+
+    Route::post('/register-courses', [RegisterCoursesController::class, 'registerCourse']);  // for the student middleware
+
+    Route::post('/un-register-courses', [RegisterCoursesController::class, 'unRegisterCourse']);  // for the student middleware
+
+
 
 
 

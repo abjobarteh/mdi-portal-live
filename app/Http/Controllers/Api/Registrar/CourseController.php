@@ -127,6 +127,7 @@ class CourseController extends Controller
 
     public function runningCourses()
     {
+        // if the course is part of the registered courses, then add registered to true else registered to false
         $studentDepartmentId = Student::where('user_id', auth()->user()->id)->value('department_id');
 
         $runningCourses = SemesterCourse::with('course')
@@ -139,6 +140,23 @@ class CourseController extends Controller
                 });
             })
             ->get();
+
+        // $courseId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
+        //     ->where('students.user_id', auth()->user()->id)->first()->course_id;
+        // return $courseId;
+
+        foreach ($runningCourses as $runningCourse) {
+
+            $courseId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
+                ->where('students.user_id', auth()->user()->id)->where('course_id', $runningCourse['course_id'])->value('course_id');
+
+            if ($runningCourse['course_id'] == $courseId) {
+                // the course is registered
+                $runningCourse['course']['registered'] = true;
+            } else {
+                $runningCourse['course']['registered'] = false;
+            }
+        }
 
         // where the course belong to the department of the login user, if he is a student
         return response()->json([
