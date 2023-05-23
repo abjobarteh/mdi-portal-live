@@ -25,8 +25,8 @@ class ProfileController extends Controller
                 ->where('users.id', auth()->user()->id)
                 ->select('users.*', 'students.gender', 'students.id', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
                 ->first();
-            $student['education'] = ApplicantEducation::where('user_id', $student->id)->get();
-            $student['certificates'] = ApplicantCertificate::where('user_id', $student->id)->get();
+            $student['education'] = ApplicantEducation::where('user_id', $student->user_id)->get();
+            $student['certificates'] = ApplicantCertificate::where('user_id', $student->user_id)->get();
 
 
 

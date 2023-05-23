@@ -29,6 +29,11 @@ class RegisterCoursesController extends Controller
             return response()->json(['message' => 'Cannot register more than 6 courses in the same semester.'], 400);
         }
 
+        $courseRegisteredBefore = StudentRegisteredCourse::where('student_id', $validatedData['student_id'])->where('course_id', $validatedData['course_id'])->exists();
+        if ($courseRegisteredBefore) {
+            return response()->json(['message' => 'Please you have registered this course before.'], 400);
+        }
+
         $studentRegisteredCourse = StudentRegisteredCourse::firstOrCreate([
             'student_id' => $studentId,
             'lecturer_id' => $validatedData['lecturer_id'],

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
+use App\Models\StudentRegisteredCourse;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -146,9 +147,9 @@ class CourseController extends Controller
         // return $courseId;
 
         foreach ($runningCourses as $runningCourse) {
-
+            $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
             $courseId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
-                ->where('students.user_id', auth()->user()->id)->where('course_id', $runningCourse['course_id'])->value('course_id');
+                ->where('students.user_id', auth()->user()->id)->where('course_id', $runningCourse['course_id'])->where('student_registered_courses.semester_id', $currentSemesterId)->value('course_id');
 
             if ($runningCourse['course_id'] == $courseId) {
                 // the course is registered
@@ -162,6 +163,82 @@ class CourseController extends Controller
         return response()->json([
             'status' => 200,
             'result' => $runningCourses
+        ]);
+    }
+
+    public function studentTranscript()
+    {
+        // $registeredCourses = StudentRegisteredCourse::with('course', 'semester')->get();
+
+
+        // return response()->json([
+        //     'status' => 200,
+        //     'result' => $registeredCourses
+        // ]);
+
+        // $registeredCourses = StudentRegisteredCourse::with('course', 'semester')->get();
+        // $groupedCourses = $registeredCourses->groupBy(function ($item) {
+        //     return $item->semester->semester_name;
+        // });
+
+        // $transcript = [];
+
+        // foreach ($groupedCourses as $semesterName => $courses) {
+        //     $semesterTranscript = [];
+
+        //     foreach ($courses as $course) {
+        //         $courseTranscript = [
+        //             'Course Code' => $course->course->course_code,
+        //             'Course Name' => $course->course->course_name,
+        //             'Test Mark' => $course->test_mark,
+        //             'Exam Mark' => $course->exam_mark,
+        //             'Total Mark' => $course->total_mark,
+        //         ];
+
+        //         $semesterTranscript[] = $courseTranscript;
+        //     }
+
+        //     $transcript[$semesterName] = $semesterTranscript;
+        // }
+
+        // return $transcript;
+
+        $registeredCourses = StudentRegisteredCourse::with('course', 'semester.session')->get();
+
+        $groupedCourses = $registeredCourses->groupBy(function ($item) {
+            $semester = $item->semester;
+            $session = $semester->session;
+            return $semester->semester_name . ' - ' . $session->session_name;
+        });
+
+        $transcript = [];
+
+        foreach ($groupedCourses as $semesterSession => $courses) {
+            $semesterTranscript = [
+                'Semester Session' => $semesterSession,
+                'Courses' => []
+            ];
+
+            foreach ($courses as $course) {
+                $courseTranscript = [
+                    'Course Code' => $course->course->course_code,
+                    'Course Name' => $course->course->course_name,
+                    'Test Mark' => $course->test_mark,
+                    'Exam Mark' => $course->exam_mark,
+                    'Total Mark' => $course->total_mark,
+                    'Start Date' => $course->semester->session->start_date,
+                    'End Date' => $course->semester->session->end_date,
+                ];
+
+                $semesterTranscript['Courses'][] = $courseTranscript;
+            }
+
+            $transcript[] = $semesterTranscript;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'result' => $transcript
         ]);
     }
 }
