@@ -8,6 +8,7 @@ use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
 use App\Models\StudentRegisteredCourse;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -203,7 +204,9 @@ class CourseController extends Controller
 
         // return $transcript;
 
-        $registeredCourses = StudentRegisteredCourse::with('course', 'semester.session')->get();
+        $registeredCourses = StudentRegisteredCourse::with('course', 'semester.session')
+            ->where('student_id', Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
+                ->where('students.user_id', auth()->user()->id)->value('students.id'))->get();
 
         $groupedCourses = $registeredCourses->groupBy(function ($item) {
             $semester = $item->semester;
@@ -215,19 +218,19 @@ class CourseController extends Controller
 
         foreach ($groupedCourses as $semesterSession => $courses) {
             $semesterTranscript = [
-                'Semester Session' => $semesterSession,
+                'SemesterSession' => $semesterSession,
                 'Courses' => []
             ];
 
             foreach ($courses as $course) {
                 $courseTranscript = [
-                    'Course Code' => $course->course->course_code,
-                    'Course Name' => $course->course->course_name,
-                    'Test Mark' => $course->test_mark,
-                    'Exam Mark' => $course->exam_mark,
-                    'Total Mark' => $course->total_mark,
-                    'Start Date' => $course->semester->session->start_date,
-                    'End Date' => $course->semester->session->end_date,
+                    'CourseCode' => $course->course->course_code,
+                    'CourseName' => $course->course->course_name,
+                    'TestMark' => $course->test_mark,
+                    'ExamMark' => $course->exam_mark,
+                    'TotalMark' => $course->total_mark,
+                    'StartDate' => $course->semester->session->start_date,
+                    'EndDate' => $course->semester->session->end_date,
                 ];
 
                 $semesterTranscript['Courses'][] = $courseTranscript;

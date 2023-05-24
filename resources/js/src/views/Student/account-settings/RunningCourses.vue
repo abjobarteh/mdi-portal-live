@@ -13,7 +13,12 @@
         </template>
         <template v-slot:[`item.action`]="{ item }">
           <!-- <v-checkbox v-model="item.checked" @change="handleCheckboxChange(item)" :checked="item.course.registered"></v-checkbox> -->
-          <v-checkbox v-model="item.course.registered" @change="handleCheckboxChange(item)"></v-checkbox>
+          <v-checkbox
+            :disabled="registrationStatus == 0"
+            v-model="item.course.registered"
+            @change="handleCheckboxChange(item)"
+          ></v-checkbox>
+
         </template>
       </v-data-table>
       <v-pagination v-model="page" :length="pageCount" />
@@ -32,6 +37,7 @@ export default {
   },
   data() {
     return {
+      registrationStatus: '',
       studentInfo: '',
       headers: [
         { text: 'Course Code', value: 'course_code' },
@@ -42,6 +48,20 @@ export default {
       page: 1,
       pageCount: 0,
     }
+  },
+
+  created() {
+    axios
+      .get('/api/registration-status')
+      .then(response => {
+        this.registrationStatus = response.data.result.registration_status
+        console.log('running courses', this.runnings)
+        this.pageCount = response.data.result.last_page
+      })
+      .catch(err => {
+        this.runnings = []
+        this.pageCount = 0
+      })
   },
 
   methods: {

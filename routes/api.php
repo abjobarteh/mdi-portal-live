@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
 use App\Http\Controllers\Api\Registrar\ApplicationsController;
 use App\Http\Controllers\Api\Registrar\LecturerController;
+use App\Http\Controllers\Api\Registrar\RegistrationStatusController;
 use App\Http\Controllers\Api\Registrar\SemesterController;
 use App\Http\Controllers\Api\Registrar\SemesterCourseController;
 use App\Http\Controllers\Api\Registrar\SessionController;
@@ -163,6 +164,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/un-register-courses', [RegisterCoursesController::class, 'unRegisterCourse']);  // for the student middleware
 
+    Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware
+
+    Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
 
 
 
@@ -174,4 +178,3 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware

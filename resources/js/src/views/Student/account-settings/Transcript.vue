@@ -9,7 +9,7 @@
         hide-default-footer
       ></v-data-table>
     </v-card>
-    <v-btn @click="generatePDF">Generate PDF</v-btn>
+    <v-btn @click="generatePDF" class="mt-2" block color="light-green">Generate PDF</v-btn>
   </div>
 </template>
 
@@ -34,117 +34,23 @@ export default {
         { text: 'ExamMark', value: 'ExamMark' },
         { text: 'TotalMark', value: 'TotalMark' },
       ],
-      transcripts: [
-        {
-          SemesterSession: '5th semester - 2023',
-          Courses: [
-            {
-              CourseCode: 'CPS 121',
-              CourseName: 'Introduction to Computer Science',
-              TestMark: 40,
-              ExamMark: 40,
-              TotalMark: 80,
-            },
-            {
-              CourseCode: 'CPS 122',
-              CourseName: 'IT Hardware & Systems',
-              TestMark: 30,
-              ExamMark: 40,
-              TotalMark: 70,
-            },
-            {
-              CourseCode: 'CPS 123',
-              CourseName: 'Computer Security',
-              TestMark: 30,
-              ExamMark: 30,
-              TotalMark: 60,
-            },
-            {
-              CourseCode: 'CPS 124',
-              CourseName: 'Programming Logic and Design',
-              TestMark: 40,
-              ExamMark: 25,
-              TotalMark: 55,
-            },
-            {
-              CourseCode: 'CPS 211',
-              CourseName: 'Networking I',
-              TestMark: 35,
-              ExamMark: 35,
-              TotalMark: 70,
-            },
-          ],
-        },
-        {
-          SemesterSession: '6th semester - 2023',
-          Courses: [
-            {
-              CourseCode: 'CPS 213',
-              CourseName: 'Web programming I',
-              TestMark: 50,
-              ExamMark: 50,
-              TotalMark: 100,
-            },
-            {
-              CourseCode: 'CPS 214',
-              CourseName: 'Computer programming I',
-              TestMark: 30,
-              ExamMark: 40,
-              TotalMark: 70,
-            },
-            {
-              CourseCode: 'CPS 212',
-              CourseName: 'Database I',
-              TestMark: 45,
-              ExamMark: 35,
-              TotalMark: 80,
-            },
-          ],
-        },
-        {
-          SemesterSession: '6th semester - 2023',
-          Courses: [
-            {
-              CourseCode: 'CPS 121',
-              CourseName: 'Introduction to Computer Science',
-              TestMark: 40,
-              ExamMark: 40,
-              TotalMark: 80,
-            },
-            {
-              CourseCode: 'CPS 122',
-              CourseName: 'IT Hardware & Systems',
-              TestMark: 30,
-              ExamMark: 40,
-              TotalMark: 70,
-            },
-            {
-              CourseCode: 'CPS 123',
-              CourseName: 'Computer Security',
-              TestMark: 30,
-              ExamMark: 30,
-              TotalMark: 60,
-            },
-            {
-              CourseCode: 'CPS 124',
-              CourseName: 'Programming Logic and Design',
-              TestMark: 40,
-              ExamMark: 25,
-              TotalMark: 55,
-            },
-            {
-              CourseCode: 'CPS 211',
-              CourseName: 'Networking I',
-              TestMark: 35,
-              ExamMark: 35,
-              TotalMark: 70,
-            },
-          ],
-        },
-
-        // Add more transcript items here
-      ],
+      transcripts: [],
+      registrationStatus: '',
     }
+  },
+  //
+  created() {
+    axios
+      .get('/api/transcript-courses')
+      .then(response => {
+        this.transcripts = response.data.result
+        console.log('running courses', this.runnings)
+        this.pageCount = response.data.result.last_page
+      })
+      .catch(err => {
+        this.runnings = []
+        this.pageCount = 0
+      })
   },
 
   methods: {
