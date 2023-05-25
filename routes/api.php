@@ -168,6 +168,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
 
+    Route::post('/update-admission', [AdmissionStatusController::class, 'updateAdmissionStatus']);
+
+    Route::post('/update-registration-status', [RegistrationStatusController::class, 'updateRegistrationStatus']);
 
 
 

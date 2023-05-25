@@ -205,8 +205,10 @@ export default {
       axios
         .get('/api/admission-status')
         .then(response => {
-          this.admission_status = response.data.result.admission_status
-          console.log(this.admission_status)
+          // this.admission_status = response.data.admission_status
+          this.admission_status = response.data.result[0].admission_status
+
+          console.log('good', this.admission_status)
         })
         .catch(err => {
           this.admission_status = []

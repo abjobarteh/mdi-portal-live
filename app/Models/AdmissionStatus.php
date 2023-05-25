@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class AdmissionStatus extends Model
 {
     use HasFactory;
+
+    public $fillable = [
+        'admission_status'
+    ];
 }

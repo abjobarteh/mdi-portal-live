@@ -23,6 +23,25 @@ class RegistrationStatusController extends Controller
         ]);
     }
 
+    public function updateRegistrationStatus(Request $request)
+    {
+        $status = $request->get('status');
+
+        if ($status == 'Open') {
+            RegistrationStatus::first()->update(['registration_status' => 1]);
+            // Assuming the 'status' column is boolean (1 for open, 0 for closed)
+            // Adjust the column name and value based on your database structure
+            return response()->json(['message' => 'Admission opened successfully']);
+        } elseif ($status == 'Close') {
+            RegistrationStatus::first()->update(['registration_status' => 0]);
+            // Assuming the 'status' column is boolean (1 for open, 0 for closed)
+            // Adjust the column name and value based on your database structure
+            return response()->json(['message' => 'Admission closed successfully']);
+        } else {
+            return response()->json(['error' => 'Invalid admission status'], 400);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

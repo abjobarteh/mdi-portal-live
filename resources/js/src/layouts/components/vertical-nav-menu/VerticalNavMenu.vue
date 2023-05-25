@@ -125,6 +125,11 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
+      <nav-menu-group v-if="currentUser && currentUser.role_id == '2'" title="Settings" :icon="icons.mdiFileOutline">
+        <nav-menu-link title="Admissions" :to="{ name: 'admission-status' }"></nav-menu-link>
+        <nav-menu-link title="Registrations" :to="{ name: 'registration-status' }"></nav-menu-link>
+      </nav-menu-group>
+
       <!-- <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title> -->
       <!-- <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
       <nav-menu-link title="Icons" :to="{ name: 'icons' }" :icon="icons.mdiEyeOutline"></nav-menu-link>

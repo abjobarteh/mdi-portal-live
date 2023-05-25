@@ -16,7 +16,7 @@ class AdmissionStatusController extends Controller
      */
     public function index()
     {
-        $admissionStatus = AdmissionStatus::first();
+        $admissionStatus = AdmissionStatus::get();
         return response()->json([
             'status' => 200,
             'result' => $admissionStatus
@@ -39,9 +39,23 @@ class AdmissionStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function updateAdmissionStatus(Request $request)
     {
-        //
+        $status = $request->get('status');
+
+        if ($status == 'Open') {
+            AdmissionStatus::first()->update(['admission_status' => 1]);
+            // Assuming the 'status' column is boolean (1 for open, 0 for closed)
+            // Adjust the column name and value based on your database structure
+            return response()->json(['message' => 'Admission opened successfully']);
+        } elseif ($status == 'Close') {
+            AdmissionStatus::first()->update(['admission_status' => 0]);
+            // Assuming the 'status' column is boolean (1 for open, 0 for closed)
+            // Adjust the column name and value based on your database structure
+            return response()->json(['message' => 'Admission closed successfully']);
+        } else {
+            return response()->json(['error' => 'Invalid admission status'], 400);
+        }
     }
 
     /**

@@ -325,6 +325,26 @@ const routes = [
 
 
   {
+    path: '/registration-status',
+    name: 'registration-status',
+    component: () => import('@/views/Registrar/settings/RegistrationStatus.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+  {
+    path: '/admission-status',
+    name: 'admission-status',
+    component: () => import('@/views/Registrar/settings/AdmissionStatus.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+
+  {
     path: '/login',
     name: 'pages-login',
     component: () => import('@/views/pages/Login.vue'),
