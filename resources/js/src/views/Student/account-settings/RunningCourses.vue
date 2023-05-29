@@ -14,11 +14,10 @@
         <template v-slot:[`item.action`]="{ item }">
           <!-- <v-checkbox v-model="item.checked" @change="handleCheckboxChange(item)" :checked="item.course.registered"></v-checkbox> -->
           <v-checkbox
-            :disabled="registrationStatus == 0"
+            :disabled="registrationStatus == 0 || !item.can_register"
             v-model="item.course.registered"
             @change="handleCheckboxChange(item)"
           ></v-checkbox>
-
         </template>
       </v-data-table>
       <v-pagination v-model="page" :length="pageCount" />

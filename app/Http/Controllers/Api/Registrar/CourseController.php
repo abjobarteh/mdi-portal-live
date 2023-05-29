@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
+use App\Models\StudentPayment;
 use App\Models\StudentRegisteredCourse;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -143,6 +144,8 @@ class CourseController extends Controller
             })
             ->get();
 
+
+
         // $courseId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
         //     ->where('students.user_id', auth()->user()->id)->first()->course_id;
         // return $courseId;
@@ -151,6 +154,18 @@ class CourseController extends Controller
             $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
             $courseId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
                 ->where('students.user_id', auth()->user()->id)->where('course_id', $runningCourse['course_id'])->where('student_registered_courses.semester_id', $currentSemesterId)->value('course_id');
+
+            $current_semester = Semester::where('is_current_semester', 1)->value('id');
+
+            $student_id =  Student::join('student_payments', 'students.id', '=', 'student_payments.student_id')->where('students.user_id', auth()->user()->id)->value('student_id');
+
+            if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || (Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
+                // can register
+                $runningCourse["can_register"] = true;
+            } else {
+                $runningCourse["can_register"] = false;
+            }
+
 
             if ($runningCourse['course_id'] == $courseId) {
                 // the course is registered
