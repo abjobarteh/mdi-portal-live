@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\ApplicantEducation;
 use App\Models\Department;
+use App\Models\StudentPayment;
 
 
 class Student extends Model
@@ -43,6 +44,11 @@ class Student extends Model
     public function educations()
     {
         return $this->hasMany(ApplicantEducation::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(StudentPayment::class);
     }
 
     public function department()

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class SemesterController extends Controller
@@ -66,6 +67,15 @@ class SemesterController extends Controller
                 'course_id' => $course->id,
                 'semester_id' => $semester->id,
             ]);
+        }
+
+        // loop through all the students where the payment_types is 1 and remaining is not 0 and update their remaining
+        $students = Student::where('payment_type',  1)->where('remaining', '>',  0)->get();
+        foreach ($students as $student) {
+
+            $semesterFee = $student->department->programs->value('per_semester_fee');
+            $student->decrement('remaining', $semesterFee);
+            // remember initially the remaining will be - one semester fee
         }
 
         return response()->json(['message' => 'Semester created successfully.']);

@@ -59,6 +59,16 @@ const routes = [
   },
 
   {
+    path: '/finance-dashboard',
+    name: 'finance-dashboard',
+    component: () => import('@/views/dashboard/finance/Dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [5],
+    }
+  },
+
+  {
     path: '/applicant-personal-info',
     name: 'applicant-personal-info',
     component: () => import('@/components/student/ApplicantPersonalInfoForm.vue'),
@@ -203,7 +213,7 @@ const routes = [
     component: () => import('@/views/Registrar/programs/ViewPrograms.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 5],
     }
   },
 
@@ -343,6 +353,17 @@ const routes = [
     }
   },
 
+  {
+    path: '/view-student-fees',
+    name: 'view-student-fees',
+    component: () => import('@/views/Finance/studentsFees/ViewStudentsFees.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [5],
+    }
+
+  },
+
 
   {
     path: '/login',
@@ -403,6 +424,8 @@ router.beforeEach(async (to, from, next) => {
     }
     else if (userRole === 4) {
       next('/student'); // redirect to student dashboard for role 4
+    } else if (userRole === 5) {
+      next('/finance-dashboard'); // redirect to registrar for role 2
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

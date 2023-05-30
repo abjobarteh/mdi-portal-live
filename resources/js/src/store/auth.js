@@ -60,6 +60,8 @@ export default {
                     router.push({ name: 'registrar-dashboard' });
                 } else if (state.user.role_id == 4) {
                     router.push({ name: 'student' });
+                } else if (state.user.role_id == 5) {
+                    router.push({ name: 'finance-dashboard' });
                 }
 
             } catch (error) {

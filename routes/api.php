@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Registrar\ProgramDurationController;
 use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\EmailController;
+use App\Http\Controllers\Api\Finance\StudentPaymentController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
@@ -171,6 +172,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/update-admission', [AdmissionStatusController::class, 'updateAdmissionStatus']);
 
     Route::post('/update-registration-status', [RegistrationStatusController::class, 'updateRegistrationStatus']);
+
+    Route::get('/view-students', [StudentPaymentController::class, 'index']);
 
 
 

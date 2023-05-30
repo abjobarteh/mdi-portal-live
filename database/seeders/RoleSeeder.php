@@ -34,5 +34,10 @@ class RoleSeeder extends Seeder
             'rank' => 'student',
             'description' => 'responsible for registering courses, thought by lecturers'
         ]);
+
+        Role::create([
+            'rank' => 'finance',
+            'description' => 'responsible for collecting payments from the students'
+        ]);
     }
 }

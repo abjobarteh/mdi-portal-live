@@ -49,8 +49,8 @@
         <nav-menu-link title="View Gradings" :to="{ name: 'view-gradings' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-group
-        v-if="currentUser && currentUser.role_id == '2'"
-        title="Manage Programs"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '5')"
+        title="Programs"
         :icon="icons.mdiFileOutline"
       >
         <nav-menu-link title="Departments" :to="{ name: 'view-departments' }"></nav-menu-link>
@@ -129,6 +129,13 @@
         <nav-menu-link title="Admissions" :to="{ name: 'admission-status' }"></nav-menu-link>
         <nav-menu-link title="Registrations" :to="{ name: 'registration-status' }"></nav-menu-link>
       </nav-menu-group>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '5'"
+        title="Student Fees"
+        :to="{ name: 'view-student-fees' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
 
       <!-- <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title> -->
       <!-- <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
