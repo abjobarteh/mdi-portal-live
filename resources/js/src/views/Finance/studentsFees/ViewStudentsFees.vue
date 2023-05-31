@@ -6,21 +6,20 @@
           <v-toolbar-title>Students</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
-          <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
         </v-toolbar>
 
         <v-card-text>
           <v-data-table
             :headers="headers"
-            :items="lecturers"
+            :items="students"
             :items-per-page="13"
             :search="search"
             class="elevation-1"
             hide-default-footer
           >
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn @click="openLecturerSemesterCoursesPopup(item)">View Payments</v-btn>
-              <v-btn small color="primary" @click="showAllocateSemesterCoursesDialog(item)">Add Payment</v-btn>
+              <v-btn @click="openStudentPaymentsPopup(item)">View Payments</v-btn>
+              <v-btn small color="primary" @click="showAddStudentPaymentDialog(item)">Add Payment</v-btn>
               <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -29,31 +28,13 @@
       </v-card>
     </v-container>
 
-    <v-dialog v-model="editLecturerDialog" max-width="500px">
-      <v-card>
-        <v-card-title> Edit lecturer </v-card-title>
-        <v-card-text>
-          <v-form ref="form">
-            <v-text-field outlined v-model="editLecturerFormData.mark_from" label="Mark From"></v-text-field>
-            <v-text-field outlined v-model="editLecturerFormData.mark_to" label="Mark To"></v-text-field>
-            <v-text-field outlined v-model="editLecturerFormData.grade" label="Grade"></v-text-field>
-            <v-text-field outlined v-model="editLecturerFormData.interpretation" label="Interpretation"></v-text-field>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="submitEditlecturerForm">Save</v-btn>
-          <v-btn color="secondary" @click="cancelEdit">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <!-- show lecturers courses dialog -->
-    <v-dialog v-model="showLecturerSemesterCoursesPopup" persistent max-width="600px">
+    <v-dialog v-model="showStudentPaymentPopup" persistent max-width="600px">
       <!-- <template v-slot:activator="{ on }"></template> -->
       <v-card>
         <v-card-title>
           <p>
-            <span style="font-weight: bold">{{ lecturerFullName }}'s</span> Courses
+            <span style="font-weight: bold">{{ studentFullName }}'s</span> Payments
           </p>
           <v-spacer></v-spacer>
           <fas
@@ -71,13 +52,13 @@
             "
             icon="times"
             @click="
-              canCloseLecturerSemesterCoursesPopup = true
-              closeLecturerSemesterCoursesPopup()
+              canCloseStudentPaymentsPopup = true
+              closeStudentPaymentPopup()
             "
           ></fas>
         </v-card-title>
         <v-card-text>
-          <v-data-table :headers="lecturerSemesterCoursesHeaders" :items="lecturerSemesterCoursesArr">
+          <v-data-table :headers="studentPaymentsHeaders" :items="studentPayments">
             <!-- <template v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
             </template> -->
@@ -86,52 +67,36 @@
       </v-card>
     </v-dialog>
 
-    <!-- // allocate courses //  -->
-    <v-dialog v-model="allocateCoursesDialog" max-width="500px">
+    <!-- // add payments //  -->
+    <v-dialog v-model="addPaymentDialog" max-width="500px">
       <v-card>
-        <v-card-title>Allocate Courses</v-card-title>
+        <v-card-title>Add Payment</v-card-title>
         <v-card-text>
           <v-form ref="addDepartmentForm">
             <v-select
               outlined
-              v-model="allocateCourseFormData.lecturer_id"
+              v-model="addPaymentFormData.semester_id"
               :items="
-                lecturers.map(lecturer => ({ id: lecturer.id, name: lecturer.firstname + ' ' + lecturer.lastname }))
-              "
-              item-value="id"
-              item-text="name"
-              label="Lecturers"
-            ></v-select>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.lecturer_id.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
-            <v-select
-              multiple
-              outlined
-              v-model="allocateCourseFormData.semester_courses_ids"
-              :items="
-                semesterAvailableCourses.map(semesterCourse => ({
-                  id: semesterCourse.course_id,
-                  name: semesterCourse.course.course_name,
+                semesters.map(semester => ({
+                  id: semester.id,
+                  name: semester.semester_name + '(' + semester.session.session_name + ')',
                 }))
               "
               item-value="id"
               item-text="name"
-              label="Courses"
+              label="Semester Name"
             ></v-select>
             <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.semester_courses_ids.$errors"
+              v-for="error in v$.value.semester_id.$errors"
               :key="error.$uid"
               >{{ error.$message }}</span
             >
+            <v-text-field outlined v-model="addPaymentFormData.amount_paid" label="Fee"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitallocateCourseForm">Add</v-btn>
+          <v-btn color="primary" @click="submitAddPaymentForm">Add</v-btn>
           <!-- <v-btn color="secondary" @click="addProgramDialog = false">Cancel</v-btn> -->
         </v-card-actions>
       </v-card>
@@ -154,14 +119,14 @@ export default {
   components: {},
   data() {
     return {
-      showLecturerSemesterCoursesPopup: false,
-      lecturerSemesterCoursesArr: [],
-      canCloseLecturerSemesterCoursesPopup: false,
-      allocateCoursesDialog: false,
-      lecturerSemesterCoursesHeaders: [],
-      lecturers: [],
-      lecturerFullName: '',
-      semesterAvailableCourses: [],
+      showStudentPaymentPopup: false,
+      studentPayments: [],
+      canCloseStudentPaymentsPopup: false,
+      addPaymentDialog: false,
+      studentPaymentsHeaders: [],
+      students: [],
+      semesters: [],
+      studentFullName: '',
       headers: [
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
@@ -171,18 +136,11 @@ export default {
         { text: 'Phonenumber', value: 'phonenumber' },
         { text: 'Action', value: 'action', sortable: false },
       ],
-      editLecturerDialog: false,
-      editedIndex: -1,
-      editLecturerFormData: {
-        id: null,
-        mark_from: '',
-        mark_to: '',
-        grade: '',
-        interpretation: '',
-      },
-      allocateCourseFormData: {
-        lecturer_id: '',
-        semester_courses_ids: [],
+
+      addPaymentFormData: {
+        amount_paid: '',
+        semester_id: '',
+        student_id: '',
       },
       page: 1,
       pageCount: 0,
@@ -190,28 +148,11 @@ export default {
 
       rules: {
         lecturer_id: { required },
-        semester_courses_ids: { required },
+        semester_id: { required },
       },
 
       v$: null,
     }
-  },
-
-  watch: {
-    'allocateCourseFormData.lecturer_id'(newLecturerId) {
-      if (newLecturerId) {
-        axios
-          .get(`/api/view-semester-available-courses/${newLecturerId}?page=` + this.page)
-          .then(response => {
-            this.semesterAvailableCourses = response.data.result.data
-            this.pageCount = response.data.result.last_page
-          })
-          .catch(err => {
-            this.semesterAvailableCourses = []
-            this.pageCount = 0
-          })
-      }
-    },
   },
 
   created() {
@@ -221,85 +162,30 @@ export default {
 
   methods: {
     setupValidation() {
-      this.v$ = useVuelidate(this.rules, this.allocateCourseFormData)
+      this.v$ = useVuelidate(this.rules, this.addPaymentFormData)
     },
     getResults() {
       axios
         .get('/api/view-students?page=' + this.page)
         .then(response => {
-          this.lecturers = response.data.result.data
+          this.students = response.data.result.data
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {
-          this.lecturers = []
+          this.students = []
           this.pageCount = 0
         })
-    },
 
-    exportToExcel() {
-      const worksheet = XLSX.utils.json_to_sheet(this.lecturers)
-      const workbook = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'lecturers')
-      XLSX.writeFile(workbook, 'lecturers.xlsx')
-    },
-
-    editlecturer(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editLecturerFormData = Object.assign({}, item)
-      this.editLecturerDialog = true
-    },
-
-    submitEditlecturerForm() {
-      // make a PUT request to update the lecturerSystem data
       axios
-        .put(`/api/lecturer/${this.editLecturerFormData.id}`, this.editLecturerFormData)
+        .get('/api/view-semesters?page=' + this.page)
         .then(response => {
-          // show success alert
-          this.editLecturerDialog = false
-          swal
-            .fire({
-              title: 'Success!',
-              text: 'Lecturer updated successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            .then(() => {
-              this.getResults()
-            })
+          this.semesters = response.data.result.data
+          this.pageCount = response.data.result.last_page
         })
-        .catch(error => {
-          // show error alert
-          swal.fire({
-            title: 'Error!',
-            text: 'Failed to update grade.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          })
+        .catch(err => {
+          this.semesters = []
+          this.pageCount = 0
         })
-      // hide the dialog
-      this.editLecturerDialog = false
-      // clear the edited item
-      this.editLecturerFormData = {
-        id: null,
-        mark_from: '',
-        mark_to: '',
-        grade: '',
-        interpretation: '',
-      }
-      this.editedIndex = -1
-    },
-    cancelEdit() {
-      // hide the editLecturerDialog
-      this.editLecturerDialog = false
-      // clear the edited item
-      this.editLecturerFormData = {
-        id: null,
-        mark_from: '',
-        mark_to: '',
-        grade: '',
-        interpretation: '',
-      }
-      this.editedIndex = -1
     },
 
     deleteLecturer(item) {
@@ -335,42 +221,44 @@ export default {
         })
     },
 
-    openLecturerSemesterCoursesPopup(lecturer) {
-      this.lecturerFullName = lecturer.firstname + ' ' + lecturer.lastname
-      console.log(lecturer)
-      ;(this.lecturerSemesterCoursesHeaders = [
-        { text: 'Course Code', value: 'course_code' },
-        { text: 'Course Name', value: 'course_name' },
+    openStudentPaymentsPopup(student) {
+      this.studentFullName = student.firstname + ' ' + student.lastname
+      console.log('student', student)
+      ;(this.studentPaymentsHeaders = [
+        { text: 'Semester Name', value: 'semester.semester_name' },
+        { text: 'Amount Paid', value: 'amount_paid' },
       ]),
-        (this.lecturerSemesterCoursesArr = lecturer.semester_courses.map(course => course.course)),
-        (this.showLecturerSemesterCoursesPopup = true)
-      this.canCloseLecturerSemesterCoursesPopup = false
+        (this.studentPayments = student.payments),
+        (this.showStudentPaymentPopup = true)
+      this.canCloseStudentPaymentsPopup = false
     },
 
-    closeLecturerSemesterCoursesPopup() {
-      if (this.canCloseLecturerSemesterCoursesPopup) {
-        this.showLecturerSemesterCoursesPopup = false
+    closeStudentPaymentPopup() {
+      if (this.canCloseStudentPaymentsPopup) {
+        this.showStudentPaymentPopup = false
       }
     },
 
     //////////////  Allocate courses ///////////////////
-    showAllocateSemesterCoursesDialog(item) {
-      this.allocateCoursesDialog = true
+    showAddStudentPaymentDialog(item) {
+      console.log(item)
+      this.addPaymentFormData.student_id = item.id
+      this.addPaymentDialog = true
     },
 
-    async submitallocateCourseForm() {
-      const result = await this.v$.value.$validate()
-      if (result) {
+    async submitAddPaymentForm() {
+      // const result = await this.v$.value.$validate()
+      if (true) {
         axios
-          .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
+          .post('/api/add-student-fee', this.addPaymentFormData)
           .then(result => {
-            this.allocateCoursesDialog = false
+            this.addPaymentDialog = false
             // show success alert
-            ;(this.allocateCourseFormData.semester_courses_ids = ''),
+            ;(this.addPaymentFormData.semester_id = ''),
               swal
                 .fire({
                   title: 'Success!',
-                  text: 'course allocated successfully.',
+                  text: 'Payment added successfully.',
                   icon: 'success',
                   confirmButtonText: 'OK',
                 })

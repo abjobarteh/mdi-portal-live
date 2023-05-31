@@ -110,7 +110,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-sessions', [SessionController::class, 'index']);
 
         Route::post('/add-semester', [SemesterController::class, 'store']);
-        Route::get('/view-semesters', [SemesterController::class, 'index']);
 
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
@@ -175,6 +174,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/view-students', [StudentPaymentController::class, 'index']);
 
+    Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
+
+    Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Models\StudentPayment;
 use Illuminate\Http\Request;
 
 class StudentPaymentController extends Controller
@@ -15,11 +16,27 @@ class StudentPaymentController extends Controller
      */
     public function index()
     {
-        $students = Student::with('payments', 'department')->where('accepted', 'accepted')->paginate(13);
+        $students = Student::with('payments.semester', 'department')->where('accepted', 'accepted')->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $students
         ]);
+    }
+
+    public function addPayment(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_id' => 'required|max:255',
+            'semester_id' => 'required|max:255',
+            'amount_paid' => 'required|max:255',
+        ]);
+        StudentPayment::create([
+            'student_id' => $validatedData['student_id'],
+            'semester_id' => $validatedData['semester_id'],
+            'amount_paid' => $validatedData['amount_paid'],
+        ]);
+
+        return response()->json(['message' => 'Payment created successfully.']);
     }
 
     /**

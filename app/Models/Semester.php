@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Session;
+use App\Models\StudentPayment;
 
 
 class Semester extends Model
@@ -21,5 +22,10 @@ class Semester extends Model
     public function session()
     {
         return $this->belongsTo(Session::class, 'session_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(StudentPayment::class);
     }
 }
