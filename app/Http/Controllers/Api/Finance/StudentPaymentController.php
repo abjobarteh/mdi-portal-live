@@ -25,16 +25,38 @@ class StudentPaymentController extends Controller
 
     public function addPayment(Request $request)
     {
+        // know the student total fee
+
         $validatedData = $request->validate([
             'student_id' => 'required|max:255',
             'semester_id' => 'required|max:255',
             'amount_paid' => 'required|max:255',
         ]);
-        StudentPayment::create([
-            'student_id' => $validatedData['student_id'],
-            'semester_id' => $validatedData['semester_id'],
-            'amount_paid' => $validatedData['amount_paid'],
-        ]);
+        $studentDepartmentFee = Student::find($validatedData['student_id'])->department->programs->first();
+        if ($studentDepartmentFee->fee == $validatedData['amount_paid']) {
+
+            // here i know the student paid all the fee
+            StudentPayment::create([
+                'student_id' => $validatedData['student_id'],
+                'semester_id' => $validatedData['semester_id'],
+                'amount_paid' => $validatedData['amount_paid'],
+            ]);
+            Student::find($validatedData['student_id'])->update([
+                'payment_type' => 1,
+                'balance' => 0,
+                'remaining' => $validatedData['amount_paid']
+            ]);
+        } else if ($studentDepartmentFee->fee == $validatedData['per_semester_fee']) {
+            StudentPayment::create([
+                'student_id' => $validatedData['student_id'],
+                'semester_id' => $validatedData['semester_id'],
+                'amount_paid' => $validatedData['amount_paid'],
+            ]);
+        } else {
+            // you are expected to either pay fully or per semester
+            return response()->json(['message' => 'Pay all the fee or per semester fee.']);
+        }
+
 
         return response()->json(['message' => 'Payment created successfully.']);
     }

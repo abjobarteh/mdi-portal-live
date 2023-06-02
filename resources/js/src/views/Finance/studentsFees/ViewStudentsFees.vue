@@ -131,6 +131,7 @@ export default {
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
         { text: 'username', value: 'username' },
+        { text: 'Mat Number', value: 'mat_number' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },

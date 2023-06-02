@@ -34,6 +34,10 @@ class Student extends Model
         'accepted',
         'application_completed',
         'personal_info_completed',
+        'remaining',
+        'payment_type',
+        'balance',
+        'mat_number'
     ];
 
     public function user()

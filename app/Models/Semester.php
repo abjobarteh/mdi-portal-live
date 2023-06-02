@@ -23,9 +23,4 @@ class Semester extends Model
     {
         return $this->belongsTo(Session::class, 'session_id');
     }
-
-    public function payments()
-    {
-        return $this->hasMany(StudentPayment::class);
-    }
 }

@@ -8,6 +8,7 @@ use App\Models\ApplicantEducation;
 use App\Models\Lecturer;
 use App\Models\Student;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ApplicationsController extends Controller
@@ -88,11 +89,32 @@ class ApplicationsController extends Controller
     public function acceptStudentApplication(Request $request)
     {
         $student = Student::where('user_id', $request->get('userId'))->first();
-        $student->update(['is_applicant' => 0, 'accepted' => 'accepted',]);
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber()]);
+
+        // when the student application is accepted, then he needs a matnumber
         return response()->json([
             'status' => 200,
             'result' => 'Accepted Successful'
         ]);
+    }
+
+    private function generateStudentNumber()
+    {
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
+
+        // Determine the month range and assign the fifth digit accordingly
+        $fifthDigit = ($currentMonth >= 1 && $currentMonth <= 6) ? 1 : 2;
+
+        // Retrieve the last student number from the database and increment it by one
+        $lastStudent = Student::whereNotNull('mat_number')->orderBy('id', 'desc')->first();
+        $lastNumber = ($lastStudent) ? intval(substr($lastStudent->mat_number, -4)) + 1 : 1;
+        $lastNumber = str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
+
+        // Generate the complete student number
+        $studentNumber = $currentYear . $fifthDigit . sprintf('%04d', $lastNumber);
+
+        return $studentNumber;
     }
 
     public function rejectStudentApplication(Request $request)
