@@ -191,7 +191,7 @@ const routes = [
     component: () => import('@/views/Registrar/departments/ViewDepartments.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 5],
     }
 
   },
@@ -202,7 +202,7 @@ const routes = [
     component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 5],
     }
 
   },

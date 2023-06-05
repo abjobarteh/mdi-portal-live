@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/upload-excel-file', [ExcelController::class, 'uploadExcelFile']);
 
-
+    ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar'])->group(function () {
         Route::post('/add-employee', [EmployeeController::class, 'store']);
         Route::get('/view-employees', [EmployeeController::class, 'index']);
@@ -69,17 +69,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/department/{id}', [DepartmentController::class, 'show']);
         Route::put('/department/{id}', [DepartmentController::class, 'update']);
         Route::delete('/delete-department/{id}', [DepartmentController::class, 'destroy']);
+        Route::get('/view-departments', [DepartmentController::class, 'index']);
+
 
 
         Route::post('/add-program-duration', [ProgramDurationController::class, 'store']);
-        Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
         Route::get('/program-duration/{id}', [ProgramDurationController::class, 'show']);
         Route::put('/program-duration/{id}', [ProgramDurationController::class, 'update']);
         Route::delete('/delete-program-duration/{id}', [ProgramDurationController::class, 'destroy']);
 
 
         Route::post('/add-program', [ProgramController::class, 'store']);
-        Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/program/{id}', [ProgramController::class, 'show']);
         Route::put('/program/{id}', [ProgramController::class, 'update']);
         Route::delete('/delete-program/{id}', [ProgramController::class, 'destroy']);
@@ -110,6 +110,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-sessions', [SessionController::class, 'index']);
 
         Route::post('/add-semester', [SemesterController::class, 'store']);
+        Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
+
 
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
@@ -124,6 +126,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+        Route::post('/update-admission', [AdmissionStatusController::class, 'updateAdmissionStatus']);
+        Route::post('/update-registration-status', [RegistrationStatusController::class, 'updateRegistrationStatus']);
+        Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
+        Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
 
 
 
@@ -133,7 +139,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/send-email', [EmailController::class, 'sendEmail']);
     });
 
-    Route::get('/view-departments', [DepartmentController::class, 'index']);
 
 
     Route::middleware(['admin'])->group(function () {
@@ -147,41 +152,40 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
     Route::get('/profile', [ProfileController::class, 'index']);
-    Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
-    Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
-
-    Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
-    Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
-    Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
-    Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
-    Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
-
-    Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);  // for the student middleware
-
-    Route::get('/running-courses', [CourseController::class, 'runningCourses']);  // for the student middleware
-
-    Route::post('/register-courses', [RegisterCoursesController::class, 'registerCourse']);  // for the student middleware
-
-    Route::post('/un-register-courses', [RegisterCoursesController::class, 'unRegisterCourse']);  // for the student middleware
-
-    Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware
-
-    Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
-
-    Route::post('/update-admission', [AdmissionStatusController::class, 'updateAdmissionStatus']);
-
-    Route::post('/update-registration-status', [RegistrationStatusController::class, 'updateRegistrationStatus']);
-
-    Route::get('/view-students', [StudentPaymentController::class, 'index']);
-
-    Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
-
-    Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
 
 
 
 
-    // submitApplication
+
+    Route::middleware(['student'])->group(function () {
+        Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);  // for the student middleware
+        Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
+
+        Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
+        Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
+        Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
+        Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
+        Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
+
+        Route::get('/running-courses', [CourseController::class, 'runningCourses']);  // for the student middleware
+
+        Route::post('/register-courses', [RegisterCoursesController::class, 'registerCourse']);  // for the student middleware
+
+        Route::post('/un-register-courses', [RegisterCoursesController::class, 'unRegisterCourse']);  // for the student middleware
+
+        Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware
+
+    });
+
+
+    Route::middleware(['finance'])->group(function () {
+        Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
+        Route::get('/view-students', [StudentPaymentController::class, 'index']);
+        Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
+        Route::get('/view-departments', [DepartmentController::class, 'index']);
+        Route::get('/view-programs', [ProgramController::class, 'index']);
+        Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
+    });
 });
 
 Route::post('login', [AuthController::class, 'login']);
