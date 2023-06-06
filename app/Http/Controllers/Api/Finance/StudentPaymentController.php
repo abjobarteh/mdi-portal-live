@@ -46,7 +46,7 @@ class StudentPaymentController extends Controller
                 'balance' => 0,
                 'remaining' => $validatedData['amount_paid']
             ]);
-        } else if ($studentDepartmentFee->fee == $validatedData['per_semester_fee']) {
+        } else if ($studentDepartmentFee->fee == $studentDepartmentFee['per_semester_fee']) {
             StudentPayment::create([
                 'student_id' => $validatedData['student_id'],
                 'semester_id' => $validatedData['semester_id'],
@@ -59,6 +59,40 @@ class StudentPaymentController extends Controller
 
 
         return response()->json(['message' => 'Payment created successfully.']);
+    }
+
+    public function studentPayments()
+    {
+        $studentId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
+            ->where('students.user_id', auth()->user()->id)->value('students.id');
+
+        $studentPayments = StudentPayment::with('semester')
+            ->where('student_id', $studentId)->get();
+
+        $groupedPayments = $studentPayments->groupBy(function ($payment) {
+            $semester = $payment->semester;
+            return $semester->semester_name . ' - ' . $semester->session->session_name;
+        });
+
+        $formattedPayments = [];
+
+        foreach ($groupedPayments as $semesterSession => $payments) {
+            $semesterPayment = [
+                'SemesterSession' => $semesterSession,
+                'Payments' => [
+                    'PaymentId' => $payments[0]->id,
+                    'Amount' => $payments[0]->amount_paid,
+                    'Date' => $payments[0]->created_at->toDateString(),
+                ],
+            ];
+
+            $formattedPayments[] = $semesterPayment;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'result' => $formattedPayments,
+        ]);
     }
 
     /**

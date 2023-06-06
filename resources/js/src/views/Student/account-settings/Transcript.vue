@@ -41,6 +41,17 @@ export default {
   //
   created() {
     axios
+      .get('/api/view-student-payments')
+      .then(response => {
+        // this.transcripts = response.data.result
+        console.log('running courses', this.runnings)
+        this.pageCount = response.data.result.last_page
+      })
+      .catch(err => {
+        this.runnings = []
+        this.pageCount = 0
+      })
+    axios
       .get('/api/transcript-courses')
       .then(response => {
         this.transcripts = response.data.result

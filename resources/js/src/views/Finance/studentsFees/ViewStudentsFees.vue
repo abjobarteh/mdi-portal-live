@@ -110,6 +110,7 @@ import Vue2Filters from 'vue2-filters'
 import 'vuetify/dist/vuetify.min.css'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
+import html2pdf from 'html2pdf.js'
 
 Vue.use(Vue2Filters)
 
@@ -119,6 +120,7 @@ export default {
   components: {},
   data() {
     return {
+      selectedSemesterName: '',
       showStudentPaymentPopup: false,
       studentPayments: [],
       canCloseStudentPaymentsPopup: false,
@@ -127,6 +129,7 @@ export default {
       students: [],
       semesters: [],
       studentFullName: '',
+      studentDetails: '',
       headers: [
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
@@ -159,6 +162,14 @@ export default {
   created() {
     this.setupValidation()
     this.getResults()
+  },
+
+  computed: {
+    currentDate() {
+      const today = new Date()
+      const options = { year: 'numeric', month: 'long', day: 'numeric' }
+      return today.toLocaleDateString(undefined, options)
+    },
   },
 
   methods: {
@@ -242,6 +253,7 @@ export default {
 
     //////////////  Allocate courses ///////////////////
     showAddStudentPaymentDialog(item) {
+      this.studentDetails = item
       console.log(item)
       this.addPaymentFormData.student_id = item.id
       this.addPaymentDialog = true
@@ -264,6 +276,7 @@ export default {
                   confirmButtonText: 'OK',
                 })
                 .then(() => {
+                  this.generatePDF()
                   this.getResults()
                 })
           })
@@ -283,6 +296,141 @@ export default {
           icon: 'error',
           confirmButtonText: 'OK',
         })
+      }
+    },
+    generatePDF() {
+      const options = {
+        filename: 'transcript.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      }
+
+      const tableContent = this.generateReceiptContent()
+
+      const htmlContent = `
+        <html>
+          <head>
+            <style scoped>
+            .title {
+              font-size: 24px;
+              font-weight: bold;
+              text-align: center;
+              margin-bottom: 20px;
+            }
+
+            .subtitle {
+              font-size: 18px;
+              text-align: center;
+              margin-bottom: 10px;
+            }
+
+            .receipt-card {
+              max-width: 500px;
+              margin: 0 auto;
+              padding: 20px;
+            }
+
+            .header {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+
+            .receipt-info {
+              display: flex;
+              flex-direction: column;
+            }
+
+            .info-row {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 10px;
+            }
+
+            .info-label {
+              font-weight: bold;
+            }
+
+            .info-value {
+              text-align: right;
+            }
+
+            .signature-row {
+              margin-top: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+            }
+
+            .signature-line {
+              margin-top: 10px;
+              border-bottom: 1px solid black;
+              width: 200px;
+            }
+
+            </style>
+          </head>
+          <body>
+            ${tableContent}
+          </body>
+        </html>
+      `
+
+      html2pdf().set(options).from(htmlContent).save()
+    },
+
+    generateReceiptContent() {
+      let content = `
+    <div class="receipt-card">
+      <div class="title">TUITION FEES RECEIPT</div>
+      <div class="header">
+        <p class="subtitle">Management Development Institute</p>
+        <p>No 9 Kanifing GRTS Street</p>
+      </div>
+
+      <div class="receipt-info">
+        <div class="info-row">
+          <span class="info-label">Date:</span>
+          <span class="info-value">${this.currentDate}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Received From:</span>
+          <span class="info-value">${this.studentDetails.firstname + ' ' + this.studentDetails.lastname}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">The sum of:</span>
+          <span class="info-value">${'D' + this.addPaymentFormData.amount_paid}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Being payment of:</span>
+          <span class="info-value">${this.selectedSemesterName}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Received by:</span>
+          <span class="info-value">${this.studentDetails.firstname + ' ' + this.studentDetails.lastname}</span>
+        </div>
+
+        <div class="signature-row">
+          <span class="info-label">Signature:</span>
+          <span class="signature-line"></span>
+        </div>
+      </div>
+    </div>
+  `
+
+      return content
+    },
+  },
+
+  watch: {
+    'addPaymentFormData.semester_id': function (newVal) {
+      const selectedSemester = this.semesters.find(semester => semester.id === newVal)
+      if (selectedSemester) {
+        this.selectedSemesterName = selectedSemester.semester_name + '(' + selectedSemester.session.session_name + ')'
       }
     },
   },

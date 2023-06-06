@@ -129,7 +129,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update-admission', [AdmissionStatusController::class, 'updateAdmissionStatus']);
         Route::post('/update-registration-status', [RegistrationStatusController::class, 'updateRegistrationStatus']);
         Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
-        Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
 
 
 
@@ -158,6 +157,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware(['student'])->group(function () {
+        Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
+
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);  // for the student middleware
         Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
 
@@ -186,6 +187,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
     });
+
+    Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
 });
 
 Route::post('login', [AuthController::class, 'login']);
