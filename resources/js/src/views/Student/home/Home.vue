@@ -1,9 +1,17 @@
 <template>
   <div>
-    <div>
-      <p>Email Verification code</p>
+    <div v-if="true">
+      <v-card>
+        <v-card-title class="text-center font-weight-bold">Enter Email Token to Continue</v-card-title>
+        <v-card-text>
+          <v-form @submit="submitForm">
+            <v-text-field outlined v-model="emailToken" label="Email Token" required></v-text-field>
+            <v-btn type="submit" color="green" block>Submit</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
     </div>
-    <div>
+    <div v-else>
       <v-container
         v-if="studentInfo.is_applicant == 1 && admission_status == 0"
         class="d-flex justify-center align-center"
@@ -14,7 +22,7 @@
           <v-col cols="12" md="8" lg="6">
             <div outlined class="text-center">
               <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-                admission closed
+                admission closed, try again later
               </v-card-title>
             </div>
           </v-col>
