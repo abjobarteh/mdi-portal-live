@@ -19,6 +19,9 @@ class ApplicantEducationController extends Controller
             'schools.*.certificate' => 'required|string|max:255',
         ]);
 
+        // Delete existing data for the student
+        ApplicantEducation::where('user_id', auth()->user()->id)->delete();
+
         foreach ($validatedData['schools'] as $schoolData) {
             if (!isset($schoolData['name']) || empty($schoolData['name'])) {
                 return response()->json(['error' => 'School name is missing.'], 400);

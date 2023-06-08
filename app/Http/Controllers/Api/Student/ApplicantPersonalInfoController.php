@@ -15,7 +15,6 @@ class ApplicantPersonalInfoController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
-            'middlename' => 'required',
             'gender' => 'required',
             'dob' => 'required',
             'marital_status' => 'required',
@@ -41,8 +40,7 @@ class ApplicantPersonalInfoController extends Controller
             ], 404);
         }
 
-        $student->update([
-            'middlename' => $request->get('middlename'),
+        $studentData = [
             'gender' => $request->get('gender'),
             'dob' => $request->get('dob'),
             'marital_status' => $request->get('marital_status'),
@@ -51,7 +49,13 @@ class ApplicantPersonalInfoController extends Controller
             'employment_status' => $request->get('employment_status'),
             'phonenumber' => $request->get('phonenumber'),
             'personal_info_completed' => 1,
-        ]);
+        ];
+
+        if (!empty($request->get('middlename'))) {
+            $studentData['middlename'] = $request->get('middlename');
+        }
+
+        $student->update($studentData);
 
         return response()->json([
             'success' => true,

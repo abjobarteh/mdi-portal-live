@@ -10,7 +10,7 @@
         class="elevation-1"
       >
         <template v-slot:item.certificate="{ item }">
-          <a :href="`/certificates/${item.certificate}`" target="_blank">{{ item.certificate }}</a>
+          <a>{{ item.certificate }}</a>
         </template>
       </v-data-table>
     </v-card-text>

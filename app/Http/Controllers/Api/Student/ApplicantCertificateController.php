@@ -18,6 +18,9 @@ class ApplicantCertificateController extends Controller
             'certificates.*.certificate' => 'required|file|max:10240|mimes:pdf,jpg,jpeg,png',
         ]);
 
+        ApplicantCertificate::where('user_id', auth()->user()->id)->delete();
+
+
         // Loop through all the certificates in the request
         foreach ($request->certificates as $certificate) {
             // Get the certificate name and file

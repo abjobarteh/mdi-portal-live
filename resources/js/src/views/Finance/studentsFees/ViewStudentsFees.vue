@@ -192,6 +192,7 @@ export default {
         .get('/api/view-semesters?page=' + this.page)
         .then(response => {
           this.semesters = response.data.result.data
+          this.addPaymentFormData.semester_id = this.semesters[this.semesters.length - 1].id
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {
@@ -284,7 +285,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to allocate.',
+              text: error.response.data.message,
               icon: 'error',
               confirmButtonText: 'OK',
             })

@@ -10,7 +10,7 @@
             <v-text-field
               outlined
               v-model="applicantPersonalInfoData.middlename"
-              label="Middle Name *"
+              label="Middle Name"
               required
             ></v-text-field>
           </v-col>
@@ -19,9 +19,13 @@
               outlined
               v-model="applicantPersonalInfoData.gender"
               :items="applicantPersonalInfoData.genderOptions"
-              label="Gender *"
               required
-            ></v-select>
+            >
+              <template v-slot:label>
+                <span class="required-field">Gender</span>
+              </template>
+            </v-select>
+            <span v-if="errors.gender" class="error-message">{{ errors.gender[0] }}</span>
           </v-col>
         </v-row>
 
@@ -31,55 +35,61 @@
               outlined
               v-model="applicantPersonalInfoData.marital_status"
               :items="applicantPersonalInfoData.maritalStatusOptions"
-              label="Marital Status *"
               required
-            ></v-select>
+              ><template v-slot:label>
+                <span class="required-field">Marital Status</span>
+              </template></v-select
+            >
+            <span v-if="errors.marital_status" class="error-message">{{ errors.marital_status[0] }}</span>
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field
-              outlined
-              v-model="applicantPersonalInfoData.dob"
-              label="Date of Birth *"
-              type="date"
-              required
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              outlined
-              v-model="applicantPersonalInfoData.nationality"
-              label="Nationality *"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              outlined
-              v-model="applicantPersonalInfoData.address"
-              label="Address *"
-              required
-            ></v-text-field>
+            <v-text-field outlined label="Date of Birth *" type="date" required v-model="applicantPersonalInfoData.dob">
+              <template v-slot:label>
+                <span class="required-field">Date of Birth</span>
+              </template></v-text-field
+            >
+            <span v-if="errors.dob" class="error-message">{{ errors.dob[0] }}</span>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field
-              outlined
-              v-model="applicantPersonalInfoData.phonenumber"
-              label="Phone Number *"
-              required
-            ></v-text-field>
+            <v-text-field outlined v-model="applicantPersonalInfoData.nationality" required>
+              <template v-slot:label>
+                <span class="required-field">Nationality</span>
+              </template></v-text-field
+            >
+            <span v-if="errors.nationality" class="error-message">{{ errors.nationality[0] }}</span>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field outlined v-model="applicantPersonalInfoData.address" required>
+              <template v-slot:label>
+                <span class="required-field">Address</span>
+              </template></v-text-field
+            >
+            <span v-if="errors.address" class="error-message">{{ errors.address[0] }}</span>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field outlined v-model="applicantPersonalInfoData.phonenumber" required
+              ><template v-slot:label>
+                <span class="required-field">PhoneNumber</span>
+              </template></v-text-field
+            >
+            <span v-if="errors.phonenumber" class="error-message">{{ errors.phonenumber[0] }}</span>
           </v-col>
           <v-col cols="12" md="6">
             <v-select
               outlined
               v-model="applicantPersonalInfoData.employment_status"
               :items="applicantPersonalInfoData.employmentStatusOptions"
-              label="Employment Status *"
               required
-            ></v-select>
+            >
+              <template v-slot:label>
+                <span class="required-field">Employment Status</span>
+              </template></v-select
+            >
+            <span v-if="errors.employment_status" class="error-message">{{ errors.employment_status[0] }}</span>
           </v-col>
         </v-row>
         <v-card-actions class="d-flex justify-center">
@@ -91,6 +101,8 @@
 </template>
 
   <script>
+import 'vuetify/dist/vuetify.min.css'
+
 export default {
   data() {
     return {
@@ -108,6 +120,7 @@ export default {
         employment_status: '',
         employmentStatusOptions: ['Employed', 'Unemployed', 'Self-employed'],
       },
+      errors: {}, // Add this line to store validation errors
     }
   },
   methods: {
@@ -124,20 +137,31 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.post(`/api/submit-applicant-personal-info`, this.applicantPersonalInfoData).then(result => {
-              // show success alert
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'application submitted successfully.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                })
-                .then(() => {
-                  this.$store.dispatch('userProfile')
-                  this.$router.push('/student')
-                })
-            })
+            axios
+              .post(`/api/submit-applicant-personal-info`, this.applicantPersonalInfoData)
+              .then(result => {
+                // show success alert
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'application submitted successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.$store.dispatch('userProfile')
+                    this.applicantPersonalInfoData.dob = ''
+                    this.errors = {}
+                    this.$router.push('/student')
+                  })
+              })
+              .catch(error => {
+                // Handle error response
+                if (error.response && error.response.status === 422) {
+                  console.log('error', error.response.data.errors)
+                  this.errors = error.response.data.errors
+                }
+              })
             // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })
@@ -164,3 +188,17 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.required-field::after {
+  content: ' *';
+  color: red;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -25px;
+  display: block; /* Ensure the error message is a block element */
+  margin-bottom: 10px;
+}
+</style>

@@ -1,143 +1,148 @@
 <template>
   <div>
-    <v-container
-      v-if="studentInfo.is_applicant == 1 && admission_status == 0"
-      class="d-flex justify-center align-center"
-      fill-height
-      style="background-color: #eae4f0"
-    >
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="8" lg="6">
-          <div outlined class="text-center">
-            <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-              admission closed
-            </v-card-title>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container
-      v-else-if="studentInfo.is_applicant == 1 && studentInfo.verified_at == null && admission_status == 1"
-      class="d-flex justify-center align-center"
-      fill-height
-      style="background-color: #eae4f0"
-    >
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="8" lg="6">
-          <div outlined class="text-center">
-            <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-              Congratulations for joining!
-            </v-card-title>
-            <v-card-text>
-              <div class="text-body-1 text-lg mb-4">Enter your admission code to continue with the application.</div>
-              <div class="text-body-1">
-                <v-btn @click="showAdmissionCodeDialog" class="text-primary" style="text-decoration: none"
-                  >Enter code</v-btn
-                >
-              </div>
-            </v-card-text>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container
-      v-else-if="
-        studentInfo.is_applicant == 1 &&
-        studentInfo.verified_at != null &&
-        studentInfo.application_completed == 0 &&
-        admission_status == 1
-      "
-      class="d-flex justify-center align-center"
-      fill-height
-      style="background-color: #fcfafe"
-    >
-      <new-application :progress="progress" :profile="profile"></new-application>
-    </v-container>
+    <div>
+      <p>Email Verification code</p>
+    </div>
+    <div>
+      <v-container
+        v-if="studentInfo.is_applicant == 1 && admission_status == 0"
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
+                admission closed
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-container
+        v-else-if="studentInfo.is_applicant == 1 && studentInfo.verified_at == null && admission_status == 1"
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
+                Congratulations for joining!
+              </v-card-title>
+              <v-card-text>
+                <div class="text-body-1 text-lg mb-4">Enter your admission code to continue with the application.</div>
+                <div class="text-body-1">
+                  <v-btn @click="showAdmissionCodeDialog" class="text-primary" style="text-decoration: none"
+                    >Enter code</v-btn
+                  >
+                </div>
+              </v-card-text>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-container
+        v-else-if="
+          studentInfo.is_applicant == 1 &&
+          studentInfo.verified_at != null &&
+          studentInfo.application_completed == 0 &&
+          admission_status == 1
+        "
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #fcfafe"
+      >
+        <new-application :progress="progress" :profile="profile"></new-application>
+      </v-container>
 
-    <v-container
-      v-else-if="
-        studentInfo.is_applicant == 1 &&
-        studentInfo.verified_at != null &&
-        studentInfo.application_completed == 1 && // completed by the user
-        studentInfo.accepted == 'pending' // this is by the registrar
-      "
-      class="d-flex justify-center align-center"
-      fill-height
-      style="background-color: #eae4f0"
-    >
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="8" lg="6">
-          <div outlined class="text-center">
-            <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-              Pending wait
-            </v-card-title>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
+      <v-container
+        v-else-if="
+          studentInfo.is_applicant == 1 &&
+          studentInfo.verified_at != null &&
+          studentInfo.application_completed == 1 && // completed by the user
+          studentInfo.accepted == 'pending' // this is by the registrar
+        "
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
+                Pending wait
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
 
-    <v-container
-      v-else-if="
-        studentInfo.is_applicant == 1 &&
-        studentInfo.verified_at != null &&
-        studentInfo.application_completed == 1 && // completed by the user
-        studentInfo.accepted == 'rejected' // this is by the registrar
-      "
-      class="d-flex justify-center align-center"
-      fill-height
-      style="background-color: #eae4f0"
-    >
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="8" lg="6">
-          <div outlined class="text-center">
-            <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-              Sorry Rejected
-            </v-card-title>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
+      <v-container
+        v-else-if="
+          studentInfo.is_applicant == 1 &&
+          studentInfo.verified_at != null &&
+          studentInfo.application_completed == 1 && // completed by the user
+          studentInfo.accepted == 'rejected' // this is by the registrar
+        "
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
+                Sorry Rejected
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
 
-    <v-container
-      v-else-if="
-        studentInfo.is_applicant == 0 &&
-        studentInfo.verified_at != null &&
-        studentInfo.application_completed == 1 && // completed by the user
-        studentInfo.accepted == 'accepted' // this is by the registrar
-      "
-      class="d-flex justify-center align-center"
-      fill-height
-      style="background-color: #eae4f0"
-    >
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="8" lg="12">
-          <div outlined class="text-center">
-            <v-card-title class="headline text-center mb-5" style="font-weight: bold">
-              <AccountSettings />
-            </v-card-title>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
+      <v-container
+        v-else-if="
+          studentInfo.is_applicant == 0 &&
+          studentInfo.verified_at != null &&
+          studentInfo.application_completed == 1 && // completed by the user
+          studentInfo.accepted == 'accepted' // this is by the registrar
+        "
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="12">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="font-weight: bold">
+                <AccountSettings />
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
 
-    <v-dialog v-model="inputAdmissionCodeDialog" max-width="500px">
-      <v-card>
-        <v-card-title> Admission Code </v-card-title>
-        <v-card-text>
-          <v-form ref="form">
-            <v-text-field
-              v-model="inputAdmissionCodeFormData.admission_code"
-              outlined
-              label="Enter Admission Code Here"
-            ></v-text-field>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="submitInputAdmissionCode">Save</v-btn>
-          <v-btn color="secondary" @click="inputAdmissionCodeDialog = false">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      <v-dialog v-model="inputAdmissionCodeDialog" max-width="500px">
+        <v-card>
+          <v-card-title> Admission Code </v-card-title>
+          <v-card-text>
+            <v-form ref="form">
+              <v-text-field
+                v-model="inputAdmissionCodeFormData.admission_code"
+                outlined
+                label="Enter Admission Code Here"
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" @click="submitInputAdmissionCode">Save</v-btn>
+            <v-btn color="secondary" @click="inputAdmissionCodeDialog = false">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 

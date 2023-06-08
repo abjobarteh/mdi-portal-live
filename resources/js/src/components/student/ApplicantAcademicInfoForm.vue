@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import 'vuetify/dist/vuetify.min.css'
+
 export default {
   data() {
     return {
@@ -105,7 +107,7 @@ export default {
       })
     },
     removeSchool(index) {
-      this.schools.splice(index, 1)
+      this.educationFormData.schools.splice(index, 1)
     },
     submit() {
       // Implement form submission logic here

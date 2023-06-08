@@ -128,7 +128,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/update-admission', [AdmissionStatusController::class, 'updateAdmissionStatus']);
         Route::post('/update-registration-status', [RegistrationStatusController::class, 'updateRegistrationStatus']);
-        Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
 
 
 
@@ -189,6 +188,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
+    Route::get('/admission-status', [AdmissionStatusController::class, 'index']); // is needed by the student and registrar
+
 });
 
 Route::post('login', [AuthController::class, 'login']);

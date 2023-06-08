@@ -16,7 +16,7 @@ class StudentPaymentController extends Controller
      */
     public function index()
     {
-        $students = Student::with('payments.semester', 'department')->where('accepted', 'accepted')->paginate(13);
+        $students = Student::with('payments.semester', 'department')->where('accepted', 'accepted')->paginate(1000000);
         return response()->json([
             'status' => 200,
             'result' => $students
@@ -33,6 +33,13 @@ class StudentPaymentController extends Controller
             'amount_paid' => 'required|max:255',
         ]);
         $studentDepartmentFee = Student::find($validatedData['student_id'])->department->programs->first();
+
+        // student have already paid all the fees
+        if (Student::find($validatedData['student_id'])->payment_type == 1) {
+            return response()->json(['message' => 'You have already made a complete payment'], 422);
+        }
+
+        // student want to pay a fee that is above the total course fee or smaller than a semster fee * work later *
         if ($studentDepartmentFee->fee == $validatedData['amount_paid']) {
 
             // here i know the student paid all the fee
