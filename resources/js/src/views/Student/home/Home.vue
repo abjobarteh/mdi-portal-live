@@ -1,11 +1,16 @@
 <template>
   <div>
-    <div v-if="true">
+    <div v-if="studentInfo.student_email_verified_at == null">
       <v-card>
         <v-card-title class="text-center font-weight-bold">Enter Email Token to Continue</v-card-title>
         <v-card-text>
-          <v-form @submit="submitForm">
-            <v-text-field outlined v-model="emailToken" label="Email Token" required></v-text-field>
+          <v-form @submit.prevent="submitVerifyRegistrationToken">
+            <v-text-field
+              outlined
+              v-model="registarationVerificationFormData.registration_verification_token"
+              label="Email Token"
+              required
+            ></v-text-field>
             <v-btn type="submit" color="green" block>Submit</v-btn>
           </v-form>
         </v-card-text>
@@ -179,6 +184,10 @@ export default {
         admission_code: '',
       },
 
+      registarationVerificationFormData: {
+        registration_verification_token: '',
+      },
+
       profile: {},
       progress: {
         academic: 'Completed',
@@ -270,6 +279,34 @@ export default {
           // show error alert
         })
       // console.log(this.inputAdmissionCodeFormData.admission_code)
+    },
+
+    submitVerifyRegistrationToken() {
+      axios
+        .post('/api/verify-registration-token', this.registarationVerificationFormData)
+        .then(result => {
+          // show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'registration token redeemed successfully, continue',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+              this.$store.dispatch('userProfile')
+            })
+        })
+        .catch(error => {
+          swal.fire({
+            title: 'Error!',
+            text: error.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+          // show error alert
+        })
     },
   },
 }

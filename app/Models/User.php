@@ -30,6 +30,7 @@ class User extends Authenticatable
         'picture',
         'role_id',
         'is_active',
+        'registration_token'
     ];
 
     /**

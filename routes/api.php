@@ -175,6 +175,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware
 
+        Route::post('/verify-registration-token', [AuthController::class, 'verifyRegistrationToken']);  // for the student middleware
+
+        // verifyRegistrationToken
     });
 
 
