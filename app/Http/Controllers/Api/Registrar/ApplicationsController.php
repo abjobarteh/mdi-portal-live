@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AcceptedApplicationEmail;
+use App\Mail\RejectedApplicationEmail;
 use App\Models\ApplicantCertificate;
 use App\Models\ApplicantEducation;
 use App\Models\Lecturer;
@@ -10,6 +12,7 @@ use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationsController extends Controller
 {
@@ -88,8 +91,11 @@ class ApplicationsController extends Controller
 
     public function acceptStudentApplication(Request $request)
     {
+        // interviewDate
         $student = Student::where('user_id', $request->get('userId'))->first();
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber()]);
+
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($request->interviewDate));
 
         // when the student application is accepted, then he needs a matnumber
         return response()->json([
@@ -120,10 +126,15 @@ class ApplicationsController extends Controller
     public function rejectStudentApplication(Request $request)
     {
         $student = Student::where('user_id', $request->get('userId'))->first();
-        $student->update(['accepted' => 'rejected',]);
+
+        $student->update(['accepted' => 'rejected']);
+
+        // Send email to the student
+        Mail::to($student->email)->send(new RejectedApplicationEmail());
+
         return response()->json([
             'status' => 200,
-            'result' => 'Accepted Successful'
+            'result' => 'Application Rejected Successfully'
         ]);
     }
 

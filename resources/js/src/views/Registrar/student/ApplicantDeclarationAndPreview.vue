@@ -87,6 +87,37 @@ export default {
         })
     },
 
+    // acceptStudentApplication() {
+    //   // perform delete action on item
+    //   swal
+    //     .fire({
+    //       title: 'Are you sure?',
+    //       text: "You won't be able to revert this!",
+    //       icon: 'warning',
+    //       showCancelButton: true,
+    //       confirmButtonColor: '#3085d6',
+    //       cancelButtonColor: '#d33',
+    //       confirmButtonText: 'Yes, accept it!',
+    //     })
+    //     .then(result => {
+    //       if (result.isConfirmed) {
+    //         axios.post(`/api/accept-student-application `, { userId: this.$route.params.id }).then(result => {
+    //           swal
+    //             .fire({
+    //               title: 'Success!',
+    //               text: 'Applicant accepted successfully.',
+    //               icon: 'success',
+    //               confirmButtonText: 'OK',
+    //             })
+    //             .then(() => {
+    //               this.$router.push('/view-incoming-applications')
+    //             })
+    //         })
+    //         // swal.fire('Deleted!', 'Department has been deleted.', 'success')
+    //       }
+    //     })
+    // },
+
     acceptStudentApplication() {
       // perform delete action on item
       swal
@@ -97,23 +128,44 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, accept it!',
+          confirmButtonText: 'Schedule Interview',
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.post(`/api/accept-student-application `, { userId: this.$route.params.id }).then(result => {
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'Applicant accepted successfully.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                })
-                .then(() => {
-                  this.$router.push('/view-incoming-applications')
-                })
-            })
-            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
+            // Show date selection popup
+            swal
+              .fire({
+                title: 'Select Interview Date',
+                // html: '<input type="date" id="interviewDate">',
+                html: '<input type="datetime-local" id="interviewDate">',
+
+                showCancelButton: true,
+                confirmButtonText: 'Schedule',
+              })
+              .then(dateResult => {
+                if (dateResult.isConfirmed) {
+                  const interviewDate = document.getElementById('interviewDate').value
+
+                  // Perform API request to schedule interview
+                  axios
+                    .post(`/api/accept-student-application`, {
+                      userId: this.$route.params.id,
+                      interviewDate: interviewDate,
+                    })
+                    .then(result => {
+                      swal
+                        .fire({
+                          title: 'Success!',
+                          text: 'Interview scheduled successfully.',
+                          icon: 'success',
+                          confirmButtonText: 'OK',
+                        })
+                        .then(() => {
+                          this.$router.push('/view-incoming-applications')
+                        })
+                    })
+                }
+              })
           }
         })
     },

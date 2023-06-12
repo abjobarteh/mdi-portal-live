@@ -185,14 +185,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
-        Route::get('/view-departments', [DepartmentController::class, 'index']);
+        // Route::get('/view-departments', [DepartmentController::class, 'index']);
         Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
     });
 
     Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
     Route::get('/admission-status', [AdmissionStatusController::class, 'index']); // is needed by the student and registrar
-
+    Route::get('/view-departments', [DepartmentController::class, 'index']); // needed by student and finance
 });
 
 Route::post('login', [AuthController::class, 'login']);
