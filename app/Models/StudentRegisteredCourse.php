@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Course;
 use App\Models\Semester;
+use App\Models\Student;
+
 
 class StudentRegisteredCourse extends Model
 {
@@ -30,5 +32,10 @@ class StudentRegisteredCourse extends Model
     public function semester()
     {
         return $this->belongsTo(Semester::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
     }
 }

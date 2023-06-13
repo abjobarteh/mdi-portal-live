@@ -62,7 +62,10 @@ export default {
                     router.push({ name: 'student' });
                 } else if (state.user.role_id == 5) {
                     router.push({ name: 'finance-dashboard' });
+                } else if (state.user.role_id == 3) {
+                    router.push({ name: 'lecturer-dashboard' });
                 }
+
 
             } catch (error) {
                 throw error;

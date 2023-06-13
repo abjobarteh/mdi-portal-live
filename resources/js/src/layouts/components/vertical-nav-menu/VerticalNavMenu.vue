@@ -38,6 +38,12 @@
         :to="{ name: 'registrar-dashboard' }"
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '3'"
+        title="Dashboard"
+        :to="{ name: 'lecturer-dashboard' }"
+        :icon="icons.mdiHomeOutline"
+      ></nav-menu-link>
 
       <nav-menu-link
         title="Account Settings"
@@ -134,6 +140,13 @@
         v-if="currentUser && currentUser.role_id == '5'"
         title="Student Fees"
         :to="{ name: 'view-student-fees' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '3'"
+        title="Student Marks"
+        :to="{ name: 'manage-student-marks' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 

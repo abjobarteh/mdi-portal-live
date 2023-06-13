@@ -25,6 +25,9 @@ const routes = [
         } else if (userRole === 2) {
           next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
         }
+        else if (userRole === 3) {
+          next('/lecturer-dashboard'); // redirect to registrar dashboard for other roles
+        }
       }
     }
   },
@@ -47,6 +50,17 @@ const routes = [
       roles: [2],
     }
   },
+
+  {
+    path: '/lecturer-dashboard',
+    name: 'lecturer-dashboard',
+    component: () => import('@/views/dashboard/lecturer/Dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [3],
+    }
+  },
+
 
   {
     path: '/student',
@@ -364,6 +378,17 @@ const routes = [
 
   },
 
+  {
+    path: '/manage-student-marks',
+    name: 'manage-student-marks',
+    component: () => import('@/views/Lecturer/ManageStudentMarks.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [3],
+    }
+
+  },
+
 
   {
     path: '/login',
@@ -421,6 +446,8 @@ router.beforeEach(async (to, from, next) => {
       next('/admin-dashboard'); // redirect to admin dashboard for role 1
     } else if (userRole === 2) {
       next('/registrar-dashboard'); // redirect to registrar for role 2
+    } else if (userRole === 3) {
+      next('/lecturer-dashboard'); // redirect to registrar for role 2
     }
     else if (userRole === 4) {
       next('/student'); // redirect to student dashboard for role 4

@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\Finance\StudentPaymentController;
+use App\Http\Controllers\Api\Lecturer\StudentMarksController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
@@ -193,6 +194,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
     Route::get('/admission-status', [AdmissionStatusController::class, 'index']); // is needed by the student and registrar
     Route::get('/view-departments', [DepartmentController::class, 'index']); // needed by student and finance
+
+    Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
+    Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
+
+
+
 });
 
 Route::post('login', [AuthController::class, 'login']);
