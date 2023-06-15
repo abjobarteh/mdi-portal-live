@@ -27,11 +27,14 @@ Copy code
       <v-card-title> Add Grades </v-card-title>
       <v-card-text>
         <v-data-table :headers="tableHeaders" :items="students" :items-per-page="10" class="elevation-1">
+          <template v-slot:item.name="{ item }">
+            <span>{{ item.student.firstname + ' ' + item.student.lastname }}</span>
+          </template>
           <template v-slot:item.testMark="{ item }">
-            <v-text-field v-model="item.testMark" outlined dense class="mt-3"></v-text-field>
+            <v-text-field v-model="item.test_mark" outlined dense class="mt-3"></v-text-field>
           </template>
           <template v-slot:item.examMark="{ item }">
-            <v-text-field v-model="item.examMark" outlined dense class="mt-3"></v-text-field>
+            <v-text-field v-model="item.exam_mark" outlined dense class="mt-3"></v-text-field>
           </template>
         </v-data-table>
       </v-card-text>
@@ -60,11 +63,7 @@ export default {
       selectedCourse: null,
       semesters: ['Semester 1', 'Semester 2', 'Semester 3'],
       courses: ['Course 1', 'Course 2', 'Course 3'],
-      students: [
-        { name: 'John Doe', testMark: 50, examMark: 50 },
-        { name: 'Jane Smith', testMark: '', examMark: '' },
-        { name: 'Mike Johnson', testMark: '', examMark: '' },
-      ],
+      students: [],
       tableHeaders: [
         { text: 'Student Name', value: 'name' },
         { text: 'Test Mark', value: 'testMark' },
@@ -96,13 +95,25 @@ export default {
   methods: {
     getMarks(courseId) {
       axios.post('/api/manage-student-marks', { course_id: courseId }).then(result => {
-        this.students = result.data.result.map(item => ({
-          name: item.student.firstname + ' ' + item.student.lastname,
-          testMark: item.test_mark,
-          examMark: item.exam_mark,
-        }))
-        console.log('student ', this.students)
+        this.students = result.data.result
+        // this.students = result.data.result.map(item => ({
+        //   name: item.student.firstname + ' ' + item.student.lastname,
+        //   testMark: item.test_mark,
+        //   examMark: item.exam_mark,
+        // }))
       })
+    },
+    saveGrades() {
+      axios
+        .post('/api/submit-student-marks', { student: this.students })
+        .then(response => {
+          console.log('Success:', response.data)
+          // Do something with the response if needed
+        })
+        .catch(error => {
+          console.error('Error:', error)
+          // Handle the error
+        })
     },
   },
 }

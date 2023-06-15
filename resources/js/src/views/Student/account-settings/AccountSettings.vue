@@ -1,31 +1,5 @@
  <template>
   <div>
-    <!-- <v-card>
-      <v-card-text>
-        <v-simple-table>
-          <template v-slot:default>
-            <tbody>
-              <tr>
-                <td>General Registration ID</td>
-                <td>profile.regId</td>
-              </tr>
-              <tr>
-                <td>Email</td>
-                <td>profile.email</td>
-              </tr>
-              <tr>
-                <td>Phone #</td>
-                <td>profile.phone</td>
-              </tr>
-              <tr>
-                <td>Status</td>
-                <td>profile.status</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-card-text>
-    </v-card> -->
     <v-card id="account-setting-card">
       <!-- tabs -->
       <v-tabs v-model="tab" show-arrows class="flexible-tabs">
@@ -97,18 +71,12 @@ export default {
       runnings: '',
     }
   },
-  // .get('/api/view-departments?page=' + this.page)
   created() {
     axios
       .get('/api/running-courses?page=' + this.page)
       .then(response => {
         this.runnings = response.data.result
-        // this.runnings = response.data.result.map(course => {
-        //   return {
-        //     ...course.course,
-        //     lecturer: course.lecturer.firstname + ' ' + course.lecturer.lastname,
-        //   }
-        // })
+
         console.log('running courses', this.runnings)
         this.pageCount = response.data.result.last_page
       })

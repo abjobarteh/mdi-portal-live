@@ -4,6 +4,7 @@
     app
     floating
     width="260"
+    height="100%"
     class="app-navigation-menu"
     :right="$vuetify.rtl"
     @input="val => $emit('update:is-drawer-open', val)"

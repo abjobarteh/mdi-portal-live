@@ -43,6 +43,21 @@ class StudentMarksController extends Controller
             'result' => $courses
         ]);
     }
+
+    public function takeMark(Request $request)
+    {
+        foreach ($request->student as $student) {
+            StudentRegisteredCourse::where([
+                ['student_id', $student['student_id']],
+                ['lecturer_id', $student['lecturer_id']],
+                ['semester_id', $student['semester_id']],
+                ['course_id', $student['course_id']]
+            ])->update([
+                'test_mark' => $student['test_mark'],
+                'exam_mark' => $student['exam_mark']
+            ]);
+        }
+    }
     /**
      * Display a listing of the resource.
      *

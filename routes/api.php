@@ -197,6 +197,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
     Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
+    Route::post('/submit-student-marks', [StudentMarksController::class, 'takeMark']); // needed by student and finance
+
 
 
 
