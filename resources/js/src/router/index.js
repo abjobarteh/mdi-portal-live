@@ -253,6 +253,19 @@ const routes = [
   },
 
   {
+    path: '/approve-marks',
+    name: 'approve-marks',
+    component: () => import('@/views/Registrar/approve-marks/ApproveMarks.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+
+  },
+
+  // approve-marks
+
+  {
     path: '/view-admission-codes-locations',
     name: 'view-admission-codes-locations',
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),

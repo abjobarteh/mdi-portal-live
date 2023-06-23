@@ -105,7 +105,19 @@ export default {
     },
     saveGrades() {
       axios
-        .post('/api/submit-student-marks', { student: this.students })
+        .post('/api/save-student-marks', { student: this.students })
+        .then(response => {
+          console.log('Success:', response.data)
+          // Do something with the response if needed
+        })
+        .catch(error => {
+          console.error('Error:', error)
+          // Handle the error
+        })
+    },
+    submitGrades() {
+      axios
+        .post('/api/submit-student-marks', { course_id: this.selectedCourse })
         .then(response => {
           console.log('Success:', response.data)
           // Do something with the response if needed

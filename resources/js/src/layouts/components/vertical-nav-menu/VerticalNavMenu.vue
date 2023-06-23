@@ -72,6 +72,13 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
+      <!-- <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '2'"
+        title="Approve Marks"
+        :to="{ name: 'approve-marks' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link> -->
+
       <!-- ///////////////////// ADMIN ROUTES /////////////////////////// -->
       <nav-menu-group
         v-if="currentUser && currentUser.role_id == '1'"

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lecturer;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
+use App\Models\Student;
 use App\Models\StudentRegisteredCourse;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,7 @@ class StudentMarksController extends Controller
 
     public function myCourses()
     {
-        $myCourses = SemesterCourse::with('course')->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
+        $myCourses = SemesterCourse::with('course')->where('submitted', 0)->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
             ->where('lecturer_id', Lecturer::where('user_id', auth()->user()->id)->value('id'))->get();
         $courses = $myCourses->pluck('course');
 
@@ -57,6 +58,13 @@ class StudentMarksController extends Controller
                 'exam_mark' => $student['exam_mark']
             ]);
         }
+    }
+
+    public function submitMarks(Request $request)
+    {
+        SemesterCourse::where('course_id', $request->get('course_id'))
+            ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
+            ->update(['submitted' => 1,]);
     }
     /**
      * Display a listing of the resource.

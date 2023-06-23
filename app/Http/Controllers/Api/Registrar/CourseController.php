@@ -225,9 +225,30 @@ class CourseController extends Controller
         ]);
     }
 
-    public function approveCourses()
+    public function coursesToApprove()
     {
-        // only when the course is submitted, this semester, that is the time it needs approval from the registar
+        $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
+        // i have to add approved later
+        $activeSemesterCourses = SemesterCourse::with('course')->where('semester_id', $currentSemesterId)->where('submitted', 1)->paginate(13);
+        foreach ($activeSemesterCourses as $activeSemesterCourse) {
+            $activeSemesterCourse['marks'] = StudentRegisteredCourse::with('student')->where('course_id', $activeSemesterCourse['course_id'])->get();
+        }
 
+        return response()->json([
+            'status' => 200,
+            'result' => $activeSemesterCourses
+        ]);
+    }
+
+    public function approveCourses(Request $request)
+    {
+        SemesterCourse::where('course_id', $request->get('course_id'))
+            ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
+            ->update(['approved' =>  1]);
+
+        StudentRegisteredCourse::where('course_id', $request->get('course_id'))
+            ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
+            ->update(['approved' => 1]);
     }
 }
+// meet.google.com/kqw-vkuc-uuq

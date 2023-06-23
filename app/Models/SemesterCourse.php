@@ -16,6 +16,7 @@ class SemesterCourse extends Model
         'course_id',
         'semester_id',
         'lecturer_id',
+        'submitted',
     ];
 
     public function semester()

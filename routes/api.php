@@ -135,6 +135,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
 
         Route::post('/send-email', [EmailController::class, 'sendEmail']);
+
+        Route::get('/courses-to-approve', [CourseController::class, 'coursesToApprove']);  // for the student middleware
+
+        Route::post('/approve-courses', [CourseController::class, 'approveCourses']);  // for the student middleware
+
+
+
     });
 
 
@@ -178,6 +185,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/verify-registration-token', [AuthController::class, 'verifyRegistrationToken']);  // for the student middleware
 
         // verifyRegistrationToken
+
+
     });
 
 
@@ -196,7 +205,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
     Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
-    Route::post('/submit-student-marks', [StudentMarksController::class, 'takeMark']); // needed by student and finance
+    Route::post('/save-student-marks', [StudentMarksController::class, 'takeMark']); // needed by student and finance
+    Route::post('/submit-student-marks', [StudentMarksController::class, 'submitMarks']); // needed by student and finance
+
+
 
     Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar
 

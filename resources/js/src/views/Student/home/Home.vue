@@ -125,11 +125,20 @@
         class="d-flex justify-center align-center"
         fill-height
       >
-        <v-row align="center" justify="center">
+        <!-- <v-row align="center" justify="center">
           <v-col cols="12" md="8" lg="12">
             <div outlined class="text-center">
               <v-card-title class="headline text-center mb-5" style="font-weight: bold">
                 <AccountSettings />
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row> -->
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
+                Congratulations you are now a student, make your payments to be able to register your courses.
               </v-card-title>
             </div>
           </v-col>
