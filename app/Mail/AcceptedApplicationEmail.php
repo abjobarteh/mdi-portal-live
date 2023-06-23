@@ -10,6 +10,7 @@ class AcceptedApplicationEmail extends Mailable
 {
     use Queueable, SerializesModels;
     public $date;
+    public $matnumber;
 
 
     /**
@@ -17,9 +18,10 @@ class AcceptedApplicationEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($date)
+    public function __construct($date, $matnumber)
     {
         $this->date = $date;
+        $this->matnumber = $matnumber;
     }
 
     /**

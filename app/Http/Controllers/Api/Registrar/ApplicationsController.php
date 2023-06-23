@@ -95,7 +95,7 @@ class ApplicationsController extends Controller
         $student = Student::where('user_id', $request->get('userId'))->first();
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber()]);
 
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($request->interviewDate));
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($request->interviewDate, $this->generateStudentNumber()));
 
         // when the student application is accepted, then he needs a matnumber
         return response()->json([

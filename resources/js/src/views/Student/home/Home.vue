@@ -124,6 +124,7 @@
         "
         class="d-flex justify-center align-center"
         fill-height
+        style="background-color: #eae4f0"
       >
         <!-- <v-row align="center" justify="center">
           <v-col cols="12" md="8" lg="12">
@@ -138,7 +139,7 @@
           <v-col cols="12" md="8" lg="6">
             <div outlined class="text-center">
               <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
-                Congratulations you are now a student, make your payments to be able to register your courses.
+                Congratulations you are now a student, <br />make your payments to be able to register your courses.
               </v-card-title>
             </div>
           </v-col>
