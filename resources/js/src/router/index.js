@@ -27,6 +27,8 @@ const routes = [
         }
         else if (userRole === 3) {
           next('/lecturer-dashboard'); // redirect to registrar dashboard for other roles
+        } else if (userRole === 6) {
+          next('/view-admission-codes-locations'); // redirect to registrar dashboard for other roles
         }
       }
     }
@@ -69,16 +71,6 @@ const routes = [
     meta: {
       requiresAuth: true,
       roles: [4],
-    }
-  },
-
-  {
-    path: '/agent',
-    name: 'agent',
-    component: () => import('@/views/Agent/Home.vue'),
-    meta: {
-      requiresAuth: true,
-      roles: [6],
     }
   },
 
@@ -477,7 +469,7 @@ router.beforeEach(async (to, from, next) => {
     } else if (userRole === 5) {
       next('/finance-dashboard'); // redirect to registrar for role 2
     } else if (userRole == 6) {
-      next('/agent')
+      next('/view-admission-codes-locations')
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

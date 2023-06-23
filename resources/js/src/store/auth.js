@@ -65,7 +65,7 @@ export default {
                 } else if (state.user.role_id == 3) {
                     router.push({ name: 'lecturer-dashboard' });
                 } else if (state.user.role_id == 6) {
-                    router.push({ name: 'agent' });
+                    router.push({ name: 'view-admission-codes-locations' });
                 }
 
 
