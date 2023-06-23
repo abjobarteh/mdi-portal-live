@@ -93,7 +93,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete-course/{id}', [CourseController::class, 'destroy']);
 
 
-        Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']);
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
         Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
 
@@ -198,6 +197,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
     Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
     Route::post('/submit-student-marks', [StudentMarksController::class, 'takeMark']); // needed by student and finance
+
+    Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar
 
 
 

@@ -82,7 +82,7 @@
         <nav-menu-link title="Logs" :to="{ name: 'view-program-durations' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '6')"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"

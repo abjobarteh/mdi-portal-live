@@ -32,6 +32,8 @@ class ProfileController extends Controller
 
 
             return $student;
+        } else if (auth()->user()->role_id == 6) {
+            return User::where('id', auth()->user()->id)->get();
         }
     }
 

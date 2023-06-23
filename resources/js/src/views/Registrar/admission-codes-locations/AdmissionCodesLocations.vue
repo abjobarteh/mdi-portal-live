@@ -7,7 +7,9 @@
           <v-toolbar-title>Admission Codes Locations</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
-          <v-btn color="primary" small class="white--text" @click="showAddDialog">Add AdmissionCodeLocation</v-btn>
+          <v-btn color="primary" v-if="userRole != 6" small class="white--text" @click="showAddDialog"
+            >Add AdmissionCodeLocation</v-btn
+          >
         </v-toolbar>
 
         <div v-if="isLoading" class="spinner">
@@ -28,8 +30,8 @@
             <template v-slot:[`item.action`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
               <v-btn @click="openAdmissionCodesPopup(item)">View Codes</v-btn>
-              <v-btn small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn>
-              <v-btn small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn>
+              <v-btn v-if="userRole != 6" small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn>
+              <v-btn v-if="userRole != 6" small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -38,7 +40,7 @@
     </v-container>
 
     <!-- Add AdmissionCodeLocation dialog -->
-    <v-dialog v-model="addAdmissionCodeLocationDialog" max-width="500px">
+    <v-dialog v-model="addAdmissionCodeLocationDialog" max-width="700px">
       <v-card>
         <v-card-title>Add AdmissionCodeLocation</v-card-title>
         <v-card-text>
@@ -91,6 +93,13 @@
               :key="error.$uid"
               >{{ error.$message }}</span
             >
+
+            <!-- New code -->
+            <h3 class="mb-2 text-center" style="font-size: 20px">User Info</h3>
+
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.username" label="Username"></v-text-field>
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.email" label="Email"></v-text-field>
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -212,6 +221,7 @@ export default {
   components: {},
   data() {
     return {
+      userRole: '',
       location: '',
       admissionCodeLocationItem: null,
 
@@ -257,6 +267,9 @@ export default {
         semester_id: '',
         total_number: '',
         price: '',
+        username: '',
+        email: '',
+        password: '',
       },
 
       rules: {
@@ -273,6 +286,23 @@ export default {
   created() {
     this.getResults()
     this.setupValidation()
+  },
+
+  watch: {
+    getUserProfile: function () {
+      this.userRole = this.getUserProfile[0].role_id
+      console.log('user info ', this.userRole)
+    },
+  },
+
+  mounted() {
+    this.$store.dispatch('userProfile')
+  },
+  computed: {
+    getUserProfile() {
+      //final output from here
+      return this.$store.getters.getUserProfile
+    },
   },
 
   methods: {

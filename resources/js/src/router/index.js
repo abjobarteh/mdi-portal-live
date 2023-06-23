@@ -73,6 +73,16 @@ const routes = [
   },
 
   {
+    path: '/agent',
+    name: 'agent',
+    component: () => import('@/views/Agent/Home.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [6],
+    }
+  },
+
+  {
     path: '/finance-dashboard',
     name: 'finance-dashboard',
     component: () => import('@/views/dashboard/finance/Dashboard.vue'),
@@ -248,7 +258,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 6],
     }
   },
 
@@ -258,7 +268,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes/AdmissionCodes.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 6],
     }
   },
 
@@ -453,6 +463,8 @@ router.beforeEach(async (to, from, next) => {
       next('/student'); // redirect to student dashboard for role 4
     } else if (userRole === 5) {
       next('/finance-dashboard'); // redirect to registrar for role 2
+    } else if (userRole == 6) {
+      next('/agent')
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

@@ -184,42 +184,7 @@ class CourseController extends Controller
 
     public function studentTranscript()
     {
-        // $registeredCourses = StudentRegisteredCourse::with('course', 'semester')->get();
-
-
-        // return response()->json([
-        //     'status' => 200,
-        //     'result' => $registeredCourses
-        // ]);
-
-        // $registeredCourses = StudentRegisteredCourse::with('course', 'semester')->get();
-        // $groupedCourses = $registeredCourses->groupBy(function ($item) {
-        //     return $item->semester->semester_name;
-        // });
-
-        // $transcript = [];
-
-        // foreach ($groupedCourses as $semesterName => $courses) {
-        //     $semesterTranscript = [];
-
-        //     foreach ($courses as $course) {
-        //         $courseTranscript = [
-        //             'Course Code' => $course->course->course_code,
-        //             'Course Name' => $course->course->course_name,
-        //             'Test Mark' => $course->test_mark,
-        //             'Exam Mark' => $course->exam_mark,
-        //             'Total Mark' => $course->total_mark,
-        //         ];
-
-        //         $semesterTranscript[] = $courseTranscript;
-        //     }
-
-        //     $transcript[$semesterName] = $semesterTranscript;
-        // }
-
-        // return $transcript;
-
-        $registeredCourses = StudentRegisteredCourse::with('course', 'semester.session')
+        $registeredCourses = StudentRegisteredCourse::where('approved', 1)->with('course', 'semester.session')
             ->where('student_id', Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
                 ->where('students.user_id', auth()->user()->id)->value('students.id'))->get();
 
@@ -258,5 +223,11 @@ class CourseController extends Controller
             'status' => 200,
             'result' => $transcript
         ]);
+    }
+
+    public function approveCourses()
+    {
+        // only when the course is submitted, this semester, that is the time it needs approval from the registar
+
     }
 }

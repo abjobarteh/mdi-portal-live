@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use App\Models\AdmissionCode;
 use App\Models\AdmissionCodeLocation;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
@@ -19,7 +21,15 @@ class AdmissionCodeLocationController extends Controller
      */
     public function index()
     {
-        $admissionCodeLocations = AdmissionCodeLocation::with(['admissionCodes', 'semester.session'])->paginate(13);
+        // try to know if the login user is an agent then, then fetch the admissioncodelocation where the location
+        // is my location
+        $admissionCodeLocations = null;
+        if (auth()->user()->role_id == 6) {
+
+            $admissionCodeLocations = AdmissionCodeLocation::where('user_id', auth()->user()->id)->with(['admissionCodes', 'semester.session'])->paginate(13);
+        } else {
+            $admissionCodeLocations = AdmissionCodeLocation::with(['admissionCodes', 'semester.session'])->paginate(13);
+        }
         return response()->json([
             'status' => 200,
             'result' => $admissionCodeLocations
@@ -51,6 +61,9 @@ class AdmissionCodeLocationController extends Controller
                 'semester_id' => 'required|max:255',
                 'total_number' => 'required|max:255',
                 'price' => 'required|numeric',
+                'username' => 'required',
+                'email' => 'required',
+                'password' => 'required'
             ]);
             $validatedData['total_remains'] = $request->get('total_number');
 
@@ -79,6 +92,17 @@ class AdmissionCodeLocationController extends Controller
 
             // Associate the AdmissionCodeLocation model with the AdmissionCode models and save them
             $admissionCodeLocation->admissionCodes()->saveMany($admissionCodes);
+
+            // i want to create a user also who will be able to sell the codes
+            $user = User::create([
+                'firstname' => $request->username,
+                'lastname' => $request->username,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'is_active' => 1,
+                'role_id' => 6, // role_id 6 is agents
+            ]);
 
             // Commit the transaction
             DB::commit();

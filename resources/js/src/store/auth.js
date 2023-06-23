@@ -64,6 +64,8 @@ export default {
                     router.push({ name: 'finance-dashboard' });
                 } else if (state.user.role_id == 3) {
                     router.push({ name: 'lecturer-dashboard' });
+                } else if (state.user.role_id == 6) {
+                    router.push({ name: 'agent' });
                 }
 
 

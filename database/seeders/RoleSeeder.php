@@ -39,5 +39,10 @@ class RoleSeeder extends Seeder
             'rank' => 'finance',
             'description' => 'responsible for collecting payments from the students'
         ]);
+
+        Role::create([
+            'rank' => 'agent',
+            'description' => 'these are the agents who sells admission_codes'
+        ]);
     }
 }
