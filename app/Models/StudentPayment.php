@@ -13,7 +13,8 @@ class StudentPayment extends Model
     public $fillable = [
         'student_id',
         'semester_id',
-        'amount_paid'
+        'amount_paid',
+        'payment_type'
     ];
 
     public function semester()

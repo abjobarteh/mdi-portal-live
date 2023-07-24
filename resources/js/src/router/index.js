@@ -263,7 +263,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 6],
+      roles: [5, 6],
     }
   },
 
@@ -404,6 +404,29 @@ const routes = [
 
   },
 
+  {
+    path: '/lecturer-courses',
+    name: 'lecturer-courses',
+    component: () => import('@/views/Lecturer/MyCourses.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [3],
+    }
+
+  },
+
+  {
+    path: '/courses/:id',
+    name: 'course-details',
+    component: () => import('@/views/Lecturer/CourseDetails.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [3],
+    }
+
+  },
+
+
 
   {
     path: '/login',
@@ -449,7 +472,8 @@ router.beforeEach(async (to, from, next) => {
   console.log("current user ", store.getters.currentUser);
   const allowedRoles = to.meta.roles
 
-
+  console.log("role ", allowedRoles && !allowedRoles.includes(currentUser.role_id
+  ));
   if (requiresAuth && !isLoggedIn) {
     next({ name: 'pages-login' })
   } else if (isLoggedIn && (to.name === 'pages-login' || to.name === 'pages-register')) {
@@ -473,6 +497,7 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this
+
     next('/error-404')
   }
   else {

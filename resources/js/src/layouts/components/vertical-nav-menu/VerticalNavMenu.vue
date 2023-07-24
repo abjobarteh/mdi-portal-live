@@ -72,12 +72,12 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
-      <!-- <nav-menu-link
+      <nav-menu-link
         v-if="currentUser && currentUser.role_id == '2'"
         title="Approve Marks"
         :to="{ name: 'approve-marks' }"
         :icon="icons.mdiAlphaTBoxOutline"
-      ></nav-menu-link> -->
+      ></nav-menu-link>
 
       <!-- ///////////////////// ADMIN ROUTES /////////////////////////// -->
       <nav-menu-group
@@ -89,7 +89,7 @@
         <nav-menu-link title="Logs" :to="{ name: 'view-program-durations' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-link
-        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '6')"
+        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '6')"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"
@@ -155,6 +155,13 @@
         v-if="currentUser && currentUser.role_id == '3'"
         title="Student Marks"
         :to="{ name: 'manage-student-marks' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '3'"
+        title="Courses"
+        :to="{ name: 'lecturer-courses' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 

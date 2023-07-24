@@ -41,10 +41,10 @@ Copy code
       <v-card-actions>
         <v-row>
           <v-col cols="6">
-            <v-btn block color="success" @click="saveGrades">Save</v-btn>
+            <v-btn block color="success" :disabled="selectedCourse == null" @click="saveGrades">Save</v-btn>
           </v-col>
           <v-col cols="6">
-            <v-btn block color="success" @click="submitGrades">Submit</v-btn>
+            <v-btn block color="success" :disabled="selectedCourse == null" @click="submitGrades">Submit</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -76,14 +76,7 @@ export default {
     axios.get('/api/my-courses').then(result => {
       this.myCourses = result.data.result
       console.log(this.myCourses)
-      swal.fire({
-        title: 'Success!',
-        text: 'grade added successfully.',
-        icon: 'success',
-        confirmButtonText: 'OK',
-      })
     })
-    // this.getMarks()
   },
 
   watch: {
@@ -104,27 +97,55 @@ export default {
       })
     },
     saveGrades() {
-      axios
-        .post('/api/save-student-marks', { student: this.students })
-        .then(response => {
-          console.log('Success:', response.data)
-          // Do something with the response if needed
+      swal
+        .fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
         })
-        .catch(error => {
-          console.error('Error:', error)
-          // Handle the error
+        .then(result => {
+          if (result.isConfirmed) {
+            axios
+              .post('/api/save-student-marks', { student: this.students })
+              .then(response => {
+                console.log('Success:', response.data)
+                // Do something with the response if needed
+              })
+              .catch(error => {
+                console.error('Error:', error)
+                // Handle the error
+              })
+          }
         })
     },
     submitGrades() {
-      axios
-        .post('/api/submit-student-marks', { course_id: this.selectedCourse })
-        .then(response => {
-          console.log('Success:', response.data)
-          // Do something with the response if needed
+      swal
+        .fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
         })
-        .catch(error => {
-          console.error('Error:', error)
-          // Handle the error
+        .then(result => {
+          if (result.isConfirmed) {
+            axios
+              .post('/api/submit-student-marks', { student: this.students })
+              .then(response => {
+                console.log('Success:', response.data)
+                // Do something with the response if needed
+              })
+              .catch(error => {
+                console.error('Error:', error)
+                // Handle the error
+              })
+          }
         })
     },
   },

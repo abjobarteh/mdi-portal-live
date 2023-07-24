@@ -43,6 +43,7 @@
     "@vuetify/cli-plugin-utils": "^0.0.9",
     "apexcharts-clevision": "^3.28.3",
     "core-js": "^3.6.5",
+    "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
     "js-cookie": "^3.0.1",

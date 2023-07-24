@@ -147,9 +147,9 @@ export default {
         })
         await this.$store.dispatch('fetchUser')
       } catch (error) {
-        console.log(error.response.data.errors)
+        // console.log(error.response.data.errors)
         this.error = true
-        this.errorMessage = error.response.data.errors
+        // this.errorMessage = error.response.data.errors
       }
     },
   },

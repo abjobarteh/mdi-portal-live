@@ -22,6 +22,7 @@ class StudentRegisteredCourse extends Model
         'exam_mark',
         'total_mark'
 
+
     ];
 
     public function course()

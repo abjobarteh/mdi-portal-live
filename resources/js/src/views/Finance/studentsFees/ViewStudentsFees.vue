@@ -240,6 +240,7 @@ export default {
       ;(this.studentPaymentsHeaders = [
         { text: 'Semester Name', value: 'semester.semester_name' },
         { text: 'Amount Paid', value: 'amount_paid' },
+        { text: 'Payment Type', value: 'payment_type' },
       ]),
         (this.studentPayments = student.payments),
         (this.showStudentPaymentPopup = true)

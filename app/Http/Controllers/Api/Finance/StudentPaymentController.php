@@ -33,7 +33,6 @@ class StudentPaymentController extends Controller
             'amount_paid' => 'required|max:255',
         ]);
         $studentDepartmentFee = Student::find($validatedData['student_id'])->department->programs->first();
-
         // student have already paid all the fees
         if (Student::find($validatedData['student_id'])->payment_type == 1) {
             return response()->json(['message' => 'You have already made a complete payment'], 422);
@@ -42,26 +41,28 @@ class StudentPaymentController extends Controller
         // student want to pay a fee that is above the total course fee or smaller than a semster fee * work later *
         if ($studentDepartmentFee->fee == $validatedData['amount_paid']) {
 
-            // here i know the student paid all the fee
+            // here i know the student is paying all the fee
             StudentPayment::create([
                 'student_id' => $validatedData['student_id'],
                 'semester_id' => $validatedData['semester_id'],
                 'amount_paid' => $validatedData['amount_paid'],
+                'payment_type' => 'Full Course Payment'
             ]);
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 1,
                 'balance' => 0,
                 'remaining' => $validatedData['amount_paid']
             ]);
-        } else if ($studentDepartmentFee->fee == $studentDepartmentFee['per_semester_fee']) {
+        } else if ($validatedData['amount_paid'] == $studentDepartmentFee['per_semester_fee']) {
             StudentPayment::create([
                 'student_id' => $validatedData['student_id'],
                 'semester_id' => $validatedData['semester_id'],
                 'amount_paid' => $validatedData['amount_paid'],
+                'payment_type' => 'Per semester installment'
             ]);
         } else {
             // you are expected to either pay fully or per semester
-            return response()->json(['message' => 'Pay all the fee or per semester fee.']);
+            return response()->json(['message' => 'Pay all the fee or per semester fee.'], 422);
         }
 
 

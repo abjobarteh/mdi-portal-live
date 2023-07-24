@@ -62,7 +62,7 @@ class StudentMarksController extends Controller
 
     public function submitMarks(Request $request)
     {
-        SemesterCourse::where('course_id', $request->get('course_id'))
+        SemesterCourse::where('course_id', $request->get('student')[0]['course_id'])
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
             ->update(['submitted' => 1,]);
     }

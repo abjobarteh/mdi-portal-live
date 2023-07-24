@@ -74,6 +74,7 @@ export default {
     },
 
     showConfirmationDialog(item, action) {
+      console.log('id ', item)
       swal
         .fire({
           title: 'Are you sure?',
@@ -93,6 +94,7 @@ export default {
                 lecturer_id: item.lecturer.id,
                 semester_id: item.semester_id,
                 course_id: item.course_id,
+                semester_course_id: item.id,
               })
               .then(result => {
                 // show success alert
