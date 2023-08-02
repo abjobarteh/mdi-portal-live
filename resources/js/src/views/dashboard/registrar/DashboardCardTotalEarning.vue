@@ -66,27 +66,17 @@ export default {
     const totalEarning = [
       {
         avatar: require('@/assets/images/logos/zipcar.png').default,
-        title: 'Zipcar',
-        subtitle: 'Vuejs, React & HTML',
+        title: 'Admission Codes',
         earning: '$24,895.65',
         progress: '85',
         color: 'primary',
       },
       {
         avatar: require('@/assets/images/logos/bitbank.png').default,
-        title: 'Bitbank',
-        subtitle: 'Sketch, Figma & XD',
+        title: 'Tuition Fees',
         earning: '$8,6500.20',
         progress: '65',
         color: 'info',
-      },
-      {
-        avatar: require('@/assets/images/logos/aviato.png').default,
-        title: 'Aviato',
-        subtitle: 'HTML & angular',
-        earning: '$1,2450.80',
-        progress: '30',
-        color: 'secondary',
       },
     ]
 

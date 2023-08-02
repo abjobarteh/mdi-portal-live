@@ -9,24 +9,14 @@
       disable-sort
     >
       <!-- name -->
-      <template #[`item.full_name`]="{item}">
+      <template #[`item.full_name`]="{ item }">
         <div class="d-flex flex-column">
           <span class="d-block font-weight-semibold text--primary text-truncate">{{ item.full_name }}</span>
           <small>{{ item.post }}</small>
         </div>
       </template>
-      <template #[`item.salary`]="{item}">
-        {{ `$${item.salary}` }}
-      </template>
-      <!-- status -->
-      <template #[`item.status`]="{item}">
-        <v-chip
-          small
-          :color="statusColor[status[item.status]]"
-          class="font-weight-medium"
-        >
-          {{ status[item.status] }}
-        </v-chip>
+      <template #[`item.tel`]="{ item }">
+        {{ item.tel }}
       </template>
     </v-data-table>
   </v-card>
@@ -52,10 +42,7 @@ export default {
       headers: [
         { text: 'NAME', value: 'full_name' },
         { text: 'EMAIL', value: 'email' },
-        { text: 'DATE', value: 'start_date' },
-        { text: 'SALARY', value: 'salary' },
-        { text: 'AGE', value: 'age' },
-        { text: 'STATUS', value: 'status' },
+        { text: 'TEL', value: 'tel' },
       ],
       usreList: data,
       status: {

@@ -421,7 +421,7 @@ const routes = [
     component: () => import('@/views/Lecturer/CourseDetails.vue'),
     meta: {
       requiresAuth: true,
-      roles: [3],
+      roles: [3, 4],
     }
 
   },

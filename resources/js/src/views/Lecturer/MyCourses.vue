@@ -19,7 +19,16 @@
             hide-default-footer
           >
             <template v-slot:[`item.course.course_name`]="{ item }">
-              <router-link class="custom-link" :to="`courses/${item.id}`">{{ item.course.course_name }}</router-link>
+              <!-- <router-link class="custom-link" :to="`courses/${item.id}`">{{ item.course.course_name }}</router-link> -->
+              <router-link
+                class="custom-link"
+                :to="{
+                  path: `courses/${item.id}`,
+                  query: { course_name: item.course.course_name },
+                }"
+              >
+                {{ item.course.course_name }}
+              </router-link>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />

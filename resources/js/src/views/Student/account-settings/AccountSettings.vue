@@ -1,9 +1,9 @@
  <template>
-  <div>
+  <div class="container">
     <v-card id="account-setting-card">
       <!-- tabs -->
       <v-tabs v-model="tab" show-arrows class="flexible-tabs">
-        <v-tab v-for="tab in tabs" :key="tab.title" style="width: 335px">
+        <v-tab v-for="tab in tabs" :key="tab.title">
           <v-icon size="20" class="me-3">
             {{ tab.icon }}
           </v-icon>
@@ -15,6 +15,10 @@
       <v-tabs-items v-if="runnings.length" v-model="tab">
         <v-tab-item>
           <running-courses :runnings="runnings"></running-courses>
+        </v-tab-item>
+
+        <v-tab-item>
+          <registered-courses :courses="courses"></registered-courses>
         </v-tab-item>
 
         <v-tab-item>
@@ -39,6 +43,7 @@ import { mdiAccountOutline, mdiLockOpenOutline, mdiInformationOutline } from '@m
 // demos
 import RunningCourses from './RunningCourses.vue'
 import ProgramCourses from './ProgramCourses.vue'
+import RegisteredCourses from './RegisteredCourses.vue'
 import Transcript from './Transcript.vue'
 import Payments from './Payments.vue'
 
@@ -50,6 +55,7 @@ export default {
     ProgramCourses,
     Payments,
     Transcript,
+    RegisteredCourses,
   },
 
   data() {
@@ -58,9 +64,10 @@ export default {
       tab: '',
       tabs: [
         { title: 'Running Courses', icon: mdiAccountOutline },
+        { title: 'Registered Courses', icon: mdiLockOpenOutline },
         { title: 'Program Courses', icon: mdiLockOpenOutline },
-        { title: 'Transcript', icon: mdiInformationOutline },
-        { title: 'Payment', icon: mdiInformationOutline },
+        { title: 'Transcript List', icon: mdiInformationOutline },
+        { title: 'Tuition Payments', icon: mdiInformationOutline },
       ],
       icons: {
         mdiAccountOutline,
@@ -122,14 +129,15 @@ export default {
 
 
 <style>
-.flex {
-  width: 100%;
-  margin: 0 auto;
+.container {
+  max-width: 1400px; /* Set the maximum width as you desire */
+  margin: 0 auto; /* Center the content */
 }
 
-@media (min-width: 1024px) {
-  .flex {
-    min-width: 1320px;
+/* Media query for larger screens */
+@media (min-width: 1400px) {
+  .container {
+    width: 100%; /* Remove the max-width constraint on larger screens */
   }
 }
 </style>

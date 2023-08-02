@@ -14,7 +14,7 @@ class ApplicantDeparmentInfoController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
-            'department_id' => 'required',
+            'program_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +34,7 @@ class ApplicantDeparmentInfoController extends Controller
         }
 
         $student->update([
-            'department_id' => $request->get('department_id'),
+            'program_id' => $request->get('program_id'),
         ]);
 
         return response()->json([

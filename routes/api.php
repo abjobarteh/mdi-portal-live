@@ -94,15 +94,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete-course/{id}', [CourseController::class, 'destroy']);
 
 
-        Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
-        Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
+        // Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
+        // Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
 
 
-        Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
+        // Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
 
 
 
-        Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
+        // Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
 
 
 
@@ -185,6 +185,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/verify-registration-token', [AuthController::class, 'verifyRegistrationToken']);  // for the student middleware
 
+        Route::get('registerd-courses', [CourseController::class, 'registeredCourses']);
+
         // verifyRegistrationToken
 
 
@@ -196,13 +198,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
         // Route::get('/view-departments', [DepartmentController::class, 'index']);
-        Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
+
+
+        Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
+        Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
+
+
+        Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
+
+
+
+        Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
     });
 
     Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
     Route::get('/admission-status', [AdmissionStatusController::class, 'index']); // is needed by the student and registrar
     Route::get('/view-departments', [DepartmentController::class, 'index']); // needed by student and finance
+    Route::get('/view-programs', [ProgramController::class, 'index']);  // please restructure this in a given middleware
+
 
     Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
     Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
@@ -211,7 +225,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-semester-courses', [MyCoursesController::class, 'courses']); // needed by student and finance
 
     Route::post('/upload-lecturer-files', [MyCoursesController::class,  'uploadLecturerFiles']);
-    Route::get('/lecturer-files', [MyCoursesController::class,  'index']);
+    Route::post('/lecturer-files', [MyCoursesController::class,  'index']);
 
 
     Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar

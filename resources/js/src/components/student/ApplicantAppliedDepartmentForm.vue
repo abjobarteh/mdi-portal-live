@@ -2,15 +2,15 @@
   <v-card>
     <v-form ref="form" @submit.prevent="submit">
       <v-container style="background-color: #fefcff">
-        <v-card-title class="headline">Department Information</v-card-title>
+        <v-card-title class="headline">Program Information</v-card-title>
         <v-card-text>
           <v-select
             outlined
-            v-model="addApplicantDepartmentFormData.department_id"
-            :items="departments.map(department => ({ id: department.id, name: department.name }))"
+            v-model="addApplicantProgramFormData.program_id"
+            :items="programs.map(program => ({ id: program.id, name: program.name }))"
             item-value="id"
             item-text="name"
-            label="Department"
+            label="Program"
           ></v-select>
           <v-card-actions class="d-flex justify-center">
             <v-btn color="primary" class="col-12" @click="submit()">Save</v-btn>
@@ -27,11 +27,11 @@ import 'vuetify/dist/vuetify.min.css'
 export default {
   data() {
     return {
-      departments: [],
+      programs: [],
       studentInfo: '',
       educationFormData: {},
-      addApplicantDepartmentFormData: {
-        department_id: '',
+      addApplicantProgramFormData: {
+        program_id: '',
       },
     }
   },
@@ -49,7 +49,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.post(`/api/submit-applicant-department-info`, this.addApplicantDepartmentFormData).then(result => {
+            axios.post(`/api/submit-applicant-department-info`, this.addApplicantProgramFormData).then(result => {
               // show success alert
               swal
                 .fire({
@@ -69,10 +69,20 @@ export default {
     },
   },
   created() {
+    // axios
+    //   .get('/api/view-departments?page=' + this.page)
+    //   .then(response => {
+    //     this.departments = response.data.result.data
+    //     this.pageCount = response.data.result.last_page
+    //   })
+    //   .catch(err => {
+    //     this.departments = []
+    //     this.pageCount = 0
+    //   })
     axios
-      .get('/api/view-departments?page=' + this.page)
+      .get('/api/view-programs?page=' + this.page)
       .then(response => {
-        this.departments = response.data.result.data
+        this.programs = response.data.result.data
         this.pageCount = response.data.result.last_page
       })
       .catch(err => {
@@ -83,7 +93,7 @@ export default {
   watch: {
     getUserProfile: function () {
       this.studentInfo = this.getUserProfile
-      this.addApplicantDepartmentFormData['id'] = this.studentInfo.user_id
+      this.addApplicantProgramFormData['id'] = this.studentInfo.user_id
     },
   },
 

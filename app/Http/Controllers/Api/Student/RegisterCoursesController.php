@@ -15,6 +15,7 @@ class RegisterCoursesController extends Controller
             'lecturer_id' => 'required',
             'semester_id' => 'required',
             'course_id' => 'required',
+            'semester_course_id' => 'required'
         ]);
 
         $studentId = $validatedData['student_id'];
@@ -39,6 +40,7 @@ class RegisterCoursesController extends Controller
             'lecturer_id' => $validatedData['lecturer_id'],
             'semester_id' => $semesterId,
             'course_id' => $validatedData['course_id'],
+            'semester_course_id' => $validatedData['semester_course_id']
         ]);
 
         return response()->json(['message' => 'Program created successfully.']);

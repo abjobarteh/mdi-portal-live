@@ -6,6 +6,8 @@
 
         <!-- title -->
         <v-card-text class="d-flex flex-column align-center justify-center">
+          <v-img width="100" height="70" :src="require('@/assets/images/logos/mdi_logo_square.png').default"></v-img>
+
           <p class="text-h4 font-weight-semibold text-center mb-2">MDI PORTAL</p>
           <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Register</p>
         </v-card-text>
@@ -77,24 +79,6 @@
         </v-card-text>
       </v-card>
     </div>
-
-    <!-- background triangle shape  -->
-    <img
-      class="auth-mask-bg"
-      height="190"
-      :src="require(`@/assets/images/misc/mask-${$vuetify.theme.dark ? 'dark' : 'light'}.png`).default"
-    />
-
-    <!-- tree -->
-    <v-img class="auth-tree" width="247" height="185" :src="require('@/assets/images/misc/tree.png').default"></v-img>
-
-    <!-- tree  -->
-    <v-img
-      class="auth-tree-3"
-      width="377"
-      height="289"
-      :src="require('@/assets/images/misc/tree-3.png').default"
-    ></v-img>
   </div>
 </template>
 
@@ -164,4 +148,12 @@ export default {
 
 <style lang="scss">
 @import '~@resources/sass/preset/pages/auth.scss';
+.auth-wrapper {
+  /* Background Image */
+  // background-image: url('../../assets/images/misc/mdi-image.png');
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../assets/images/misc/mdi-image.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 </style>

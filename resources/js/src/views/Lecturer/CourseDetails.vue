@@ -2,49 +2,36 @@
   <div>
     <v-container>
       <!-- Buttons Section -->
-      <v-row align="center" justify="center">
+      <v-row align="center" justify="center" v-if="userRole == 3">
         <v-col cols="6" class="text-center">
           <!-- <v-file-input label="Upload File" @change="onFileUpload" outlined dense class="file-input"></v-file-input> -->
           <v-btn style="margin-top: -24px" color="primary" @click="onFileUpload" block rounded> Upload file </v-btn>
-        </v-col>
-        <v-col cols="6" class="text-center">
-          <v-btn style="margin-top: -24px" color="primary" @click="onVideoUpload" block rounded> Upload Video </v-btn>
         </v-col>
       </v-row>
 
       <!-- Subject Title Section -->
       <v-row>
         <v-col cols="12" class="text-center mt-6">
-          <h2 class="subtitle custom-underline">Introduction to Computer Science</h2>
+          <h2 class="subtitle custom-underline">
+            {{ courseName }}
+          </h2>
         </v-col>
       </v-row>
 
       <!-- Table Section -->
-      <v-row>
-        <v-col cols="12">
-          <v-data-table :headers="headers" :items="files">
-            <!-- Add a custom column for the download button -->
-            <template v-slot:item.actions="{ item }">
-              <v-btn @click="downloadFile(item.file_name)" color="primary" text> Download </v-btn>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row>
+      <v-app>
+        <v-row>
+          <v-col cols="12">
+            <v-data-table :headers="headers" :items="files" class="elevation-1">
+              <!-- Add a custom column for the download button -->
+              <template v-slot:item.actions="{ item }">
+                <v-btn @click="downloadFile(item.file_name)" color="primary" text>Download</v-btn>
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+      </v-app>
     </v-container>
-
-    <v-dialog v-model="videoUploadDialog" max-width="500px">
-      <v-card>
-        <v-card-title class="headline">Upload Video</v-card-title>
-        <v-card-text>
-          <v-text-field outlined v-model="videoName" label="Video Name"></v-text-field>
-          <v-file-input label="Select Video" @change="onVideoSelected" outlined></v-file-input>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="uploadVideo">Upload</v-btn>
-          <v-btn color="red" @click="closeVideoUploadDialog">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
     <v-dialog v-model="fileUploadDialog" max-width="500px">
       <v-card>
@@ -65,15 +52,16 @@
 <script>
 import 'vuetify/dist/vuetify.min.css'
 import apiBaseURL from '../../../api-config'
-import { saveAs } from 'file-saver'
 
 export default {
   data() {
     return {
+      courseName: '',
+
       files: [],
       headers: [
         { text: 'File title', value: 'file_title' },
-        { text: 'Uploaded Date', value: 'created_at' },
+        { text: 'Uploaded Date', value: 'uploaded_date' },
         { text: 'File', value: 'actions' },
       ],
       // Your data properties here (if needed)
@@ -86,12 +74,19 @@ export default {
       fileUploadDialog: false,
       fileName: '',
       selectedFile: null,
+      userRole: '',
     }
   },
 
+  mounted() {
+    console.log('user here ', this.$store.getters.currentUser.role_id)
+    this.userRole = this.$store.getters.currentUser.role_id
+  },
   created() {
+    this.courseName = this.$route.query.course_name
+
     axios
-      .get('api/lecturer-files')
+      .post('api/lecturer-files', { semester_course_id: this.$route.params.id })
       .then(response => {
         this.files = response.data.result.data
         console.log('files', this.files)
@@ -108,23 +103,6 @@ export default {
   methods: {
     downloadFile(file) {
       const fullURL = apiBaseURL + 'storage/lecturer-files/' + file
-      saveAs.saveAs('http://localhost:8000/storage/lecturer-files/1690050332_64bc1f1c733df.pdf', 'image.jpg')
-
-      // fetch(fullURL)
-      //   .then(response => response.blob())
-      //   .then(blob => {
-      //     const contentDispositionHeader = response.headers.get('content-disposition')
-      //     const fileNameMatch =
-      //       contentDispositionHeader && contentDispositionHeader.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)
-      //     const fileName = fileNameMatch ? fileNameMatch[1] : 'file'
-
-      //     // Save the file using FileSaver.js
-      //     saveAs(blob, fileName)
-      //   })
-      //   .catch(error => {
-      //     console.error('File download failed:', error)
-      //     // Handle the error if needed
-      //   })
       window.open(fullURL, '_blank')
     },
     uploadFile() {

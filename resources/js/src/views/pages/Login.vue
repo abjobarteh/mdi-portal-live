@@ -1,15 +1,22 @@
 <template>
   <div class="auth-wrapper auth-v1">
     <div class="auth-inner">
-      <v-card class="auth-card">
+      <v-card class="auth-card" style="background-color: rgba(255, 255, 255, 0.983)">
         <!-- logo -->
-
-        <!-- title -->
-        <!-- <v-card-text>
-          <p class="text-2xl font-weight-semibold text--primary mb-2">MDI PORTAL 👋🏻</p>
-          <p class="text-2xl font-weight-semibold text--primary mb-2">Welcome! Please Signin</p>
+        <!-- <v-card-text class="d-flex flex-column align-center justify-center">
+          <p class="text-h4 font-weight-semibold text-center mb-2">MDI PORTAL</p>
+          <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Sign in</p>
         </v-card-text> -->
         <v-card-text class="d-flex flex-column align-center justify-center">
+          <!-- Add your logo here -->
+          <!-- <img
+            src="../../assets/images/logos/mdi_logo_square.png"
+            alt="Your Logo"
+            class="mb-3"
+            style="max-height: 100px"
+          /> -->
+          <v-img width="170" height="120" :src="require('@/assets/images/logos/mdi_logo_square.png').default"></v-img>
+
           <p class="text-h4 font-weight-semibold text-center mb-2">MDI PORTAL</p>
           <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Sign in</p>
         </v-card-text>
@@ -56,24 +63,6 @@
         </v-card-text>
       </v-card>
     </div>
-
-    <!-- background triangle shape  -->
-    <img
-      class="auth-mask-bg"
-      height="173"
-      :src="require(`@/assets/images/misc/mask-${$vuetify.theme.dark ? 'dark' : 'light'}.png`).default"
-    />
-
-    <!-- tree -->
-    <v-img class="auth-tree" width="247" height="185" :src="require('@/assets/images/misc/tree.png').default"></v-img>
-
-    <!-- tree  -->
-    <v-img
-      class="auth-tree-3"
-      width="377"
-      height="289"
-      :src="require('@/assets/images/misc/tree-3.png').default"
-    ></v-img>
   </div>
 </template>
 
@@ -158,4 +147,24 @@ export default {
 
 <style lang="scss">
 @import '~@resources/sass/preset/pages/auth.scss';
+
+// .auth-wrapper {
+//   /* Replace 'path/to/background-image.jpg' with the path to your background image */
+//   background-image: url('../../assets/images/misc/mdi-image.png');
+//   background-size: cover;
+//   background-repeat: no-repeat;
+//   background-position: center;
+// }
+.auth-wrapper {
+  /* Background Image */
+  // background-image: url('../../assets/images/misc/mdi-image.png');
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../assets/images/misc/mdi-image.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.login-container {
+  background-color: rgb(45, 118, 182);
+}
 </style>

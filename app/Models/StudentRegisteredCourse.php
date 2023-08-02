@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Student;
+use App\Models\SemesterCourse;
+use App\Models\Lecturer;
 
 
 class StudentRegisteredCourse extends Model
@@ -20,7 +22,8 @@ class StudentRegisteredCourse extends Model
         'course_id',
         'test_mark',
         'exam_mark',
-        'total_mark'
+        'total_mark',
+        'semester_course_id'
 
 
     ];
@@ -38,5 +41,15 @@ class StudentRegisteredCourse extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function lecturer()
+    {
+        return $this->belongsTo(Lecturer::class);
+    }
+
+    public function semester_course()
+    {
+        return $this->belongsTo(SemesterCourse::class);
     }
 }

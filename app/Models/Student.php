@@ -27,7 +27,7 @@ class Student extends Model
         'address',
         'email',
         'user_id',
-        'department_id',
+        'program_id',
         'phonenumber',
         'is_applicant',
         'application_completed',

@@ -50,6 +50,10 @@ export default {
   },
 
   created() {
+    axios.get('/api/registerd-courses').then(response => {
+      console.log('response ', response)
+    })
+
     axios
       .get('/api/registration-status')
       .then(response => {

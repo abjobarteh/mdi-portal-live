@@ -7,6 +7,7 @@ use App\Models\Lecturer;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\SemesterCourseFile;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MyCoursesController extends Controller
@@ -46,12 +47,19 @@ class MyCoursesController extends Controller
         return response()->json(['message' => 'File uploaded successfully']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $files = SemesterCourseFile::paginate(13);
+        $files = SemesterCourseFile::where('semester_course_id', $request->get('semester_course_id'))->paginate(13);
+
+
+        // Format the created_at field in the desired format
+        foreach ($files as $file) {
+            $file['uploaded_date'] = Carbon::parse($file->created_at)->format('jS F Y');
+        }
+
         return response()->json([
             'status' => 200,
-            'result' => $files
+            'result' => $files,
         ]);
     }
 }

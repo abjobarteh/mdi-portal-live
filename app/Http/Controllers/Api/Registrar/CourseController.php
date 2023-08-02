@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\GradingSystem;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
@@ -195,31 +196,43 @@ class CourseController extends Controller
         });
 
         $transcript = [];
+        $totalSemesters = count($groupedCourses);
+        $totalCGPASum = 0;
 
         foreach ($groupedCourses as $semesterSession => $courses) {
             $semesterTranscript = [
                 'SemesterSession' => $semesterSession,
-                'Courses' => []
+                'Courses' => [],
+                'Average' => 0,
             ];
-
+            $noOfCourses = 0;
+            $sumOfMarks = 0;
             foreach ($courses as $course) {
+                $noOfCourses++;
+                $totalMark = $course->test_mark  + $course->exam_mark;
+                $sumOfMarks += $totalMark;
                 $courseTranscript = [
                     'CourseCode' => $course->course->course_code,
                     'CourseName' => $course->course->course_name,
                     'TestMark' => $course->test_mark,
                     'ExamMark' => $course->exam_mark,
-                    'TotalMark' => $course->total_mark,
                     'StartDate' => $course->semester->session->start_date,
                     'EndDate' => $course->semester->session->end_date,
+                    'Grade' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('grade'),
+                    'GradePoint' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('grade_point'),
+                    'Interpretation' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=',  $totalMark)->value('interpretation'),
                 ];
 
                 $semesterTranscript['Courses'][] = $courseTranscript;
+                $semesterTranscript['Average'] = $sumOfMarks / $noOfCourses;
             }
 
+            $totalCGPASum += $semesterTranscript['Average']; // Accumulate the semester averages for CGPA calculation
             $transcript[] = $semesterTranscript;
         }
 
         return response()->json([
+            'cgpa' => $totalCGPASum / $totalSemesters,
             'status' => 200,
             'result' => $transcript
         ]);
@@ -249,6 +262,47 @@ class CourseController extends Controller
         StudentRegisteredCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
             ->update(['approved' => 1]);
+    }
+
+    public function registeredCourses()
+    {
+        $registeredCourses = StudentRegisteredCourse::with('course', 'semester.session', 'lecturer')
+            ->where('student_id', Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
+                ->where('students.user_id', auth()->user()->id)->value('students.id'))->get();
+
+        $groupedCourses = $registeredCourses->groupBy(function ($item) {
+            $semester = $item->semester;
+            $session = $semester->session;
+            return $semester->semester_name . ' - ' . $session->session_name;
+        });
+
+        $transcript = [];
+
+        foreach ($groupedCourses as $semesterSession => $courses) {
+            $semesterTranscript = [
+                'SemesterSession' => $semesterSession,
+                'Courses' => []
+            ];
+
+            foreach ($courses as $course) {
+                $courseTranscript = [
+                    'CourseCode' => $course->course->course_code,
+                    'Lecturer' => $course->lecturer->firstname . ' ' . $course->lecturer->lastname,
+                    'CourseName' => $course->course->course_name,
+                    'SemesterCourseId' => $course->semester_course_id,
+                ];
+
+                $semesterTranscript['Courses'][] = $courseTranscript;
+            }
+
+            $transcript[] = $semesterTranscript;
+        }
+
+
+        return response()->json([
+            'status' => 200,
+            'result' => $transcript
+        ]);
     }
 }
 // meet.google.com/kqw-vkuc-uuq
