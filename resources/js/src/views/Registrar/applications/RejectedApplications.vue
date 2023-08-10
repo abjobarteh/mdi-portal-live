@@ -48,7 +48,7 @@ export default {
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
         { text: 'Email', value: 'email' },
-        { text: 'Department', value: 'name' },
+        { text: 'Program', value: 'program_name' },
 
         { text: 'Action', value: 'action', sortable: false },
       ],

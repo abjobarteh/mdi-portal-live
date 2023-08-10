@@ -45,7 +45,7 @@ class StudentMarksController extends Controller
         ]);
     }
 
-    public function takeMark(Request $request)
+    public function takeTestMark(Request $request)
     {
         foreach ($request->student as $student) {
             StudentRegisteredCourse::where([
@@ -54,14 +54,23 @@ class StudentMarksController extends Controller
                 ['semester_id', $student['semester_id']],
                 ['course_id', $student['course_id']]
             ])->update([
-                'test_mark' => $student['test_mark'],
-                'exam_mark' => $student['exam_mark']
+                'test_mark' => $student['test_mark']
             ]);
         }
     }
 
-    public function submitMarks(Request $request)
+    public function saveExamMarkAndSubmit(Request $request)
     {
+        foreach ($request->student as $student) {
+            StudentRegisteredCourse::where([
+                ['student_id', $student['student_id']],
+                ['lecturer_id', $student['lecturer_id']],
+                ['semester_id', $student['semester_id']],
+                ['course_id', $student['course_id']]
+            ])->update([
+                'exam_mark' => $student['exam_mark']
+            ]);
+        }
         SemesterCourse::where('course_id', $request->get('student')[0]['course_id'])
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
             ->update(['submitted' => 1,]);

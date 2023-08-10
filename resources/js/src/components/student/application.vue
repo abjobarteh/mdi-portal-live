@@ -73,7 +73,7 @@
                   <tr>
                     <td><router-link to="/applicant-applied-department">Course Details</router-link></td>
                     <td
-                      v-if="studentInfo.department_id != null"
+                      v-if="studentInfo.program_name != null"
                       style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
                     >
                       Completed

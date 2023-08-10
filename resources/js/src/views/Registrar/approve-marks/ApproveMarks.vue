@@ -36,7 +36,7 @@
       <v-card>
         <v-card-title>
           <p>
-            Admission Codes for <span style="font-weight: bold">{{ location }}</span>
+            Grades for the selected course <span style="font-weight: bold">{{ location }}</span>
           </p>
           <v-spacer></v-spacer>
           <fas
@@ -66,41 +66,27 @@
             <template v-slot:item.action="{ item }">
               {{ item.student.firstname + ' ' + item.student.lastname }}
             </template>
-            <!-- <template v-slot:item.is_sold="{ item }">
-              <fas
-                v-if="item.is_sold == 0"
-                icon="check"
-                style="
-                  font-size: 24px;
-                  cursor: pointer;
-                  background-color: lightgreen;
-                  color: #fff;
-                  border-radius: 50%;
-                  text-align: center;
-                  line-height: 1.5;
-                  width: 36px;
-                  height: 36px;
-                "
-                @click="handleSold(item)"
-              ></fas>
-              <fas
-                v-else
-                icon="times"
-                disabled
-                style="
-                  font-size: 24px;
-                  background-color: red;
-                  color: #fff;
-                  border-radius: 50%;
-                  text-align: center;
-                  line-height: 1.5;
-                  width: 36px;
-                  height: 36px;
-                "
-              ></fas>
-            </template> -->
+            <template v-slot:item.update_mark="{ item }">
+              <v-btn @click="openUpdateMarkDialog(item)" class="success small">Update</v-btn>
+            </template>
           </v-data-table>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <!-- dialog for update of marks -->
+    <v-dialog v-model="updateMarkDialog" max-width="500px">
+      <v-card>
+        <v-card-title class="headline">Update Marks</v-card-title>
+        <v-card-text>
+          <v-text-field outlined v-model="updateMark.testMark" label="Test Mark"></v-text-field>
+          <v-text-field outlined v-model="updateMark.examMark" label="Exam Mark"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="saveMarks">Save</v-btn>
+          <v-btn color="error" @click="closeUpdateMarkDialog">Cancel</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -119,6 +105,14 @@ export default {
   components: {},
   data() {
     return {
+      updateMarkDialog: false,
+      updateMark: {
+        testMark: '',
+        examMark: '',
+        course_id: '',
+        semester_id: '',
+        student_id: '',
+      },
       location: '',
       admissionCodeLocationItem: null,
       showStudentMarksPopup: false,
@@ -143,6 +137,52 @@ export default {
   },
 
   methods: {
+    openUpdateMarkDialog(mark) {
+      console.log('mark ', mark)
+      this.updateMarkDialog = true
+      this.updateMark.testMark = mark.test_mark
+      this.updateMark.examMark = mark.exam_mark
+      this.updateMark.course_id = mark.course_id
+      this.updateMark.semester_id = mark.semester_id
+      this.updateMark.student_id = mark.student_id
+    },
+    closeUpdateMarkDialog() {
+      this.updateMarkDialog = false
+    },
+    saveMarks() {
+      // api/update-student-grades
+      swal
+        .fire({
+          title: "Are you sure, you want to update the student's mark?",
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, submit it!',
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            axios.post(`/api/update-student-grades`, this.updateMark).then(result => {
+              // show success alert
+              swal
+                .fire({
+                  title: 'Success!',
+                  text: 'mark updated successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+                .then(() => {
+                  this.getResults()
+                  this.updateMarkDialog = false
+                  this.showStudentMarksPopup = false
+                  // this.$store.dispatch('userProfile')
+                  // this.$router.push('/student')
+                })
+            })
+          }
+        })
+    },
     openStudentMarksPopup(studentMarks) {
       console.log(studentMarks)
       //   this.location = admissionCodes.location_name
@@ -150,6 +190,7 @@ export default {
         { text: 'Student Name', value: 'action' },
         { text: 'Test Mark', value: 'test_mark' },
         { text: 'Exam Mark', value: 'exam_mark' },
+        { text: 'Update', value: 'update_mark' },
       ]),
         (this.items = studentMarks.marks),
         (this.showStudentMarksPopup = true)
@@ -204,7 +245,7 @@ export default {
               swal
                 .fire({
                   title: 'Success!',
-                  text: 'Admission Code Location deleted successfully.',
+                  text: 'Grades approved successfully',
                   icon: 'success',
                   confirmButtonText: 'OK',
                 })

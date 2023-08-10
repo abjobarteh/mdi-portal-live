@@ -220,12 +220,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
     Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
-    Route::post('/save-student-marks', [StudentMarksController::class, 'takeMark']); // needed by student and finance
-    Route::post('/submit-student-marks', [StudentMarksController::class, 'submitMarks']); // needed by student and finance
+    Route::post('/save-student-test-marks', [StudentMarksController::class, 'takeTestMark']); // needed by student and finance
+    Route::post('/save-student-exam-marks-and-submit', [StudentMarksController::class, 'saveExamMarkAndSubmit']); // needed by student and finance
     Route::get('/my-semester-courses', [MyCoursesController::class, 'courses']); // needed by student and finance
 
     Route::post('/upload-lecturer-files', [MyCoursesController::class,  'uploadLecturerFiles']);
     Route::post('/lecturer-files', [MyCoursesController::class,  'index']);
+
+    Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
+
 
 
     Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar

@@ -11,7 +11,7 @@
         <certificate-card :certificates="certificates"></certificate-card>
       </v-col>
       <v-col cols="12" md="12" class="mb-4">
-        <DepartmentCard :department="department" />
+        <DepartmentCard :program="program" />
       </v-col>
       <v-btn @click="submitApplication" color="success lighten-2" block>Confirm</v-btn>
     </v-container>
@@ -37,7 +37,7 @@ export default {
       studentInfo: '',
       education: [],
       certificates: [],
-      department: '',
+      program: '',
       applicantProfile: [],
     }
   },
@@ -80,7 +80,7 @@ export default {
       this.studentInfo = this.getUserProfile
       this.education = this.studentInfo.education
       this.certificates = this.studentInfo.certificates
-      this.department = this.studentInfo.name // this is actually the department name
+      this.program = this.studentInfo.program_name // this is actually the department name
       this.applicantProfile = [
         {
           firstname: this.studentInfo.firstname,

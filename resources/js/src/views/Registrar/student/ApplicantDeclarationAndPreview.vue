@@ -11,7 +11,7 @@
         <certificate-card :certificates="certificates"></certificate-card>
       </v-col>
       <v-col cols="12" md="12" class="mb-4">
-        <DepartmentCard :department="department" />
+        <DepartmentCard :program="program" />
       </v-col>
       <v-row v-if="this.$route.query.param == 'incoming'">
         <v-col cols="6">
@@ -45,7 +45,7 @@ export default {
     return {
       education: [],
       certificates: [],
-      department: '',
+      program: '',
       applicantProfile: [],
     }
   },
@@ -97,29 +97,29 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Schedule Interview',
+          confirmButtonText: 'Schedule Orientation',
         })
         .then(result => {
           if (result.isConfirmed) {
             // Show date selection popup
             swal
               .fire({
-                title: 'Select Interview Date',
-                // html: '<input type="date" id="interviewDate">',
-                html: '<input type="datetime-local" id="interviewDate">',
+                title: 'Select Orientation Date',
+                // html: '<input type="date" id="orientationDate">',
+                html: '<input type="datetime-local" id="orientationDate">',
 
                 showCancelButton: true,
                 confirmButtonText: 'Schedule',
               })
               .then(dateResult => {
                 if (dateResult.isConfirmed) {
-                  const interviewDate = document.getElementById('interviewDate').value
+                  const orientationDate = document.getElementById('orientationDate').value
 
                   // Perform API request to schedule interview
                   axios
                     .post(`/api/accept-student-application`, {
                       userId: this.$route.params.id,
-                      interviewDate: interviewDate,
+                      orientationDate: orientationDate,
                     })
                     .then(result => {
                       swal
@@ -182,7 +182,7 @@ export default {
             console.log('anme', response.data.result.data[0].firstname)
             this.education = response.data.result.data[0].education
             this.certificates = response.data.result.data[0].certificates
-            this.department = response.data.result.data[0].name
+            this.program = response.data.result.data[0].program_name
 
             this.pageCount = response.data.result.last_page
 
@@ -212,7 +212,7 @@ export default {
             console.log(response.data.result.data)
             this.education = response.data.result.data[0].education
             this.certificates = response.data.result.data[0].certificates
-            this.department = response.data.result.data[0].name
+            this.program = response.data.result.data[0].program_name
             this.pageCount = response.data.result.last_page
             this.applicantProfile = [
               {
@@ -240,7 +240,7 @@ export default {
             console.log(response.data.result.data)
             this.education = response.data.result.data[0].education
             this.certificates = response.data.result.data[0].certificates
-            this.department = response.data.result.data[0].name
+            this.program = response.data.result.data[0].program_name
             this.pageCount = response.data.result.last_page
             this.applicantProfile = [
               {

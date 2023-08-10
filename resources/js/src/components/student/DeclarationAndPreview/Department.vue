@@ -1,13 +1,13 @@
 <template>
   <v-card>
-    <v-card-title class="text-h5">Department Applied</v-card-title>
+    <v-card-title class="text-h5">Program Applied</v-card-title>
     <v-card-text>
       <v-data-table
         :headers="headers"
         :hide-default-footer="true"
         :items-per-page="5"
         class="elevation-1"
-        :items="[department]"
+        :items="[program]"
       >
         <template v-slot:item="{ item }">
           <tr>
@@ -23,19 +23,19 @@
 export default {
   name: 'Department',
   props: {
-    department: {
+    program: {
       type: String,
       required: true,
     },
   },
   data() {
     return {
-      headers: [{ text: 'Department', value: 'department' }],
+      headers: [{ text: 'Program', value: 'program' }],
     }
   },
 
   mounted() {
-    console.log('departments ', this.department)
+    console.log('program ', this.program)
   },
 }
 </script>

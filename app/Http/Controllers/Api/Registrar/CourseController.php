@@ -304,5 +304,22 @@ class CourseController extends Controller
             'result' => $transcript
         ]);
     }
+
+    public function updateStudentMark(Request $request)
+    {
+
+        StudentRegisteredCourse::where([
+            'student_id' => $request->get('student_id'),
+            'semester_id' => $request->get('semester_id'),
+            'course_id' => $request->get('course_id')
+        ])->update([
+            'test_mark' => $request->get('testMark'),
+            'exam_mark' => $request->get('examMark'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'result' => "Grades updated successfully"
+        ]);
+    }
 }
-// meet.google.com/kqw-vkuc-uuq

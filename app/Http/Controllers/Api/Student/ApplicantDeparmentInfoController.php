@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Program;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class ApplicantDeparmentInfoController extends Controller
 
         $student->update([
             'program_id' => $request->get('program_id'),
+            'department_id' => Program::where('id', $request->get('program_id'))->value('department_id'),
         ]);
 
         return response()->json([

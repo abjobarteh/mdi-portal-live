@@ -37,7 +37,8 @@ class Student extends Model
         'remaining',
         'payment_type',
         'balance',
-        'mat_number'
+        'mat_number',
+        'department_id'
     ];
 
     public function user()

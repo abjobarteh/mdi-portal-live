@@ -83,24 +83,27 @@ export default {
     this.userRole = this.$store.getters.currentUser.role_id
   },
   created() {
-    this.courseName = this.$route.query.course_name
-
-    axios
-      .post('api/lecturer-files', { semester_course_id: this.$route.params.id })
-      .then(response => {
-        this.files = response.data.result.data
-        console.log('files', this.files)
-        // Handle the response from the API if needed
-      })
-      .catch(error => {
-        console.error('File upload failed:', error)
-        // Handle the error if needed
-      })
+    this.getLecturerFiles()
   },
   // <v-btn class="ma-2" color="success" :href="`/certificates/${item.certificate}`" target="_blank" small dark
   //           >View</v-btn
   //         >
   methods: {
+    getLecturerFiles() {
+      this.courseName = this.$route.query.course_name
+
+      axios
+        .post('api/lecturer-files', { semester_course_id: this.$route.params.id })
+        .then(response => {
+          this.files = response.data.result.data
+          console.log('files', this.files)
+          // Handle the response from the API if needed
+        })
+        .catch(error => {
+          console.error('File upload failed:', error)
+          // Handle the error if needed
+        })
+    },
     downloadFile(file) {
       const fullURL = apiBaseURL + 'storage/lecturer-files/' + file
       window.open(fullURL, '_blank')
@@ -116,7 +119,16 @@ export default {
         .post('api/upload-lecturer-files', formData)
         .then(response => {
           console.log('File upload successful:', response.data)
-          // Handle the response from the API if needed
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'File uploaded successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getLecturerFiles()
+            })
         })
         .catch(error => {
           console.error('File upload failed:', error)

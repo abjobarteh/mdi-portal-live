@@ -472,8 +472,7 @@ router.beforeEach(async (to, from, next) => {
   console.log("current user ", store.getters.currentUser);
   const allowedRoles = to.meta.roles
 
-  console.log("role ", allowedRoles && !allowedRoles.includes(currentUser.role_id
-  ));
+
   if (requiresAuth && !isLoggedIn) {
     next({ name: 'pages-login' })
   } else if (isLoggedIn && (to.name === 'pages-login' || to.name === 'pages-register')) {
