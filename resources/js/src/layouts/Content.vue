@@ -41,14 +41,8 @@
         <div class="mx-6 d-flex justify-space-between">
           <span>
             &copy; 2023
-            <a href="https://themeselection.com" class="text-decoration-none" target="_blank"
-              >Nifty ICT Solutions</a
-            ></span
+            <a href="https://niftyict.com" class="text-decoration-none" target="_blank">Nifty ICT Solutions</a></span
           >
-          <span class="d-sm-inline d-none">
-            <a class="me-6 text--secondary text-decoration-none">Freebies</a>
-            <a class="me-6 text--secondary text-decoration-none">Blog</a>
-          </span>
         </div>
       </div>
     </v-footer>

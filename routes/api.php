@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeController;
 use App\Http\Controllers\Api\Registrar\AdmissionCodeLocationController;
 use App\Http\Controllers\Api\Registrar\ApplicationsController;
+use App\Http\Controllers\Api\Registrar\DashboardController;
 use App\Http\Controllers\Api\Registrar\LecturerController;
 use App\Http\Controllers\Api\Registrar\RegistrationStatusController;
 use App\Http\Controllers\Api\Registrar\SemesterController;
@@ -234,6 +235,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar
 
 
+    Route::get('/profit-status', [DashboardController::class, 'statusCount']); // needed by student and finance
 
 
 });

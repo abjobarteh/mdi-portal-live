@@ -80,5 +80,29 @@ export default {
       },
     }
   },
+
+  methods: {
+    fetchStatusCounts() {
+      axios
+        .get('/api/profit-status')
+        .then(response => {})
+        .catch(error => {
+          console.error('Error fetching status counts:', error)
+        })
+    },
+
+    resolveStatisticsIconVariation(data) {
+      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
+      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
+      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
+      if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' }
+
+      return { icon: mdiAccountOutline, color: 'success' }
+    },
+  },
+
+  mounted() {
+    this.fetchStatusCounts()
+  },
 }
 </script>
