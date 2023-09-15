@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmissionCode;
 use App\Models\AdmissionCodeLocation;
 use App\Models\Semester;
+use App\Models\Student;
 use App\Models\StudentPayment;
+use App\Models\StudentRegisteredCourse;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -71,12 +73,29 @@ class DashboardController extends Controller
             'lastSemesterTuitionPaid' => $lastSemesterTuitionPaid,
             'totalTutionFeePaid' => StudentPayment::sum('amount_paid'),
 
-
-
         ]);
     }
 
-    public function totalActualAmount()
+    public function counts()
     {
+        $acceptedStudents = Student::where('accepted', 'accepted')->count();
+        $rejectedStudents = Student::where('accepted', 'rejected')->count();
+
+        $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
+
+        $activeStudents = StudentRegisteredCourse::where('semester_id', $currentSemesterId)
+            ->distinct('student_id')
+            ->count();
+
+        $activeLecturers = StudentRegisteredCourse::where('semester_id', $currentSemesterId)
+            ->distinct('lecturer_id')
+            ->count();
+
+        return response()->json([
+            'acceptedStudents' => $acceptedStudents,
+            'rejectedStudents' => $rejectedStudents,
+            'activeStudents' => $activeStudents, // students who have taken courses this semester
+            'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
+        ]);
     }
 }

@@ -75,6 +75,16 @@ const routes = [
   },
 
   {
+    path: '/student-detail/:id',
+    name: 'student-detail',
+    component: () => import('@/views/Registrar/students/student-detail.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
     path: '/finance-dashboard',
     name: 'finance-dashboard',
     component: () => import('@/views/dashboard/finance/Dashboard.vue'),
@@ -376,6 +386,16 @@ const routes = [
     path: '/admission-status',
     name: 'admission-status',
     component: () => import('@/views/Registrar/settings/AdmissionStatus.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
+    path: '/view-students',
+    name: 'view-students',
+    component: () => import('@/views/Registrar/students/ViewStudents.vue'),
     meta: {
       requiresAuth: true,
       roles: [2],

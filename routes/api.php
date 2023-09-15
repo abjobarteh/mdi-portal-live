@@ -160,9 +160,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
     Route::get('/profile', [ProfileController::class, 'index']);
 
+    Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);  // for the student middleware and registrar
 
+    Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);  // for the student middleware and registrar
 
-
+    // studentDetail
 
     Route::middleware(['student'])->group(function () {
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
@@ -182,7 +184,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/un-register-courses', [RegisterCoursesController::class, 'unRegisterCourse']);  // for the student middleware
 
-        Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware
+        // Route::get('/transcript-courses', [CourseController::class, 'studentTranscript']);  // for the student middleware
 
         Route::post('/verify-registration-token', [AuthController::class, 'verifyRegistrationToken']);  // for the student middleware
 
@@ -236,6 +238,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('/profit-status', [DashboardController::class, 'statusCount']); // needed by student and finance
+
+    Route::get('/user-counts', [DashboardController::class, 'counts']); // needed by student and finance
+
 
 
 });

@@ -12,18 +12,90 @@
 
     <v-card-text>
       <v-row>
-        <v-col v-for="data in statisticsData" :key="data.title" cols="6" md="3" class="d-flex align-center">
-          <v-avatar size="44" :color="resolveStatisticsIconVariation(data.title).color" rounded class="elevation-1">
+        <!-- First instance -->
+        <v-col cols="6" md="3" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[0].title).color"
+            rounded
+            class="elevation-1"
+          >
             <v-icon dark color="white" size="30">
-              {{ resolveStatisticsIconVariation(data.title).icon }}
+              {{ resolveStatisticsIconVariation(statisticsData[0].title).icon }}
             </v-icon>
           </v-avatar>
           <div class="ms-3">
             <p class="text-xs mb-0">
-              {{ data.title }}
+              {{ statisticsData[0].title }}
             </p>
             <h3 class="text-xl font-weight-semibold">
-              {{ data.total }}
+              {{ statisticsData[0].total }}
+            </h3>
+          </div>
+        </v-col>
+
+        <!-- Second instance -->
+        <v-col cols="6" md="3" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[1].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[1].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[1].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ statisticsData[1].total }}
+            </h3>
+          </div>
+        </v-col>
+
+        <!-- Third instance -->
+        <v-col cols="6" md="3" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[2].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[2].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[2].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ statisticsData[2].total }}
+            </h3>
+          </div>
+        </v-col>
+
+        <!-- Fourth instance -->
+        <v-col cols="6" md="3" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[3].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[3].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[3].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ statisticsData[3].total }}
             </h3>
           </div>
         </v-col>
@@ -37,38 +109,35 @@
 import { mdiAccountOutline, mdiCurrencyUsd, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline } from '@mdi/js'
 
 export default {
-  setup() {
-    const statisticsData = [
-      {
-        title: 'Lecturers',
-        total: '245k',
-      },
-      {
-        title: 'Active students',
-        total: '12.5k',
-      },
-      {
-        title: 'Product',
-        total: '1.54k',
-      },
-      {
-        title: 'Rejected Students',
-        total: '$88k',
-      },
-    ]
-
-    const resolveStatisticsIconVariation = data => {
-      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
-      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
-      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
-      if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' }
-
-      return { icon: mdiAccountOutline, color: 'success' }
-    }
-
+  data() {
     return {
-      statisticsData,
-      resolveStatisticsIconVariation,
+      statisticsData: [
+        {
+          title: 'Active Lecturers',
+          total: '245',
+        },
+        {
+          title: 'Active students',
+          total: '12.5',
+        },
+        {
+          title: 'Accepted Students',
+          total: '100',
+        },
+        {
+          title: 'Rejected Students',
+          total: '88',
+        },
+      ],
+
+      resolveStatisticsIconVariation: data => {
+        if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
+        if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
+        if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
+        if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' }
+
+        return { icon: mdiAccountOutline, color: 'success' }
+      },
 
       // icons
       icons: {
@@ -84,24 +153,20 @@ export default {
   methods: {
     fetchStatusCounts() {
       axios
-        .get('/api/profit-status')
-        .then(response => {})
+        .get('/api/user-counts')
+        .then(response => {
+          this.statisticsData[0].total = response.data.activeLecturers
+          this.statisticsData[1].total = response.data.activeStudents
+          this.statisticsData[2].total = response.data.acceptedStudents
+          this.statisticsData[3].total = response.data.rejectedStudents
+        })
         .catch(error => {
           console.error('Error fetching status counts:', error)
         })
     },
-
-    resolveStatisticsIconVariation(data) {
-      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
-      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
-      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
-      if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' }
-
-      return { icon: mdiAccountOutline, color: 'success' }
-    },
   },
 
-  mounted() {
+  created() {
     this.fetchStatusCounts()
   },
 }

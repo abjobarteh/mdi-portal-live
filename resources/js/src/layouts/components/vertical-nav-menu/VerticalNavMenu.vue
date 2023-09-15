@@ -116,6 +116,13 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '2'"
+        title="Students"
+        :to="{ name: 'view-students' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
       <nav-menu-group
         v-if="currentUser && currentUser.role_id == '2'"
         title="Applications"

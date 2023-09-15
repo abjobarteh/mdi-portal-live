@@ -118,7 +118,6 @@ export default {
       axios
         .post('api/upload-lecturer-files', formData)
         .then(response => {
-          console.log('File upload successful:', response.data)
           swal
             .fire({
               title: 'Success!',
@@ -131,8 +130,17 @@ export default {
             })
         })
         .catch(error => {
-          console.error('File upload failed:', error)
-          // Handle the error if needed
+          console.error('File upload failed:', error.response.data.message)
+          swal
+            .fire({
+              title: 'Success!',
+              text: error.response.data.message,
+              icon: 'error',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getLecturerFiles()
+            })
         })
 
       this.closeFileUploadDialog()

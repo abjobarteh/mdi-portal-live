@@ -5,11 +5,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        icon
-        small
-        class="mt-n2 me-n3"
-      >
+      <v-btn icon small class="mt-n2 me-n3">
         <v-icon size="22">
           {{ icons.mdiDotsVertical }}
         </v-icon>
@@ -18,27 +14,12 @@
 
     <v-card-text>
       <!-- Chart -->
-      <vue-apex-charts
-        :options="chartOptions"
-        :series="chartData"
-        height="210"
-      ></vue-apex-charts>
+      <vue-apex-charts :options="chartOptions" :series="chartData" height="210"></vue-apex-charts>
 
       <div class="d-flex align-center">
-        <h3 class="text-2xl font-weight-semibold me-4">
-          45%
-        </h3>
+        <h3 class="text-2xl font-weight-semibold me-4">45%</h3>
         <span>Your sales perfomance in 45% 🤩 better compare to last month</span>
       </div>
-
-      <v-btn
-        block
-        color="primary"
-        class="mt-6"
-        outlined
-      >
-        Details
-      </v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -127,7 +108,7 @@ export default {
 
     const chartData = [
       {
-        data: [40, 60, 50, 60, 75, 60, 50, 65],
+        data: [40, 60, 50, 60, 75, 60, 50],
       },
     ]
 

@@ -58,7 +58,7 @@ export default {
         this.pageCount = 0
       })
     axios
-      .get('/api/transcript-courses/' + 71)
+      .get('/api/transcript-courses/' + this.$route.params.id)
       .then(response => {
         this.transcripts = response.data.result
         this.cgpa = response.data.cgpa
@@ -67,6 +67,15 @@ export default {
       })
       .catch(err => {
         this.runnings = []
+        this.pageCount = 0
+      })
+    axios
+      .get('/api/student-detail/' + this.$route.params.id)
+      .then(response => {
+        this.studentInfo = response.data.result
+        console.log('student info ', this.studentInfo)
+      })
+      .catch(err => {
         this.pageCount = 0
       })
   },
@@ -285,24 +294,6 @@ export default {
       const year = currentDate.getFullYear()
 
       return `${month}, ${year}`
-    },
-  },
-
-  watch: {
-    getUserProfile: function () {
-      this.studentInfo = this.getUserProfile
-      console.log('id', this.studentInfo.user_id)
-    },
-  },
-
-  created() {
-    this.$store.dispatch('userProfile')
-    // student-detail/this.$route.params.id
-  },
-  computed: {
-    getUserProfile() {
-      //final output from here
-      return this.$store.getters.getUserProfile
     },
   },
 }

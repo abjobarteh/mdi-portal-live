@@ -183,11 +183,11 @@ class CourseController extends Controller
         ]);
     }
 
-    public function studentTranscript()
+    public function studentTranscript($id)
     {
         $registeredCourses = StudentRegisteredCourse::where('approved', 1)->with('course', 'semester.session')
             ->where('student_id', Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
-                ->where('students.user_id', auth()->user()->id)->value('students.id'))->get();
+                ->where('students.user_id', $id)->value('students.id'))->get();
 
         $groupedCourses = $registeredCourses->groupBy(function ($item) {
             $semester = $item->semester;
