@@ -45,29 +45,25 @@ export default {
     }
   },
   //
+  mounted() {
+    this.$store.dispatch('userProfile')
+    console.log('transcript mounted', this.studentInfo)
+  },
   created() {
+    // Dispatch 'userProfile' action to fetch user profile
+    this.$store.dispatch('userProfile')
+
+    // Set up a watcher to respond to changes in this.getUserProfile
+    this.$watch('getUserProfile', this.fetchTranscriptCourses)
+
+    // You can also make the API call to fetch student payments here
     axios
       .get('/api/view-student-payments')
       .then(response => {
-        // this.transcripts = response.data.result
-        console.log('running courses', this.runnings)
-        this.pageCount = response.data.result.last_page
+        // Handle the response
       })
       .catch(err => {
-        this.runnings = []
-        this.pageCount = 0
-      })
-    axios
-      .get('/api/transcript-courses/' + 71)
-      .then(response => {
-        this.transcripts = response.data.result
-        this.cgpa = response.data.cgpa
-        console.log('running courses', this.cgpa)
-        this.pageCount = response.data.result.last_page
-      })
-      .catch(err => {
-        this.runnings = []
-        this.pageCount = 0
+        // Handle errors
       })
   },
 
@@ -286,19 +282,39 @@ export default {
 
       return `${month}, ${year}`
     },
+
+    fetchTranscriptCourses() {
+      // Check if this.getUserProfile has the required data
+      if (this.getUserProfile && this.getUserProfile.user_id) {
+        // Make the API call with this.getUserProfile.user_id
+        axios
+          .get('/api/transcript-courses/' + this.getUserProfile.user_id)
+          .then(response => {
+            // Handle the response and update data properties
+            this.transcripts = response.data.result
+            this.cgpa = response.data.cgpa
+            this.pageCount = response.data.result.last_page
+          })
+          .catch(err => {
+            // Handle errors
+            this.runnings = []
+            this.pageCount = 0
+          })
+      }
+    },
   },
 
   watch: {
     getUserProfile: function () {
       this.studentInfo = this.getUserProfile
-      console.log('id', this.studentInfo.user_id)
+      console.log('ids', this.studentInfo.user_id)
     },
   },
 
-  created() {
-    this.$store.dispatch('userProfile')
-    // student-detail/this.$route.params.id
-  },
+  // created() {
+  //   this.$store.dispatch('userProfile')
+  //   // student-detail/this.$route.params.id
+  // },
   computed: {
     getUserProfile() {
       //final output from here
