@@ -159,6 +159,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
     Route::get('/profile', [ProfileController::class, 'index']);
+    Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
+
 
     Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);  // for the student middleware and registrar
 

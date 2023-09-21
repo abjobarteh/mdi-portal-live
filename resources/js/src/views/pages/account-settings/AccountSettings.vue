@@ -53,7 +53,7 @@ export default {
     // account settings data
     const accountSettingData = {
       account: {
-        avatarImg: require(`@/assets/images/avatars/${currentUser.value.picture}`).default,
+        // avatarImg: require(`@/assets/images/avatars/${currentUser.value.picture}`).default,
         // username: 'johnDoe',
         // firstname: 'john Doe',
         // lastname: 'john Doe',

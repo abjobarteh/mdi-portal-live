@@ -103,7 +103,6 @@ export default {
       const tableContent = this.generateTableContent()
 
       const watermarkImage = './mdi_logo.png'
-
       const htmlContent = `
     <html>
       <head>
@@ -191,13 +190,12 @@ export default {
         <div class="page-container">
           <div class="watermark-container">
             ${tableContent}
-            <img src="images/logos/mdi_logo.png" class="watermark-image" />
+            <img src="../../../../assets/images/logos/mdi_logo.png" class="watermark-image" />
           </div>
       </div>
       </body>
     </html>
   `
-
       html2pdf().set(options).from(htmlContent).save()
     },
 

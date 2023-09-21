@@ -2,21 +2,29 @@
   <v-card flat class="pa-3 mt-2">
     <v-card-text class="d-flex">
       <v-avatar rounded size="120" class="me-6">
-        <v-img :src="accountDataLocale.avatarImg"></v-img>
+        <v-img :src="getImageUrl(user.picture)"></v-img>
       </v-avatar>
       <!-- {{ currentUser }} -->
       <!-- upload photo -->
       <div>
-        <v-btn color="primary" class="me-3 mt-5" @click="$refs.refInputEl.click()">
+        <!-- <v-btn color="primary" class="me-3 mt-5">
           <v-icon class="d-sm-none">
             {{ icons.mdiCloudUploadOutline }}
           </v-icon>
           <span class="d-none d-sm-block">Upload new photo</span>
-        </v-btn>
+        </v-btn> -->
 
-        <input ref="refInputEl" type="file" accept=".jpeg,.png,.jpg,GIF" :hidden="true" />
+        <!-- <input ref="refInputEl" type="file" accept=".jpeg,.png,.jpg,GIF" :hidden="true" /> -->
+        <div>
+          <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
 
-        <v-btn color="error" outlined class="mt-5"> Reset </v-btn>
+          <v-btn color="primary" class="me-3 mt-5" @click="openFileInput">
+            <v-icon class="d-sm-none">
+              {{ icons.mdiCloudUploadOutline }}
+            </v-icon>
+            <span class="d-none d-sm-block">Upload new photo</span>
+          </v-btn>
+        </div>
         <p class="text-sm mt-5">Allowed JPG, GIF or PNG. Max size of 800K</p>
       </div>
     </v-card-text>
@@ -73,6 +81,8 @@ import { mdiAlertOutline, mdiCloudUploadOutline } from '@mdi/js'
 import { ref, computed, onMounted } from '@vue/composition-api'
 import store from '@/store'
 
+import apiBaseURL from '../../../../api-config'
+
 export default {
   props: {
     accountData: {
@@ -81,25 +91,31 @@ export default {
     },
   },
 
-  setup(props) {
-    onMounted(() => console.log('props', props.accountData))
-    const status = ['Active', 'Inactive', 'Pending', 'Closed']
-
-    const accountDataLocale = ref(JSON.parse(JSON.stringify(props.accountData)))
-
-    const resetForm = () => {
-      accountDataLocale.value = JSON.parse(JSON.stringify(props.accountData))
+  data() {
+    return {
+      user: '',
+      status: ['Active', 'Inactive', 'Pending', 'Closed'],
+      accountDataLocale: JSON.parse(JSON.stringify(this.accountData)),
+      icons: {
+        mdiAlertOutline,
+        mdiCloudUploadOutline,
+      },
     }
-
-    const submitForm = () => {
-      // update the user details
-      // console.log('form submitted', accountDataLocale.value)
+  },
+  methods: {
+    getImageUrl(filename) {
+      // Use Laravel's asset function to generate the URL path
+      return apiBaseURL + 'images/avatars/' + filename
+    },
+    resetForm() {
+      this.accountDataLocale = JSON.parse(JSON.stringify(this.accountData))
+    },
+    submitForm() {
       axios
-        .put(`/api/update-user/${accountDataLocale.value.id}`, accountDataLocale.value)
+        .put(`/api/update-user/${this.accountDataLocale.id}`, this.accountDataLocale)
         .then(result => {
           // show success alert
-          store.dispatch('fetchUser')
-
+          this.$store.dispatch('fetchUser')
           swal.fire({
             title: 'Success!',
             text: 'User updated successfully.',
@@ -116,18 +132,67 @@ export default {
             confirmButtonText: 'OK',
           })
         })
-    }
+    },
+    openFileInput() {
+      // Trigger the file input element
+      this.$refs.fileInput.click()
+    },
+    async handleFileChange(event) {
+      const selectedFile = event.target.files[0]
 
-    return {
-      status,
-      accountDataLocale,
-      resetForm,
-      icons: {
-        mdiAlertOutline,
-        mdiCloudUploadOutline,
-      },
-      submitForm,
-    }
+      if (selectedFile) {
+        try {
+          // Create a form data object to send the file to the server
+          const formData = new FormData()
+          formData.append('photo', selectedFile) // 'photo' should match your Laravel controller's input name
+
+          // Upload the file to the server using Axios or a similar library
+          const response = await axios.post('api/upload-photo', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+
+          // Assuming the response contains the updated user data
+          const updatedUserData = response.data
+
+          // Update the user's photo in your component's data
+          this.accountDataLocale.photo = updatedUserData.photo // Adjust the property name as needed
+
+          // Show a success message or handle the response as necessary
+          swal.fire({
+            title: 'Success!',
+            text: 'Photo uploaded successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
+        } catch (error) {
+          // Handle errors and show an error message
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to upload photo.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        }
+      }
+    },
+  },
+  watch: {
+    getUserProfile: function () {
+      this.user = this.getUserProfile
+      console.log('user pic', `${this.user.picture}`)
+    },
+  },
+
+  mounted() {
+    this.$store.dispatch('userProfile')
+  },
+  computed: {
+    getUserProfile() {
+      //final output from here
+      return this.$store.getters.getUserProfile
+    },
   },
 }
 </script>

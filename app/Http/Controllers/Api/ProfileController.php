@@ -8,6 +8,7 @@ use App\Models\ApplicantEducation;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -34,7 +35,15 @@ class ProfileController extends Controller
 
             return $student;
         } else if (auth()->user()->role_id == 6) {
-            return User::where('id', auth()->user()->id)->get();
+            return User::where('id', auth()->user()->id)->first();
+        } else if (auth()->user()->role_id == 2) {
+            return User::where('id', auth()->user()->id)->first();
+        } else if (auth()->user()->role_id == 3) {
+            return User::where('id', auth()->user()->id)->first();
+        } else if (auth()->user()->role_id == 5) {
+            return User::where('id', auth()->user()->id)->first();
+        } else if (auth()->user()->role_id == 1) {
+            return User::where('id', auth()->user()->id)->first();
         }
     }
 
@@ -57,6 +66,24 @@ class ProfileController extends Controller
             'status' => 200,
             'result' => $student
         ]);
+    }
+
+    public function uploadPhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the validation rules as needed
+        ]);
+
+        $user = Auth::user(); // Get the authenticated user
+        $photo = $request->file('photo');
+        $photoName = time() . '.' . $photo->getClientOriginalExtension();
+        $photo->move(public_path('images/avatars'), $photoName); // Store the uploaded file in the 'uploads' folder
+
+        // Update the user's photo in the database
+        $user->picture = $photoName;
+        $user->save();
+
+        return response()->json(['photo' => $photoName]);
     }
 
     /**
