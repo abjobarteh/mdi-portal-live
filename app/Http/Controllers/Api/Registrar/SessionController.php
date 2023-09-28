@@ -41,15 +41,15 @@ class SessionController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'session_name' => 'required|max:255',
-            'next_session' => 'required',
+            'session_start' => 'required|max:255',
+            'session_end' => 'required|max:255',
         ]);
 
         Session::where('is_current_session', 1)->update(['is_current_session' => 0]);
 
         Session::create([
-            'session_name' => $validatedData['session_name'],
-            'next_session' => $validatedData['next_session'],
+            'session_start' => $validatedData['session_start'],
+            'session_end' => $validatedData['session_end'],
             'is_current_session' => 1,
         ]);
 

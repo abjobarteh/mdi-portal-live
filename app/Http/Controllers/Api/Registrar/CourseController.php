@@ -192,7 +192,7 @@ class CourseController extends Controller
         $groupedCourses = $registeredCourses->groupBy(function ($item) {
             $semester = $item->semester;
             $session = $semester->session;
-            return $semester->semester_name . ' - ' . $session->session_name;
+            return $semester->semester_name . ' (' . strtoupper(explode(' ', $session->session_start)[0]) . ' - ' . strtoupper($session->session_end) . ')';
         });
 
         $transcript = [];

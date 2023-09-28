@@ -14,7 +14,7 @@
         <v-card-text>
           <v-data-table
             :headers="headers"
-            :items="filteredsessions"
+            :items="sessions"
             :items-per-page="13"
             :search="search"
             class="elevation-1"
@@ -64,22 +64,27 @@
         <v-card-title>Add Session</v-card-title>
         <v-card-text>
           <v-form ref="addSessionForm">
-            <v-text-field outlined v-model="addSessionFormData.session_name" label="Session"></v-text-field>
+            <v-text-field
+              type="month"
+              outlined
+              v-model="addSessionFormData.session_start"
+              label="Session"
+            ></v-text-field>
             <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.session_name.$errors"
+              v-for="error in v$.value.session_start.$errors"
               :key="error.$uid"
               >{{ error.$message }}</span
             >
             <v-text-field
               outlined
-              v-model="addSessionFormData.next_session"
+              v-model="addSessionFormData.session_end"
               label="Next Session"
-              type="date"
+              type="month"
             ></v-text-field>
             <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.next_session.$errors"
+              v-for="error in v$.value.session_end.$errors"
               :key="error.$uid"
               >{{ error.$message }}</span
             >
@@ -128,9 +133,9 @@ export default {
     return {
       sessions: [],
       headers: [
-        { text: 'Session', value: 'session_name' },
+        { text: 'Session Start', value: 'session_start' },
+        { text: 'Session End', value: 'session_end' },
         { text: 'Is current Session', value: 'is_current_session' },
-        { text: 'Next Session', value: 'next_session' },
 
         { text: 'Action', value: 'action', sortable: false },
       ],
@@ -143,8 +148,8 @@ export default {
       //////////////// add new department /////////
       addSessionDialog: false,
       addSessionFormData: {
-        session_name: '',
-        next_session: '',
+        session_start: '',
+        session_end: '',
       },
 
       // edit department
@@ -156,8 +161,8 @@ export default {
       },
 
       rules: {
-        session_name: { required },
-        next_session: { required },
+        session_start: { required },
+        session_end: { required },
       },
 
       v$: useVuelidate(this.rules, this.addSessionFormData),

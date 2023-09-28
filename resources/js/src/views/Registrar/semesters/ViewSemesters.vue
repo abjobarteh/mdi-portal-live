@@ -49,6 +49,9 @@
                 "
               ></fas>
             </template>
+            <template v-slot:item.session="{ item }">
+              {{ item.session.session_start.split(' ')[0] }} - {{ item.session.session_end }}
+            </template>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="editSemester(item)">Edit</v-btn>
             </template>
@@ -74,7 +77,12 @@
             <v-select
               outlined
               v-model="addSemesterFormData.session_id"
-              :items="sessions.map(session => ({ id: session.id, name: session.session_name }))"
+              :items="
+                sessions.map(session => ({
+                  id: session.id,
+                  name: `${session.session_start.split(' ')[0]} - ${session.session_end}`,
+                }))
+              "
               item-value="id"
               item-text="name"
               label="Session"
@@ -85,12 +93,6 @@
               :key="error.$uid"
               >{{ error.$message }}</span
             >
-            <v-text-field
-              outlined
-              v-model="addSemesterFormData.next_semester"
-              label="Next Semester"
-              type="date"
-            ></v-text-field>
             <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
               v-for="error in v$.value.next_semester.$errors"
@@ -146,7 +148,7 @@ export default {
       headers: [
         { text: 'Semester', value: 'semester_name' },
         { text: 'Is current Semester', value: 'is_current_semester' },
-        { text: 'Session', value: 'session.session_name' },
+        { text: 'Session', value: 'session' },
         { text: 'Next Semester', value: 'next_semester' },
 
         { text: 'Action', value: 'action', sortable: false },

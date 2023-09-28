@@ -34,9 +34,9 @@ export default {
       studentInfo: '',
       cgpa: 0,
       headers: [
-        { text: 'CourseCode', value: 'CourseCode' },
-        { text: 'CourseName', value: 'CourseName' },
-        { text: 'Grade', value: 'Grade' },
+        { text: 'CourseCode', value: 'CourseCode', width: '20%' },
+        { text: 'CourseName', value: 'CourseName', width: '35%' },
+        { text: 'Grade', value: 'Grade', width: '25%' },
         { text: 'GradePoint', value: 'GradePoint' },
         { text: 'Average', value: 'action' },
       ],
@@ -199,7 +199,12 @@ export default {
       <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">OFFICIAL TRANSCRIPT</h3>
     </div>
     `
-
+      let startsession = this.transcripts[0].SemesterSession.substring(
+        this.transcripts[0].SemesterSession.indexOf('('),
+      ).slice(1, -1)
+      let endsession = this.transcripts[this.transcripts.length - 1].SemesterSession.substring(
+        this.transcripts[this.transcripts.length - 1].SemesterSession.indexOf('('),
+      ).slice(1, -1)
       content += `
       <table>
         <tr>
@@ -210,20 +215,23 @@ export default {
         </tr>
         <tr>
           <td style='font-size: 14px'>YEAR: ONE</td>
-          <td style='font-size: 14px'>SESSION: JULY - DECEMBER, 2019-JULY - DECEMBER - 2020</td>
+          <td style='font-size: 14px'>SESSION: ${startsession + ' - ' + endsession}</td>
           <td style='font-size: 14px'>DATE OF ISSUE: ${this.getCurrentDate()}</td>
         </tr>
       </table>
       `
 
       this.transcripts.forEach(transcript => {
+        let session = transcript.SemesterSession.substring(transcript.SemesterSession.indexOf('('))
+        console.log('trans', transcript)
         content += `
-            <h3 class="semester-heading">${transcript.SemesterSession}</h3>
             <table class="transcript-table">
               <thead>
                 <tr>
-                  <th style='font-size: 14px'>CourseCode</th>
-                  <th style='font-size: 14px' colspan="4">CourseName</th>
+                  <th style='font-size: 14px'>${
+                    transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
+                  }</th>
+                  <th style='font-size: 14px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
                   <th style='font-size: 14px'>CREDIT HOURS</th>
                   <th style='font-size: 14px'>GRADE</th>
                   <th style='font-size: 14px'>GRADE POINT</th>
@@ -257,6 +265,15 @@ export default {
           <td style='font-size: 14px'>CUMULATIVE GRADE POINT AVERAGE</td>
           <td style='font-size: 14px'>${this.cgpa.toFixed(3)}</td>
         </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 50px">
+          <div>
+            <div>.....................................</div>
+            <div>Registrar</div>
+          </div>
+          <div>School Stamp</div>
+        </div>
+
           `
       return content
     },

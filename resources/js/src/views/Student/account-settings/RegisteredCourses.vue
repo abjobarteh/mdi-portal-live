@@ -6,14 +6,21 @@
         <!-- Slot for custom rendering of each row -->
         <template v-slot:item="props">
           <tr>
-            <td class="text-start">{{ props.item.CourseCode }}</td>
-            <td class="text-start">
+            <td class="text-start" style="width: 30%">
+              <!-- Set the width as needed -->
+              {{ props.item.CourseCode }}
+            </td>
+            <td class="text-start" style="width: 45%">
+              <!-- Set the width as needed -->
               <!-- Render the course as a router-link -->
               <router-link :to="`/courses/${props.item.SemesterCourseId}`" class="router-link">
                 {{ props.item.CourseName }}
               </router-link>
             </td>
-            <td class="text-start">{{ props.item.Lecturer }}</td>
+            <td class="text-start" style="width: 25%">
+              <!-- Set the width as needed -->
+              {{ props.item.Lecturer }}
+            </td>
           </tr>
         </template>
       </v-data-table>
