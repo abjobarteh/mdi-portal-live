@@ -94,12 +94,12 @@
               >{{ error.$message }}</span
             >
 
-            <!-- New code -->
+            <!-- New code
             <h3 class="mb-2 text-center" style="font-size: 20px">User Info</h3>
 
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.username" label="Username"></v-text-field>
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.email" label="Email"></v-text-field>
-            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field>
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field> -->
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -267,9 +267,9 @@ export default {
         semester_id: '',
         total_number: '',
         price: '',
-        username: '',
-        email: '',
-        password: '',
+        // username: '',
+        // email: '',
+        // password: '',
       },
 
       rules: {

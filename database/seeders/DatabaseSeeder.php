@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProgrammeSeeder::class);
         $this->call(CourseSeeder::class);
         $this->call(GradingSystemSeeder::class);
+        $this->call(RegistrationStatusSeeder::class);
+        $this->call(AdmissionStatusSeeder::class);
     }
 }

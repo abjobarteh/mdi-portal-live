@@ -93,12 +93,6 @@
               :key="error.$uid"
               >{{ error.$message }}</span
             >
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.next_semester.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -163,7 +157,6 @@ export default {
       addSemesterDialog: false,
       addSemesterFormData: {
         semester_name: '',
-        next_semester: '',
         session_id: '',
       },
 
@@ -172,13 +165,11 @@ export default {
       editSemesterFormData: {
         id: null,
         semester_name: '',
-        next_semester: '',
         session_id: '',
       },
 
       rules: {
         semester_name: { required },
-        next_semester: { required },
         session_id: { required },
       },
 

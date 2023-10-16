@@ -12,6 +12,12 @@
           <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Register</p>
         </v-card-text>
 
+        <!-- loading spinner -->
+        <div v-if="isLoading" class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+
         <!-- login form -->
         <v-card-text>
           <v-form>
@@ -68,7 +74,7 @@
               </template>
             </v-checkbox>
 
-            <v-btn @click="register" block color="primary" class="mt-6"> Sign Up </v-btn>
+            <v-btn :disabled="isLoading" @click="register" block color="primary" class="mt-6"> Sign Up </v-btn>
           </v-form>
         </v-card-text>
 
@@ -90,6 +96,7 @@ import { ref } from '@vue/composition-api'
 export default {
   data() {
     return {
+      isLoading: false,
       isPasswordVisible: false,
       registrationFormData: {
         firstname: '',
@@ -108,9 +115,12 @@ export default {
   methods: {
     register() {
       if (true) {
+        this.isLoading = true
         axios
           .post('/api/register', this.registrationFormData)
           .then(result => {
+            this.isLoading = false
+
             // show success alert
             this.addUserDialog = false
             swal
@@ -155,5 +165,44 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  z-index: 9999;
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  animation-delay: -1s;
+}
+
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
 }
 </style>

@@ -19,43 +19,56 @@ class ProgrammeSeeder extends Seeder
             'name' => 'NATIONAL DIPLOMA IN ACCOUNTANCY ',
             'program_abbreviation' => 'NDA',
             'fee' => 40500,
+            'per_semester_fee' => 10125,
             'department_id' => 7,
             'program_duration_id' => 1,
 
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN BANKING & FINANCE',
             'program_abbreviation' => 'HND',
-            'fee' => 50500,
+            'fee' => 40500,
+            'per_semester_fee' => 10125,
+
             'department_id' => 3,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN MARKETING AND SALES MANAGEMENT',
             'program_abbreviation' => 'HND',
-            'fee' => 50500,
+            'fee' => 40500,
+            'per_semester_fee' => 10125,
+
             'department_id' => 5,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN DIPLOMACY & INTERNATIONAL RELATIONS',
             'program_abbreviation' => 'HND',
-            'fee' => 50500,
+            'fee' => 40500,
+            'per_semester_fee' => 10125,
+
             'department_id' => 1,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN COMPUTER SCIENCE',
             'program_abbreviation' => 'HND',
             'fee' => 50500,
+            'per_semester_fee' => 12625,
+
             'department_id' => 4,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN GENDER AND DEVELOPMENT STUDIES',
             'program_abbreviation' => 'HND',
-            'fee' => 50500,
+            'fee' => 40500,
+            'per_semester_fee' => 10125,
+
             'department_id' => 2,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATION DIPLOMA IN MANAGEMENT STUDIES',
             'program_abbreviation' => 'HND',
-            'fee' => 50500,
+            'fee' => 40500,
+            'per_semester_fee' => 10125,
+
             'department_id' => 6,
             'program_duration_id' => 1,
         ]);

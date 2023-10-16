@@ -46,7 +46,6 @@ class SemesterController extends Controller
         $validatedData = $request->validate([
             'semester_name' => 'required|max:255',
             'session_id' => 'required',
-            'next_semester' => 'required',
         ]);
 
         Semester::where('is_current_semester', 1)->update(['is_current_semester' => 0]);
@@ -54,7 +53,7 @@ class SemesterController extends Controller
         $semester = Semester::create([
             'semester_name' => $validatedData['semester_name'],
             'session_id' => $validatedData['session_id'],
-            'next_semester' => $validatedData['next_semester'],
+            'next_semester' => "Not known",
             'is_current_semester' => 1,
         ]);
 

@@ -52,9 +52,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/upload-excel-file', [ExcelController::class, 'uploadExcelFile']);
+    Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar'])->group(function () {
+        Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
+
         Route::post('/add-employee', [EmployeeController::class, 'store']);
         Route::get('/view-employees', [EmployeeController::class, 'index']);
         Route::get('/employee/{id}', [EmployeeController::class, 'show']);
@@ -72,8 +77,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/department/{id}', [DepartmentController::class, 'show']);
         Route::put('/department/{id}', [DepartmentController::class, 'update']);
         Route::delete('/delete-department/{id}', [DepartmentController::class, 'destroy']);
-        Route::get('/view-departments', [DepartmentController::class, 'index']);
-
 
 
         Route::post('/add-program-duration', [ProgramDurationController::class, 'store']);
@@ -95,24 +98,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete-course/{id}', [CourseController::class, 'destroy']);
 
 
-        // Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
-        // Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
-
-
-        // Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
-
-
-
-        // Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
-
-
-
 
         Route::post('/add-session', [SessionController::class, 'store']);
         Route::get('/view-sessions', [SessionController::class, 'index']);
 
         Route::post('/add-semester', [SemesterController::class, 'store']);
-        Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
+        // Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
 
 
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
@@ -136,13 +127,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
 
-        Route::post('/send-email', [EmailController::class, 'sendEmail']);
 
         Route::get('/courses-to-approve', [CourseController::class, 'coursesToApprove']);  // for the student middleware
 
         Route::post('/approve-courses', [CourseController::class, 'approveCourses']);  // for the student middleware
-
-
 
     });
 
@@ -157,19 +145,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
     });
-    Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
-    Route::get('/profile', [ProfileController::class, 'index']);
-    Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
-
-
-    Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);  // for the student middleware and registrar
-
-    Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);  // for the student middleware and registrar
 
     // studentDetail
 
     Route::middleware(['student'])->group(function () {
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
+        Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
+
 
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);  // for the student middleware
         Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
@@ -197,54 +179,50 @@ Route::middleware('auth:sanctum')->group(function () {
 
     });
 
-
+    // student-registrar
     Route::middleware(['finance'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::get('/view-semesters', [SemesterController::class, 'index']);  // middleware should be created for it.
-        // Route::get('/view-departments', [DepartmentController::class, 'index']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
-
-
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
         Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
-
-
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
-
-
-
         Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
+        Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar
+        Route::post('/send-email', [EmailController::class, 'sendEmail']);
     });
 
-    Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
-    Route::get('/admission-status', [AdmissionStatusController::class, 'index']); // is needed by the student and registrar
-    Route::get('/view-departments', [DepartmentController::class, 'index']); // needed by student and finance
-    Route::get('/view-programs', [ProgramController::class, 'index']);  // please restructure this in a given middleware
+    Route::middleware(['student-registrar'])->group(function () {
+        Route::get('/registration-status', [RegistrationStatusController::class, 'index']); // is needed by the student and registrar
+        Route::get('/admission-status', [AdmissionStatusController::class, 'index']); // is needed by the student and registrar
+        Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);  // for the student middleware and registrar
+        Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);  // for the student middleware and registrar
+    });
 
 
-    Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
-    Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
-    Route::post('/save-student-test-marks', [StudentMarksController::class, 'takeTestMark']); // needed by student and finance
-    Route::post('/save-student-exam-marks-and-submit', [StudentMarksController::class, 'saveExamMarkAndSubmit']); // needed by student and finance
-    Route::get('/my-semester-courses', [MyCoursesController::class, 'courses']); // needed by student and finance
+    Route::middleware(['student-finance-registrar-admin'])->group(function () {
 
-    Route::post('/upload-lecturer-files', [MyCoursesController::class,  'uploadLecturerFiles']);
+        Route::get('/view-departments', [DepartmentController::class, 'index']); // needed by student and finance
+        Route::get('/view-programs', [ProgramController::class, 'index']);  // please restructure this in a given middleware
+        Route::get('/profit-status', [DashboardController::class, 'statusCount']); // needed by student and finance
+        Route::get('/user-counts', [DashboardController::class, 'counts']); // needed by student and finance
+    });
+
+    Route::middleware(['lecturer'])->group(function () {
+
+        Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']); // needed by student and finance
+        Route::get('/my-semester-courses', [MyCoursesController::class, 'courses']);
+        Route::post('/upload-lecturer-files', [MyCoursesController::class,  'uploadLecturerFiles']);
+        Route::get('/my-courses', [StudentMarksController::class, 'myCourses']); // needed by student and finance
+        Route::post('/save-student-test-marks', [StudentMarksController::class, 'takeTestMark']); // needed by student and finance
+        Route::post('/save-student-exam-marks-and-submit', [StudentMarksController::class, 'saveExamMarkAndSubmit']); // needed by student and finance
+
+    });
+
+
+
     Route::post('/lecturer-files', [MyCoursesController::class,  'index']);
-
-    Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
-
-
-
-    Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']); // this was for the registrar
-
-
-    Route::get('/profit-status', [DashboardController::class, 'statusCount']); // needed by student and finance
-
-    Route::get('/user-counts', [DashboardController::class, 'counts']); // needed by student and finance
-
-
-
 });
 
 Route::post('login', [AuthController::class, 'login']);
