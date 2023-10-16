@@ -136,9 +136,11 @@ export default {
           })
           .catch(error => {
             // show error alert
+            this.isLoading = false
+
             swal.fire({
               title: 'Error!',
-              text: error.response.data.message,
+              text: error.response.data.error,
               icon: 'error',
               confirmButtonText: 'OK',
             })
