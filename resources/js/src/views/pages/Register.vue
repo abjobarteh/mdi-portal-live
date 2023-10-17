@@ -65,15 +65,6 @@
               hide-details
               @click:append="isPasswordVisible = !isPasswordVisible"
             ></v-text-field>
-
-            <v-checkbox hide-details class="mt-1">
-              <template #label>
-                <div class="d-flex align-center flex-wrap">
-                  <span class="me-2">I agree to</span><a href="javascript:void(0)">privacy policy &amp; terms</a>
-                </div>
-              </template>
-            </v-checkbox>
-
             <v-btn :disabled="isLoading" @click="register" block color="primary" class="mt-6"> Sign Up </v-btn>
           </v-form>
         </v-card-text>
