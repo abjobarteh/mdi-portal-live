@@ -38,26 +38,6 @@ class AuthController extends Controller
         return $user->createToken($request->device_name)->plainTextToken;
     }
 
-    // public function sendEmail(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'admission_code' => 'required|max:255',
-    //         'email' => 'required|email',
-    //     ]);
-
-    //     $validator = new EmailValidator();
-    //     if (!$validator->isValid($validatedData['email'], new DNSCheckValidation())) {
-    //         return response()->json(['error' => 'Invalid email address'], 422);
-    //     }
-    //     try {
-    //         Mail::to($validatedData['email'])->send(new AdmissionCodeMail($validatedData['admission_code']));
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Email sending failed'], 422);
-    //     }
-
-    //     return response()->json(['message' => 'Email sent successfully']);
-    // }
-
     public function register(Request $request)
     {
         $validatedData = $request->validate([

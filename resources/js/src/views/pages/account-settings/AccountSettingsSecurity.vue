@@ -41,14 +41,14 @@
                 @click:append="isCPasswordVisible = !isCPasswordVisible"
               ></v-text-field>
             </v-col>
-
             <v-col cols="12" sm="4" md="6" class="d-none d-sm-flex justify-center position-relative">
-              <v-img
+              <!-- <v-img
                 contain
                 max-width="170"
                 :src="require('@/assets/images/3d-characters/pose-m-1.png').default"
                 class="security-character"
-              ></v-img>
+              ></v-img> -->
+              <v-img max-width="170" :src="getImageUrl(user.picture)"></v-img>
             </v-col>
           </v-row>
         </v-card-text>
@@ -58,26 +58,6 @@
       <v-divider></v-divider>
 
       <div class="pa-3">
-        <v-card-title class="flex-nowrap">
-          <v-icon class="text--primary me-3">
-            {{ icons.mdiKeyOutline }}
-          </v-icon>
-          <span class="text-break">Two-factor authentication</span>
-        </v-card-title>
-
-        <v-card-text class="two-factor-auth text-center mx-auto">
-          <v-avatar color="primary" class="primary mb-4" rounded>
-            <v-icon size="25" color="white">
-              {{ icons.mdiLockOpenOutline }}
-            </v-icon>
-          </v-avatar>
-          <p class="text-base text--primary font-weight-semibold">Two factor authentication is not enabled yet.</p>
-          <p class="text-sm text--primary">
-            Two-factor authentication adds an additional layer of security to your account by requiring more than just a
-            password to log in. Learn more.
-          </p>
-        </v-card-text>
-
         <!-- action buttons -->
         <v-card-text>
           <v-btn type="submit" color="primary" class="me-3 mt-3"> Save changes </v-btn>
@@ -92,24 +72,38 @@
 // eslint-disable-next-line object-curly-newline
 import { mdiKeyOutline, mdiLockOpenOutline, mdiEyeOffOutline, mdiEyeOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
+import apiBaseURL from '../../../../api-config'
 
 export default {
   setup() {
+    const user = ref('')
     const isCurrentPasswordVisible = ref(false)
     const isNewPasswordVisible = ref(false)
     const isCPasswordVisible = ref(false)
-    // const currentPassword = ref('12345678')
-    // const newPassword = ref('87654321')
-    // const cPassword = ref('87654321')
     const currentPassword = ref('')
     const newPassword = ref('')
     const cPassword = ref('')
 
+    const getImageUrl = filename => {
+      // Use Laravel's asset function to generate the URL path
+      return apiBaseURL + 'images/avatars/' + filename
+    }
+
     const submitForm = () => {
       if (!newPassword.value.length >= 8) {
-        console.log('password length should atleast 8')
-      } else if (newPassword.value != newPassword.value) {
-        console.log('passwords should be the same')
+        swal.fire({
+          title: 'Error!',
+          text: 'Password should atleast be 8 characters long',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
+      } else if (newPassword.value != cPassword.value) {
+        swal.fire({
+          title: 'Error!',
+          text: 'Passwords should be the same',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
       } else {
         axios
           .put(`/api/update-password/1`, { oldPassword: currentPassword.value, newPassword: newPassword.value })
@@ -126,7 +120,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to update user.',
+              text: error.response.data.message,
               icon: 'error',
               confirmButtonText: 'OK',
             })
@@ -141,6 +135,8 @@ export default {
       isCPasswordVisible,
       newPassword,
       cPassword,
+      user,
+      getImageUrl,
       submitForm,
       icons: {
         mdiKeyOutline,
@@ -149,6 +145,23 @@ export default {
         mdiEyeOutline,
       },
     }
+  },
+
+  watch: {
+    getUserProfile: function () {
+      this.user = this.getUserProfile
+      console.log('users ', this.user)
+    },
+  },
+
+  mounted() {
+    this.$store.dispatch('userProfile')
+  },
+  computed: {
+    getUserProfile() {
+      //final output from here
+      return this.$store.getters.getUserProfile
+    },
   },
 }
 </script>

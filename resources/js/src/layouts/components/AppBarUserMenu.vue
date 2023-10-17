@@ -18,7 +18,21 @@
           <span class="text--primary font-weight-semibold mb-n1">
             {{ user.firstname + ' ' + user.lastname }}
           </span>
-          <small class="text--disabled text-capitalize">Admin</small>
+          <small class="text--disabled text-capitalize">{{
+            user.role_id === 1
+              ? 'Admin'
+              : user.role_id === 2
+              ? 'Registrar'
+              : user.role_id === 3
+              ? 'Lecturer'
+              : user.role_id === 4
+              ? 'Student'
+              : user.role_id === 5
+              ? 'Finance'
+              : user.role_id === 6
+              ? 'Agent'
+              : 'Unknown'
+          }}</small>
         </div>
       </div>
 

@@ -127,7 +127,7 @@ export default {
           // show error alert
           swal.fire({
             title: 'Error!',
-            text: 'Failed to update user.',
+            text: error.response.data.message,
             icon: 'error',
             confirmButtonText: 'OK',
           })

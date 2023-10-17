@@ -133,7 +133,7 @@ export default {
           // show error alert
           swal.fire({
             title: 'Error!',
-            text: 'Failed to add session duration.',
+            text: 'Failed to add school Info.',
             icon: 'error',
             confirmButtonText: 'OK',
           })

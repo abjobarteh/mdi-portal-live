@@ -55,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
+    Route::put('/update-user/{id}', [UserController::class, 'update']);
+
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar'])->group(function () {
@@ -138,7 +140,6 @@ Route::middleware('auth:sanctum')->group(function () {
         /////////////////// users controller ////////////
         Route::post('/add-user', [UserController::class, 'store']);
         Route::get('/view-users', [UserController::class, 'index']);
-        Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);

@@ -64,41 +64,6 @@
   </div>
 </template>
 
-<!-- <script>
-// eslint-disable-next-line object-curly-newline
-import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
-import { ref } from '@vue/composition-api'
-
-export default {
-  setup() {
-    const isPasswordVisible = ref(false)
-    const email = ref('')
-    const password = ref('')
-    const device_name = ref('browser')
-
-    async function handleLogin() {
-      // axios.get('/sanctum/csrf-cookie')
-      try {
-        await axios.get('/sanctum/csrf-cookie')
-        await axios.post('api/login', { email: email.value, password: password.value, device_name: 'browser' })
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    return {
-      isPasswordVisible,
-      email,
-      password,
-      icons: {
-        mdiEyeOutline,
-        mdiEyeOffOutline,
-      },
-      handleLogin,
-    }
-  },
-}
-</script> -->
 <script>
 import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { mapActions } from 'vuex'
@@ -125,7 +90,15 @@ export default {
   },
   methods: {
     async login() {
-      console.log('Logging in user...')
+      if (this.auth.email == '' || this.auth.password == '') {
+        swal.fire({
+          title: 'Error!',
+          text: 'Please fill the Email and Password',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
+        return
+      }
       try {
         await this.$store.dispatch('login', {
           email: this.auth.email,
@@ -136,7 +109,7 @@ export default {
       } catch (error) {
         // console.log(error.response.data.errors)
         this.error = true
-        // this.errorMessage = error.response.data.errors
+        this.errorMessage = error.response.data.errors
       }
     },
   },
@@ -155,7 +128,6 @@ export default {
 // }
 .auth-wrapper {
   /* Background Image */
-  // background-image: url('../../assets/images/misc/mdi-image.png');
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../assets/images/misc/mdi-image.png');
   background-size: cover;
   background-repeat: no-repeat;
