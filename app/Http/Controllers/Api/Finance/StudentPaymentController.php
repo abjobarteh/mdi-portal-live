@@ -93,6 +93,10 @@ class StudentPaymentController extends Controller
             return response()->json(['message' => 'Pay all the fee or per semester fee.'], 422);
         }
 
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has recieved student payment');
 
         return response()->json(['message' => 'Payment created successfully.']);
     }

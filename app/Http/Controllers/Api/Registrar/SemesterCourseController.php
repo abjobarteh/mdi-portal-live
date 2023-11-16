@@ -60,6 +60,11 @@ class SemesterCourseController extends Controller
             SemesterCourse::whereIn('course_id', $validatedData['semester_courses_ids'])
                 ->update(['lecturer_id' => $validatedData['lecturer_id']]);
 
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . '  has allocated a course');
+
             return response()->json(['message' => 'Courses allocated successfully.']);
         } catch (\Exception $e) {
             // Handle the exception here

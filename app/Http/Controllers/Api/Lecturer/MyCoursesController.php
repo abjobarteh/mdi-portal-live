@@ -43,6 +43,11 @@ class MyCoursesController extends Controller
             'file_name' => $fileName
         ]);
 
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has uploaded course materials');
+
         // Return a response as needed (e.g., success message)
         return response()->json(['message' => 'File uploaded successfully']);
     }

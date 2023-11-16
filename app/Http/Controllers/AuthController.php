@@ -35,6 +35,12 @@ class AuthController extends Controller
             return response()->json(['errors' => "sorry you are blocked"], 422);
         }
 
+        // Log the successful login with the user's name
+        activity()
+            ->causedBy($user)
+            ->withProperties(['attributes' => $user])
+            ->log($user->firstname . '  logged in');
+
         return $user->createToken($request->device_name)->plainTextToken;
     }
 
@@ -105,6 +111,7 @@ class AuthController extends Controller
         // return $user->createToken($request->device_name)->plainTextToken;
     }
 
+
     public function verifyRegistrationToken(Request $request)
     {
         $validatedData = $request->validate([
@@ -136,6 +143,10 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  logged out');
         return [
             'message' => 'Logged out'
         ];

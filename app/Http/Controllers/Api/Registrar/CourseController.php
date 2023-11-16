@@ -76,6 +76,12 @@ class CourseController extends Controller
             'program_id' => $validatedData['program_id'],
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has added a course');
+
         return response()->json(['message' => 'Course created successfully.']);
     }
 
@@ -132,6 +138,12 @@ class CourseController extends Controller
             'program_id' => $validatedData['program_id'],
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated a course');
+
         return response()->json(['message' => 'Course updated successfully.']);
     }
 
@@ -145,6 +157,12 @@ class CourseController extends Controller
     {
         $department = Course::find($id);
         $department->delete();
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted a course');
     }
 
     public function runningCourses()

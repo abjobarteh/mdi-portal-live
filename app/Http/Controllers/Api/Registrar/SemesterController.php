@@ -77,6 +77,11 @@ class SemesterController extends Controller
             // remember initially the remaining will be - one semester fee
         }
 
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created a semester');
+
         return response()->json(['message' => 'Semester created successfully.']);
     }
 

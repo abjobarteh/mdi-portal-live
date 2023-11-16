@@ -16,6 +16,8 @@ class ProgramDurationController extends Controller
     public function index()
     {
         $programDuration = ProgramDuration::paginate(13);
+
+
         return response()->json([
             'status' => 200,
             'result' => $programDuration
@@ -52,6 +54,12 @@ class ProgramDurationController extends Controller
 
 
         ]);
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created the program duration');
 
         return response()->json(['message' => 'ProgramDuration created successfully.']);
     }
@@ -107,6 +115,12 @@ class ProgramDurationController extends Controller
             'description' => $validatedData['description'],
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated the program duration');
+
         return response()->json(['message' => 'Program duration updated successfully.']);
     }
 
@@ -121,6 +135,11 @@ class ProgramDurationController extends Controller
         try {
             $department = ProgramDuration::find($id);
             $department->delete();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . '  has deleted program duration');
             return response()->json([
                 'message' => 'Record deleted successfully'
             ], 200);

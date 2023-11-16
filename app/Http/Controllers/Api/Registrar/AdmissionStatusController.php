@@ -41,6 +41,13 @@ class AdmissionStatusController extends Controller
      */
     public function updateAdmissionStatus(Request $request)
     {
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated the admission status');
+
         $status = $request->get('status');
 
         if ($status == 'Open') {

@@ -97,6 +97,12 @@ class ApplicationsController extends Controller
 
         Mail::to($student->email)->send(new AcceptedApplicationEmail($request->interviewDate, $this->generateStudentNumber()));
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has accepted a student application');
+
         // when the student application is accepted, then he needs a matnumber
         return response()->json([
             'status' => 200,
@@ -131,6 +137,12 @@ class ApplicationsController extends Controller
 
         // Send email to the student
         Mail::to($student->email)->send(new RejectedApplicationEmail());
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has rejected a student application');
 
         return response()->json([
             'status' => 200,

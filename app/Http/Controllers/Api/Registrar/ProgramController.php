@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
 use App\Models\Program;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class ProgramController extends Controller
 {
@@ -15,6 +17,7 @@ class ProgramController extends Controller
      */
     public function index()
     {
+
         $programs = Program::with(['department', 'duration'])->paginate(13);
         return response()->json([
             'status' => 200,
@@ -56,6 +59,12 @@ class ProgramController extends Controller
             'program_duration_id' => $validatedData['program_duration_id'],
 
         ]);
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created a program');
 
         return response()->json(['message' => 'Program created successfully.']);
     }
@@ -117,6 +126,12 @@ class ProgramController extends Controller
             'program_duration_id' => $validatedData['program_duration_id'],
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated the program');
+
         return response()->json(['message' => 'Program updated successfully.']);
     }
 
@@ -128,6 +143,11 @@ class ProgramController extends Controller
      */
     public function destroy($id)
     {
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted program');
         $department = Program::find($id);
         $department->delete();
     }

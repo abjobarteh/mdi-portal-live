@@ -53,6 +53,10 @@ class GradingSystemController extends Controller
             'interpretation' => $validatedData['interpretation'],
 
         ]);
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created a grading system');
 
         return response()->json(['message' => 'GradingSystem created successfully.']);
     }
@@ -112,6 +116,11 @@ class GradingSystemController extends Controller
             'interpretation' => $validatedData['interpretation'],
         ]);
 
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated a grading system');
+
         return response()->json(['message' => 'GradingSystem updated successfully.']);
     }
 
@@ -125,5 +134,9 @@ class GradingSystemController extends Controller
     {
         $department = GradingSystem::find($id);
         $department->delete();
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted a grading system');
     }
 }

@@ -107,6 +107,12 @@ class AdmissionCodeLocationController extends Controller
             // Commit the transaction
             DB::commit();
 
+
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . '  has created admission code location');
+
             // Return a success response
             return response()->json(['message' => 'create successfully']);
         } catch (\Exception $e) {
@@ -158,6 +164,11 @@ class AdmissionCodeLocationController extends Controller
             $admissionCodeLocation->increment('total_remains', $validatedData['total_number']);
 
 
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . '  has added admission codes');
+
             // Return a success response
             return response()->json(['message' => 'Admission codes added successfully']);
         } catch (\Exception $e) {
@@ -208,5 +219,11 @@ class AdmissionCodeLocationController extends Controller
     {
         $admissionCodeLocation = AdmissionCodeLocation::find($id);
         $admissionCodeLocation->delete();
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted admission codes');
     }
 }

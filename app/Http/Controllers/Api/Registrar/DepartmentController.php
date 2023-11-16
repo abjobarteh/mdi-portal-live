@@ -56,6 +56,12 @@ class DepartmentController extends Controller
             'name' => $validatedData['name'],
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created a department');
+
         return response()->json(['message' => 'Department created successfully.']);
     }
 
@@ -119,7 +125,13 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
+
         $department = Department::find($id);
         $department->delete();
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted department');
     }
 }

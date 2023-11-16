@@ -25,6 +25,11 @@ class RegistrationStatusController extends Controller
 
     public function updateRegistrationStatus(Request $request)
     {
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated a registration status');
+
         $status = $request->get('status');
 
         if ($status == 'Open') {

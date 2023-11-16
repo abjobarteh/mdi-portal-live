@@ -9,7 +9,9 @@ use App\Models\Semester;
 use App\Models\Student;
 use App\Models\StudentPayment;
 use App\Models\StudentRegisteredCourse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class DashboardController extends Controller
 {
@@ -91,11 +93,39 @@ class DashboardController extends Controller
             ->distinct('lecturer_id')
             ->count();
 
+
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $startOfWeek = $endOfWeek->copy()->startOfWeek();
+
+        $countsByDay = Activity::whereJsonContains('properties->attributes->role_id', 2)
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d") as day, COUNT(*) as count')
+            ->groupBy('day')
+            ->get();
+
+        // Create an array representing all days of the week with initial count set to 0
+        $counts = [];
+        $currentDay = $startOfWeek->copy();
+
+        while ($currentDay <= $endOfWeek) {
+            $counts[] = 0; // Only store counts without dates
+            $currentDay->addDay();
+        }
+
+        // Fill in the counts for the existing days
+        foreach ($countsByDay as $count) {
+            $dayCarbon = Carbon::parse($count->day); // Convert the string to a Carbon instance
+            $index = $dayCarbon->diffInDays($startOfWeek);
+            $counts[$index] = $count->count;
+        }
+
+
         return response()->json([
             'acceptedStudents' => $acceptedStudents,
             'rejectedStudents' => $rejectedStudents,
             'activeStudents' => $activeStudents, // students who have taken courses this semester
             'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
+            'weekyStudentLogins' => $counts
         ]);
     }
 }

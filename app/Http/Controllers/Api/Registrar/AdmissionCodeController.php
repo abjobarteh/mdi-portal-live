@@ -36,6 +36,12 @@ class AdmissionCodeController extends Controller
             'is_sold' => 1,
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has sold an admission code');
+
         return response()->json(['message' => 'Code sold successfully.']);
     }
 
@@ -50,6 +56,13 @@ class AdmissionCodeController extends Controller
             if ($admissionCodeExist->expired === 0) {
                 $admissionCodeExist->update(['is_sold' => 1, 'expired' => 1]);
                 AdmissionCodeVerification::create(['user_id' => auth()->user()->id, 'verified_at' => Carbon::now()]);
+
+
+                activity()
+                    ->causedBy(auth()->user())
+                    ->withProperties(['attributes' => auth()->user()])
+                    ->log(auth()->user()->firstname . '  admission code redeemed');
+
                 return response()->json(['message' => 'Code Redeemed successfully.'], 200);
             } else {
                 return response()->json(['message' => 'Code already taken.'], 409);

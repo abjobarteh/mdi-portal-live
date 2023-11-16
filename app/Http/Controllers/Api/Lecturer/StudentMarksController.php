@@ -74,6 +74,11 @@ class StudentMarksController extends Controller
         SemesterCourse::where('course_id', $request->get('student')[0]['course_id'])
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
             ->update(['submitted' => 1,]);
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has saved and submitted exam marks');
     }
     /**
      * Display a listing of the resource.

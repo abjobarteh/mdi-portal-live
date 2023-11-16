@@ -54,6 +54,12 @@ class EmployeeController extends Controller
 
         ]);
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has added an employee');
+
         return response()->json(['message' => 'Employee created successfully.']);
     }
 

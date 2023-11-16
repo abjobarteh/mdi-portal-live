@@ -42,6 +42,11 @@ class UserController extends Controller
         $user->is_active = 0;
         $user->save();
 
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has blocked a user');
+
         return response()->json(['message' => 'User blocked', 'user' => $user]);
     }
 
@@ -55,6 +60,11 @@ class UserController extends Controller
 
         $user->is_active = 1;
         $user->save();
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has unblocked a user');
 
         return response()->json(['message' => 'User unblocked', 'user' => $user]);
     }
@@ -118,7 +128,10 @@ class UserController extends Controller
 
                 $lecturer->teachables()->attach($request->course_ids);
             }
-
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . '  has created a user');
             DB::commit();
 
             return response()->json(['message' => 'User created successfully.']);

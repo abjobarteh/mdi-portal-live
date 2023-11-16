@@ -53,6 +53,11 @@ class SessionController extends Controller
             'is_current_session' => 1,
         ]);
 
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created session');
+
         return response()->json(['message' => 'Session created successfully.']);
     }
 
