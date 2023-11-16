@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Lecturer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('role')->paginate(13);
+        // Format the created_at field in the desired format
+        foreach ($users as $user) {
+            $user['registered_at'] = Carbon::parse($user->created_at)->format('jS F Y');
+        }
         return response()->json([
             'status' => 200,
             'result' => $users

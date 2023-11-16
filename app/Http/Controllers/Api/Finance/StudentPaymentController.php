@@ -14,12 +14,40 @@ class StudentPaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // public function index()
+    // {
+    //     $students = Student::with('payments.semester', 'department')->where('accepted', 'accepted')->paginate(1000000);
+    //     return response()->json([
+    //         'status' => 200,
+    //         'result' => $students
+    //     ]);
+    // }
+
+    public function index(Request $request)
     {
-        $students = Student::with('payments.semester', 'department')->where('accepted', 'accepted')->paginate(1000000);
+        $query = Student::with('payments.semester', 'department')->where('accepted', 'accepted');
+
+        if ($request->has('selectedItem') && $request->has('advanceSearch')) {
+
+            $selectedItem = $request->input('selectedItem');
+            $advanceSearch = $request->input('advanceSearch');
+
+            switch ($selectedItem) {
+                case 1:
+                    $query->where('mat_number', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 2:
+                    $query->where('email', 'like', '%' . $advanceSearch . '%');
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        $courses = $query->paginate(13);
         return response()->json([
             'status' => 200,
-            'result' => $students
+            'result' => $courses
         ]);
     }
 

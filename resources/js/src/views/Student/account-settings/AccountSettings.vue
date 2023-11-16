@@ -12,9 +12,10 @@
       </v-tabs>
 
       <!-- tabs item -->
-      <v-tabs-items v-if="runnings.length" v-model="tab">
+      <v-tabs-items v-model="tab">
         <v-tab-item>
-          <running-courses :runnings="runnings"></running-courses>
+          <running-courses v-if="runnings.length" :runnings="runnings"></running-courses>
+          <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Running Courses</h6>
         </v-tab-item>
 
         <v-tab-item>

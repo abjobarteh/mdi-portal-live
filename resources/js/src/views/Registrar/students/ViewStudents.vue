@@ -6,7 +6,36 @@
           <v-toolbar-title>Students</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
+          <v-btn icon @click="showSearchDialog">
+            <fas icon="search"></fas>
+          </v-btn>
         </v-toolbar>
+
+        <v-dialog v-model="searchDialog" max-width="400">
+          <v-card>
+            <v-card-title>Advanced Search</v-card-title>
+            <v-card-text>
+              <!-- Add your dropdown or any additional search options here -->
+              <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
+              <v-text-field
+                v-model="advanceSearch"
+                :label="advanceSearchLabel"
+                append-icon="mdi-magnify"
+                clearable
+                hide-details
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="primary"
+                :disabled="selectedItem == null || advanceSearch === ''"
+                @click="performAdvancedSearch"
+                >Search</v-btn
+              >
+              <v-btn @click="closeSearchDialog">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
         <v-card-text>
           <v-data-table
@@ -44,6 +73,15 @@ export default {
   components: {},
   data() {
     return {
+      advanceSearchLabel: '',
+      advanceSearch: '',
+      searchDialog: false,
+      selectedItem: null,
+      items: [
+        // Your dropdown items here
+        { text: 'Mat Number', value: '1' },
+        { text: 'Email', value: '2' },
+      ],
       students: [],
       semesters: [],
       headers: [
@@ -69,12 +107,50 @@ export default {
     }
   },
 
+  watch: {
+    selectedItem(newValue) {
+      // Find the corresponding text based on the selected value
+      const selectedItemObject = this.items.find(item => item.value === newValue)
+
+      // Update the label with the text associated with the selected value
+      this.advanceSearchLabel = selectedItemObject ? 'search by ' + selectedItemObject.text.toLowerCase() : ''
+    },
+  },
+
   created() {
     this.setupValidation()
     this.getResults()
   },
 
   methods: {
+    showSearchDialog() {
+      this.searchDialog = true
+    },
+    closeSearchDialog() {
+      this.searchDialog = false
+    },
+    performAdvancedSearch() {
+      // Implement your advanced search logic here
+      console.log('Performing advanced search...')
+      // Close the dialog after searching
+      axios
+        .get('/api/view-students', {
+          params: {
+            page: this.page,
+            advanceSearch: this.advanceSearch,
+            selectedItem: this.selectedItem, // Add the selectedItem here
+          },
+        })
+        .then(response => {
+          this.students = response.data.result.data
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.courses = []
+          this.pageCount = 0
+        })
+      this.closeSearchDialog()
+    },
     setupValidation() {
       this.v$ = useVuelidate(this.rules, this.addPaymentFormData)
     },

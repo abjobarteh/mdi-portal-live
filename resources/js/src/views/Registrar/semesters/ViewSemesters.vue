@@ -297,7 +297,7 @@ export default {
             swal
               .fire({
                 title: 'Success!',
-                text: 'Program Duration added successfully.',
+                text: 'Semester added successfully.',
                 icon: 'success',
                 confirmButtonText: 'OK',
               })

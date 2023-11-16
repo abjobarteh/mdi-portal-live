@@ -20,9 +20,27 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with(['program.department'])->paginate(13);
+        $query = Course::with(['program.department']);
+
+        if ($request->has('selectedItem') && $request->has('advanceSearch')) {
+            $selectedItem = $request->input('selectedItem');
+            $advanceSearch = $request->input('advanceSearch');
+
+            switch ($selectedItem) {
+                case 1:
+                    $query->where('course_name', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 2:
+                    $query->where('course_code', 'like', '%' . $advanceSearch . '%');
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        $courses = $query->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $courses

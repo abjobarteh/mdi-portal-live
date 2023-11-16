@@ -15,7 +15,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        $sessions = Session::paginate(13);
+        $sessions = Session::orderBy('id', 'desc')->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $sessions

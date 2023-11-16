@@ -33,7 +33,7 @@
               {{ item.firstname + ' ' + item.lastname }}
             </template>
             <template v-slot:[`item.created_at_abbreviated`]="{ item }">
-              {{ item.created_at.substring(0, 10) }}
+              {{ item.registered_at }}
             </template>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="editUser(item)">Edit</v-btn>
@@ -237,6 +237,7 @@ export default {
         .get('/api/view-users?page=' + this.page)
         .then(response => {
           this.users = response.data.result.data
+          console.log('users ', this.users)
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {

@@ -27,6 +27,16 @@
               <v-btn small color="primary" @click="editProgram(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteProgram(item)">Delete</v-btn>
             </template>
+            <template v-slot:item.department.name="{ item }">
+              <div class="text-truncate" style="max-width: 300px; font-size: 13px">
+                {{ item.name }}
+              </div>
+            </template>
+            <template v-slot:item.name="{ item }">
+              <div class="text-truncate" style="max-width: 300px; font-size: 13px">
+                {{ item.name }}
+              </div>
+            </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
