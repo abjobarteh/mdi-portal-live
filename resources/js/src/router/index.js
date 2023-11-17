@@ -328,6 +328,17 @@ const routes = [
 
   },
 
+  {
+    path: '/view-activities',
+    name: 'view-activities',
+    component: () => import('@/views/Admin/users/ViewActivities.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [1],
+    }
+
+  },
+
 
 
   {

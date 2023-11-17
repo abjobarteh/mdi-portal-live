@@ -62,7 +62,13 @@
               :items="
                 semesters.map(semester => ({
                   id: semester.id,
-                  name: semester.semester_name + '(' + semester.session.session_name + ')',
+                  name:
+                    semester.semester_name +
+                    '(' +
+                    semester.session.session_start.split(' ')[0] +
+                    '-' +
+                    semester.session.session_end +
+                    ')',
                 }))
               "
               item-value="id"

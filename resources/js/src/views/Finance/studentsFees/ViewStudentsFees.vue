@@ -36,7 +36,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
+        <!-- 202320002 -->
         <v-card-text>
           <v-data-table
             :headers="headers"
@@ -51,6 +51,7 @@
               <v-btn small color="primary" @click="showAddStudentPaymentDialog(item)">Add Payment</v-btn>
               <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
             </template>
+            <template v-slot:[`item.fullname`]="{ item }"> {{ item.firstname + ' ' + item.lastname }} </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
@@ -108,7 +109,13 @@
               :items="
                 semesters.map(semester => ({
                   id: semester.id,
-                  name: semester.semester_name + '(' + semester.session.session_name + ')',
+                  name:
+                    semester.semester_name +
+                    '(' +
+                    semester.session.session_start.split(' ')[0] +
+                    '-' +
+                    semester.session.session_end +
+                    ')',
                 }))
               "
               item-value="id"
@@ -169,9 +176,7 @@ export default {
       studentFullName: '',
       studentDetails: '',
       headers: [
-        { text: 'Firstname', value: 'firstname' },
-        { text: 'Lastname', value: 'lastname' },
-        { text: 'username', value: 'username' },
+        { text: 'FullName', value: 'fullname' },
         { text: 'Mat Number', value: 'mat_number' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },

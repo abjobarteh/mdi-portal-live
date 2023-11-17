@@ -86,7 +86,7 @@
         :icon="icons.mdiFileOutline"
       >
         <nav-menu-link title="Users" :to="{ name: 'view-users' }"></nav-menu-link>
-        <nav-menu-link title="Logs" :to="{ name: 'view-program-durations' }"></nav-menu-link>
+        <nav-menu-link title="Logs" :to="{ name: 'view-activities' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-link
         v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '6')"

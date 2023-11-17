@@ -278,7 +278,7 @@ export default {
             swal
               .fire({
                 title: 'Success!',
-                text: 'Program Duration added successfully.',
+                text: 'Session added successfully.',
                 icon: 'success',
                 confirmButtonText: 'OK',
               })

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\LogController;
 use App\Http\Controllers\Api\Registrar\AdmissionStatusController;
 use App\Http\Controllers\Api\Registrar\CourseController;
 use App\Http\Controllers\Api\Registrar\DepartmentController;
@@ -143,11 +144,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
+        Route::get('/view-activities', [LogController::class, 'index']);
     });
 
 
     ///////////////////////////////////  STUDENT END POINTS  ////////////////////////////
-
     Route::middleware(['student'])->group(function () {
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
         Route::get('/view-semesters', [SemesterController::class, 'index']);
