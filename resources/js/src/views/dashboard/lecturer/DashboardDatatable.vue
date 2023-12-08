@@ -1,24 +1,27 @@
 <template>
   <v-card>
-    <v-data-table
-      :headers="headers"
-      :items="usreList"
-      item-key="full_name"
-      class="table-rounded"
-      hide-default-footer
-      disable-sort
-    >
-      <!-- name -->
-      <template #[`item.full_name`]="{ item }">
-        <div class="d-flex flex-column">
-          <span class="d-block font-weight-semibold text--primary text-truncate">{{ item.full_name }}</span>
-          <small>{{ item.post }}</small>
-        </div>
-      </template>
-      <template #[`item.tel`]="{ item }">
-        {{ item.tel }}
-      </template>
-    </v-data-table>
+    <div class="text-center">
+      <h4 class="mb-4 p-2">My Courses</h4>
+      <v-data-table
+        :headers="headers"
+        :items="courses"
+        item-key="full_name"
+        class="table-rounded"
+        hide-default-footer
+        disable-sort
+      >
+        <!-- name -->
+        <template v-slot:item.courseCode="{ item }">
+          <div class="d-flex flex-column">
+            <span class="d-block font-weight-semibold text--primary text-truncate">{{ item.course.course_code }}</span>
+            <small>lecturer</small>
+          </div>
+        </template>
+        <template v-slot:item.courseName="{ item }">
+          {{ item.course.course_name }}
+        </template>
+      </v-data-table>
+    </div>
   </v-card>
 </template>
 
@@ -27,39 +30,35 @@ import { mdiSquareEditOutline, mdiDotsVertical } from '@mdi/js'
 import data from './datatable-data'
 
 export default {
-  setup() {
-    const statusColor = {
-      /* eslint-disable key-spacing */
-      Current: 'primary',
-      Professional: 'success',
-      Rejected: 'error',
-      Resigned: 'warning',
-      Applied: 'info',
-      /* eslint-enable key-spacing */
-    }
-
+  data() {
     return {
+      courses: [],
+      myStudentCount: '',
       headers: [
-        { text: 'NAME', value: 'full_name' },
-        { text: 'EMAIL', value: 'email' },
-        { text: 'TEL', value: 'tel' },
+        { text: 'CourseCode', value: 'courseCode' },
+        { text: 'CourseName', value: 'courseName' },
       ],
-      usreList: data,
-      status: {
-        1: 'Current',
-        2: 'Professional',
-        3: 'Rejected',
-        4: 'Resigned',
-        5: 'Applied',
-      },
-      statusColor,
-
-      // icons
-      icons: {
-        mdiSquareEditOutline,
-        mdiDotsVertical,
-      },
     }
+  },
+
+  methods: {
+    fetchStatusCounts() {
+      axios
+        .get('/api/lecturer-dashboard')
+        .then(response => {
+          this.courses = response.data.myCourses.data
+          console.log('courses', this.courses)
+          this.myStudentCount = response.data.myStudents
+          console.log(this.myStudentCount)
+        })
+        .catch(error => {
+          console.error('Error fetching status counts:', error)
+        })
+    },
+  },
+
+  created() {
+    this.fetchStatusCounts()
   },
 }
 </script>

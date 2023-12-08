@@ -45,6 +45,12 @@
         :to="{ name: 'lecturer-dashboard' }"
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '5'"
+        title="Dashboard"
+        :to="{ name: 'finance-dashboard' }"
+        :icon="icons.mdiHomeOutline"
+      ></nav-menu-link>
 
       <nav-menu-link
         title="Account Settings"

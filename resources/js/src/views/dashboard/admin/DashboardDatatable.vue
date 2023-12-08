@@ -2,21 +2,26 @@
   <v-card>
     <v-data-table
       :headers="headers"
-      :items="usreList"
+      :items="lecturers"
       item-key="full_name"
       class="table-rounded"
       hide-default-footer
       disable-sort
     >
       <!-- name -->
-      <template #[`item.full_name`]="{ item }">
+      <template v-slot:item.fullname="{ item }">
         <div class="d-flex flex-column">
-          <span class="d-block font-weight-semibold text--primary text-truncate">{{ item.full_name }}</span>
-          <small>{{ item.post }}</small>
+          <span class="d-block font-weight-semibold text--primary text-truncate">{{
+            item.lecturer.firstname + ' ' + item.lecturer.lastname
+          }}</span>
+          <small>lecturer</small>
         </div>
       </template>
-      <template #[`item.tel`]="{ item }">
-        {{ item.tel }}
+      <template v-slot:item.phonenumber="{ item }">
+        {{ item.lecturer.phonenumber }}
+      </template>
+      <template v-slot:item.course_count="{ item }">
+        {{ item.course_count }}
       </template>
     </v-data-table>
   </v-card>
@@ -27,39 +32,33 @@ import { mdiSquareEditOutline, mdiDotsVertical } from '@mdi/js'
 import data from './datatable-data'
 
 export default {
-  setup() {
-    const statusColor = {
-      /* eslint-disable key-spacing */
-      Current: 'primary',
-      Professional: 'success',
-      Rejected: 'error',
-      Resigned: 'warning',
-      Applied: 'info',
-      /* eslint-enable key-spacing */
-    }
-
+  data() {
     return {
+      lecturers: [],
       headers: [
-        { text: 'NAME', value: 'full_name' },
-        { text: 'EMAIL', value: 'email' },
-        { text: 'TEL', value: 'tel' },
+        { text: 'Name', value: 'fullname' },
+        { text: 'PhoneNumber', value: 'phonenumber' },
+        { text: 'TotalCourses', value: 'course_count' },
       ],
-      usreList: data,
-      status: {
-        1: 'Current',
-        2: 'Professional',
-        3: 'Rejected',
-        4: 'Resigned',
-        5: 'Applied',
-      },
-      statusColor,
-
-      // icons
-      icons: {
-        mdiSquareEditOutline,
-        mdiDotsVertical,
-      },
     }
+  },
+
+  methods: {
+    fetchStatusCounts() {
+      axios
+        .get('/api/user-counts')
+        .then(response => {
+          this.lecturers = response.data.lecturersWithMostCourses
+          console.log('Lecturers ', this.lecturers)
+        })
+        .catch(error => {
+          console.error('Error fetching status counts:', error)
+        })
+    },
+  },
+
+  created() {
+    this.fetchStatusCounts()
   },
 }
 </script>

@@ -119,13 +119,46 @@ class DashboardController extends Controller
             $counts[$index] = $count->count;
         }
 
+        $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
+
+        $lecturersWithMostCourses = StudentRegisteredCourse::with('lecturer')->where('semester_id', $currentSemesterId)
+            ->groupBy('lecturer_id')
+            ->selectRaw('lecturer_id, count(*) as course_count')
+            ->orderByDesc('course_count')
+            ->take(5) // Limit the results to the first 5 lecturers
+            ->get();
+
 
         return response()->json([
             'acceptedStudents' => $acceptedStudents,
             'rejectedStudents' => $rejectedStudents,
             'activeStudents' => $activeStudents, // students who have taken courses this semester
             'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
-            'weekyStudentLogins' => $counts
+            'weekyStudentLogins' => $counts,
+            'lecturersWithMostCourses'  => $lecturersWithMostCourses,
+        ]);
+    }
+
+    public function lecturerDashboardCounts()
+    {
+        $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
+
+        $myCourses = StudentRegisteredCourse::with('course')->join('lecturers', 'lecturers.id', '=', 'student_registered_courses.lecturer_id')
+            ->where('lecturers.user_id', auth()->user()->id)->where('semester_id', $currentSemesterId)
+            ->distinct('lecturer_id')->paginate(10);
+
+
+        $myTotalStudents = StudentRegisteredCourse::join('lecturers', 'lecturers.id', '=', 'student_registered_courses.lecturer_id')
+            ->where('lecturers.user_id', auth()->user()->id)->where('semester_id', $currentSemesterId)
+            ->distinct('lecturer_id')
+            ->count();
+
+
+
+        return response()->json([
+            'myCourses' => $myCourses,
+            'myStudents' => $myTotalStudents,
+
         ]);
     }
 }

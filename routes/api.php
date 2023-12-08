@@ -110,6 +110,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
 
+
+
+
+
         // applications
         Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
@@ -145,6 +149,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);
+        Route::get('/profit-status', [DashboardController::class, 'statusCount']);
     });
 
 
@@ -215,6 +220,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/my-courses', [StudentMarksController::class, 'myCourses']);
         Route::post('/save-student-test-marks', [StudentMarksController::class, 'takeTestMark']);
         Route::post('/save-student-exam-marks-and-submit', [StudentMarksController::class, 'saveExamMarkAndSubmit']);
+        Route::get('/lecturer-dashboard', [DashboardController::class, 'lecturerDashboardCounts']);
     });
 
 

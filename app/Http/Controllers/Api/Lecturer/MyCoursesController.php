@@ -7,6 +7,7 @@ use App\Models\Lecturer;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\SemesterCourseFile;
+use App\Models\StudentRegisteredCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 

@@ -23,7 +23,8 @@ class StudentRegisteredCourse extends Model
         'test_mark',
         'exam_mark',
         'total_mark',
-        'semester_course_id'
+        'semester_course_id',
+        'order',
 
 
     ];
