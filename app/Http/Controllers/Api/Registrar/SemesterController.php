@@ -116,7 +116,20 @@ class SemesterController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'semester_name' => 'required|max:255',
+            'session_id' => 'required',
+        ]);
+
+        $semester = Semester::find($id);
+        if (!$semester) {
+            return response()->json(['message' => 'Semester not found.'], 404);
+        }
+
+        $semester->update([
+            'semester_name' => $validatedData['semester_name'],
+            'session_id' => $validatedData['session_id'],
+        ]);
     }
 
     /**

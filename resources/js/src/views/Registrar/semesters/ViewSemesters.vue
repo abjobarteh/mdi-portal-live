@@ -102,15 +102,25 @@
       </v-card>
     </v-dialog>
 
-    <!-- Edit sessioni dialog -->
     <v-dialog v-model="editSemesterDialog" max-width="500px">
       <v-card>
         <v-card-title> Edit Program </v-card-title>
         <v-card-text>
-          <v-form ref="form">
-            <v-text-field outlined v-model="addSemesterFormData.session_name" label="Session"></v-text-field>
-
-            <v-text-field outlined v-model="addSemesterFormData.next_session" label="Next Session"></v-text-field>
+          <v-form ref="addCourseForm">
+            <v-text-field outlined v-model="editSemesterFormData.semester_name" label="Course Code"></v-text-field>
+            <v-select
+              outlined
+              v-model="editSemesterFormData.session_id"
+              :items="
+                sessions.map(session => ({
+                  id: session.id,
+                  name: `${session.session_start.split(' ')[0]} - ${session.session_end}`,
+                }))
+              "
+              item-value="id"
+              item-text="name"
+              label="Session"
+            ></v-select>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -229,14 +239,14 @@ export default {
     submitupdateSemesterForm() {
       // make a PUT request to update the gradingSystem data
       axios
-        .put(`/api/session/${this.editSemesterFormData.id}`, this.editSemesterFormData)
+        .put(`/api/semester/${this.editSemesterFormData.id}`, this.editSemesterFormData)
         .then(response => {
           // show success alert
           this.editSemesterDurationDialog = false
           swal
             .fire({
               title: 'Success!',
-              text: 'Program  updated successfully.',
+              text: 'Semester  updated successfully.',
               icon: 'success',
               confirmButtonText: 'OK',
             })

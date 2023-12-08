@@ -92,7 +92,28 @@ class SessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'session_start' => 'required|max:255',
+            'session_end' => 'required|max:255',
+        ]);
+
+        $session = Session::find($id);
+        if (!$session) {
+            return response()->json(['message' => 'Session not found.'], 404);
+        }
+
+        $session->update([
+            'session_start' => $validatedData['session_start'],
+            'session_end' => $validatedData['session_end'],
+        ]);
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has updated a session');
+
+        return response()->json(['message' => 'Session updated successfully.']);
     }
 
     /**

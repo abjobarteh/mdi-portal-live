@@ -105,9 +105,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-session', [SessionController::class, 'store']);
         Route::get('/view-sessions', [SessionController::class, 'index']);
 
+        Route::put('/session/{id}', [SessionController::class, 'update']);
         Route::post('/add-semester', [SemesterController::class, 'store']);
 
+        Route::put('/semester/{id}', [SemesterController::class, 'update']);
+
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
+
+
 
 
 

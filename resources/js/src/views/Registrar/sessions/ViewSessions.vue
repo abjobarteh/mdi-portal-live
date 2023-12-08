@@ -68,7 +68,7 @@
               type="month"
               outlined
               v-model="addSessionFormData.session_start"
-              label="Session"
+              label="Session Start"
             ></v-text-field>
             <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
@@ -79,7 +79,7 @@
             <v-text-field
               outlined
               v-model="addSessionFormData.session_end"
-              label="Next Session"
+              label="Session End"
               type="month"
             ></v-text-field>
             <span
@@ -103,8 +103,18 @@
         <v-card-title> Edit Program </v-card-title>
         <v-card-text>
           <v-form ref="form">
-            <v-text-field outlined v-model="addSessionFormData.session_name" label="Session"></v-text-field>
-            <v-text-field outlined v-model="addSessionFormData.next_session" label="Next Session"></v-text-field>
+            <v-text-field
+              type="month"
+              outlined
+              v-model="editSessionFormData.session_start"
+              label="Session Start"
+            ></v-text-field>
+            <v-text-field
+              type="month"
+              outlined
+              v-model="editSessionFormData.session_end"
+              label="Session End"
+            ></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -156,8 +166,8 @@ export default {
       editSessionDialog: false,
       editSessionFormData: {
         id: null,
-        session_name: '',
-        next_session: '',
+        session_start: '',
+        session_end: '',
       },
 
       rules: {
