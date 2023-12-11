@@ -20,6 +20,9 @@
         <template v-slot:item.courseName="{ item }">
           {{ item.course.course_name }}
         </template>
+        <template v-slot:item.studentCount="{ item }">
+          {{ item.student_count }}
+        </template>
       </v-data-table>
     </div>
   </v-card>
@@ -28,7 +31,7 @@
 <script>
 import { mdiSquareEditOutline, mdiDotsVertical } from '@mdi/js'
 import data from './datatable-data'
-
+// student_count
 export default {
   data() {
     return {
@@ -37,6 +40,7 @@ export default {
       headers: [
         { text: 'CourseCode', value: 'courseCode' },
         { text: 'CourseName', value: 'courseName' },
+        { text: 'Students', value: 'studentCount' },
       ],
     }
   },

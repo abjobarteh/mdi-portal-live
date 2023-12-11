@@ -145,7 +145,9 @@ class DashboardController extends Controller
 
         $myCourses = StudentRegisteredCourse::with('course')->join('lecturers', 'lecturers.id', '=', 'student_registered_courses.lecturer_id')
             ->where('lecturers.user_id', auth()->user()->id)->where('semester_id', $currentSemesterId)
-            ->distinct('lecturer_id')->paginate(10);
+            ->distinct('lecturer_id')->withCount('student') // Count the number of related students
+            ->paginate(10);
+
 
 
         $myTotalStudents = StudentRegisteredCourse::join('lecturers', 'lecturers.id', '=', 'student_registered_courses.lecturer_id')

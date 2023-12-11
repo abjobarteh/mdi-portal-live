@@ -199,10 +199,6 @@ export default {
       return this.$store.getters.getUserProfile
     },
   },
-
-  mounted() {
-    console.log('props running courses', this.runnings)
-  },
 }
 </script>
 
