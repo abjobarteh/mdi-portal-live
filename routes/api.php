@@ -155,6 +155,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
+        Route::delete('/delete-user/{id}', [UserController::class, 'destroy']);
     });
 
 

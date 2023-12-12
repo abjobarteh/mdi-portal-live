@@ -379,7 +379,7 @@ export default {
             swal
               .fire({
                 title: 'Success!',
-                text: 'Program Duration added successfully.',
+                text: 'Program added successfully.',
                 icon: 'success',
                 confirmButtonText: 'OK',
               })
@@ -391,7 +391,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to add program duration.',
+              text: 'Failed to add program.',
               icon: 'error',
               confirmButtonText: 'OK',
             })

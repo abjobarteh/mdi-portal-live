@@ -298,10 +298,11 @@ export default {
               })
           })
           .catch(error => {
+            console.log('error ', error.response.data.message)
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to add program duration.',
+              text: error.response.data.message,
               icon: 'error',
               confirmButtonText: 'OK',
             })
@@ -309,7 +310,7 @@ export default {
       } else {
         swal.fire({
           title: 'Error!',
-          text: 'Failed to add employee.',
+          text: 'Failed to add program duration.',
           icon: 'error',
           confirmButtonText: 'OK',
         })

@@ -90,7 +90,7 @@ class StudentPaymentController extends Controller
             ]);
         } else {
             // you are expected to either pay fully or per semester
-            return response()->json(['message' => 'Pay all the fee or per semester fee.'], 422);
+            return response()->json(['message' => 'Pay all the fee (' . $studentDepartmentFee->fee . ') or per semester installment (' . $studentDepartmentFee['per_semester_fee'] . ')'], 422);
         }
 
         activity()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
 use App\Models\Program;
+use App\Models\ProgramDuration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
@@ -57,7 +58,7 @@ class ProgramController extends Controller
             'fee' => $validatedData['fee'],
             'department_id' => $validatedData['department_id'],
             'program_duration_id' => $validatedData['program_duration_id'],
-
+            'per_semester_fee' => $validatedData['fee'] / ((ProgramDuration::where('id', $validatedData['program_duration_id'])->value('duration')) * 2)
         ]);
 
 

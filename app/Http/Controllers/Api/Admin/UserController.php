@@ -225,6 +225,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $user = User::find($id);
+        if ($user->id == auth()->user()->id) {
+            return response()->json(['error' => 'You cannot delete yourself'], 422);
+        }
+        $user->delete();
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted a user');
     }
 }

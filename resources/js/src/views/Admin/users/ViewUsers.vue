@@ -36,7 +36,7 @@
               {{ item.registered_at }}
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="editUser(item)">Edit</v-btn>
+              <v-btn small disabled color="primary" @click="editUser(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteUser(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -249,7 +249,6 @@ export default {
         .get('/api/view-roles?page=' + this.page)
         .then(response => {
           this.roles = response.data.result.data
-          this.pageCount = response.data.result.last_page
         })
         .catch(err => {
           this.programs = []
@@ -260,7 +259,6 @@ export default {
         .get('/api/view-departments?page=' + this.page)
         .then(response => {
           this.departments = response.data.result.data
-          this.pageCount = response.data.result.last_page
         })
         .catch(err => {
           this.departments = []
@@ -311,7 +309,7 @@ export default {
 
     deleteUser(item) {
       // perform delete action on item
-      console.log(`Deleting item ${item.id}`)
+      console.log(`Deleting user ${item.id}`)
       swal
         .fire({
           title: 'Are you sure?',
@@ -324,7 +322,30 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            axios
+              .delete(`/api/delete-user/${item.id}`)
+              .then(result => {
+                // show success alert
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'User deleted successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.getResults()
+                  })
+              })
+              .catch(err => {
+                swal.fire({
+                  title: 'Error!',
+                  text: err.response.data.error,
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                })
+              })
+            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })
     },
@@ -350,6 +371,17 @@ export default {
                 confirmButtonText: 'OK',
               })
               .then(() => {
+                this.addUserFormData.firstname = ''
+                this.addUserFormData.middlename = ''
+                this.addUserFormData.lastname = ''
+                this.addUserFormData.address = ''
+                this.addUserFormData.phonenumber = ''
+                this.addUserFormData.password = ''
+                this.addUserFormData.password_confirmation = ''
+                ;(this.addUserFormData.role_id = ''), (this.addUserFormData.username = '')
+                this.addUserFormData.email = ''
+                this.addUserFormData.department_id = ''
+                this.addUserFormData.course_ids = []
                 this.getResults()
               })
           })

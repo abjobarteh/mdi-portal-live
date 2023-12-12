@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use App\Models\ProgramDuration;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 class ProgramDurationController extends Controller
 {
@@ -48,11 +50,26 @@ class ProgramDurationController extends Controller
             'description' => 'required',
 
         ]);
+        $validatedData = $request->validate([
+            'duration' => 'required',
+            'description' => 'required',
+        ]);
+
+        // Check for unique combination of duration and description
+        $uniqueRule = Rule::unique('program_durations')->where(function ($query) use ($validatedData) {
+            return $query->where('duration', $validatedData['duration'])
+                ->where('description', $validatedData['description']);
+        });
+
+        $validatedData = $request->validate([
+            'duration' => ['required', $uniqueRule],
+            'description' => 'required',
+        ]);
+
+        // If validation passes, create the record
         ProgramDuration::create([
             'duration' => $validatedData['duration'],
             'description' => $validatedData['description'],
-
-
         ]);
 
 

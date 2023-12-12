@@ -14,5 +14,6 @@ class GradingSystem extends Model
         'mark_to',
         'grade',
         'interpretation',
+        'grade_point',
     ];
 }

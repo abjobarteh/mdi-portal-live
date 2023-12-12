@@ -19,6 +19,7 @@ class Program extends Model
         'fee',
         'department_id',
         'program_duration_id',
+        'per_semester_fee'
     ];
 
     public function department()
