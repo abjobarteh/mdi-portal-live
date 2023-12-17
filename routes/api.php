@@ -190,14 +190,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['finance'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
-        Route::get('/view-semesters', [SemesterController::class, 'index']);
-        Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
+        Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
+        Route::post('/add-student-sponsorship', [StudentPaymentController::class, 'storeStudentSponsorship']);
+        Route::get('/view-scholarship-details/{id}', [StudentPaymentController::class, 'scholarshipDetails']);
+
+        // view-scholarship-details
+        // storeStudentSponsorship
+    });
+
+    Route::middleware(['finance-vendor'])->group(function () {
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
         Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
         Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
         Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']);
         Route::post('/send-email', [EmailController::class, 'sendEmail']);
+        Route::get('/view-semesters', [SemesterController::class, 'index']);
     });
 
     Route::middleware(['student-registrar'])->group(function () {

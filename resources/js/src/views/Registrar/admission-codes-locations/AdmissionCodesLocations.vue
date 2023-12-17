@@ -18,7 +18,7 @@
         </div>
 
         <!-- Data table -->
-        <v-card-text>
+        <v-card-text style="height: 60vh">
           <v-data-table
             :headers="headers"
             :items="admissionCodeLocations"
@@ -100,12 +100,12 @@
               >{{ error.$message }}</span
             >
 
-            <!-- New code
+            <!-- New code -->
             <h3 class="mb-2 text-center" style="font-size: 20px">User Info</h3>
 
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.username" label="Username"></v-text-field>
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.email" label="Email"></v-text-field>
-            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field> -->
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -273,9 +273,9 @@ export default {
         semester_id: '',
         total_number: '',
         price: '',
-        // username: '',
-        // email: '',
-        // password: '',
+        username: '',
+        email: '',
+        password: '',
       },
 
       rules: {
@@ -296,7 +296,7 @@ export default {
 
   watch: {
     getUserProfile: function () {
-      this.userRole = this.getUserProfile[0].role_id
+      this.userRole = this.getUserProfile.role_id
       console.log('user info ', this.userRole)
     },
   },
@@ -474,6 +474,9 @@ export default {
     },
 
     handleSold(item) {
+      if (this.userRole == 5) {
+        return false
+      }
       console.log('item', item)
       this.showAdmissionCodesPopup = false
       swal

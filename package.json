@@ -48,6 +48,7 @@
     "html2pdf.js": "^0.10.1",
     "js-cookie": "^3.0.1",
     "jspdf": "^2.5.1",
+    "read-excel-file": "^5.7.1",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.2",
     "vue-router": "^3.2.0",
@@ -59,7 +60,6 @@
     "vuetifyjs-mix-extension": "0.0.20",
     "vuex": "^3.4.0",
     "vuex-persistedstate": "^4.1.0",
-    "webpack": "^5.58.2",
-    "xlsx": "^0.18.5"
+    "webpack": "^5.58.2"
   }
 }

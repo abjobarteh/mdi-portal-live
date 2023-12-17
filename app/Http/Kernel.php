@@ -75,6 +75,8 @@ class Kernel extends HttpKernel
         'student-registrar' => \App\Http\Middleware\StudentRegistrarMiddleware::class,
         'student-finance-registrar-admin' => \App\Http\Middleware\StudentFinanceRegistrarAdminMiddleware::class,
         'lecturer' => \App\Http\Middleware\LecturerMiddleware::class,
+        'finance-vendor' => \App\Http\Middleware\FinanceVendorMiddleware::class,
+
 
     ];
 }

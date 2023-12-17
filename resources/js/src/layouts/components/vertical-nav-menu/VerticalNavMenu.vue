@@ -61,11 +61,7 @@
         <nav-menu-link title="Add Grading" :to="{ name: 'add-grading' }"></nav-menu-link>
         <nav-menu-link title="View Gradings" :to="{ name: 'view-gradings' }"></nav-menu-link>
       </nav-menu-group>
-      <nav-menu-group
-        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '5')"
-        title="Programs"
-        :icon="icons.mdiFileOutline"
-      >
+      <nav-menu-group v-if="currentUser && currentUser.role_id == '2'" title="Programs" :icon="icons.mdiFileOutline">
         <nav-menu-link title="Departments" :to="{ name: 'view-departments' }"></nav-menu-link>
         <nav-menu-link title="Program Durations" :to="{ name: 'view-program-durations' }"></nav-menu-link>
         <nav-menu-link title="Programs" :to="{ name: 'view-programs' }"></nav-menu-link>

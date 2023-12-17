@@ -16,7 +16,8 @@ class AdmissionCodeLocation extends Model
         'semester_id',
         'total_number',
         'price',
-        'total_remains'
+        'total_remains',
+        'user_id',
     ];
 
     public function admissionCodes()

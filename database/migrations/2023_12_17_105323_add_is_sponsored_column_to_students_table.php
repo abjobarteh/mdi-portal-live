@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('student_registered_courses', function (Blueprint $table) {
-            $table->integer('order');
+        Schema::table('students', function (Blueprint $table) {
+            $table->boolean('is_sponsored')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('student_registered_courses', function (Blueprint $table) {
-            $table->dropColumn('order');
+        Schema::table('students', function (Blueprint $table) {
+            $table->dropColumn('is_sponsored');
         });
     }
 };

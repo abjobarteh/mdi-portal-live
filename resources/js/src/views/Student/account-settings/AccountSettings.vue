@@ -33,6 +33,10 @@
         <v-tab-item>
           <payments></payments>
         </v-tab-item>
+
+        <v-tab-item>
+          <deferments></deferments>
+        </v-tab-item>
       </v-tabs-items>
     </v-card>
   </div>
@@ -47,6 +51,7 @@ import ProgramCourses from './ProgramCourses.vue'
 import RegisteredCourses from './RegisteredCourses.vue'
 import Transcript from './Transcript.vue'
 import Payments from './Payments.vue'
+import Deferments from './Deferments.vue'
 
 import 'vuetify/dist/vuetify.min.css'
 
@@ -57,6 +62,7 @@ export default {
     Payments,
     Transcript,
     RegisteredCourses,
+    Deferments,
   },
 
   data() {
@@ -69,6 +75,7 @@ export default {
         { title: 'Program Courses', icon: mdiLockOpenOutline },
         { title: 'Transcript List', icon: mdiInformationOutline },
         { title: 'Tuition Payments', icon: mdiInformationOutline },
+        { title: 'Deferments', icon: mdiInformationOutline },
       ],
       icons: {
         mdiAccountOutline,

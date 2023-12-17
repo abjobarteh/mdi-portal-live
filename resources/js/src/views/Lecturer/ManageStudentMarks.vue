@@ -29,10 +29,19 @@ Copy code
     </v-card>
 
     <v-card class="mt-3">
-      <v-card-title> Add Grades </v-card-title>
+      <v-card-title>
+        <span class="mr-auto">Add Grades</span>
+        <v-card-title>
+          <div class="d-flex align-center" style="width: 400px">
+            <v-file-input v-model="selectedFile" label="Upload Marks" class="mr-4"></v-file-input>
+            <v-btn @click="handleFile">Handle File</v-btn>
+          </div>
+        </v-card-title>
+      </v-card-title>
+
       <v-card-text>
         <v-data-table
-          v-if="selectedAssesmentType == 'Test'"
+          v-if="selectedAssesmentType == 'Continuous Assessment'"
           :headers="tableHeaders.filter(header => header.text !== 'Exam Mark')"
           :items="students"
           :items-per-page="10"
@@ -63,11 +72,13 @@ Copy code
       </v-card-text>
       <v-card-actions>
         <v-row>
-          <v-col cols="12" v-if="selectedAssesmentType == 'Test'">
+          <v-col cols="12" v-if="selectedAssesmentType == 'Continuous Assessment'">
             <v-btn
               block
               color="success"
-              :disabled="selectedCourse === null || selectedAssesmentType !== 'Test' || isTestMarkInvalid"
+              :disabled="
+                selectedCourse === null || selectedAssesmentType !== 'Continuous Assessment' || isTestMarkInvalid
+              "
               @click="saveGrades"
               >Save</v-btn
             >
@@ -88,15 +99,19 @@ Copy code
 </template>
 
 <script>
+import readXlsxFile from 'read-excel-file'
 import 'vuetify/dist/vuetify.min.css'
 
 export default {
   data() {
     return {
+      selectedFile: null,
+      jsonData: [],
+
       myCourses: [],
       selectedAssesmentType: null,
       selectedCourse: null,
-      assesmentTypes: ['Test', 'Exam'],
+      assesmentTypes: ['Continuous Assessment', 'Exam'],
       courses: ['Course 1', 'Course 2', 'Course 3'],
       students: [],
       tableHeaders: [
@@ -144,6 +159,49 @@ export default {
   },
 
   methods: {
+    handleFile() {
+      if (this.selectedFile) {
+        readXlsxFile(this.selectedFile)
+          .then(rows => {
+            // rows is an array of arrays representing the Excel data
+            console.log('rows:', rows)
+
+            console.log('Excel Data:', rows[0][0])
+            this.jsonData = rows
+            console.log('hh', this.jsonData[0][1])
+
+            if (this.jsonData[0][1] == 'Continuous Assessment') {
+              for (let i = 1; i < this.students.length + 1; i++) {
+                // Check if the names match
+                if (
+                  this.jsonData[i][0] ===
+                  this.students[i - 1].student.firstname + ' ' + this.students[i - 1].student.lastname
+                ) {
+                  // If the names match, assign the test mark
+                  this.students[i - 1].test_mark = this.jsonData[i][1]
+                }
+              }
+            } else if (this.jsonData[0][1] == 'Exam') {
+              for (let i = 1; i < this.students.length + 1; i++) {
+                // Check if the names match
+                if (
+                  this.jsonData[i][0] ===
+                  this.students[i - 1].student.firstname + ' ' + this.students[i - 1].student.lastname
+                ) {
+                  // If the names match, assign the test mark
+                  this.students[i - 1].exam_mark = this.jsonData[i][1]
+                }
+              }
+            }
+          })
+          .catch(error => {
+            console.error('Error reading Excel file:', error)
+          })
+      } else {
+        alert('Please select a file')
+      }
+    },
+
     getMyCourses() {
       axios.get('/api/my-courses').then(result => {
         this.myCourses = result.data.result
@@ -153,6 +211,9 @@ export default {
     getMarks(courseId) {
       axios.post('/api/manage-student-marks', { course_id: courseId }).then(result => {
         this.students = result.data.result
+        // this.students[0].student.firstname == 'Baba'
+        //   ? (this.students[0].test_mark = 50)
+        //   : (his.students[0].test_mark = 40)
         // this.students = result.data.result.map(item => ({
         //   name: item.student.firstname + ' ' + item.student.lastname,
         //   testMark: item.test_mark,
@@ -180,7 +241,7 @@ export default {
                 swal
                   .fire({
                     title: 'Success!',
-                    text: 'Test Marks added successfully.',
+                    text: 'Continuous Assessment Marks added successfully.',
                     icon: 'success',
                     confirmButtonText: 'OK',
                   })

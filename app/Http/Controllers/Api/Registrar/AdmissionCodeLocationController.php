@@ -61,9 +61,9 @@ class AdmissionCodeLocationController extends Controller
                 'semester_id' => 'required|max:255',
                 'total_number' => 'required|max:255',
                 'price' => 'required|numeric',
-                // 'username' => 'required',
-                // 'email' => 'required',
-                // 'password' => 'required'
+                'username' => 'required',
+                'email' => 'required',
+                'password' => 'required'
             ]);
             $validatedData['total_remains'] = $request->get('total_number');
 
@@ -94,15 +94,19 @@ class AdmissionCodeLocationController extends Controller
             $admissionCodeLocation->admissionCodes()->saveMany($admissionCodes);
 
             // i want to create a user also who will be able to sell the codes
-            // $user = User::create([
-            //     'firstname' => $request->username,
-            //     'lastname' => $request->username,
-            //     'username' => $request->username,
-            //     'email' => $request->email,
-            //     'password' => Hash::make($request->password),
-            //     'is_active' => 1,
-            //     'role_id' => 6, // role_id 6 is agents
-            // ]);
+            $user = User::create([
+                'firstname' => $request->username,
+                'lastname' => $request->username,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'is_active' => 1,
+                'role_id' => 6, // role_id 6 is agents
+            ]);
+
+            $admissionCodeLocation->user_id = $user->id;
+            $admissionCodeLocation->save();
+
 
             // Commit the transaction
             DB::commit();

@@ -4,7 +4,6 @@
       <!-- Buttons Section -->
       <v-row align="center" justify="center" v-if="userRole == 3">
         <v-col cols="6" class="text-center">
-          <!-- <v-file-input label="Upload File" @change="onFileUpload" outlined dense class="file-input"></v-file-input> -->
           <v-btn style="margin-top: -24px" color="primary" @click="onFileUpload" block rounded> Upload file </v-btn>
         </v-col>
       </v-row>
@@ -19,18 +18,53 @@
       </v-row>
 
       <!-- Table Section -->
-      <v-app>
-        <v-row>
-          <v-col cols="12">
-            <v-data-table :headers="headers" :items="files" class="elevation-1">
-              <!-- Add a custom column for the download button -->
-              <template v-slot:item.actions="{ item }">
-                <v-btn @click="downloadFile(item.file_name)" color="primary" text>Download</v-btn>
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-      </v-app>
+      <v-row>
+        <v-col cols="12">
+          <!-- Files Table -->
+          <v-data-table :headers="headers" :items="files" class="elevation-1">
+            <template v-slot:item.actions="{ item }">
+              <v-btn @click="downloadFile(item.file_name)" color="primary" text>Download</v-btn>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+
+      <!-- Students Table -->
+
+      <v-row>
+        <v-col cols="12">
+          <v-card>
+            <v-toolbar color="primary" dark>
+              <v-toolbar-title>Course Students</v-toolbar-title>
+              <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+
+            <v-card-text>
+              <v-data-table
+                :headers="headers2"
+                :items="students"
+                :items-per-page="13"
+                class="elevation-1"
+                hide-default-footer
+              >
+                <template v-slot:item.name="{ item }">
+                  <span>{{ item.student.firstname + ' ' + item.student.lastname }}</span>
+                </template>
+                <template v-slot:item.mat_number="{ item }">
+                  <span>{{ item.student.mat_number }}</span>
+                </template>
+                <template v-slot:item.mat_number="{ item }">
+                  <span>{{ item.student.mat_number }}</span>
+                </template>
+                <template v-slot:item.phonenumber="{ item }">
+                  <span>{{ item.student.phonenumber }}</span>
+                </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
 
     <v-dialog v-model="fileUploadDialog" max-width="500px">
@@ -52,6 +86,7 @@
 <script>
 import 'vuetify/dist/vuetify.min.css'
 import apiBaseURL from '../../../api-config'
+import * as XLSX from 'xlsx'
 
 export default {
   data() {
@@ -64,6 +99,15 @@ export default {
         { text: 'Uploaded Date', value: 'uploaded_date' },
         { text: 'File', value: 'actions' },
       ],
+
+      students: [],
+      headers2: [
+        { text: 'FullName', value: 'name' },
+        { text: 'Mat Number', value: 'mat_number' },
+        { text: 'Phonenumber', value: 'phonenumber' },
+      ],
+      page: 1,
+      pageCount: 0,
       // Your data properties here (if needed)
 
       // New data properties for video upload
@@ -84,11 +128,25 @@ export default {
   },
   created() {
     this.getLecturerFiles()
+    this.getStudents()
   },
-  // <v-btn class="ma-2" color="success" :href="`/certificates/${item.certificate}`" target="_blank" small dark
-  //           >View</v-btn
-  //         >
   methods: {
+    exportToExcel() {
+      // Extract only the columns you want (firstname and lastname)
+      const dataToExport = this.students.map(student => ({
+        Firstname: student.student.firstname + ' ' + student.student.lastname,
+      }))
+
+      // Convert the extracted data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport)
+
+      // Create a new workbook and add the worksheet
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Students')
+
+      // Save the workbook as an Excel file
+      XLSX.writeFile(workbook, 'students.xlsx')
+    },
     getLecturerFiles() {
       this.courseName = this.$route.query.course_name
 
@@ -97,6 +155,19 @@ export default {
         .then(response => {
           this.files = response.data.result.data
           console.log('files', this.files)
+          // Handle the response from the API if needed
+        })
+        .catch(error => {
+          console.error('File upload failed:', error)
+          // Handle the error if needed
+        })
+    },
+    getStudents() {
+      axios
+        .post('/api/manage-student-marks', { course_id: this.$route.query.course_id })
+        .then(response => {
+          this.students = response.data.result
+          console.log('students ', this.students)
           // Handle the response from the API if needed
         })
         .catch(error => {

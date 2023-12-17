@@ -16,7 +16,7 @@ export default {
       Cookies.set('token', token); // set the token in a cookie without an expiry date
 
       // set a timer to remove the token and vuex state from storage after 30 seconds of inactivity
-      const inactivityTime = 120000; // 30 seconds in milliseconds
+      const inactivityTime = 120000; // 30 seconds in milliseconds // update to 5minutes
       let timer = setTimeout(() => {
         Cookies.remove('token');
         localStorage.removeItem('vuex');

@@ -38,7 +38,8 @@ class Student extends Model
         'payment_type',
         'balance',
         'mat_number',
-        'department_id'
+        'department_id',
+        'is_sponsored',
     ];
 
     public function user()

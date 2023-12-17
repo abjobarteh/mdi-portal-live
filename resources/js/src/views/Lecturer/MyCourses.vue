@@ -24,7 +24,7 @@
                 class="custom-link"
                 :to="{
                   path: `courses/${item.id}`,
-                  query: { course_name: item.course.course_name },
+                  query: { course_name: item.course.course_name, course_id: item.course.id },
                 }"
               >
                 {{ item.course.course_name }}
@@ -111,15 +111,14 @@ export default {
 }
 </style>
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+

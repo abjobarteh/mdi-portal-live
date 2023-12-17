@@ -87,6 +87,7 @@
               v-if="showDepartments"
               outlined
               v-model="addUserFormData.department_id"
+              multiple
               :items="departments.map(department => ({ id: department.id, name: department.name }))"
               item-value="id"
               item-text="name"
@@ -98,7 +99,7 @@
               v-if="selectedDepartment && showDepartments"
               v-model="addUserFormData.course_ids"
               multiple
-              :items="selectedDepartment.courses.map(course => ({ id: course.id, name: course.course_name }))"
+              :items="getFlattenedCourses(selectedDepartment)"
               item-value="id"
               item-text="name"
               label="Teachable Courses"
@@ -152,7 +153,7 @@ export default {
       users: [],
       departments: [],
       showDepartments: false,
-      selectedDepartment: null,
+      selectedDepartment: [],
 
       headers: [
         { text: 'Full Name', value: 'fullname' },
@@ -222,14 +223,25 @@ export default {
   },
 
   methods: {
+    getFlattenedCourses(selectedDepartments) {
+      // Flatten courses from selected departments
+      return this.selectedDepartment.flatMap(department => {
+        return department.courses.map(course => ({
+          id: course.id,
+          name: course.course_name,
+        }))
+      })
+    },
     onDepartmentSelected() {
       if (this.addUserFormData.department_id) {
-        this.selectedDepartment = this.departments.find(
-          department => department.id === this.addUserFormData.department_id,
+        this.selectedDepartment.push(
+          this.departments.find(department => this.addUserFormData.department_id.includes(department.id)),
         )
       } else {
         this.selectedDepartment = null
       }
+      console.log('selected de', this.selectedDepartment)
+
       this.addUserFormData.course_id = null
     },
     getResults() {
@@ -380,7 +392,7 @@ export default {
                 this.addUserFormData.password_confirmation = ''
                 ;(this.addUserFormData.role_id = ''), (this.addUserFormData.username = '')
                 this.addUserFormData.email = ''
-                this.addUserFormData.department_id = ''
+                this.addUserFormData.department_id = []
                 this.addUserFormData.course_ids = []
                 this.getResults()
               })

@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api\Finance;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
+use App\Models\Program;
+use App\Models\Semester;
+use App\Models\SponsoredStudents;
 use App\Models\Student;
 use App\Models\StudentPayment;
 use Illuminate\Http\Request;
@@ -26,6 +30,12 @@ class StudentPaymentController extends Controller
     public function index(Request $request)
     {
         $query = Student::with('payments.semester', 'department')->where('accepted', 'accepted');
+
+        if ($request->has('sponsored')) {
+            $query->where('is_sponsored', 1);
+        } else {
+            $query->where('is_sponsored', 0);
+        }
 
         if ($request->has('selectedItem') && $request->has('advanceSearch')) {
 
@@ -140,9 +150,40 @@ class StudentPaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function storeStudentSponsorship(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'student_id' => 'required|max:255',
+            'scholarshipProvider' => 'required|max:255',
+            'scholarshipName' => 'required|max:255',
+            'startDate' => 'required|max:255',
+            'endDate' => 'required|max:255',
+        ]);
+
+        SponsoredStudents::create([
+            'student_id' => $validatedData['student_id'],
+            'scholarship_provider' => $validatedData['scholarshipProvider'],
+            'scholarship_name' => $validatedData['scholarshipName'],
+            'start_date' => $validatedData['startDate'],
+            'end_date' => $validatedData['endDate'],
+        ]);
+
+        $student = Student::where('id', $request->get('student_id'))->update([
+            'is_sponsored' => 1,
+        ]);
+
+        $student = Student::where('id', $request->get('student_id'))->first();
+        $student->update([
+            'remaining' => Program::where('department_id', $student->department_id)->value('fee'),
+        ]);
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has created a scholarship');
+
+        return response()->json(['message' => 'GradingSystem created successfully.']);
     }
 
     /**
@@ -154,6 +195,15 @@ class StudentPaymentController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function scholarshipDetails($id)
+    {
+        $sponsorship = SponsoredStudents::where('student_id', $id)->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'result' => $sponsorship
+        ]);
     }
 
     /**
