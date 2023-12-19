@@ -30,6 +30,8 @@ use App\Http\Controllers\Api\Student\ApplicantDeclarationController;
 use App\Http\Controllers\Api\Student\ApplicantDeparmentInfoController;
 use App\Http\Controllers\Api\Student\ApplicantEducationController;
 use App\Http\Controllers\Api\Student\ApplicantPersonalInfoController;
+use App\Http\Controllers\Api\Registrar\RegistrarDefermentController;
+use App\Http\Controllers\Api\Student\DefermentController;
 use App\Http\Controllers\Api\Student\RegisterCoursesController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
@@ -142,6 +144,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/approve-courses', [CourseController::class, 'approveCourses']);  // for the student middleware
 
+        Route::get('/registrar-deferments', [RegistrarDefermentController::class, 'index']);
+
+        Route::post('/approve-deferment/{id}', [RegistrarDefermentController::class, 'approveDeferment']);
     });
 
 
@@ -162,8 +167,10 @@ Route::middleware('auth:sanctum')->group(function () {
     ///////////////////////////////////  STUDENT END POINTS  ////////////////////////////
     Route::middleware(['student'])->group(function () {
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
-        Route::get('/view-semesters', [SemesterController::class, 'index']);
-
+        // Route::get('/view-semesters', [SemesterController::class, 'index']);
+        Route::get('/view-current-semesters', [SemesterController::class, 'index']);
+        Route::post('/add-deferment', [DefermentController::class, 'addDeferment']);
+        Route::get('/deferments', [DefermentController::class, 'index']);
 
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);

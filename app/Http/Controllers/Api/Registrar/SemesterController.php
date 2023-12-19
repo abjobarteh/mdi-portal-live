@@ -18,7 +18,7 @@ class SemesterController extends Controller
      */
     public function index()
     {
-        $semesters = Semester::with('session')->orderBy('id', 'desc')->paginate(13);
+        $semesters = Semester::with('session')->where('is_current_semester', 1)->orderBy('id', 'desc')->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $semesters

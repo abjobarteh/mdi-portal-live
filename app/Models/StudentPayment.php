@@ -21,4 +21,9 @@ class StudentPayment extends Model
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
 }

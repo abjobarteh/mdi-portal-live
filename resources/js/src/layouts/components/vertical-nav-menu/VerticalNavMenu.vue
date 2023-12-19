@@ -154,6 +154,13 @@
       </nav-menu-group>
 
       <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '2'"
+        title="Deferments"
+        :to="{ name: 'view-deferments' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
         v-if="currentUser && currentUser.role_id == '5'"
         title="Student Fees"
         :to="{ name: 'view-student-fees' }"

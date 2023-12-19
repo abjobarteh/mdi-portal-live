@@ -318,6 +318,16 @@ const routes = [
   },
 
   {
+    path: '/view-deferments',
+    name: 'view-deferments',
+    component: () => import('@/views/Registrar/deferments/ViewDeferments.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2],
+    }
+  },
+
+  {
     path: '/view-users',
     name: 'view-users',
     component: () => import('@/views/Admin/users/ViewUsers.vue'),
