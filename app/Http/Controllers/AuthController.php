@@ -44,71 +44,133 @@ class AuthController extends Controller
         return $user->createToken($request->device_name)->plainTextToken;
     }
 
+    // public function register(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'firstname' => 'required|max:255',
+    //         'lastname' => 'required|max:255',
+    //         'username' => 'required|unique:users,username',
+    //         'email' => 'required|email|unique:users,email',
+    //         'password' => 'required|max:255',
+    //     ]);
+
+    //     // $validator = new EmailValidator();
+    //     // if (!$validator->isValid($validatedData['email'], new DNSCheckValidation())) {
+    //     //     return response()->json(['error' => 'Invalid email address'], 422);
+    //     // } else {
+    //     DB::beginTransaction();
+
+    //     try {
+    //         $user = User::create([
+    //             'firstname' => $validatedData['firstname'],
+    //             'lastname' => $validatedData['lastname'],
+    //             'username' => $validatedData['username'],
+    //             'email' => $validatedData['email'],
+    //             'password' => Hash::make($validatedData['password']),
+    //             'role_id' => 4,
+    //             'is_active' => 1,
+    //         ]);
+
+    //         $student = Student::create([
+    //             'firstname' => $user->firstname,
+    //             'lastname' => $user->lastname,
+    //             'username' => $user->username,
+    //             'email' => $user->email,
+    //             'user_id' => $user->id,
+    //             'is_applicant' => 1,
+    //             'application_completed' => 0,
+    //             'accepted' => 'pending'
+    //         ]);
+
+    //         // Generate a random 5-digit token
+    //         $token = mt_rand(10000, 99999);
+
+    //         // Hash the token
+    //         $hashedToken = Hash::make($token);
+
+    //         // Update user record with the hashed token
+    //         $user->update(['registration_token' => $hashedToken]);
+
+    //         RegistrationVerificationToken::create(['user_id' => $user->id]);
+
+    //         // Send the verification email
+    //         // Mail::to($user->email)->send(new VerificationMail($token));
+    //         Mail::to($user->email)->send(new VerificationMail($token));
+
+
+    //         DB::commit();
+
+    //         return response()->json(['message' => 'User created successfully.']);
+    //     } catch (\Exception $e) {
+    //         DB::rollback();
+    //         // return $e->getMessage();
+    //         return response()->json(['message' => 'Error creating user.' . ' ' . $e->getMessage()], 500);
+    //     }
+    //     // }
+
+
+
+    //     // return $user->createToken($request->device_name)->plainTextToken;
+    // }
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
-            'username' => 'required|unique:users',
-            'email' => 'required|email|unique:users',
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|max:255',
         ]);
 
-        $validator = new EmailValidator();
-        if (!$validator->isValid($validatedData['email'], new DNSCheckValidation())) {
-            return response()->json(['error' => 'Invalid email address'], 422);
-        } else {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            try {
-                $user = User::create([
-                    'firstname' => $validatedData['firstname'],
-                    'lastname' => $validatedData['lastname'],
-                    'username' => $validatedData['username'],
-                    'email' => $validatedData['email'],
-                    'password' => Hash::make($validatedData['password']),
-                    'role_id' => 4,
-                    'is_active' => 1,
-                ]);
+        try {
+            $user = User::create([
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'role_id' => 4,
+                'is_active' => 1,
+            ]);
 
-                $student = Student::create([
-                    'firstname' => $user->firstname,
-                    'lastname' => $user->lastname,
-                    'username' => $user->username,
-                    'email' => $user->email,
-                    'user_id' => $user->id,
-                    'is_applicant' => 1,
-                    'application_completed' => 0,
-                    'accepted' => 'pending'
-                ]);
+            $student = Student::create([
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'username' => $user->username,
+                'email' => $user->email,
+                'user_id' => $user->id,
+                'is_applicant' => 1,
+                'application_completed' => 0,
+                'accepted' => 'pending'
+            ]);
 
-                // Generate a random 5-digit token
-                $token = mt_rand(10000, 99999);
+            // Generate a random 5-digit token
+            $token = mt_rand(10000, 99999);
 
-                // Hash the token
-                $hashedToken = Hash::make($token);
+            // Hash the token
+            $hashedToken = Hash::make($token);
 
-                // Update user record with the hashed token
-                $user->update(['registration_token' => $hashedToken]);
+            // Update user record with the hashed token
+            $user->update(['registration_token' => $hashedToken]);
 
-                RegistrationVerificationToken::create(['user_id' => $user->id]);
+            // Send the token to the user via email
+            // Modify this part based on your email sending logic
+            // Mail::to($user->email)->send(new YourCustomMailClass($token));
 
-                // Send the verification email
-                Mail::to($user->email)->send(new VerificationMail($token));
+            RegistrationVerificationToken::create(['user_id' => $user->id]);
+            Mail::to($user->email)->send(new VerificationMail($token));
 
-                DB::commit();
 
-                return response()->json(['message' => 'User created successfully.']);
-            } catch (\Exception $e) {
-                DB::rollback();
-                return $e->getMessage();
-                return response()->json(['message' => 'Error creating user.'], 500);
-            }
+            DB::commit();
+
+            return response()->json(['message' => 'User created successfully.']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => 'Error creating user.' . ' ' . $e->getMessage()], 500);
         }
-
-
-
-        // return $user->createToken($request->device_name)->plainTextToken;
     }
 
 
