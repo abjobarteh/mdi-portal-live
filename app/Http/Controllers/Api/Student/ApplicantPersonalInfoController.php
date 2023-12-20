@@ -22,6 +22,7 @@ class ApplicantPersonalInfoController extends Controller
             'address' => 'required',
             'employment_status' => 'required',
             'phonenumber' => 'required',
+            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -50,6 +51,14 @@ class ApplicantPersonalInfoController extends Controller
             'phonenumber' => $request->get('phonenumber'),
             'personal_info_completed' => 1,
         ];
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/profiles'), $imageName);
+
+            $studentData['profile_image'] = 'images/profiles/' . $imageName;
+        }
 
         if (!empty($request->get('middlename'))) {
             $studentData['middlename'] = $request->get('middlename');

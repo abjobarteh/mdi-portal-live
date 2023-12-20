@@ -92,6 +92,7 @@ export default {
           employment_status: this.studentInfo.employment_status,
           email: this.studentInfo.email,
           dob: this.studentInfo.dob,
+          profile_image: this.studentInfo.profile_image,
         },
       ]
     },

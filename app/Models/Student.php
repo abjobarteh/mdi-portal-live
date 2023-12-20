@@ -40,6 +40,7 @@ class Student extends Model
         'mat_number',
         'department_id',
         'is_sponsored',
+        'profile_image'
     ];
 
     public function user()

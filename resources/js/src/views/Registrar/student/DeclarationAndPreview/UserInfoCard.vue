@@ -5,6 +5,8 @@
       <v-simple-table>
         <template v-slot:default>
           <tbody v-for="item in studentProfile" :key="item.id">
+            <v-img max-width="170" :src="getImageUrl(item.profile_image)"></v-img>
+
             <tr>
               <td>Firstname</td>
               <td>{{ item.firstname }}</td>
@@ -37,12 +39,21 @@
 </template>
 
 <script>
+import apiBaseURL from '../../../../../api-config'
+
 export default {
   name: 'Department',
   props: {
     studentProfile: {
       type: Array,
       required: true,
+    },
+  },
+
+  methods: {
+    getImageUrl(filename) {
+      // Use Laravel's asset function to generate the URL path
+      return apiBaseURL + filename
     },
   },
 }

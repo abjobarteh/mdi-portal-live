@@ -197,6 +197,7 @@ export default {
                 employment_status: response.data.result.data[0].employment_status,
                 email: response.data.result.data[0].email,
                 dob: response.data.result.data[0].dob,
+                profile_image: response.data.result.data[0].profile_image,
               },
             ]
           })
@@ -225,6 +226,7 @@ export default {
                 employment_status: response.data.result.data[0].employment_status,
                 email: response.data.result.data[0].email,
                 dob: response.data.result.data[0].dob,
+                profile_image: response.data.result.data[0].profile_image,
               },
             ]
           })
@@ -253,6 +255,7 @@ export default {
                 employment_status: response.data.result.data[0].employment_status,
                 email: response.data.result.data[0].email,
                 dob: response.data.result.data[0].dob,
+                profile_image: response.data.result.data[0].profile_image,
               },
             ]
           })

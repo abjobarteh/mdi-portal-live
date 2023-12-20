@@ -5,6 +5,22 @@
         <v-card-title>
           <span class="headline font-weight-medium">PERSONAL INFORMATION</span>
         </v-card-title>
+
+        <v-row>
+          <v-col class="pr-2">
+            <!-- File Input for Image Upload -->
+            <v-file-input
+              v-model="applicantPersonalInfoData.profile_image"
+              label="Upload Profile Image"
+              @change="handleImageUpload"
+            ></v-file-input>
+          </v-col>
+
+          <v-col class="text-right pl-2">
+            <!-- Image Preview -->
+            <v-img v-if="previewImage" :src="previewImage" alt="Profile Image" width="150" height="150"></v-img>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
@@ -106,6 +122,7 @@ import 'vuetify/dist/vuetify.min.css'
 export default {
   data() {
     return {
+      previewImage: null, // Store the URL for previewing the image
       studentInfo: '',
       applicantPersonalInfoData: {
         middlename: '',
@@ -119,12 +136,43 @@ export default {
         address: '',
         employment_status: '',
         employmentStatusOptions: ['Employed', 'Unemployed', 'Self-employed'],
+        profile_image: null, // Store the selected file
       },
       errors: {}, // Add this line to store validation errors
     }
   },
   methods: {
+    handleImageUpload() {
+      const file = this.applicantPersonalInfoData.profile_image
+      if (file) {
+        // Read the file as a data URL to display the preview
+        const reader = new FileReader()
+        reader.onload = e => {
+          this.previewImage = e.target.result
+        }
+        reader.readAsDataURL(file)
+      } else {
+        // Reset preview if no file is selected
+        this.previewImage = null
+      }
+    },
     submitForm() {
+      const formData = new FormData()
+      this.applicantPersonalInfoData['id'] = this.studentInfo.user_id
+      formData.append('id', this.studentInfo.user_id) // Add other form fields as needed
+      formData.append('middlename', this.applicantPersonalInfoData.middlename) // Add other form fields as needed
+      formData.append('phonenumber', this.applicantPersonalInfoData.phonenumber) // Add other form fields as needed
+      formData.append('gender', this.applicantPersonalInfoData.gender) // Add other form fields as needed
+      formData.append('genderOptions', this.applicantPersonalInfoData.genderOptions) // Add other form fields as needed
+      formData.append('marital_status', this.applicantPersonalInfoData.marital_status) // Add other form fields as needed
+      formData.append('maritalStatusOptions', this.applicantPersonalInfoData.maritalStatusOptions) // Add other form fields as needed
+      formData.append('dob', this.applicantPersonalInfoData.dob) // Add other form fields as needed
+      formData.append('nationality', this.applicantPersonalInfoData.nationality) // Add other form fields as needed
+      formData.append('address', this.applicantPersonalInfoData.address) // Add other form fields as needed
+      formData.append('employment_status', this.applicantPersonalInfoData.employment_status) // Add other form fields as needed
+      formData.append('employmentStatusOptions', this.applicantPersonalInfoData.employmentStatusOptions) // Add other form fields as needed
+      formData.append('profile_image', this.applicantPersonalInfoData.profile_image) // Add other form fields as needed
+
       swal
         .fire({
           title: 'Are you sure, you want to submit personal Info?',
@@ -138,7 +186,7 @@ export default {
         .then(result => {
           if (result.isConfirmed) {
             axios
-              .post(`/api/submit-applicant-personal-info`, this.applicantPersonalInfoData)
+              .post(`/api/submit-applicant-personal-info`, formData)
               .then(result => {
                 // show success alert
                 swal
