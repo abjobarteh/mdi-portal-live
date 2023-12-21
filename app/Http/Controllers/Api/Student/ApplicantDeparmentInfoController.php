@@ -13,17 +13,21 @@ class ApplicantDeparmentInfoController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // $validator = Validator::make($request->all(), [
+        //     'id' => 'required',
+        //     'program_id' => 'required',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'errors' => $validator->errors(),
+        //     ], 422);
+        // }
+        $validatedData = $request->validate([
             'id' => 'required',
             'program_id' => 'required',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
 
         $student = Student::where('user_id', $request->get('id'))->first();
 

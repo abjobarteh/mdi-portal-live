@@ -18,7 +18,8 @@ class Lecturer extends Model
         'email',
         'user_id',
         'address',
-        'phonenumber'
+        'phonenumber',
+        'lecturer_type',
     ];
 
 

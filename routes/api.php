@@ -60,9 +60,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
     Route::put('/update-user/{id}', [UserController::class, 'update']);
 
+    // move it to middleware 
+    Route::get('/view-semesters', [SemesterController::class, 'index']);
+
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar'])->group(function () {
+
         Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
 
         Route::post('/add-employee', [EmployeeController::class, 'store']);
@@ -212,7 +216,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
         Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']);
         Route::post('/send-email', [EmailController::class, 'sendEmail']);
-        Route::get('/view-semesters', [SemesterController::class, 'index']);
+        // Route::get('/view-semesters', [SemesterController::class, 'index']);
     });
 
     Route::middleware(['student-registrar'])->group(function () {

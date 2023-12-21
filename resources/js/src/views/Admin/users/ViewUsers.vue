@@ -83,6 +83,28 @@
               item-text="name"
               label="User Type"
             ></v-select>
+            <!-- <v-select
+              v-if="showDepartments"
+              outlined
+              v-model="addUserFormData.lecturer_type"
+              multiple
+              :items="departments.map(department => ({ id: department.id, name: department.name }))"
+              item-value="id"
+              item-text="name"
+              label="Department"
+              @input="onDepartmentSelected"
+            ></v-select> -->
+            <v-select
+              v-if="showDepartments"
+              outlined
+              v-model="addUserFormData.lecturer_type"
+              :items="addUserFormData.lecturerTypeOptions"
+              required
+              ><template v-slot:label>
+                <span class="required-field">Lecturer Type</span>
+              </template></v-select
+            >
+
             <v-select
               v-if="showDepartments"
               outlined
@@ -178,6 +200,8 @@ export default {
       //////////////// add new User /////////
       addUserDialog: false,
       addUserFormData: {
+        lecturer_type: '',
+        lecturerTypeOptions: ['Fulltime', 'Part-time'],
         firstname: '',
         middlename: '',
         lastname: '',

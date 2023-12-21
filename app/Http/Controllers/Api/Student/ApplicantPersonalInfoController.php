@@ -13,7 +13,25 @@ class ApplicantPersonalInfoController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // $validator = Validator::make($request->all(), [
+        //     'id' => 'required',
+        //     'gender' => 'required',
+        //     'dob' => 'required',
+        //     'marital_status' => 'required',
+        //     'nationality' => 'required',
+        //     'address' => 'required',
+        //     'employment_status' => 'required',
+        //     'phonenumber' => 'required',
+        //     'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'errors' => $validator->errors(),
+        //     ], 422);
+        // }
+        $validatedData = $request->validate([
             'id' => 'required',
             'gender' => 'required',
             'dob' => 'required',
@@ -23,14 +41,8 @@ class ApplicantPersonalInfoController extends Controller
             'employment_status' => 'required',
             'phonenumber' => 'required',
             'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
+        ]);
 
         $student = Student::where('user_id', $request->get('id'))->first();
 

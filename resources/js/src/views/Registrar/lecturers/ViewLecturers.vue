@@ -172,6 +172,7 @@ export default {
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
+        { text: 'Lecturer Type', value: 'lecturer_type' },
         { text: 'Action', value: 'action', sortable: false },
       ],
       editLecturerDialog: false,

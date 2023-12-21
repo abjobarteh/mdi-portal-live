@@ -31,6 +31,10 @@
               <td>DOB</td>
               <td>{{ item.dob }}</td>
             </tr>
+            <tr>
+              <td>Employment</td>
+              <td>{{ item.employment_status }}</td>
+            </tr>
           </tbody>
         </template>
       </v-simple-table>

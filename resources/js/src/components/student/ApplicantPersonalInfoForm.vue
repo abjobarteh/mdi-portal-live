@@ -69,10 +69,19 @@
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field outlined v-model="applicantPersonalInfoData.nationality" required>
+            <!-- <v-text-field outlined v-model="applicantPersonalInfoData.nationality" required>
               <template v-slot:label>
                 <span class="required-field">Nationality</span>
               </template></v-text-field
+            > -->
+            <v-select
+              outlined
+              v-model="applicantPersonalInfoData.nationality"
+              :items="applicantPersonalInfoData.nationalityOptions"
+              required
+              ><template v-slot:label>
+                <span class="required-field">Nationality</span>
+              </template></v-select
             >
             <span v-if="errors.nationality" class="error-message">{{ errors.nationality[0] }}</span>
           </v-col>
@@ -133,6 +142,7 @@ export default {
         maritalStatusOptions: ['Single', 'Married', 'Divorced', 'Widowed'],
         dob: '',
         nationality: '',
+        nationalityOptions: ['Gambian', 'Non Gambian'],
         address: '',
         employment_status: '',
         employmentStatusOptions: ['Employed', 'Unemployed', 'Self-employed'],
@@ -208,6 +218,12 @@ export default {
                 if (error.response && error.response.status === 422) {
                   console.log('error', error.response.data.errors)
                   this.errors = error.response.data.errors
+                  swal.fire({
+                    title: 'Error!',
+                    text: error.response.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  })
                 }
               })
             // swal.fire('Deleted!', 'Department has been deleted.', 'success')

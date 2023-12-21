@@ -115,15 +115,30 @@ class UserController extends Controller
             ]);
 
             if ($validatedData['role_id'] == 3) {
-                $lecturer = Lecturer::create([
-                    'firstname' => $user->firstname,
-                    'lastname' => $user->lastname,
-                    'email' => $user->email,
-                    'address' => $user->address,
-                    'phonenumber' => $user->phonenumber,
-                    'username' => $user->username,
-                    'user_id' => $user->id
-                ]);
+
+
+                if ($request->has('lecturer_type')) {
+                    $lecturer = Lecturer::create([
+                        'firstname' => $user->firstname,
+                        'lastname' => $user->lastname,
+                        'email' => $user->email,
+                        'address' => $user->address,
+                        'phonenumber' => $user->phonenumber,
+                        'username' => $user->username,
+                        'user_id' => $user->id,
+                        'lecturer_type' => $request->get('lecturer_type'),
+                    ]);
+                } else {
+                    $lecturer = Lecturer::create([
+                        'firstname' => $user->firstname,
+                        'lastname' => $user->lastname,
+                        'email' => $user->email,
+                        'address' => $user->address,
+                        'phonenumber' => $user->phonenumber,
+                        'username' => $user->username,
+                        'user_id' => $user->id
+                    ]);
+                }
 
 
                 $lecturer->teachables()->attach($request->course_ids);
