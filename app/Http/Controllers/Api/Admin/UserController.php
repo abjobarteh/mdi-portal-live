@@ -95,7 +95,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'address' => 'required',
             'role_id' => 'required',
-            'phonenumber' => 'required',
+            'phonenumber' =>   ['required', 'regex:/^[2-7,9]\d{6}$/'],
             'password' => 'required|confirmed|min:6'
         ]);
 

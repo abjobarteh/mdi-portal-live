@@ -29,7 +29,7 @@
             </template>
             <template v-slot:item.department.name="{ item }">
               <div class="text-truncate" style="max-width: 300px; font-size: 13px">
-                {{ item.name }}
+                {{ item.department.name }}
               </div>
             </template>
             <template v-slot:item.name="{ item }">

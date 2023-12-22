@@ -58,6 +58,10 @@ class RegistrarDefermentController extends Controller
             }
         }
 
+        // incase if the student have already registered for courses, just remove all his registered courses, this semester
+        StudentRegisteredCourse::where('student_id', Deferment::where('id', $id)->value('student_id'))
+            ->where('semester_id', $currentSemesterId)
+            ->delete();
         // 2. check if the student have made payment for this semester or full course payment, if yes then refund
         return response()->json([
             'status' => 200,

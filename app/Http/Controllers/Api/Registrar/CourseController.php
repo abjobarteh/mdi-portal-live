@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Deferment;
 use App\Models\GradingSystem;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
@@ -195,8 +196,9 @@ class CourseController extends Controller
             $current_semester = Semester::where('is_current_semester', 1)->value('id');
 
             $student_id =  Student::join('student_payments', 'students.id', '=', 'student_payments.student_id')->where('students.user_id', auth()->user()->id)->value('student_id');
-
-            if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || (Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
+            if (Deferment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists()) {
+                $runningCourse["can_register"] = false;
+            } else if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || (Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
                 // can register
                 $runningCourse["can_register"] = true;
             } else {
