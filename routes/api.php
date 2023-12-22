@@ -118,10 +118,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/view-lecturers', [LecturerController::class, 'index']);
 
-
-
-
-
+        Route::delete('/delete-lecturer/{id}', [LecturerController::class, 'destroy']);
 
 
 
