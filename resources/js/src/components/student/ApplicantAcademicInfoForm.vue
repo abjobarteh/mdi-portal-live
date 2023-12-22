@@ -98,10 +98,6 @@ export default {
     }
   },
   methods: {
-    getImageUrl(filename) {
-      // Use Laravel's asset function to generate the URL path
-      return apiBaseURL + 'images/avatars/' + filename
-    },
     addSchool() {
       this.educationFormData.schools.push({
         name: '',
