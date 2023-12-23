@@ -198,13 +198,12 @@ class CourseController extends Controller
             $student_id =  Student::join('student_payments', 'students.id', '=', 'student_payments.student_id')->where('students.user_id', auth()->user()->id)->value('student_id');
             if (Deferment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists()) {
                 $runningCourse["can_register"] = false;
-            } else if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || (Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
+            } else if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || ((Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 || Student::where('user_id', auth()->user()->id)->value('is_sponsored') == 1) && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
                 // can register
                 $runningCourse["can_register"] = true;
             } else {
                 $runningCourse["can_register"] = false;
             }
-
 
             if ($runningCourse['course_id'] == $courseId) {
                 // the course is registered

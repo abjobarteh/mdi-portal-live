@@ -45,7 +45,9 @@ class RegistrarDefermentController extends Controller
                 } else {
                     // Handle the case where program fee is null
                 }
-            } elseif ($studentPayment->semester_id != $currentSemesterId && $studentPayment->payment_type == 'Full Course Payment') {
+            } elseif (($studentPayment->semester_id != $currentSemesterId && $studentPayment->payment_type == 'Full Course Payment') ||
+                Student::where('id', Deferment::where('id', $id)->value('student_id'))->value('is_sponsored') == 1
+            ) {
                 // his remaining balance will be added by the per_semester_fee ie he paid but not this semester
                 $programFee = Program::where('department_id', $studentPayment->student->department_id)->value('per_semester_fee');
 

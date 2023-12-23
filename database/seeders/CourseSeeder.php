@@ -95,69 +95,66 @@ class CourseSeeder extends Seeder
             'course_code' => 'ACC 325',
             'course_name' => 'Project Writing I for Accountancy',
             'program_id' => 1
-        ])
-
-
-            ->create([
-                'course_code' => 'CPS 121',
-                'course_name' => 'Introduction to Computer Science',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 122',
-                'course_name' => 'IT Hardware & Systems',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 123',
-                'course_name' => 'Computer Security',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 124',
-                'course_name' => 'Programming Logic and Design',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'ENG 100',
-                'course_name' => 'English 2 (Academic Writing)',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 211',
-                'course_name' => 'Networking I',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 212',
-                'course_name' => 'Database I',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 213',
-                'course_name' => 'Web programming I',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 214',
-                'course_name' => 'Computer programming I',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 215',
-                'course_name' => 'Operating System',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 221',
-                'course_name' => 'Networking II',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 222',
-                'course_name' => 'Database II',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 223',
-                'course_name' => 'Web programming II',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 224',
-                'course_name' => 'Computer programming II',
-                'program_id' => 5
-            ])->create([
-                'course_code' => 'CPS 225',
-                'course_name' => 'Junior Project Writing I',
-                'program_id' => 5
-            ]);
+        ])->create([
+            'course_code' => 'CPS 121',
+            'course_name' => 'Introduction to Computer Science',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 122',
+            'course_name' => 'IT Hardware & Systems',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 123',
+            'course_name' => 'Computer Security',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 124',
+            'course_name' => 'Programming Logic and Design',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'ENG 100',
+            'course_name' => 'English 2 (Academic Writing)',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 211',
+            'course_name' => 'Networking I',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 212',
+            'course_name' => 'Database I',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 213',
+            'course_name' => 'Web programming I',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 214',
+            'course_name' => 'Computer programming I',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 215',
+            'course_name' => 'Operating System',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 221',
+            'course_name' => 'Networking II',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 222',
+            'course_name' => 'Database II',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 223',
+            'course_name' => 'Web programming II',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 224',
+            'course_name' => 'Computer programming II',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CPS 225',
+            'course_name' => 'Junior Project Writing I',
+            'program_id' => 5
+        ]);
     }
 }

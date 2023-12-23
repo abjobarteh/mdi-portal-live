@@ -173,8 +173,13 @@ class StudentPaymentController extends Controller
         ]);
 
         $student = Student::where('id', $request->get('student_id'))->first();
+
+        $departmentFee = Program::where('department_id', $student->department_id)->value('fee');
+
         $student->update([
-            'remaining' => Program::where('department_id', $student->department_id)->value('fee'),
+            'remaining' => $student->remaining !== null
+                ? $student->remaining + $departmentFee
+                : $departmentFee,
         ]);
 
 
