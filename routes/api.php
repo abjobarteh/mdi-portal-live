@@ -207,6 +207,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware(['finance-vendor'])->group(function () {
+        Route::get('/view-agents', [AdmissionCodeLocationController::class, 'agents']);
+
+        Route::post('/add-agent', [AdmissionCodeLocationController::class, 'addAgent']);
+
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
         Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);

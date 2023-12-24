@@ -27,6 +27,10 @@
             class="elevation-1"
             hide-default-footer
           >
+            <template v-slot:[`item.totalAmountSold`]="{ item }">
+              <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
+              D{{ item.totalAmountSold }}.00
+            </template>
             <template v-slot:[`item.action`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
               <v-btn @click="openAdmissionCodesPopup(item)">View Codes</v-btn>
@@ -45,7 +49,7 @@
         <v-card-title>Add AdmissionCodeLocation</v-card-title>
         <v-card-text>
           <v-form ref="addAdmissionCodeLocationForm">
-            <v-text-field
+            <!-- <v-text-field
               outlined
               v-model="addAdmissionCodeLocationFormData.location_name"
               label="Location Name"
@@ -55,7 +59,7 @@
               v-for="error in v$.value.location_name.$errors"
               :key="error.$uid"
               >{{ error.$message }}</span
-            >
+            > -->
             <v-select
               outlined
               v-model="addAdmissionCodeLocationFormData.semester_id"
@@ -100,12 +104,26 @@
               >{{ error.$message }}</span
             >
 
+            <v-select
+              outlined
+              v-model="addAdmissionCodeLocationFormData.agent_id"
+              :items="
+                agents.map(agent => ({
+                  id: agent.id,
+                  name: agent.address,
+                }))
+              "
+              item-value="id"
+              item-text="name"
+              label="Location"
+            ></v-select>
+
             <!-- New code -->
-            <h3 class="mb-2 text-center" style="font-size: 20px">User Info</h3>
+            <!-- <h3 class="mb-2 text-center" style="font-size: 20px">User Info</h3>
 
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.username" label="Username"></v-text-field>
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.email" label="Email"></v-text-field>
-            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field>
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.password" label="Password"></v-text-field> -->
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -227,6 +245,7 @@ export default {
   components: {},
   data() {
     return {
+      agents: [],
       userRole: '',
       location: '',
       admissionCodeLocationItem: null,
@@ -246,7 +265,7 @@ export default {
         { text: 'Total Admission Codes', value: 'total_number' },
         { text: 'Total Sold', value: 'total_sold' },
         { text: 'Total Remains', value: 'total_remains' },
-
+        { text: 'Total Amount Sold', value: 'totalAmountSold' },
         { text: 'Action', value: 'action', sortable: false },
       ],
 
@@ -269,17 +288,18 @@ export default {
       addAdmissionCodeLocationDialog: false,
 
       addAdmissionCodeLocationFormData: {
-        location_name: '',
+        // location_name: '',
         semester_id: '',
         total_number: '',
         price: '',
-        username: '',
-        email: '',
-        password: '',
+        agent_id: '',
+        // username: '',
+        // email: '',
+        // password: '',
       },
 
       rules: {
-        location_name: { required, minLength: minLength(2) },
+        // location_name: { required, minLength: minLength(2) },
         semester_id: { required },
         total_number: { required, minLength: minLength(1) },
         price: { required, minLength: minLength(2) },
@@ -341,6 +361,18 @@ export default {
         })
         .catch(err => {
           this.admissionCodeLocations = []
+          this.pageCount = 0
+        })
+
+      axios
+        .get('/api/view-agents?page=' + this.page)
+        .then(response => {
+          this.agents = response.data.result.data
+          console.log('users ', this.users)
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.users = []
           this.pageCount = 0
         })
 

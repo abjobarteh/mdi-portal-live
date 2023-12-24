@@ -160,12 +160,23 @@ class StudentPaymentController extends Controller
             'endDate' => 'required|max:255',
         ]);
 
+        // Handle file upload
+        $uploadedFile = $request->file('uploadedFile');
+        $filePath = null;
+
+        if ($uploadedFile) {
+            $filePath = $uploadedFile->store('scholarships', 'public'); // Update storage path as needed
+        }
+
+
         SponsoredStudents::create([
             'student_id' => $validatedData['student_id'],
             'scholarship_provider' => $validatedData['scholarshipProvider'],
             'scholarship_name' => $validatedData['scholarshipName'],
             'start_date' => $validatedData['startDate'],
             'end_date' => $validatedData['endDate'],
+            'scholarship_file' => $filePath, // Update column name as needed
+
         ]);
 
         $student = Student::where('id', $request->get('student_id'))->update([

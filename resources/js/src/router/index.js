@@ -435,6 +435,17 @@ const routes = [
   },
 
   {
+    path: '/view-agents',
+    name: 'view-agents',
+    component: () => import('@/views/Finance/ViewAgents.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [5],
+    }
+
+  },
+
+  {
     path: '/manage-student-marks',
     name: 'manage-student-marks',
     component: () => import('@/views/Lecturer/ManageStudentMarks.vue'),

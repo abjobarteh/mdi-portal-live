@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmissionCode;
 use App\Models\AdmissionCodeLocation;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -29,10 +30,26 @@ class AdmissionCodeLocationController extends Controller
             $admissionCodeLocations = AdmissionCodeLocation::where('user_id', auth()->user()->id)->with(['admissionCodes', 'semester.session'])->paginate(13);
         } else {
             $admissionCodeLocations = AdmissionCodeLocation::with(['admissionCodes', 'semester.session'])->paginate(13);
+            foreach ($admissionCodeLocations as $acl) {
+                $acl['totalAmountSold'] = $acl['price'] * $acl['total_sold'];
+            }
         }
         return response()->json([
             'status' => 200,
             'result' => $admissionCodeLocations
+        ]);
+    }
+
+    public function agents()
+    {
+        $users = User::with('role')->where('role_id', 6)->paginate(13);
+        // Format the created_at field in the desired format
+        foreach ($users as $user) {
+            $user['registered_at'] = Carbon::parse($user->created_at)->format('jS F Y');
+        }
+        return response()->json([
+            'status' => 200,
+            'result' => $users
         ]);
     }
 
@@ -57,13 +74,14 @@ class AdmissionCodeLocationController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'location_name' => 'required|max:255',
+                // 'location_name' => 'required|max:255',
                 'semester_id' => 'required|max:255',
                 'total_number' => 'required|max:255',
                 'price' => 'required|numeric',
-                'username' => 'required',
-                'email' => 'required',
-                'password' => 'required'
+                'agent_id' => 'required|numeric',
+                // 'username' => 'required',
+                // 'email' => 'required',
+                // 'password' => 'required'
             ]);
             $validatedData['total_remains'] = $request->get('total_number');
 
@@ -94,17 +112,18 @@ class AdmissionCodeLocationController extends Controller
             $admissionCodeLocation->admissionCodes()->saveMany($admissionCodes);
 
             // i want to create a user also who will be able to sell the codes
-            $user = User::create([
-                'firstname' => $request->username,
-                'lastname' => $request->username,
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'is_active' => 1,
-                'role_id' => 6, // role_id 6 is agents
-            ]);
+            // $user = User::create([
+            //     'firstname' => $request->username,
+            //     'lastname' => $request->username,
+            //     'username' => $request->username,
+            //     'email' => $request->email,
+            //     'password' => Hash::make($request->password),
+            //     'is_active' => 1,
+            //     'role_id' => 6, // role_id 6 is agents
+            // ]);
 
-            $admissionCodeLocation->user_id = $user->id;
+            $admissionCodeLocation->location_name = User::where('id', $request->get('agent_id'))->value('address');
+            $admissionCodeLocation->user_id = $request->get('agent_id');
             $admissionCodeLocation->save();
 
 
@@ -126,6 +145,28 @@ class AdmissionCodeLocationController extends Controller
             // Return an error response
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function addAgent(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'address' => 'required',
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+        // i want to create a user also who will be able to sell the codes
+        $user = User::create([
+            'firstname' => $request->username,
+            'lastname' => $request->username,
+            'username' => $request->username,
+            'email' => $request->email,
+            'address' => $request->address,
+            'password' => Hash::make($request->password),
+            'is_active' => 1,
+            'role_id' => 6, // role_id 6 is agents
+        ]);
     }
 
     public function addAdmissionCodes(Request $request)

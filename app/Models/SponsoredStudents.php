@@ -15,5 +15,6 @@ class SponsoredStudents extends Model
         'scholarship_name',
         'start_date',
         'end_date',
+        'scholarship_file'
     ];
 }

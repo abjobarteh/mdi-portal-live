@@ -251,6 +251,12 @@
               <v-text-field type="month" v-model="scholarshipFormData.endDate" label="End Date"></v-text-field>
             </v-col>
           </v-row>
+          <v-file-input
+            v-model="scholarshipFormData.uploadedFile"
+            label="Upload File (Optional)"
+            show-size
+            @change="handleFileUpload"
+          ></v-file-input>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="saveScholarship">Save</v-btn>
@@ -270,6 +276,9 @@
             class="elevation-1"
             hide-default-footer
           >
+            <template v-slot:[`item.award`]="{ item }">
+              <v-btn @click="scholarshipAward(item.scholarship_file)">View</v-btn>
+            </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
@@ -285,6 +294,8 @@ import 'vuetify/dist/vuetify.min.css'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
 import html2pdf from 'html2pdf.js'
+
+import apiBaseURL from '../../../../api-config'
 
 Vue.use(Vue2Filters)
 
@@ -343,6 +354,8 @@ export default {
         { text: 'Scholarship Provider', value: 'scholarship_provider' },
         { text: 'Start Date', value: 'start_date' },
         { text: 'End Date', value: 'end_date' },
+        { text: 'Scholarship', value: 'award' },
+        // http://127.0.0.1:8000/storage/scholarships/J0P9NnR166YSt2jo7iQDCJbOGESYU50COhvVr7jP.pdf
       ],
 
       addPaymentFormData: {
@@ -390,6 +403,12 @@ export default {
   },
 
   methods: {
+    scholarshipAward(award) {
+      const fileUrl = apiBaseURL + `storage/${award}` // Adjust the path based on your storage configuration
+
+      // Open a new window or tab with the file
+      window.open(fileUrl, '_blank')
+    },
     sponsorship(item) {
       this.showSponsorshipDetails = true
       axios
@@ -404,9 +423,19 @@ export default {
         })
     },
     saveScholarship(student) {
-      console.log('student ', student)
+      const formData = new FormData()
+      formData.append('scholarshipProvider', this.scholarshipFormData.scholarshipProvider)
+      formData.append('scholarshipName', this.scholarshipFormData.scholarshipName)
+      formData.append('startDate', this.scholarshipFormData.startDate)
+      formData.append('endDate', this.scholarshipFormData.endDate)
+      formData.append('student_id', this.student_id)
+
+      // Append file data if available
+      if (this.scholarshipFormData.uploadedFile) {
+        formData.append('uploadedFile', this.scholarshipFormData.uploadedFile)
+      }
       axios
-        .post('/api/add-student-sponsorship', { ...this.scholarshipFormData, student_id: this.student_id })
+        .post('/api/add-student-sponsorship', formData)
         .then(result => {
           // this.addPaymentDialog = false
           // show success alert
@@ -418,7 +447,7 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
-              this.generatePDF()
+              this.addSponsorDialog = false
               this.getResults()
             })
         })
@@ -449,7 +478,7 @@ export default {
       this.addSponsorDialog = true
     },
 
-    closeAddSponsorDialog() {
+    closeScholarshipDialog() {
       this.addSponsorDialog = false
     },
     showSearchDialog() {

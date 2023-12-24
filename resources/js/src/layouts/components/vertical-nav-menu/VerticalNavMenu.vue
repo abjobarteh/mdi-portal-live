@@ -166,6 +166,12 @@
         :to="{ name: 'view-student-fees' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '5'"
+        title="Agents"
+        :to="{ name: 'view-agents' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
 
       <nav-menu-link
         v-if="currentUser && currentUser.role_id == '3'"
