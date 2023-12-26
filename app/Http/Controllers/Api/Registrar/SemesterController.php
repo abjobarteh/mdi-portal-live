@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdmissionCode;
 use App\Models\Course;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
@@ -76,6 +77,12 @@ class SemesterController extends Controller
             $student->decrement('remaining', $semesterFee);
             // remember initially the remaining will be - one semester fee
         }
+
+        // make all the admission codes expire
+        AdmissionCode::where('is_sold', 0)->update([
+            'expired' => 1,
+        ]);
+
 
         activity()
             ->causedBy(auth()->user())

@@ -32,6 +32,22 @@ class StudentMarksController extends Controller
         ]);
     }
 
+    public function destroy($id)
+    {
+
+        $user = Lecturer::find($id);
+        if ($user->id == auth()->user()->id) {
+            return response()->json(['error' => 'You cannot delete yourself'], 422);
+        }
+        $user->delete();
+
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has deleted a user');
+    }
+
     public function myCourses()
     {
         $myCourses = SemesterCourse::with('course')->where('submitted', 0)->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
@@ -151,8 +167,4 @@ class StudentMarksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
 }

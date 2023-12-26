@@ -36,7 +36,7 @@
               {{ item.registered_at }}
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small disabled color="primary" @click="editUser(item)">Edit</v-btn>
+              <v-btn small color="primary" @click="editUser(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteUser(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -77,17 +77,20 @@
     </v-dialog>
 
     <!-- Edit user duration dialog -->
-    <v-dialog v-model="editUserDialog" max-width="500px">
+    <v-dialog v-model="editUserDialog" max-width="750px">
       <v-card>
-        <v-card-title> Edit User </v-card-title>
+        <v-card-title>Edit User</v-card-title>
         <v-card-text>
-          <v-form ref="form">
-            <v-text-field outlined v-model="addUserFormData.name" label="User Name"></v-text-field>
+          <v-form ref="editUserForm">
+            <v-text-field outlined v-model="editedItem.username" label="Username"></v-text-field>
+            <v-text-field outlined v-model="editedItem.email" label="Email"></v-text-field>
+            <v-text-field outlined v-model="editedItem.address" label="Location"></v-text-field>
+            <v-text-field outlined v-model="editedItem.phonenumber" label="Phone Number"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitupdateUserForm">Add</v-btn>
-          <v-btn color="secondary" @click="cancelAdd">Cancel</v-btn>
+          <v-btn color="primary" @click="submitUpdateAgent">Save Changes</v-btn>
+          <v-btn color="secondary" @click="editUserDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -125,7 +128,10 @@ export default {
       editedIndex: -1,
       editedItem: {
         id: null,
-        name: '',
+        phonenumber: '',
+        email: '',
+        address: '',
+        username: '',
       },
       page: 1,
       pageCount: 0,
@@ -189,14 +195,39 @@ export default {
       this.editUserDialog = true
     },
 
-    submitupdateUserForm() {
+    submitUpdateAgent() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/user/${this.editedItem.id}`, this.editedItem).then(response => {
-        // show a success notification
-        this.$toast.success('users information has been updated.')
-        // refresh the data table
-        this.getResults()
-      })
+      // axios.post(`/api/update-agent/${this.editedItem.id}`, this.editedItem).then(response => {
+      //   // show a success notification
+      //   this.$toast.success('users information has been updated.')
+      //   // refresh the data table
+      //   this.getResults()
+      // })
+      axios
+        .post(`/api/update-agent/${this.editedItem.id}`, this.editedItem)
+        .then(result => {
+          // show success alert
+          this.editUserDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'User update successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: error.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
       // hide the dialog
       this.editUserDialog = false
       // clear the edited item
@@ -281,18 +312,12 @@ export default {
                 confirmButtonText: 'OK',
               })
               .then(() => {
-                this.addUserFormData.firstname = ''
-                this.addUserFormData.middlename = ''
-                this.addUserFormData.lastname = ''
-                this.addUserFormData.address = ''
-                this.addUserFormData.phonenumber = ''
-                this.addUserFormData.password = ''
-                this.addUserFormData.password_confirmation = ''
-                ;(this.addUserFormData.role_id = ''), (this.addUserFormData.username = '')
-                this.addUserFormData.email = ''
-                this.addUserFormData.department_id = []
-                this.addUserFormData.course_ids = []
-                this.getResults()
+                ;(this.addUserFormData.phonenumber = ''),
+                  (this.addUserFormData.password = ''),
+                  (this.addUserFormData.password_confirmation = ''),
+                  (this.addUserFormData.email = ''),
+                  (this.addUserFormData.address = ''),
+                  this.getResults()
               })
           })
           .catch(error => {

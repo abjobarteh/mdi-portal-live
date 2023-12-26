@@ -192,7 +192,7 @@
             </template>
             <template v-slot:item.is_sold="{ item }">
               <fas
-                v-if="item.is_sold == 0"
+                v-if="item.is_sold == 0 && item.expired != 1"
                 icon="check"
                 style="
                   font-size: 24px;

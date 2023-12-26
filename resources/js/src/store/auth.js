@@ -65,7 +65,12 @@ export default {
         } else if (state.user.role_id == 3) {
           router.push({ name: 'lecturer-dashboard' });
         } else if (state.user.role_id == 6) {
-          router.push({ name: 'view-admission-codes-locations' });
+          if (state.user.password_reset == 0) {
+            router.push({ name: 'password-reset' });
+          }
+          else {
+            router.push({ name: 'view-admission-codes-locations' });
+          }
         }
 
 

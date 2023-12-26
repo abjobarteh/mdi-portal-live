@@ -36,7 +36,7 @@
               {{ item.registered_at }}
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small disabled color="primary" @click="editUser(item)">Edit</v-btn>
+              <v-btn small color="primary" @click="editUser(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteUser(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -83,17 +83,6 @@
               item-text="name"
               label="User Type"
             ></v-select>
-            <!-- <v-select
-              v-if="showDepartments"
-              outlined
-              v-model="addUserFormData.lecturer_type"
-              multiple
-              :items="departments.map(department => ({ id: department.id, name: department.name }))"
-              item-value="id"
-              item-text="name"
-              label="Department"
-              @input="onDepartmentSelected"
-            ></v-select> -->
             <v-select
               v-if="showDepartments"
               outlined
@@ -139,17 +128,71 @@
     </v-dialog>
 
     <!-- Edit user duration dialog -->
-    <v-dialog v-model="editUserDialog" max-width="500px">
+    <v-dialog v-model="editUserDialog" max-width="750px">
       <v-card>
-        <v-card-title> Edit User </v-card-title>
+        <v-card-title>Edit User</v-card-title>
         <v-card-text>
-          <v-form ref="form">
-            <v-text-field outlined v-model="addUserFormData.name" label="User Name"></v-text-field>
+          <v-form ref="editUserForm">
+            <v-row>
+              <v-col cols="6">
+                <v-text-field outlined v-model="editedItem.firstname" label="First Name"></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field outlined v-model="editedItem.middlename" label="Middle Name"></v-text-field>
+              </v-col>
+            </v-row>
+            <v-text-field outlined v-model="editedItem.lastname" label="Last Name"></v-text-field>
+            <v-text-field outlined v-model="editedItem.username" label="Username"></v-text-field>
+            <v-text-field outlined v-model="editedItem.email" label="Email"></v-text-field>
+            <v-select
+              outlined
+              v-model="editedItem.role_id"
+              :items="roles.map(role => ({ id: role.id, name: role.rank }))"
+              item-value="id"
+              item-text="name"
+              label="User Type"
+            ></v-select>
+            <v-select
+              v-if="showDepartments"
+              outlined
+              v-model="editedItem.lecturer_type"
+              :items="editedItem.lecturerTypeOptions"
+              required
+            >
+              <template v-slot:label>
+                <span class="required-field">Lecturer Type</span>
+              </template>
+            </v-select>
+
+            <v-select
+              v-if="showDepartments"
+              outlined
+              v-model="editedItem.department_id"
+              multiple
+              :items="departments.map(department => ({ id: department.id, name: department.name }))"
+              item-value="id"
+              item-text="name"
+              label="Department"
+              @input="onDepartmentSelected"
+            ></v-select>
+
+            <v-select
+              v-if="selectedDepartment && showDepartments"
+              v-model="editedItem.course_ids"
+              multiple
+              :items="getFlattenedCourses(selectedDepartment)"
+              item-value="id"
+              item-text="name"
+              label="Teachable Courses"
+              outlined
+            ></v-select>
+            <v-text-field outlined v-model="editedItem.address" label="Residential Address"></v-text-field>
+            <v-text-field outlined v-model="editedItem.phonenumber" label="Phone Number"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitupdateUserForm">Add</v-btn>
-          <v-btn color="secondary" @click="cancelAdd">Cancel</v-btn>
+          <v-btn color="primary" @click="submitupdateUserForm">Save Changes</v-btn>
+          <v-btn color="secondary" @click="editUserDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -214,6 +257,22 @@ export default {
         email: '',
         department_id: '',
         course_ids: [],
+      },
+
+      editedItem: {
+        firstname: '',
+        middlename: '',
+        lastname: '',
+        username: '',
+        email: '',
+        role_id: '',
+        lecturer_type: '',
+        lecturerTypeOptions: ['Fulltime', 'Part-time'],
+        department_id: '',
+        course_ids: [],
+        address: '',
+        phonenumber: '',
+        // Add other properties as needed
       },
 
       // edit User
@@ -317,7 +376,7 @@ export default {
 
     submitupdateUserForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/user/${this.editedItem.id}`, this.editedItem).then(response => {
+      axios.put(`/api/update-user/${this.editedItem.id}`, this.editedItem).then(response => {
         // show a success notification
         this.$toast.success('users information has been updated.')
         // refresh the data table
@@ -439,6 +498,7 @@ export default {
         })
       }
     },
+
     showAddUserDialog() {
       this.addUserDialog = true
     },

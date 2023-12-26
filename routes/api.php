@@ -58,7 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/update-password/{id}', [UserController::class, 'updatePassword']);
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::post('/upload-photo', [ProfileController::class, 'uploadPhoto']);
-    Route::put('/update-user/{id}', [UserController::class, 'update']);
+    // Route::put('/update-user/{id}', [UserController::class, 'update']);
+    Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
     // move it to middleware 
     Route::get('/view-semesters', [SemesterController::class, 'index']);
@@ -156,8 +157,9 @@ Route::middleware('auth:sanctum')->group(function () {
         /////////////////// users controller ////////////
         Route::post('/add-user', [UserController::class, 'store']);
         Route::get('/view-users', [UserController::class, 'index']);
-        Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
-        Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
+        // Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
+        Route::put('/update-user/{id}', [UserController::class, 'update']);
+        // Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
@@ -210,6 +212,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-agents', [AdmissionCodeLocationController::class, 'agents']);
 
         Route::post('/add-agent', [AdmissionCodeLocationController::class, 'addAgent']);
+        Route::post('/update-agent/{id}', [AdmissionCodeLocationController::class, 'updateAgent']);
 
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
         Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
@@ -229,7 +232,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware(['student-finance-registrar-admin'])->group(function () {
-
+        Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
+        Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::get('/view-departments', [DepartmentController::class, 'index']);
         Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);

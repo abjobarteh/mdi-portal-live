@@ -28,7 +28,7 @@ const routes = [
         else if (userRole === 3) {
           next('/lecturer-dashboard'); // redirect to registrar dashboard for other roles
         } else if (userRole === 6) {
-          next('/view-admission-codes-locations'); // redirect to registrar dashboard for other roles
+          next('/password-reset'); // redirect to registrar dashboard for other roles
         }
       }
     }
@@ -435,6 +435,17 @@ const routes = [
   },
 
   {
+    path: '/password-reset',
+    name: 'password-reset',
+    component: () => import('@/views/Finance/ResetPassword.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [6],
+    }
+
+  },
+
+  {
     path: '/view-agents',
     name: 'view-agents',
     component: () => import('@/views/Finance/ViewAgents.vue'),
@@ -543,8 +554,8 @@ router.beforeEach(async (to, from, next) => {
       next('/student'); // redirect to student dashboard for role 4
     } else if (userRole === 5) {
       next('/finance-dashboard'); // redirect to registrar for role 2
-    } else if (userRole == 6) {
-      next('/view-admission-codes-locations')
+    } else if (userRole === 6) {
+      next('/password-reset')
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

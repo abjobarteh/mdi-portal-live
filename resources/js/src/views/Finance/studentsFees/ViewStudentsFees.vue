@@ -233,7 +233,7 @@
         </v-tab-item>
       </v-tabs>
     </v-dialog>
-    <v-dialog v-model="addSponsorDialog" max-width="400">
+    <v-dialog v-model="addSponsorDialog" max-width="500">
       <v-card>
         <v-card-title>Scholarship Information</v-card-title>
         <v-card-text>
@@ -243,6 +243,11 @@
             label="Scholarship Provider"
           ></v-text-field>
           <v-text-field outlined v-model="scholarshipFormData.scholarshipName" label="Scholarship Name"></v-text-field>
+          <v-text-field
+            outlined
+            v-model="scholarshipFormData.scholarship_amount"
+            label="Scholarship Amount"
+          ></v-text-field>
           <v-row>
             <v-col cols="6">
               <v-text-field type="month" v-model="scholarshipFormData.startDate" label="Start Date"></v-text-field>
@@ -251,6 +256,7 @@
               <v-text-field type="month" v-model="scholarshipFormData.endDate" label="End Date"></v-text-field>
             </v-col>
           </v-row>
+
           <v-file-input
             v-model="scholarshipFormData.uploadedFile"
             label="Upload File (Optional)"
@@ -313,6 +319,7 @@ export default {
         scholarshipName: '',
         startDate: '',
         endDate: '',
+        scholarship_amount: '',
       },
       // student info dialog
       paymentDialog: false,
@@ -429,6 +436,7 @@ export default {
       formData.append('startDate', this.scholarshipFormData.startDate)
       formData.append('endDate', this.scholarshipFormData.endDate)
       formData.append('student_id', this.student_id)
+      formData.append('scholarship_amount', this.scholarshipFormData.scholarship_amount)
 
       // Append file data if available
       if (this.scholarshipFormData.uploadedFile) {

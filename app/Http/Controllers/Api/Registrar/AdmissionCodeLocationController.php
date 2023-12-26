@@ -28,6 +28,9 @@ class AdmissionCodeLocationController extends Controller
         if (auth()->user()->role_id == 6) {
 
             $admissionCodeLocations = AdmissionCodeLocation::where('user_id', auth()->user()->id)->with(['admissionCodes', 'semester.session'])->paginate(13);
+            foreach ($admissionCodeLocations as $acl) {
+                $acl['totalAmountSold'] = $acl['price'] * $acl['total_sold'];
+            }
         } else {
             $admissionCodeLocations = AdmissionCodeLocation::with(['admissionCodes', 'semester.session'])->paginate(13);
             foreach ($admissionCodeLocations as $acl) {
@@ -143,6 +146,43 @@ class AdmissionCodeLocationController extends Controller
             DB::rollBack();
 
             // Return an error response
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateAgent(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'email' => 'required|email',
+            'address' => 'required',
+            'phonenumber' => ['required', 'regex:/^[2-7,9]\d{6}$/'],
+        ]);
+
+        try {
+            $user = User::where('id', $id)->first();
+
+            if (!$user) {
+                return response()->json(['message' => 'User not found.'], 404);
+            }
+
+            $user->fill([
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+                'address' => $validatedData['address'],
+                'phonenumber' => $validatedData['phonenumber'],
+            ]);
+
+
+            $user->save();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . ' has updated a user');
+
+            return response()->json(['message' => 'User updated successfully.']);
+        } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }

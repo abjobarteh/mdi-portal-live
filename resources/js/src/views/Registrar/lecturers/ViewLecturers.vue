@@ -23,7 +23,7 @@
           >
             <template v-slot:[`item.action`]="{ item }">
               <v-btn @click="openLecturerSemesterCoursesPopup(item)">View Courses</v-btn>
-              <v-btn small color="primary" @click="editlecturer(item)">Edit</v-btn>
+              <!-- <v-btn small color="primary" @click="editlecturer(item)">Edit</v-btn> -->
               <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
             </template>
           </v-data-table>
@@ -32,7 +32,7 @@
       </v-card>
     </v-container>
 
-    <v-dialog v-model="editLecturerDialog" max-width="500px">
+    <!-- <v-dialog v-model="editLecturerDialog" max-width="500px">
       <v-card>
         <v-card-title> Edit lecturer </v-card-title>
         <v-card-text>
@@ -48,7 +48,7 @@
           <v-btn color="secondary" @click="cancelEdit">Cancel</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <!-- show lecturers courses dialog -->
     <v-dialog v-model="showLecturerSemesterCoursesPopup" persistent max-width="600px">
@@ -175,15 +175,15 @@ export default {
         { text: 'Lecturer Type', value: 'lecturer_type' },
         { text: 'Action', value: 'action', sortable: false },
       ],
-      editLecturerDialog: false,
-      editedIndex: -1,
-      editLecturerFormData: {
-        id: null,
-        mark_from: '',
-        mark_to: '',
-        grade: '',
-        interpretation: '',
-      },
+      // editLecturerDialog: false,
+      // editedIndex: -1,
+      // editLecturerFormData: {
+      //   id: null,
+      //   mark_from: '',
+      //   mark_to: '',
+      //   grade: '',
+      //   interpretation: '',
+      // },
       allocateCourseFormData: {
         lecturer_id: '',
         semester_courses_ids: [],
@@ -247,64 +247,64 @@ export default {
       XLSX.writeFile(workbook, 'lecturers.xlsx')
     },
 
-    editlecturer(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editLecturerFormData = Object.assign({}, item)
-      this.editLecturerDialog = true
-    },
+    // editlecturer(item) {
+    //   this.editedIndex = this.items.indexOf(item)
+    //   this.editLecturerFormData = Object.assign({}, item)
+    //   this.editLecturerDialog = true
+    // },
 
-    submitEditlecturerForm() {
-      // make a PUT request to update the lecturerSystem data
-      axios
-        .put(`/api/lecturer/${this.editLecturerFormData.id}`, this.editLecturerFormData)
-        .then(response => {
-          // show success alert
-          this.editLecturerDialog = false
-          swal
-            .fire({
-              title: 'Success!',
-              text: 'Lecturer updated successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            .then(() => {
-              this.getResults()
-            })
-        })
-        .catch(error => {
-          // show error alert
-          swal.fire({
-            title: 'Error!',
-            text: 'Failed to update grade.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          })
-        })
-      // hide the dialog
-      this.editLecturerDialog = false
-      // clear the edited item
-      this.editLecturerFormData = {
-        id: null,
-        mark_from: '',
-        mark_to: '',
-        grade: '',
-        interpretation: '',
-      }
-      this.editedIndex = -1
-    },
-    cancelEdit() {
-      // hide the editLecturerDialog
-      this.editLecturerDialog = false
-      // clear the edited item
-      this.editLecturerFormData = {
-        id: null,
-        mark_from: '',
-        mark_to: '',
-        grade: '',
-        interpretation: '',
-      }
-      this.editedIndex = -1
-    },
+    // submitEditlecturerForm() {
+    //   // make a PUT request to update the lecturerSystem data
+    //   axios
+    //     .put(`/api/lecturer/${this.editLecturerFormData.id}`, this.editLecturerFormData)
+    //     .then(response => {
+    //       // show success alert
+    //       this.editLecturerDialog = false
+    //       swal
+    //         .fire({
+    //           title: 'Success!',
+    //           text: 'Lecturer updated successfully.',
+    //           icon: 'success',
+    //           confirmButtonText: 'OK',
+    //         })
+    //         .then(() => {
+    //           this.getResults()
+    //         })
+    //     })
+    //     .catch(error => {
+    //       // show error alert
+    //       swal.fire({
+    //         title: 'Error!',
+    //         text: 'Failed to update grade.',
+    //         icon: 'error',
+    //         confirmButtonText: 'OK',
+    //       })
+    //     })
+    //   // hide the dialog
+    //   this.editLecturerDialog = false
+    //   // clear the edited item
+    //   this.editLecturerFormData = {
+    //     id: null,
+    //     mark_from: '',
+    //     mark_to: '',
+    //     grade: '',
+    //     interpretation: '',
+    //   }
+    //   this.editedIndex = -1
+    // },
+    // cancelEdit() {
+    //   // hide the editLecturerDialog
+    //   this.editLecturerDialog = false
+    //   // clear the edited item
+    //   this.editLecturerFormData = {
+    //     id: null,
+    //     mark_from: '',
+    //     mark_to: '',
+    //     grade: '',
+    //     interpretation: '',
+    //   }
+    //   this.editedIndex = -1
+    // },
 
     deleteLecturer(item) {
       // perform delete action on item

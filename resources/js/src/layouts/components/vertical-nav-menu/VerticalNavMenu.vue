@@ -53,6 +53,15 @@
       ></nav-menu-link>
 
       <nav-menu-link
+        v-if="
+          currentUser &&
+          (currentUser.role_id == '1' ||
+            currentUser.role_id == '2' ||
+            currentUser.role_id == '3' ||
+            currentUser.role_id == '4' ||
+            currentUser.role_id == '5' ||
+            (currentUser.role_id == '6' && userInfo.password_reset == 1))
+        "
         title="Account Settings"
         :to="{ name: 'pages-account-settings' }"
         :icon="icons.mdiAccountCogOutline"
@@ -91,9 +100,22 @@
         <nav-menu-link title="Logs" :to="{ name: 'view-activities' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-link
-        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '6')"
+        v-if="currentUser && currentUser.role_id == '5'"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '6' && userInfo.password_reset == 1"
+        title="Admission Codes"
+        :to="{ name: 'view-admission-codes-locations' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '6' && userInfo.password_reset == 0"
+        title="Reset Password"
+        :to="{ name: 'password-reset' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
@@ -136,13 +158,13 @@
       </nav-menu-group>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '4' && studentInfo.is_applicant == 0"
+        v-if="currentUser && currentUser.role_id == '4' && userInfo.is_applicant == 0"
         title="Student"
         :to="{ name: 'student' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '4' && studentInfo.is_applicant == 1"
+        v-if="currentUser && currentUser.role_id == '4' && userInfo.is_applicant == 1"
         title="Applicant"
         :to="{ name: 'student' }"
         :icon="icons.mdiAlphaTBoxOutline"
@@ -224,7 +246,7 @@ export default {
   },
   data() {
     return {
-      studentInfo: '',
+      userInfo: '',
     }
   },
   components: {
@@ -259,10 +281,10 @@ export default {
 
   watch: {
     getUserProfile: function () {
-      this.studentInfo = this.getUserProfile
-      console.log(this.studentInfo)
-      this.education = this.studentInfo.education
-      this.certificates = this.studentInfo.certificates
+      this.userInfo = this.getUserProfile
+      console.log('here', this.userInfo)
+      this.education = this.userInfo.education
+      this.certificates = this.userInfo.certificates
     },
   },
 

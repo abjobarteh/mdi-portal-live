@@ -152,13 +152,24 @@ class StudentPaymentController extends Controller
      */
     public function storeStudentSponsorship(Request $request)
     {
+        // make the file nullable
         $validatedData = $request->validate([
             'student_id' => 'required|max:255',
             'scholarshipProvider' => 'required|max:255',
             'scholarshipName' => 'required|max:255',
             'startDate' => 'required|max:255',
             'endDate' => 'required|max:255',
+            'scholarship_amount' => 'required|max:255',
         ]);
+
+
+        $student = Student::where('id', $request->get('student_id'))->first();
+        $departmentFee = Program::where('department_id', $student->department_id)->first();
+
+        if ($validatedData['scholarship_amount'] != $departmentFee['per_semester_fee'] && ($validatedData['scholarship_amount'] % $departmentFee['per_semester_fee'] != 0)) {
+            return response()->json(['message' => 'Scholarship should be (' . $departmentFee->fee . ') or  divisible by (' . $departmentFee['per_semester_fee'] . ')'], 422);
+        }
+
 
         // Handle file upload
         $uploadedFile = $request->file('uploadedFile');
@@ -176,21 +187,21 @@ class StudentPaymentController extends Controller
             'start_date' => $validatedData['startDate'],
             'end_date' => $validatedData['endDate'],
             'scholarship_file' => $filePath, // Update column name as needed
+            'scholarship_amount' => $validatedData['scholarship_amount'],
 
         ]);
 
-        $student = Student::where('id', $request->get('student_id'))->update([
+        Student::where('id', $request->get('student_id'))->update([
             'is_sponsored' => 1,
         ]);
 
-        $student = Student::where('id', $request->get('student_id'))->first();
 
-        $departmentFee = Program::where('department_id', $student->department_id)->value('fee');
+        // $departmentFee = Program::where('department_id', $student->department_id)->value('fee');
 
         $student->update([
             'remaining' => $student->remaining !== null
-                ? $student->remaining + $departmentFee
-                : $departmentFee,
+                ? $student->remaining + $validatedData['scholarship_amount']
+                : $validatedData['scholarship_amount'],
         ]);
 
 
