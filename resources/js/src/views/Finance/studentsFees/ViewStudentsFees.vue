@@ -411,6 +411,15 @@ export default {
 
   methods: {
     scholarshipAward(award) {
+      if (award == null) {
+        swal.fire({
+          title: 'Error!',
+          text: 'No scholarship File provided by this student',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
+        return
+      }
       const fileUrl = apiBaseURL + `storage/${award}` // Adjust the path based on your storage configuration
 
       // Open a new window or tab with the file
@@ -450,7 +459,7 @@ export default {
           swal
             .fire({
               title: 'Success!',
-              text: 'Payment added successfully.',
+              text: 'scholarship added successfully.',
               icon: 'success',
               confirmButtonText: 'OK',
             })
