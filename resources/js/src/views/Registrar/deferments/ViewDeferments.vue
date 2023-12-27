@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: 'Semester', value: 'semester_id' },
+        { text: 'Semester', value: 'semester.semester_name' },
         { text: 'Reason', value: 'deferment_reason' },
         { text: 'Status', value: 'is_approved' },
       ],

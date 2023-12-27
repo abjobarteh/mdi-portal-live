@@ -14,4 +14,9 @@ class Deferment extends Model
         'deferment_reason',
         'semester_id',
     ];
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class);
+    }
 }

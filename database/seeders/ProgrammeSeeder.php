@@ -32,12 +32,12 @@ class ProgrammeSeeder extends Seeder
             'department_id' => 3,
             'program_duration_id' => 1,
         ])->create([
-            'name' => 'NATIONAL DIPLOMA IN MARKETING AND SALES MANAGEMENT',
+            'name' => 'HIGHER NATIONAL DIPLOMA IN BANKING & FINANCE',
             'program_abbreviation' => 'HND',
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 5,
+            'department_id' => 3,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN DIPLOMACY & INTERNATIONAL RELATIONS',
@@ -64,12 +64,20 @@ class ProgrammeSeeder extends Seeder
             'department_id' => 2,
             'program_duration_id' => 1,
         ])->create([
-            'name' => 'NATION DIPLOMA IN MANAGEMENT STUDIES',
+            'name' => 'NATIONAL DIPLOMA IN MANAGEMENT STUDIES',
             'program_abbreviation' => 'HND',
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
             'department_id' => 6,
+            'program_duration_id' => 1,
+        ])->create([
+            'name' => 'POST GRADUATE IN BANKING & FINANCE',
+            'program_abbreviation' => 'HND',
+            'fee' => 40500,
+            'per_semester_fee' => 10125,
+
+            'department_id' => 3,
             'program_duration_id' => 1,
         ]);
     }

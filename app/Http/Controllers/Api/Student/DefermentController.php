@@ -40,7 +40,7 @@ class DefermentController extends Controller
 
     public function index(Request $request)
     {
-        $deferments = Deferment::where('student_id', Student::where('user_id', auth()->user()->id)->value('id'))->paginate(13);
+        $deferments = Deferment::with('semester')->where('student_id', Student::where('user_id', auth()->user()->id)->value('id'))->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $deferments

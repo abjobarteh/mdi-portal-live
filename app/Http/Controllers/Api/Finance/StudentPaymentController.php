@@ -121,7 +121,7 @@ class StudentPaymentController extends Controller
 
         $groupedPayments = $studentPayments->groupBy(function ($payment) {
             $semester = $payment->semester;
-            return $semester->semester_name . ' - ' . $semester->session->session_name;
+            return $semester->semester_name . ' - ' . $semester->session->session_start;
         });
 
         $formattedPayments = [];
