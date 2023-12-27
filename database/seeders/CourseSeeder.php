@@ -541,61 +541,509 @@ class CourseSeeder extends Seeder
             'course_name' => 'Total Quality Management',
             'program_id' => 3,
         ])->create([
-            'course_code' => 'RMBI',
-            'course_name' => 'Risk Management In Banking & Insurance',
+            'course_code' => 'IMGT',
+            'course_name' => 'Intro-To Management',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'ISTAT',
+            'course_name' => 'Intro. to Statistics',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'IIT',
+            'course_name' => 'Intro. to IT',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'PME',
+            'course_name' => 'Principles of Micro Economics',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'ENG1',
+            'course_name' => 'English-1',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'BGC',
+            'course_name' => 'Basic Gender Concepts',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'PPM',
+            'course_name' => 'PPM',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'BA',
+            'course_name' => 'Basic Acct',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'MKT',
+            'course_name' => 'Marketing & Management',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'QM',
+            'course_name' => 'Q M',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'PME2',
+            'course_name' => 'Principle Of Macro Economics',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'ENG2',
+            'course_name' => 'English 2',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'PM',
+            'course_name' => 'Performance Management',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'OB',
+            'course_name' => 'OB',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'IHRM',
+            'course_name' => 'Intro-To HRM',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'MC',
+            'course_name' => 'Managerial Communication',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'ETHICS',
+            'course_name' => 'Ethics',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'RM',
+            'course_name' => 'Research Methodology',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'IPA',
+            'course_name' => 'Intro. To Public Admin',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'CG',
+            'course_name' => 'Corporate Governance',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'IE',
+            'course_name' => 'Intro. To Entrepr',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'PPM',
+            'course_name' => 'Project Planning & Mgt',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'ALAW',
+            'course_name' => 'Admin-Law',
+            'program_id' => 7,
+        ])->create([
+            'course_code' => 'IMGT',
+            'course_name' => 'Intro. To Mgt',
             'program_id' => 9,
         ])->create([
-            'course_code' => 'MIS',
-            'course_name' => 'Management Information Systems',
+            'course_code' => 'ISTAT',
+            'course_name' => 'Intro. To Statistics',
             'program_id' => 9,
+        ])->create([
+            'course_code' => 'IIT',
+            'course_name' => 'Intro. To IT',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'PME',
+            'course_name' => 'Principles of Micro Economics',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'ENG1',
+            'course_name' => 'English-1',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'BGC',
+            'course_name' => 'Basic Gender Concepts',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'PPM',
+            'course_name' => 'PPM',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'MKT',
+            'course_name' => 'Marketing',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'MGT',
+            'course_name' => 'Mgt',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'ENG2',
+            'course_name' => 'English-2',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'BA',
+            'course_name' => 'Basic Accounting',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'PME2',
+            'course_name' => 'Principles of Macro Economics',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'QM',
+            'course_name' => 'QM',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'PM',
+            'course_name' => 'Performance Mgt',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'OB',
+            'course_name' => 'OB',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'ER',
+            'course_name' => 'Employee Resourcing',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'HRM1',
+            'course_name' => 'HRM Models',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'IHRM',
+            'course_name' => 'Intro-To HRM',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'MC',
+            'course_name' => 'Managerial Communication',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'OHS',
+            'course_name' => 'Occupational Health & Safety',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'EFHRM',
+            'course_name' => 'English For HRM',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'HRM2',
+            'course_name' => 'HRM',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'SHRM',
+            'course_name' => 'Strategic HRM',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'LAW',
+            'course_name' => 'Labour Law',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'HRIS',
+            'course_name' => 'HRIS',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'APR',
+            'course_name' => 'Analysis of Performance Requirements',
+            'program_id' => 9,
+        ])->create([
+            'course_code' => 'SMGT',
+            'course_name' => 'Strategic MGT',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'IBM',
+            'course_name' => 'International Business Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'SBIM',
+            'course_name' => 'Small Business Improvement',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'LM',
+            'course_name' => 'Leadership & Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'PFE',
+            'course_name' => 'Public Finance & Economics',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'MIS',
+            'course_name' => 'MIS',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'CM',
+            'course_name' => 'Change Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'TAX',
+            'course_name' => 'Taxation',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'PRTM',
+            'course_name' => 'People Resource & Talent Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'OHS',
+            'course_name' => 'Occupational Health & Safety',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'MT',
+            'course_name' => 'Mgt Theory',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'PA',
+            'course_name' => 'Policy Analysis',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'AUD',
+            'course_name' => 'Auditing',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'FM',
+            'course_name' => 'Financial Management',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'PM',
+            'course_name' => 'Promotion & Marketing Communication',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'ED',
+            'course_name' => 'Entrepreneurship Development',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'TQM',
+            'course_name' => 'Total Quality Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'OOM',
+            'course_name' => 'Office Organization and Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'DA',
+            'course_name' => 'Discourse Analysis',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'PDM',
+            'course_name' => 'Product Development & Mgt',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'ODDC',
+            'course_name' => 'Organisational Design, Development & Change',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'IMGT',
+            'course_name' => 'Internationat MGT',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'BLAW',
+            'course_name' => 'Business Law',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'PW',
+            'course_name' => 'Project Writing',
+            'program_id' => 10,
+        ])->create([
+            'course_code' => 'SMGT',
+            'course_name' => 'Strategic MGT',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'IBM',
+            'course_name' => 'International Business Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'SBI',
+            'course_name' => 'Small Business Improvement',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'LM',
+            'course_name' => 'Leadership & Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'PF&E',
+            'course_name' => 'Public Finance & Economics',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'MIS',
+            'course_name' => 'MIS',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'CMGT',
+            'course_name' => 'Change Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'TAX',
+            'course_name' => 'Taxation',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'PRTM',
+            'course_name' => 'People Resource & Talent Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'OH&S',
+            'course_name' => 'Occupational Health &Safety',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'MT',
+            'course_name' => 'Mgt Theory',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'POL',
+            'course_name' => 'Policy Analysis',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'AUD',
+            'course_name' => 'Auditing',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'FM',
+            'course_name' => 'Financial Management',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'P&M',
+            'course_name' => 'Promotion & Marketing',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'COM',
+            'course_name' => 'Communication',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'ED',
+            'course_name' => 'Entrepreneurship Development',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'TQM',
+            'course_name' => 'Total Quality Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'OO&M',
+            'course_name' => 'Office Organization and Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'DA',
+            'course_name' => 'Discourse Analysis',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'PD&M',
+            'course_name' => 'Product Development & Mgt',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'ODD&C',
+            'course_name' => 'Organisational Design, Development & Change',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'IMGT',
+            'course_name' => 'InternationatMGT',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'BL',
+            'course_name' => 'Business Law',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'PW',
+            'course_name' => 'Project Writing',
+            'program_id' => 11,
+        ])->create([
+            'course_code' => 'SFM',
+            'course_name' => 'Strategic Financial Mgt',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'EDP',
+            'course_name' => 'Economic Development Planning',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'DLG',
+            'course_name' => 'Decentralization &Local Governance',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'RIC',
+            'course_name' => 'Regional integration& Cooperation',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'PSC',
+            'course_name' => 'Public Sector Communication',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'PSAF',
+            'course_name' => 'Public Sector Acc. & Finance',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'PSMG',
+            'course_name' => 'Public Sector Mgt & Governance',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'PSHRM',
+            'course_name' => 'Public Sector HRM',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'PA',
+            'course_name' => 'Policy Analysis',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'LO',
+            'course_name' => 'Leadership in Org',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'SD',
+            'course_name' => 'Sustainable Development',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'RMRM',
+            'course_name' => 'Research Methods & Research Mgt',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'FRE',
+            'course_name' => 'French',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'PSE',
+            'course_name' => 'Public Sector Enterprise',
+            'program_id' => 12,
+        ])->create([
+            'course_code' => 'RM',
+            'course_name' => 'Risk Management In Banking & Insurance',
+            'program_id' => 8,
+        ])->create([
+            'course_code' => 'MIS',
+            'course_name' => 'Management Information systems',
+            'program_id' => 8,
         ])->create([
             'course_code' => 'IBOI',
             'course_name' => 'Islamic Banking Operations & Insurance',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'BAM',
             'course_name' => 'Business Analytics for Managers',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'ABFA',
             'course_name' => 'Advance Business Finance & Analysis',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
-            'course_code' => 'FL',
+            'course_code' => 'FRE',
             'course_name' => 'French Language',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'ELL',
             'course_name' => 'Employment & Labour Law',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'APSE',
             'course_name' => 'Advanced Public Sector Economics',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
-            'course_code' => 'IVCFM',
+            'course_code' => 'IVC',
             'course_name' => 'Islamic Venture capital & Financial Markets',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
-            'course_code' => 'AFPSE',
+            'course_code' => 'APSE2',
             'course_name' => 'Advance Public Sector Economics',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'AFMIS',
             'course_name' => 'Advance Financial Markets, Institutions and Services',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
-            'course_code' => 'AIOTFM',
+            'course_code' => 'AIBTFM',
             'course_name' => 'Advance International Banking, Treasury & Forex Management',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'PGRM',
             'course_name' => 'Post Graduate Research Methods',
-            'program_id' => 9,
+            'program_id' => 8,
         ])->create([
             'course_code' => 'THESIS',
             'course_name' => 'Thesis',
-            'program_id' => 9,
+            'program_id' => 8,
         ]);
     }
 }
