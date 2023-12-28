@@ -2,7 +2,7 @@
   <v-card>
     <v-form ref="form" @submit.prevent="submit">
       <v-container style="background-color: #fefcff">
-        <v-card-title class="headline">Program Information</v-card-title>
+        <v-card-title class="headline">Course Applied For:</v-card-title>
         <v-card-text>
           <v-select
             outlined
@@ -12,6 +12,15 @@
             item-text="name"
             label="Program"
           ></v-select>
+          <!-- <v-select
+            outlined
+            v-model="addApplicantProgramFormData.course_level"
+            :items="addApplicantProgramFormData.courseLevelOptions"
+            required
+            ><template v-slot:label>
+              <span class="required-field">Course Level</span>
+            </template></v-select
+          > -->
           <v-card-actions class="d-flex justify-center">
             <v-btn color="primary" class="col-12" @click="submit()">Save</v-btn>
           </v-card-actions>
@@ -32,6 +41,15 @@ export default {
       educationFormData: {},
       addApplicantProgramFormData: {
         program_id: '',
+        course_level: '',
+        courseLevelOptions: [
+          'Diploma',
+          'Higher National Diploma',
+          'Diploma 1 or 2',
+          'Advanced Diploma',
+          'Graduate Diploma',
+          'Postgraduate Diploma',
+        ],
       },
     }
   },

@@ -490,7 +490,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: 'Failed to add admissionCodeLocations.',
+              text: error.response.data.message,
               icon: 'error',
               confirmButtonText: 'OK',
             })
@@ -498,7 +498,7 @@ export default {
       } else {
         swal.fire({
           title: 'Error!',
-          text: 'Failed to add admissionCodeLocations.',
+          text: error.response.data.message,
           icon: 'error',
           confirmButtonText: 'OK',
         })
@@ -667,7 +667,7 @@ export default {
           // show error alert
           swal.fire({
             title: 'Error!',
-            text: 'Failed to add admissionCodeLocations.',
+            text: error.response.data.message,
             icon: 'error',
             confirmButtonText: 'OK',
           })

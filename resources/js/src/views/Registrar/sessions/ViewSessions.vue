@@ -91,7 +91,9 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitaddSessionForm">Add</v-btn>
+          <!-- <v-btn color="primary" @click="submitaddSessionForm">Add</v-btn> -->
+          <v-btn v-if="!loading" color="primary" @click="submitaddSessionForm">Add</v-btn>
+          <v-btn v-else disabled color="primary">wait...</v-btn>
           <v-btn color="secondary" @click="addSessionDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -141,6 +143,7 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
       sessions: [],
       headers: [
         { text: 'Session Start', value: 'session_start' },
@@ -218,10 +221,12 @@ export default {
     },
 
     submitupdateSessionnForm() {
+      this.loading = true
       // make a PUT request to update the gradingSystem data
       axios
         .put(`/api/session/${this.editSessionFormData.id}`, this.editSessionFormData)
         .then(response => {
+          this.loading = false
           // show success alert
           this.editSessionDurationDialog = false
           swal

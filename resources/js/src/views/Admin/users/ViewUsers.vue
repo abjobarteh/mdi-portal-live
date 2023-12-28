@@ -316,16 +316,14 @@ export default {
       })
     },
     onDepartmentSelected() {
-      if (this.addUserFormData.department_id) {
-        this.selectedDepartment.push(
-          this.departments.find(department => this.addUserFormData.department_id.includes(department.id)),
-        )
-      } else {
-        this.selectedDepartment = null
-      }
+      // Remove deselected departments
+      this.selectedDepartment = this.departments.filter(department =>
+        this.addUserFormData.department_id.includes(department.id),
+      )
+
       console.log('selected de', this.selectedDepartment)
 
-      this.addUserFormData.course_id = null
+      // this.addUserFormData.course_id = null
     },
     getResults() {
       axios

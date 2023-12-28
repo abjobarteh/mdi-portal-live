@@ -70,7 +70,13 @@ class SemesterController extends Controller
         }
 
         // loop through all the students where the payment_types is 1 and remaining is not 0 and update their remaining
-        $students = Student::where('payment_type',  1)->where('remaining', '>',  0)->get();
+        $students = Student::where(function ($query) {
+            $query->where('payment_type', 1)
+                ->orWhere('payment_type', 0)
+                ->orWhere('is_sponsored', 1);
+        })
+            ->where('remaining', '>', 0)
+            ->get();
         foreach ($students as $student) {
 
             $semesterFee = $student->department->programs->value('per_semester_fee');

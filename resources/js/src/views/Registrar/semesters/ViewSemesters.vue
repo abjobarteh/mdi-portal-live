@@ -96,7 +96,9 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="submitaddSemesterForm">Add</v-btn>
+          <v-btn v-if="!loading" color="primary" @click="submitaddSemesterForm">Add</v-btn>
+          <v-btn v-else disabled color="primary">wait...</v-btn>
+
           <v-btn color="secondary" @click="addSemesterDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -147,6 +149,7 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
       semesters: [],
       sessions: [],
       headers: [
@@ -297,11 +300,13 @@ export default {
 
     ////////  Adding ///////
     async submitaddSemesterForm() {
+      this.loading = true
       const result = await this.v$.value.$validate()
       if (result) {
         axios
           .post('/api/add-semester', this.addSemesterFormData)
           .then(result => {
+            this.loading = false
             // show success alert
             this.addSemesterDialog = false
             swal
@@ -357,7 +362,26 @@ export default {
   },
 }
 </script>
+\<style scoped>
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3f51b5; /* Vuetify primary color */
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
 
 
 

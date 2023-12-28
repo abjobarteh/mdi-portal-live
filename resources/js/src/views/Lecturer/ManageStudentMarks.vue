@@ -192,6 +192,8 @@ export default {
                   this.students[i - 1].exam_mark = this.jsonData[i][1]
                 }
               }
+            } else {
+              alert('Upload the correct file format')
             }
           })
           .catch(error => {

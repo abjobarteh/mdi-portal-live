@@ -77,7 +77,7 @@ class ProgrammeSeeder extends Seeder
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 3,
+            'department_id' => 7,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN HR',
@@ -85,7 +85,7 @@ class ProgrammeSeeder extends Seeder
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 3,
+            'department_id' => 8,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'HIGHER NATIONAL DIPLOMA IN MANAGEMENT',
@@ -93,7 +93,7 @@ class ProgrammeSeeder extends Seeder
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 3,
+            'department_id' => 6,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'HIGHER NATIONAL DIPLOMA IN HR',
@@ -101,7 +101,7 @@ class ProgrammeSeeder extends Seeder
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 3,
+            'department_id' => 8,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'POSTGRADUATE IN PUBLIC ADMIN',
@@ -109,7 +109,7 @@ class ProgrammeSeeder extends Seeder
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 3,
+            'department_id' => 8, // IN HR
             'program_duration_id' => 1,
         ]);
     }

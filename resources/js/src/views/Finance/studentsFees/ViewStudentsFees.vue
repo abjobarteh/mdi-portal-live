@@ -129,6 +129,7 @@
                 <template v-slot:[`item.action`]="{ item }">
                   <v-btn @click="sponsorship(item)">Sponsorship</v-btn>
                   <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
+                  <v-btn small @click="viewStudentInfo(item)">View</v-btn>
                 </template>
                 <template v-slot:[`item.fullname`]="{ item }"> {{ item.firstname + ' ' + item.lastname }} </template>
               </v-data-table>
@@ -593,7 +594,7 @@ export default {
         axios
           .post('/api/add-student-fee', this.addPaymentFormData)
           .then(result => {
-            this.addPaymentDialog = false
+            this.paymentDialog = false
             // show success alert
             ;(this.addPaymentFormData.semester_id = ''),
               swal
