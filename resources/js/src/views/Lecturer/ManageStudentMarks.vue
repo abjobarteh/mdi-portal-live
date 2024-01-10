@@ -200,7 +200,12 @@ export default {
             console.error('Error reading Excel file:', error)
           })
       } else {
-        alert('Please select a file')
+        swal.fire({
+          title: 'Error!',
+          text: 'Please select an excel file',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
       }
     },
 

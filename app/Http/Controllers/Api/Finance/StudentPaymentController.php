@@ -33,7 +33,7 @@ class StudentPaymentController extends Controller
 
         if ($request->has('sponsored')) {
             $query->where('is_sponsored', 1);
-        } else {
+        } else if ($request->has('notsponsored')) {
             $query->where('is_sponsored', 0);
         }
 

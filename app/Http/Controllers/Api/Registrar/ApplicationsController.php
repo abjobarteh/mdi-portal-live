@@ -94,8 +94,8 @@ class ApplicationsController extends Controller
         // interviewDate
         $student = Student::where('user_id', $request->get('userId'))->first();
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber()]);
-
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($request->interviewDate, $this->generateStudentNumber()));
+        $orientaionDate = Carbon::parse($request->orientationDate);
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $this->generateStudentNumber()));
 
 
         activity()
