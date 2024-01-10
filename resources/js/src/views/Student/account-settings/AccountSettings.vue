@@ -19,7 +19,8 @@
         </v-tab-item>
 
         <v-tab-item>
-          <registered-courses :courses="courses"></registered-courses>
+          <registered-courses v-if="courses.length" :courses="courses"></registered-courses>
+          <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Registered Courses</h6>
         </v-tab-item>
 
         <v-tab-item>
@@ -99,6 +100,7 @@ export default {
         this.runnings = []
         this.pageCount = 0
       })
+    this.getResults()
   },
 
   methods: {
@@ -107,6 +109,7 @@ export default {
         .post('/api/department-courses?page=' + this.page, { department_id: this.studentInfo.department_id })
         .then(response => {
           this.courses = response.data.result.data
+          console.log('courses ', courses)
           console.log('courses', this.courses[0].courses)
           this.pageCount = response.data.result.last_page
         })

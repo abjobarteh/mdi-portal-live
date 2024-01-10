@@ -34,22 +34,21 @@ class ProgrammeSeeder extends Seeder
         ])->create([
             'name' => 'HIGHER NATIONAL DIPLOMA IN BANKING & FINANCE',
             'program_abbreviation' => 'HND',
-            'fee' => 40500,
-            'per_semester_fee' => 10125,
+            'fee' => 50500,
+            'per_semester_fee' => 12625,
 
             'department_id' => 3,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN DIPLOMACY & INTERNATIONAL RELATIONS',
-            'program_abbreviation' => 'HND',
+            'program_abbreviation' => 'NDR',
             'fee' => 40500,
             'per_semester_fee' => 10125,
-
             'department_id' => 1,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN COMPUTER SCIENCE',
-            'program_abbreviation' => 'HND',
+            'program_abbreviation' => 'NDC',
             'fee' => 50500,
             'per_semester_fee' => 12625,
 
@@ -57,7 +56,7 @@ class ProgrammeSeeder extends Seeder
             'program_duration_id' => 1,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN GENDER AND DEVELOPMENT STUDIES',
-            'program_abbreviation' => 'HND',
+            'program_abbreviation' => 'NDD',
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
@@ -73,12 +72,12 @@ class ProgrammeSeeder extends Seeder
             'program_duration_id' => 1,
         ])->create([
             'name' => 'POST GRADUATE IN BANKING & FINANCE',
-            'program_abbreviation' => 'HND',
-            'fee' => 40500,
-            'per_semester_fee' => 10125,
+            'program_abbreviation' => 'PGB',
+            'fee' => 65000,
+            'per_semester_fee' => 32500,
 
             'department_id' => 7,
-            'program_duration_id' => 1,
+            'program_duration_id' => 2,
         ])->create([
             'name' => 'NATIONAL DIPLOMA IN HR',
             'program_abbreviation' => 'NDH',
@@ -90,26 +89,53 @@ class ProgrammeSeeder extends Seeder
         ])->create([
             'name' => 'HIGHER NATIONAL DIPLOMA IN MANAGEMENT',
             'program_abbreviation' => 'HND',
-            'fee' => 40500,
-            'per_semester_fee' => 10125,
+            'fee' => 50500,
+            'per_semester_fee' => 12625,
 
             'department_id' => 6,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'HIGHER NATIONAL DIPLOMA IN HR',
             'program_abbreviation' => 'HND',
-            'fee' => 40500,
-            'per_semester_fee' => 10125,
+            'fee' => 50500,
+            'per_semester_fee' => 12625,
 
-            'department_id' => 8,
+            'department_id' => 6,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'POSTGRADUATE IN PUBLIC ADMIN',
+            'program_abbreviation' => 'PGA',
+            'fee' => 60500,
+            'per_semester_fee' => 30250,
+            'department_id' => 6, // IN HR
+            'program_duration_id' => 2,
+        ])->create([
+            'name' => 'HIGHER NATIONAL DIPLOMA IN DIPLOMACY & INTERNATIONAL RELATIONS',
             'program_abbreviation' => 'HND',
+            'fee' => 50500,
+            'per_semester_fee' => 12625,
+            'department_id' => 1,
+            'program_duration_id' => 1,
+        ])->create([
+            'name' => 'Post Graduate in Diplomacy and International Relations',
+            'program_abbreviation' => 'PGD',
+            'fee' => 65000,
+            'per_semester_fee' => 32500,
+            'department_id' => 1,
+            'program_duration_id' => 1,
+        ])->create([
+            'name' => 'National Diploma in peace and conflict studies',
+            'program_abbreviation' => 'NDP',
             'fee' => 40500,
             'per_semester_fee' => 10125,
-
-            'department_id' => 8, // IN HR
+            'department_id' => 1,
+            'program_duration_id' => 1,
+        ])->create([
+            'name' => 'Higher national Diploma in Peace and Conflict Studies',
+            'program_abbreviation' => 'HDP',
+            'fee' => 50500,
+            'per_semester_fee' => 12625,
+            'department_id' => 1,
             'program_duration_id' => 1,
         ]);
     }

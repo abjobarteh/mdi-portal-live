@@ -28,9 +28,7 @@ class DepartmentSeeder extends Seeder
         ])->create([
             'name' => 'DEPARTMENT OF GENERAL MANAGEMENT & POLICY ANALYSIS',
         ])->create([
-            'name' => 'DEPARTMENT OF FINANCIAL MANAGEMENT',
-        ])->create([
-            'name' => 'DEPARTMENT OF HUMAN RESOURCES',
+            'name' => 'DEPARTMENT OF FINANCIAL MANAGEMENT AND ACCOUNTING',
         ]);
     }
 }

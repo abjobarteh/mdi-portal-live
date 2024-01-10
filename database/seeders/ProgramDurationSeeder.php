@@ -18,6 +18,9 @@ class ProgramDurationSeeder extends Seeder
         ProgramDuration::create([
             'duration' => '2',
             'description' => 'years',
-        ]);
+        ])->create([
+            'duration' => '1',
+            'description' => 'year',
+        ]);;
     }
 }

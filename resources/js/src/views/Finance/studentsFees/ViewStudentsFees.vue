@@ -337,7 +337,7 @@ export default {
       selectedItem: null,
       items: [
         // Your dropdown items here
-        { text: 'Mat Number', value: '1' },
+        { text: 'Student Number', value: '1' },
         { text: 'Email', value: '2' },
       ],
       selectedSemesterName: '',
@@ -350,7 +350,7 @@ export default {
       studentDetails: '',
       headers: [
         { text: 'FullName', value: 'fullname' },
-        { text: 'Mat Number', value: 'mat_number' },
+        { text: 'Student Number', value: 'mat_number' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },

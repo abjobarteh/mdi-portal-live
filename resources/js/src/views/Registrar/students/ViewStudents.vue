@@ -79,7 +79,7 @@ export default {
       selectedItem: null,
       items: [
         // Your dropdown items here
-        { text: 'Mat Number', value: '1' },
+        { text: 'Student Number', value: '1' },
         { text: 'Email', value: '2' },
       ],
       students: [],
@@ -88,7 +88,7 @@ export default {
         { text: 'Firstname', value: 'firstname' },
         { text: 'Lastname', value: 'lastname' },
         { text: 'username', value: 'username' },
-        { text: 'Mat Number', value: 'mat_number' },
+        { text: 'Student Number', value: 'mat_number' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },

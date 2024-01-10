@@ -136,198 +136,85 @@ class CourseSeeder extends Seeder
             'course_name' => 'Financial Management',
             'program_id' => 1
         ])->create([
-            'course_code' => 'CPS 121',
-            'course_name' => 'Introduction to Computer Science',
+            'course_code' => 'IM 101',
+            'course_name' => 'Introduction to Management',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 122',
-            'course_name' => 'IT Hardware & Systems',
+            'course_code' => 'ICT 101',
+            'course_name' => 'Introduction to ICT',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 123',
-            'course_name' => 'Computer Security',
-            'program_id' => 5
-        ])->create([
-            'course_code' => 'CPS 124',
+            'course_code' => 'PLD 101',
             'course_name' => 'Programming Logic and Design',
             'program_id' => 5
         ])->create([
-            'course_code' => 'ENG 100',
-            'course_name' => 'English 6 (Academic Writing)',
+            'course_code' => 'IGC 101',
+            'course_name' => 'Introduction to Gender Concepts',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 211',
+            'course_code' => 'ENG 101',
+            'course_name' => 'English 1 (Basic Grammar)',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'ICS 101',
+            'course_name' => 'Introduction to Computer Science',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'IHS 101',
+            'course_name' => 'IT Hardware & Systems',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'CS 101',
+            'course_name' => 'Computer Security',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'IBS 101',
+            'course_name' => 'Introduction to Basic Statistics',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'ENG 102',
+            'course_name' => 'English 2 (Academic Writing)',
+            'program_id' => 5
+        ])->create([
+            'course_code' => 'NI 101',
             'course_name' => 'Networking I',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 212',
+            'course_code' => 'DB 101',
             'course_name' => 'Database I',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 213',
+            'course_code' => 'WP 101',
             'course_name' => 'Web programming I',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 214',
+            'course_code' => 'CP 101',
             'course_name' => 'Computer programming I',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 215',
+            'course_code' => 'OS 101',
             'course_name' => 'Operating System',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 221',
+            'course_code' => 'NI 201',
             'course_name' => 'Networking II',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 222',
+            'course_code' => 'DB 201',
             'course_name' => 'Database II',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 223',
+            'course_code' => 'WP 201',
             'course_name' => 'Web programming II',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 224',
+            'course_code' => 'CP 201',
             'course_name' => 'Computer programming II',
             'program_id' => 5
         ])->create([
-            'course_code' => 'CPS 225',
-            'course_name' => 'Junior Project Writing I',
+            'course_code' => 'JP 101',
+            'course_name' => 'Junior Project',
             'program_id' => 5
-        ])->create([
-            'course_code' => 'DIR 211',
-            'course_name' => 'International Organisations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 212',
-            'course_name' => 'Introduction to International Relations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 213',
-            'course_name' => 'Introduction to Diplomacy',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 214',
-            'course_name' => 'Foreign Language (French 1)',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 215',
-            'course_name' => 'Introduction to Political Science',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 216',
-            'course_name' => 'Introduction to Peace & Conflict Studies',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 217',
-            'course_name' => 'Research Methods',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 221',
-            'course_name' => 'Foreign Language (French 2)',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 222',
-            'course_name' => 'Contemporary Issues in International Relations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 223',
-            'course_name' => 'Management Information Systems',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 224',
-            'course_name' => 'Africa and the International Systems',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 225',
-            'course_name' => 'International Law',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 226',
-            'course_name' => 'Foreign Policy Analysis',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 311',
-            'course_name' => 'Gambian Foreign Policy',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 312',
-            'course_name' => 'Culture, Values and Conflicts in War',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 313',
-            'course_name' => 'Introduction to Peace Studies',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 314',
-            'course_name' => 'International Relations and Security',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 315',
-            'course_name' => 'Research Methods',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 321',
-            'course_name' => 'Diplomacy in Negotiations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 322',
-            'course_name' => 'Leadership & Governance',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 323',
-            'course_name' => 'The UN System',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 324',
-            'course_name' => 'International Political Economy',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 325',
-            'course_name' => 'Project Work',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 411',
-            'course_name' => 'Communication: A Central Pillar in Resolution',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 412',
-            'course_name' => 'Political Islam',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 413',
-            'course_name' => 'International Political Economy',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 414',
-            'course_name' => 'Global Governance and International Organizations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 415',
-            'course_name' => 'Research Methods',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 421',
-            'course_name' => 'Ethics & Norms in International Relations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 422',
-            'course_name' => 'Nationalism & Ethnicity in International Relations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 423',
-            'course_name' => 'National Politics & International Relations',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'DIR 424',
-            'course_name' => 'Building a Harmonious World of Sustained Peace and Common Prosperity: China’s Diplomacy',
-            'program_id' => 4
-        ])->create([
-            'course_code' => 'CPS 425',
-            'course_name' => 'Diplomacy by Deception (Seminar I)
-            African Development: A Myth or Westernisation (Seminar II)y',
-            'program_id' => 4
         ])->create([
             'course_code' => 'GEN 211',
             'course_name' => 'Gender Mainstreaming ',
@@ -745,193 +632,97 @@ class CourseSeeder extends Seeder
             'course_name' => 'International Business Mgt',
             'program_id' => 10,
         ])->create([
-            'course_code' => 'SBIM',
-            'course_name' => 'Small Business Improvement',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'LM',
-            'course_name' => 'Leadership & Mgt',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'PFE',
-            'course_name' => 'Public Finance & Economics',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'MIS',
-            'course_name' => 'MIS',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'CM',
-            'course_name' => 'Change Mgt',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'TAX',
-            'course_name' => 'Taxation',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'PRTM',
-            'course_name' => 'People Resource & Talent Mgt',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'OHS',
-            'course_name' => 'Occupational Health & Safety',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'MT',
-            'course_name' => 'Mgt Theory',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'PA',
-            'course_name' => 'Policy Analysis',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'AUD',
-            'course_name' => 'Auditing',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'FM',
-            'course_name' => 'Financial Management',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'PM',
-            'course_name' => 'Promotion & Marketing Communication',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'ED',
-            'course_name' => 'Entrepreneurship Development',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'TQM',
-            'course_name' => 'Total Quality Mgt',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'OOM',
-            'course_name' => 'Office Organization and Mgt',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'DA',
-            'course_name' => 'Discourse Analysis',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'PDM',
-            'course_name' => 'Product Development & Mgt',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'ODDC',
-            'course_name' => 'Organisational Design, Development & Change',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'IMGT',
-            'course_name' => 'Internationat MGT',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'BLAW',
-            'course_name' => 'Business Law',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'PW',
-            'course_name' => 'Project Writing',
-            'program_id' => 10,
-        ])->create([
-            'course_code' => 'SMGT',
-            'course_name' => 'Strategic MGT',
-            'program_id' => 11,
-        ])->create([
-            'course_code' => 'IBM',
-            'course_name' => 'International Business Mgt',
-            'program_id' => 11,
-        ])->create([
             'course_code' => 'SBI',
             'course_name' => 'Small Business Improvement',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'LM',
             'course_name' => 'Leadership & Mgt',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'PF&E',
             'course_name' => 'Public Finance & Economics',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'MIS',
             'course_name' => 'MIS',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'CMGT',
             'course_name' => 'Change Mgt',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'TAX',
             'course_name' => 'Taxation',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'PRTM',
             'course_name' => 'People Resource & Talent Mgt',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'OH&S',
             'course_name' => 'Occupational Health &Safety',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'MT',
             'course_name' => 'Mgt Theory',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'POL',
             'course_name' => 'Policy Analysis',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'AUD',
             'course_name' => 'Auditing',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'FM',
             'course_name' => 'Financial Management',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'P&M',
             'course_name' => 'Promotion & Marketing',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'COM',
             'course_name' => 'Communication',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'ED',
             'course_name' => 'Entrepreneurship Development',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'TQM',
             'course_name' => 'Total Quality Mgt',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'OO&M',
             'course_name' => 'Office Organization and Mgt',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'DA',
             'course_name' => 'Discourse Analysis',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'PD&M',
             'course_name' => 'Product Development & Mgt',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'ODD&C',
             'course_name' => 'Organisational Design, Development & Change',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'IMGT',
             'course_name' => 'InternationatMGT',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'BL',
             'course_name' => 'Business Law',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'PW',
             'course_name' => 'Project Writing',
-            'program_id' => 11,
+            'program_id' => 10,
         ])->create([
             'course_code' => 'SFM',
             'course_name' => 'Strategic Financial Mgt',
@@ -1044,6 +835,406 @@ class CourseSeeder extends Seeder
             'course_code' => 'THESIS',
             'course_name' => 'Thesis',
             'program_id' => 8,
+        ])->create([
+            'course_code' => 'MGT 101',
+            'course_name' => 'Introduction to Management',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'GEN 101',
+            'course_name' => 'Introduction to Gender',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'ECO 101',
+            'course_name' => 'Microeconomics',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'ICT 101',
+            'course_name' => 'Introduction to Information Communication Technology (IT)',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'ENG 101',
+            'course_name' => 'English 101',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'FRE 101',
+            'course_name' => 'French 101',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'INT 101',
+            'course_name' => 'Introduction to Peace and Conflict',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'PR 101',
+            'course_name' => 'Introduction to Public Relations',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'ECO 102',
+            'course_name' => 'Macro Economics',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'POL 101',
+            'course_name' => 'Introduction to Politics',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'ENG 102',
+            'course_name' => 'English 102',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'FRE 102',
+            'course_name' => 'French 102',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'INT 102',
+            'course_name' => 'Introduction to International Relations',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'DIP 101',
+            'course_name' => 'Introduction to Diplomacy',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'IO 101',
+            'course_name' => 'Introduction to International Organizations',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'IRT 101',
+            'course_name' => 'International Relations Theories',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'FPA 101',
+            'course_name' => 'Introduction to Foreign Policy Analysis',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'RM 101',
+            'course_name' => 'Research Methods',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'ICM 101',
+            'course_name' => 'International Conflict Management',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'MD 101',
+            'course_name' => 'Modern Diplomacy',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'CSS 101',
+            'course_name' => 'Contemporary Security Studies',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'AI 101',
+            'course_name' => 'Africa and the International System',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'GFP 101',
+            'course_name' => 'Gambia Foreign Policy',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'IL 101',
+            'course_name' => 'International Law',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'RW 101',
+            'course_name' => 'Research Work',
+            'program_id' => 4
+        ])->create([
+            'course_code' => 'UNS 101',
+            'course_name' => 'UN System',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'DN 101',
+            'course_name' => 'Diplomatic Negotiation',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'LG 101',
+            'course_name' => 'Leadership and Governance',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'CIR 101',
+            'course_name' => 'Contemporary Issues in International Relations',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'IPE 101',
+            'course_name' => 'International Political Economy',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'ENIR 101',
+            'course_name' => 'Ethics and Norms in International Relations',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'CDN 101',
+            'course_name' => 'Communication as Central Pillar in Diplomatic Negotiation',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'RIR 101',
+            'course_name' => 'Religion in International Relations',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'DPG 101',
+            'course_name' => 'Diplomatic Protocol and Protocol Guide',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'GGIO 101',
+            'course_name' => 'Global Governance and International Organization',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'TIR 101',
+            'course_name' => 'Theories of International Relations',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'FPGP 101',
+            'course_name' => 'Foreign Policy of Great Powers',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'RNS 101',
+            'course_name' => 'Rise of Nation States',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'RGT 101',
+            'course_name' => 'Regional and Global Terrorism',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'AFS 101',
+            'course_name' => 'African Studies',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'CA 101',
+            'course_name' => 'Conflict Analysis',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'RC 101',
+            'course_name' => 'Research Clinic',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'SEM1 101',
+            'course_name' => 'Seminar 1',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'MIS 101',
+            'course_name' => 'Management Information System (MIS)',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'SEM2 101',
+            'course_name' => 'Seminar 2',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'RW2 101',
+            'course_name' => 'Research work',
+            'program_id' => 13
+        ])->create([
+            'course_code' => 'AFS 201',
+            'course_name' => 'African Studies',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'IDTP 201',
+            'course_name' => 'Introduction to Diplomacy, Theories and Practice',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'IHL 201',
+            'course_name' => 'International Humanitarian Law',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'FPGP 201',
+            'course_name' => 'Foreign Policy of Great Powers',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'TIR 201',
+            'course_name' => 'Theories of International Relations',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'HRGA 201',
+            'course_name' => 'Human Rights in Global Affairs',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'FREN 201',
+            'course_name' => 'French',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'PD 201',
+            'course_name' => 'Public Diplomacy',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'ICM 201',
+            'course_name' => 'International Conflict Management',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'THESIS 201',
+            'course_name' => 'Thesis',
+            'program_id' => 14
+        ])->create([
+            'course_code' => 'MGT 101',
+            'course_name' => 'Introduction to Management',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'GEN 101',
+            'course_name' => 'Introduction to Gender',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ECO 101',
+            'course_name' => 'Microeconomics',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ICT 101',
+            'course_name' => 'Introduction to Information Communication Technology (IT)',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ENG 101',
+            'course_name' => 'English 101',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'FRE 101',
+            'course_name' => 'French 101',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'PC 101',
+            'course_name' => 'Introduction to Peace and Conflict',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'PR 101',
+            'course_name' => 'Introduction to Public Relations',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ECO 102',
+            'course_name' => 'Macro Economics',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'POL 101',
+            'course_name' => 'Introduction to Politics',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ENG 102',
+            'course_name' => 'English 102',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'FRE 102',
+            'course_name' => 'French 102',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'CA 101',
+            'course_name' => 'Conflict Analysis',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'EWCP 101',
+            'course_name' => 'Early Warnings and Conflict Prevention',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'IO 101',
+            'course_name' => 'Introduction to International Organizations',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ID 101',
+            'course_name' => 'Introduction to Diplomacy',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'RM 101',
+            'course_name' => 'Research Methods',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'IR 101',
+            'course_name' => 'Introduction to International Relations',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'IHR 101',
+            'course_name' => 'Introduction to Humanitarian and Refugee Studies',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'PKO 101',
+            'course_name' => 'Peacekeeping Operations',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'CSS 101',
+            'course_name' => 'Contemporary Security Studies',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'ICM 101',
+            'course_name' => 'International Conflict Management',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'CRT 101',
+            'course_name' => 'Conflict Resolution (Theory and Practice)',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'RW 101',
+            'course_name' => 'Research Work',
+            'program_id' => 15
+        ])->create([
+            'course_code' => 'UNS 101',
+            'course_name' => 'UN System',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'PCR 101',
+            'course_name' => 'Post Conflict Reconciliation',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'ICM 102',
+            'course_name' => 'International Conflict Management',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'DLP 101',
+            'course_name' => 'Diplomacy, Law and Protocol Engagement',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'IHL 101',
+            'course_name' => 'International Humanitarian Law and Human Rights',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'CRS 101',
+            'course_name' => 'Conflict Resolution Strategies',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'CCF 101',
+            'course_name' => 'Conflict Causative Factors and Theories',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'GP 101',
+            'course_name' => 'Gender and Peacekeeping',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'RP 101',
+            'course_name' => 'Religion in Peace and Conflict',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'CAF 101',
+            'course_name' => 'Conflict Analytical Frame',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'IR 101',
+            'course_name' => 'Introduction to International Relations',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'RNS 101',
+            'course_name' => 'Rise of Nation States',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'AS 101',
+            'course_name' => 'African Studies',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'RGT 101',
+            'course_name' => 'Regional and Global Terrorism',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'DN 101',
+            'course_name' => 'Diplomatic Negotiation',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'RC 101',
+            'course_name' => 'Research Clinic',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'SEM 101',
+            'course_name' => 'Seminar 1',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'MIS 101',
+            'course_name' => 'Management Information System (MIS)',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'SEM 102',
+            'course_name' => 'Seminar 2',
+            'program_id' => 16
+        ])->create([
+            'course_code' => 'RW 101',
+            'course_name' => 'Research Work',
+            'program_id' => 16
         ]);
     }
 }

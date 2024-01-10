@@ -103,7 +103,7 @@ export default {
       students: [],
       headers2: [
         { text: 'FullName', value: 'name' },
-        { text: 'Mat Number', value: 'mat_number' },
+        { text: 'Student Number', value: 'mat_number' },
         { text: 'Phonenumber', value: 'phonenumber' },
       ],
       page: 1,
