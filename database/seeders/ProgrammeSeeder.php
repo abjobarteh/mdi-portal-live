@@ -84,7 +84,7 @@ class ProgrammeSeeder extends Seeder
             'fee' => 40500,
             'per_semester_fee' => 10125,
 
-            'department_id' => 8,
+            'department_id' => 6,
             'program_duration_id' => 1,
         ])->create([
             'name' => 'HIGHER NATIONAL DIPLOMA IN MANAGEMENT',
