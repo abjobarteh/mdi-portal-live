@@ -312,6 +312,7 @@ export default {
   components: {},
   data() {
     return {
+      userInfo: '',
       showSponsorshipDetails: false,
       addSponsorDialog: false,
       student_id: '',
@@ -407,6 +408,10 @@ export default {
       const today = new Date()
       const options = { year: 'numeric', month: 'long', day: 'numeric' }
       return today.toLocaleDateString(undefined, options)
+    },
+    getUserProfile() {
+      //final output from here
+      return this.$store.getters.getUserProfile
     },
   },
 
@@ -629,7 +634,7 @@ export default {
     },
     generatePDF() {
       const options = {
-        filename: 'transcript.pdf',
+        filename: 'receipt.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
@@ -725,7 +730,7 @@ export default {
 
         <div class="info-row">
           <span class="info-label">Received From:</span>
-          <span class="info-value">${this.studentDetails.firstname + ' ' + this.studentDetails.lastname}</span>
+          <span class="info-value">${this.studentFullName}</span>
         </div>
 
         <div class="info-row">
@@ -740,7 +745,7 @@ export default {
 
         <div class="info-row">
           <span class="info-label">Received by:</span>
-          <span class="info-value">${this.studentDetails.firstname + ' ' + this.studentDetails.lastname}</span>
+          <span class="info-value">${this.userInfo.firstname + ' ' + this.userInfo.lastname}</span>
         </div>
 
         <div class="signature-row">
@@ -784,10 +789,35 @@ export default {
     'addPaymentFormData.semester_id': function (newVal) {
       const selectedSemester = this.semesters.find(semester => semester.id === newVal)
       if (selectedSemester) {
-        this.selectedSemesterName = selectedSemester.semester_name + '(' + selectedSemester.session.session_name + ')'
+        this.selectedSemesterName =
+          selectedSemester.semester_name +
+          '(' +
+          selectedSemester.session.session_start.split(' ')[0] +
+          '-' +
+          selectedSemester.session.session_end +
+          ')'
       }
     },
+    getUserProfile: function () {
+      this.userInfo = this.getUserProfile
+    },
   },
+
+  // watch: {
+  //   getUserProfile: function () {
+  //     this.userInfo = this.getUserProfile
+  //   },
+  // },
+
+  mounted() {
+    this.$store.dispatch('userProfile')
+  },
+  // computed: {
+  //   getUserProfile() {
+  //     //final output from here
+  //     return this.$store.getters.getUserProfile
+  //   },
+  // },
 }
 </script>
 
