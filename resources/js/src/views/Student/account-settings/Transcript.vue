@@ -96,55 +96,55 @@ export default {
       <head>
         <style>
 
-          .semester-heading {
-            text-align: center;
-            margin-bottom: 5px;
-            font-size: 15px;
+            .semester-heading {
+              text-align: center;
+              margin-bottom: 5px;
+              font-size: 15px;
 
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-          }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 4px;
-            text-align: left;
-          }
-          .transcript-title {
-            text-align: center;
-            margin-bottom: 10px;
-            margin-top: 10px;
-          }
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 20px;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 4px;
+              text-align: left;
+            }
+            .transcript-title {
+              text-align: center;
+              margin-bottom: 10px;
+              margin-top: 10px;
+            }
 
-          .transcript-table {
-            table-layout: fixed;
-            width: 100%;
-          }
+            .transcript-table {
+              table-layout: fixed;
+              width: 100%;
+            }
 
-          .transcript-table td,
-          .transcript-table th {
-            word-wrap: break-word;
-            text-align: center; /* Add this line */
-          }
+            .transcript-table td,
+            .transcript-table th {
+              word-wrap: break-word;
+              text-align: center; /* Add this line */
+            }
 
-          /* Watermark styles */
-          .watermark-container {
-            position: relative;
-          }
+            /* Watermark styles */
+            .watermark-container {
+              position: relative;
+            }
 
 
-          .watermark-image {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            opacity: 0.09; /* Adjust the opacity as needed */
-            z-index: -1;
-          }
+            .watermark-image {
+              position: absolute;
+              top: 60%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 100%;
+              height: 100%;
+              opacity: 0.09; /* Adjust the opacity as needed */
+              z-index: -1;
+            }
 
           table {
               border-collapse: separate;
@@ -159,11 +159,14 @@ export default {
               text-align: left;
             }
 
+
+
             /* Add style for the page container to give it a border */
           .page-container {
             margin: 25px;
             border: 1px solid #000; /* Set the border width and color for the page */
             padding: 25px; /* Add some padding to create space around the content */
+
           }
 
           /* Add style for the body element to remove any default margin and padding */
@@ -205,6 +208,7 @@ export default {
       let endsession = this.transcripts[this.transcripts.length - 1].SemesterSession.substring(
         this.transcripts[this.transcripts.length - 1].SemesterSession.indexOf('('),
       ).slice(1, -1)
+
       content += `
       <table>
         <tr>
@@ -221,10 +225,31 @@ export default {
       </table>
       `
 
-      this.transcripts.forEach(transcript => {
+      this.transcripts.forEach((transcript, index) => {
         let session = transcript.SemesterSession.substring(transcript.SemesterSession.indexOf('('))
         console.log('trans', transcript)
-        content += `
+        if (index == 3) {
+          content += `<br><br><br>`
+        }
+        if (index === 2) {
+          content += `
+            <table class="transcript-table">
+              <thead>
+                <td style="font-size: 14px; background-color: #f0f0f0; text-align: left;"  colspan="8">YEAR: TWO</td>
+                <tr>
+                  <th style='font-size: 14px'>${
+                    transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
+                  }</th>
+                  <th style='font-size: 14px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
+                  <th style='font-size: 14px'>CREDIT HOURS</th>
+                  <th style='font-size: 14px'>GRADE</th>
+                  <th style='font-size: 14px'>GRADE POINT</th>
+                </tr>
+              </thead>
+              <tbody>
+        `
+        } else {
+          content += `
             <table class="transcript-table">
               <thead>
                 <tr>
@@ -239,6 +264,7 @@ export default {
               </thead>
               <tbody>
         `
+        }
         transcript.Courses.forEach(course => {
           content += `
               <tr>

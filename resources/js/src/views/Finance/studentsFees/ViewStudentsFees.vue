@@ -770,7 +770,7 @@ export default {
           })
       } else {
         axios
-          .get('/api/view-students?page=' + this.page)
+          .get('/api/view-students?page=' + this.page + '&notsponsored=1')
           .then(response => {
             this.students = response.data.result.data
             this.pageCount = response.data.result.last_page
