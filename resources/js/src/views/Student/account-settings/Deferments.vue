@@ -11,7 +11,6 @@
             :headers="headers"
             :items="deferments"
             :items-per-page="13"
-            :search="search"
             class="elevation-1"
             hide-default-footer
           >
@@ -82,6 +81,8 @@
 export default {
   data() {
     return {
+      pageCount: null,
+      page: null,
       headers: [
         { text: 'Semester', value: 'semester.semester_name' },
         { text: 'Reason', value: 'deferment_reason' },

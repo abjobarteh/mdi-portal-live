@@ -71,6 +71,8 @@ export default {
           else {
             router.push({ name: 'view-admission-codes-locations' });
           }
+        } else if (state.user.role_id == 7) {
+          router.push({ name: 'hod-dashboard' });
         }
 
 

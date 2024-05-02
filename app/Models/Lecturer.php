@@ -20,6 +20,7 @@ class Lecturer extends Model
         'address',
         'phonenumber',
         'lecturer_type',
+        'department_id'
     ];
 
 

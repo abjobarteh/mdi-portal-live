@@ -86,6 +86,16 @@
             <v-select
               v-if="showDepartments"
               outlined
+              v-model="addUserFormData.main_department_id"
+              :items="departments.map(department => ({ id: department.id, name: department.name }))"
+              item-value="id"
+              item-text="name"
+              label="Lecturer Main Department?"
+              @input="onDepartmentSelected"
+            ></v-select>
+            <v-select
+              v-if="showDepartments"
+              outlined
               v-model="addUserFormData.lecturer_type"
               :items="addUserFormData.lecturerTypeOptions"
               required
@@ -102,7 +112,7 @@
               :items="departments.map(department => ({ id: department.id, name: department.name }))"
               item-value="id"
               item-text="name"
-              label="Department"
+              label="Can teach courses in which departments?"
               @input="onDepartmentSelected"
             ></v-select>
 
@@ -257,6 +267,7 @@ export default {
         email: '',
         department_id: '',
         course_ids: [],
+        main_department_id: '',
       },
 
       editedItem: {

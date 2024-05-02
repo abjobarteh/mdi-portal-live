@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-data-table :key="componentKey" :headers="headers" :items="runnings" :items-per-page="13" class="elevation-1">
+      <v-data-table :headers="headers" :items="runnings" :items-per-page="13" class="elevation-1">
         <template v-slot:[`item.course_code`]="{ item }">
           {{ item.course.course_code }}
         </template>

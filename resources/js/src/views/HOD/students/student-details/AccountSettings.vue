@@ -14,29 +14,7 @@
       <!-- tabs item -->
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <running-courses v-if="runnings.length" :runnings="runnings"></running-courses>
-          <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Running Courses</h6>
-        </v-tab-item>
-
-        <v-tab-item>
-          <registered-courses v-if="courses.length" :courses="courses"></registered-courses>
-          <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Registered Courses</h6>
-        </v-tab-item>
-
-        <v-tab-item>
-          <program-courses :courses="courses"></program-courses>
-        </v-tab-item>
-
-        <v-tab-item>
           <transcript></transcript>
-        </v-tab-item>
-
-        <v-tab-item>
-          <payments></payments>
-        </v-tab-item>
-
-        <v-tab-item>
-          <deferments></deferments>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -47,61 +25,29 @@
 import { mdiAccountOutline, mdiLockOpenOutline, mdiInformationOutline } from '@mdi/js'
 
 // demos
-import RunningCourses from './RunningCourses.vue'
-import ProgramCourses from './ProgramCourses.vue'
-import RegisteredCourses from './RegisteredCourses.vue'
 import Transcript from './Transcript.vue'
-import Payments from './Payments.vue'
-import Deferments from './Deferments.vue'
 
 import 'vuetify/dist/vuetify.min.css'
 
 export default {
   components: {
-    RunningCourses,
-    ProgramCourses,
-    Payments,
     Transcript,
-    RegisteredCourses,
-    Deferments,
   },
 
   data() {
     return {
       studentInfo: '',
       tab: '',
-      tabs: [
-        { title: 'Running Courses', icon: mdiAccountOutline },
-        { title: 'Registered Courses', icon: mdiLockOpenOutline },
-        { title: 'Program Courses', icon: mdiLockOpenOutline },
-        { title: 'Transcript List', icon: mdiInformationOutline },
-        { title: 'Tuition Payments', icon: mdiInformationOutline },
-        { title: 'Deferments', icon: mdiInformationOutline },
-      ],
+      tabs: [{ title: 'Transcript List', icon: mdiInformationOutline }],
       icons: {
         mdiAccountOutline,
         mdiLockOpenOutline,
         mdiInformationOutline,
       },
       courses: '',
-      runnings: '',
     }
   },
-  created() {
-    axios
-      .get('/api/running-courses?page=' + this.page)
-      .then(response => {
-        this.runnings = response.data.result
-
-        console.log('running courses', this.runnings)
-        this.pageCount = response.data.result.last_page
-      })
-      .catch(err => {
-        this.runnings = []
-        this.pageCount = 0
-      })
-    this.getResults()
-  },
+  created() {},
 
   methods: {
     getResults() {
@@ -109,6 +55,7 @@ export default {
         .post('/api/department-courses?page=' + this.page, { department_id: this.studentInfo.department_id })
         .then(response => {
           this.courses = response.data.result.data
+          console.log('courses', this.courses[0].courses)
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {

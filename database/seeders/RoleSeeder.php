@@ -44,5 +44,9 @@ class RoleSeeder extends Seeder
             'rank' => 'agent',
             'description' => 'these are the agents who sells admission_codes'
         ]);
+        Role::create([
+            'rank' => 'HOD',
+            'description' => 'these are the head of departments'
+        ]);
     }
 }

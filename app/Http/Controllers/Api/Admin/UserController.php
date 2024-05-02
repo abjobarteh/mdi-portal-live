@@ -127,6 +127,7 @@ class UserController extends Controller
                         'username' => $user->username,
                         'user_id' => $user->id,
                         'lecturer_type' => $request->get('lecturer_type'),
+                        'department_id' => $request->get('main_department_id')
                     ]);
                 } else {
                     $lecturer = Lecturer::create([
@@ -136,7 +137,9 @@ class UserController extends Controller
                         'address' => $user->address,
                         'phonenumber' => $user->phonenumber,
                         'username' => $user->username,
-                        'user_id' => $user->id
+                        'user_id' => $user->id,
+                        'department_id' => $request->get('main_department_id')
+
                     ]);
                 }
 

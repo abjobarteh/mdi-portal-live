@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\Registrar\RolesController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\Finance\StudentPaymentController;
+use App\Http\Controllers\Api\Hod\HodController;
+use App\Http\Controllers\Api\Hod\HodCourseController;
 use App\Http\Controllers\Api\Lecturer\MyCoursesController;
 use App\Http\Controllers\Api\Lecturer\StudentMarksController;
 use App\Http\Controllers\Api\ProfileController;
@@ -66,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
-    Route::middleware(['registrar'])->group(function () {
+    Route::middleware(['registrar-admin'])->group(function () {
 
         Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
 
@@ -138,8 +140,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-        Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
-        Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
+        // Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']); // hod also needs this
+        // Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
 
 
         Route::get('/courses-to-approve', [CourseController::class, 'coursesToApprove']);  // for the student middleware
@@ -169,13 +171,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     ///////////////////////////////////  STUDENT END POINTS  ////////////////////////////
     Route::middleware(['student'])->group(function () {
-        Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
+        // Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
         // Route::get('/view-semesters', [SemesterController::class, 'index']);
         Route::get('/view-current-semesters', [SemesterController::class, 'index']);
         Route::post('/add-deferment', [DefermentController::class, 'addDeferment']);
         Route::get('/deferments', [DefermentController::class, 'index']);
 
-        Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
+        // Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
 
         Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
@@ -197,7 +199,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     ///////////////////////////////////  FINANCE END POINTS  ////////////////////////////
 
-    Route::middleware(['finance'])->group(function () {
+    Route::middleware(['finance-admin'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
@@ -208,7 +210,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // storeStudentSponsorship
     });
 
-    Route::middleware(['finance-vendor'])->group(function () {
+    Route::middleware(['finance-vendor-admin'])->group(function () {
         Route::get('/view-agents', [AdmissionCodeLocationController::class, 'agents']);
 
         Route::post('/add-agent', [AdmissionCodeLocationController::class, 'addAgent']);
@@ -224,10 +226,31 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware(['student-registrar'])->group(function () {
-        Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
+        // Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
+        // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
+        // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
+        // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
+    });
+
+    Route::middleware(['hod-admin-registrar-finance-student'])->group(function () {
+        // Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
+        // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
+        // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
+        // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
         Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
-        Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
+        Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']); // hod also needs this
+        Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
+    });
+
+
+
+    Route::middleware(['hod'])->group(function () {
+        Route::get('/view-hod-courses', [HodController::class, 'index']);
+        Route::get('/view-hod-courses-to-approve', [HodController::class, 'coursesToApproveByHod']);
+        Route::get('/view-hod-lecturers', [HodController::class, 'hodLecturers']);
+        Route::post('/approve-courses-hod', [HodController::class, 'approveCoursesHod']);  // for the student middleware
+        Route::get('/view-hod-students', [HodController::class, 'hodStudents']);
     });
 
 
@@ -238,6 +261,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-programs', [ProgramController::class, 'index']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
         Route::get('/user-counts', [DashboardController::class, 'counts']);
+        Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
+        Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
+        // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
+        // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
+        Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
     });
 
     ///////////////////////////////////  LECTURER END POINTS  ////////////////////////////

@@ -54,6 +54,16 @@ const routes = [
   },
 
   {
+    path: '/hod-dashboard',
+    name: 'hod-dashboard',
+    component: () => import('@/views/dashboard/HOD/Dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [7],
+    }
+  },
+
+  {
     path: '/lecturer-dashboard',
     name: 'lecturer-dashboard',
     component: () => import('@/views/dashboard/lecturer/Dashboard.vue'),
@@ -80,7 +90,17 @@ const routes = [
     component: () => import('@/views/Registrar/students/student-detail.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
+    }
+  },
+
+  {
+    path: '/student-detail-hod/:id',
+    name: 'student-detail',
+    component: () => import('@/views/HOD/students/student-detail.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [7],
     }
   },
 
@@ -198,7 +218,7 @@ const routes = [
     component: () => import('@/views/Registrar/gradings/AddGrading.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
   {
@@ -207,7 +227,7 @@ const routes = [
     component: () => import('@/views/Registrar/gradings/ViewGradings.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -217,7 +237,7 @@ const routes = [
     component: () => import('@/views/Registrar/departments/ViewDepartments.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5],
+      roles: [2, 5, 1],
     }
 
   },
@@ -228,7 +248,7 @@ const routes = [
     component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5],
+      roles: [2, 5, 1],
     }
 
   },
@@ -239,7 +259,7 @@ const routes = [
     component: () => import('@/views/Registrar/programs/ViewPrograms.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5],
+      roles: [2, 5, 1],
     }
   },
 
@@ -249,7 +269,7 @@ const routes = [
     component: () => import('@/views/Registrar/courses/ViewCourses.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
 
   },
@@ -260,7 +280,7 @@ const routes = [
     component: () => import('@/views/Registrar/approve-marks/ApproveMarks.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
 
   },
@@ -273,7 +293,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [5, 6],
+      roles: [5, 6, 1],
     }
   },
 
@@ -283,7 +303,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes/AdmissionCodes.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 6],
+      roles: [2, 6, 1],
     }
   },
 
@@ -293,7 +313,7 @@ const routes = [
     component: () => import('@/views/Registrar/sessions/ViewSessions.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -303,7 +323,7 @@ const routes = [
     component: () => import('@/views/Registrar/semesters/ViewSemesters.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -313,7 +333,7 @@ const routes = [
     component: () => import('@/views/Registrar/lecturers/ViewLecturers.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -323,7 +343,7 @@ const routes = [
     component: () => import('@/views/Registrar/deferments/ViewDeferments.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -357,7 +377,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -367,7 +387,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/AcceptedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
 
   },
@@ -378,7 +398,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/RejectedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -388,7 +408,7 @@ const routes = [
     component: () => import('@/views/Registrar/student/ApplicantDeclarationAndPreview.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
 
   },
@@ -400,7 +420,7 @@ const routes = [
     component: () => import('@/views/Registrar/settings/RegistrationStatus.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
   {
@@ -409,7 +429,7 @@ const routes = [
     component: () => import('@/views/Registrar/settings/AdmissionStatus.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -419,7 +439,7 @@ const routes = [
     component: () => import('@/views/Registrar/students/ViewStudents.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2, 1],
     }
   },
 
@@ -429,7 +449,7 @@ const routes = [
     component: () => import('@/views/Finance/studentsFees/ViewStudentsFees.vue'),
     meta: {
       requiresAuth: true,
-      roles: [5],
+      roles: [5, 1],
     }
 
   },
@@ -451,7 +471,7 @@ const routes = [
     component: () => import('@/views/Finance/ViewAgents.vue'),
     meta: {
       requiresAuth: true,
-      roles: [5],
+      roles: [5, 1],
     }
 
   },
@@ -487,6 +507,49 @@ const routes = [
       roles: [3, 4],
     }
 
+  },
+
+  // hod
+  {
+    path: '/view-hod-courses',
+    name: 'view-hod-courses',
+    component: () => import('@/views/HOD/courses/ViewCourses.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [7],
+    }
+
+  },
+
+  {
+    path: '/approve-marks-hod',
+    name: 'approve-marks-hod',
+    component: () => import('@/views/HOD/approve-marks/ApproveMarks.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [7],
+    }
+
+  },
+
+  {
+    path: '/view-hod-lecturers',
+    name: 'view-hod-lecturers',
+    component: () => import('@/views/HOD/lecturers/ViewLecturers.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [7],
+    }
+  },
+
+  {
+    path: '/view-hod-students',
+    name: 'view-hod-students',
+    component: () => import('@/views/HOD/students/ViewStudents.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [7],
+    }
   },
 
 
@@ -556,6 +619,8 @@ router.beforeEach(async (to, from, next) => {
       next('/finance-dashboard'); // redirect to registrar for role 2
     } else if (userRole === 6) {
       next('/password-reset')
+    } else if (userRole == 7) {
+      next('/hod-dashboard')
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

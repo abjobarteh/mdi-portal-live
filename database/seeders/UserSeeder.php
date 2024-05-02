@@ -63,5 +63,17 @@ class UserSeeder extends Seeder
             'role_id' => 5,  // student is having the role_of 5
             'password' => Hash::make('password'),
         ]);
+
+        User::create([
+            'firstname' => 'hod',
+            'middlename' => 'F',
+            'lastname' => 'hod',
+            'username' => 'hod',
+            'email' => 'hod@gmail.com',
+            'address' => '123 Main St',
+            'phonenumber' => '7199012',
+            'role_id' => 5,  // student is having the role_of 5
+            'password' => Hash::make('password'),
+        ]);
     }
 }

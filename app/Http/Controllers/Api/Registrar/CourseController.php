@@ -222,7 +222,7 @@ class CourseController extends Controller
 
     public function studentTranscript($id)
     {
-        $registeredCourses = StudentRegisteredCourse::where('approved', 1)->with('course', 'semester.session')
+        $registeredCourses = StudentRegisteredCourse::where('registrar_approved', 1)->with('course', 'semester.session')
             ->where('student_id', Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
                 ->where('students.user_id', $id)->value('students.id'))->get();
 
@@ -279,7 +279,7 @@ class CourseController extends Controller
     {
         $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
         // i have to add approved later
-        $activeSemesterCourses = SemesterCourse::with('course')->where('semester_id', $currentSemesterId)->where('submitted', 1)->paginate(13);
+        $activeSemesterCourses = SemesterCourse::with('course')->where('semester_id', $currentSemesterId)->where('submitted', 1)->where('approved', 1)->paginate(13); // ie the ones approved by hod
         foreach ($activeSemesterCourses as $activeSemesterCourse) {
             $activeSemesterCourse['marks'] = StudentRegisteredCourse::with('student')->where('course_id', $activeSemesterCourse['course_id'])->get();
         }
@@ -294,11 +294,11 @@ class CourseController extends Controller
     {
         SemesterCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
-            ->update(['approved' =>  1]);
+            ->update(['registrar_approved' =>  1]);
 
         StudentRegisteredCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
-            ->update(['approved' => 1]);
+            ->update(['registrar_approved' => 1]);
     }
 
     public function registeredCourses()

@@ -68,17 +68,6 @@ export default {
   },
 
   methods: {
-    // generatePDF() {
-    //   const options = {
-    //     filename: 'transcript.pdf',
-    //     image: { type: 'jpeg', quality: 0.98 },
-    //     html2canvas: { scale: 2 },
-    //     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    //   }
-    //   var element = document.getElementById('printable-content')
-
-    //   html2pdf().set(options).from(element).save()
-    // },
     generatePDF() {
       const options = {
         filename: 'transcript.pdf',
@@ -135,13 +124,24 @@ export default {
             }
 
 
+            // .watermark-image {
+            //   position: absolute;
+            //   top: 60%;
+            //   left: 50%;
+            //   transform: translate(-50%, -50%);
+            //   width: 100%;
+            //   height: 100%;
+            //   opacity: 0.09; /* Adjust the opacity as needed */
+            //   z-index: -1;
+            // }
+
             .watermark-image {
-              position: absolute;
-              top: 60%;
+              position: fixed; /* Use fixed position to make it centered on the page */
+              top: 50%;
               left: 50%;
               transform: translate(-50%, -50%);
-              width: 100%;
-              height: 100%;
+              width: 45%;
+              height: 75%;
               opacity: 0.09; /* Adjust the opacity as needed */
               z-index: -1;
             }
@@ -159,14 +159,12 @@ export default {
               text-align: left;
             }
 
-
-
             /* Add style for the page container to give it a border */
           .page-container {
             margin: 25px;
             border: 1px solid #000; /* Set the border width and color for the page */
             padding: 25px; /* Add some padding to create space around the content */
-
+            height: auto;
           }
 
           /* Add style for the body element to remove any default margin and padding */
@@ -196,10 +194,10 @@ export default {
 
       content += `
       <div class="transcript-title">
-      <h3 style="font-size: 13px;">REPUBLIC OF <span style="position: relative; top: -20px;"><img src="images/logos/mdi_logo.png" style="width: 70px; height: 70px; display: inline-block; vertical-align: middle;" /></span> THE GAMBIA</h3>
-      <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">MANAGEMENT DEVELOPMENT INSTITUTE</h3><br>
-      <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">${this.studentInfo.program_name}</h3><br>
-      <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">OFFICIAL TRANSCRIPT</h3>
+      <h3 style="font-size: 12px;">REPUBLIC OF <span style="position: relative; top: -5px;"><img src="images/logos/mdi_logo.png" style="width: 60px; height: 60px; display: inline-block; vertical-align: middle;" /></span> THE GAMBIA</h3>
+      <h3 style="font-size: 12px; border-bottom: 1px solid black; display: inline-block;">MANAGEMENT DEVELOPMENT INSTITUTE</h3><br>
+      <h3 style="font-size: 12px; border-bottom: 1px solid black; display: inline-block;">${this.studentInfo.program_name}</h3><br>
+      <h3 style="font-size: 12px; border-bottom: 1px solid black; display: inline-block;">OFFICIAL TRANSCRIPT</h3>
     </div>
     `
       let startsession = this.transcripts[0].SemesterSession.substring(
@@ -212,15 +210,15 @@ export default {
       content += `
       <table>
         <tr>
-          <td style='font-size: 14px' colspan="2">NAME: ${
+          <td style='font-size: 13px' colspan="2">NAME: ${
             this.studentInfo.firstname.toUpperCase() + ' ' + this.studentInfo.lastname.toUpperCase()
           }</td>
-          <td style='font-size: 14px'>STUDENT NO: ${this.studentInfo.mat_number}</td>
+          <td style='font-size: 13px'>STUDENT NO: ${this.studentInfo.mat_number}</td>
         </tr>
         <tr>
-          <td style='font-size: 14px'>YEAR: ONE</td>
-          <td style='font-size: 14px'>SESSION: ${startsession + ' - ' + endsession}</td>
-          <td style='font-size: 14px'>DATE OF ISSUE: ${this.getCurrentDate()}</td>
+          <td style='font-size: 13px'>YEAR: ONE</td>
+          <td style='font-size: 13px'>SESSION: ${startsession + ' - ' + endsession}</td>
+          <td style='font-size: 13px'>DATE OF ISSUE: ${this.getCurrentDate()}</td>
         </tr>
       </table>
       `
@@ -235,15 +233,15 @@ export default {
           content += `
             <table class="transcript-table">
               <thead>
-                <td style="font-size: 14px; background-color: #f0f0f0; text-align: left;"  colspan="8">YEAR: TWO</td>
+                <td style="font-size: 13px; background-color: #f0f0f0; text-align: left;"  colspan="8">YEAR: TWO</td>
                 <tr>
-                  <th style='font-size: 14px'>${
+                  <th style='font-size: 13px'>${
                     transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
                   }</th>
-                  <th style='font-size: 14px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
-                  <th style='font-size: 14px'>CREDIT HOURS</th>
-                  <th style='font-size: 14px'>GRADE</th>
-                  <th style='font-size: 14px'>GRADE POINT</th>
+                  <th style='font-size: 13px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
+                  <th style='font-size: 13px'>CREDIT HOURS</th>
+                  <th style='font-size: 13px'>GRADE</th>
+                  <th style='font-size: 13px'>GRADE POINT</th>
                 </tr>
               </thead>
               <tbody>
@@ -256,10 +254,10 @@ export default {
                   <th style='font-size: 14px'>${
                     transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
                   }</th>
-                  <th style='font-size: 14px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
-                  <th style='font-size: 14px'>CREDIT HOURS</th>
-                  <th style='font-size: 14px'>GRADE</th>
-                  <th style='font-size: 14px'>GRADE POINT</th>
+                  <th style='font-size: 13px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
+                  <th style='font-size: 13px'>CREDIT HOURS</th>
+                  <th style='font-size: 13px'>GRADE</th>
+                  <th style='font-size: 13px'>GRADE POINT</th>
                 </tr>
               </thead>
               <tbody>
@@ -268,19 +266,19 @@ export default {
         transcript.Courses.forEach(course => {
           content += `
               <tr>
-                <td style='font-size: 14px'>${course.CourseCode}</td>
-                <td colspan="4"  style='font-size: 14px; font-style: italic;'>${course.CourseName}</td>
-                <td style='font-size: 14px'>3</td>
-                <td style='font-size: 14px'>${course.Grade}</td>
-                <td style='font-size: 14px'>${course.GradePoint}</td>
+                <td style='font-size: 13px'>${course.CourseCode}</td>
+                <td colspan="4"  style='font-size: 13px; font-style: italic;'>${course.CourseName}</td>
+                <td style='font-size: 13px'>3</td>
+                <td style='font-size: 13px'>${course.Grade}</td>
+                <td style='font-size: 13px'>${course.GradePoint}</td>
               </tr>
             `
         })
 
         content += `
             <tr>
-              <td style='font-size: 14px' colspan="7">GRADE POINT AVERAGE</td>
-              <td style='font-size: 14px'>${transcript.Average.toFixed(3)}</td>
+              <td style='font-size: 13px' colspan="7">GRADE POINT AVERAGE</td>
+              <td style='font-size: 13px'>${transcript.Average.toFixed(3)}</td>
             </tr>
               </tbody>
             </table>
@@ -288,8 +286,8 @@ export default {
       })
       content += `
         <div style="text-align: right">
-          <td style='font-size: 14px'>CUMULATIVE GRADE POINT AVERAGE</td>
-          <td style='font-size: 14px'>${this.cgpa.toFixed(3)}</td>
+          <td style='font-size: 13px'>CUMULATIVE GRADE POINT AVERAGE</td>
+          <td style='font-size: 13px'>${this.cgpa.toFixed(3)}</td>
         </div>
 
         <div style="display: flex; justify-content: space-between; margin-top: 50px">

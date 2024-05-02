@@ -66,25 +66,33 @@
         :to="{ name: 'pages-account-settings' }"
         :icon="icons.mdiAccountCogOutline"
       ></nav-menu-link>
-      <nav-menu-group v-if="currentUser && currentUser.role_id == '2'" title="Gradings" :icon="icons.mdiFileOutline">
+      <nav-menu-group
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
+        title="Gradings"
+        :icon="icons.mdiFileOutline"
+      >
         <nav-menu-link title="Add Grading" :to="{ name: 'add-grading' }"></nav-menu-link>
         <nav-menu-link title="View Gradings" :to="{ name: 'view-gradings' }"></nav-menu-link>
       </nav-menu-group>
-      <nav-menu-group v-if="currentUser && currentUser.role_id == '2'" title="Programs" :icon="icons.mdiFileOutline">
+      <nav-menu-group
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
+        title="Programs"
+        :icon="icons.mdiFileOutline"
+      >
         <nav-menu-link title="Departments" :to="{ name: 'view-departments' }"></nav-menu-link>
         <nav-menu-link title="Program Durations" :to="{ name: 'view-program-durations' }"></nav-menu-link>
         <nav-menu-link title="Programs" :to="{ name: 'view-programs' }"></nav-menu-link>
       </nav-menu-group>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Course List"
         :to="{ name: 'view-courses' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Approve Marks"
         :to="{ name: 'approve-marks' }"
         :icon="icons.mdiAlphaTBoxOutline"
@@ -100,14 +108,14 @@
         <nav-menu-link title="Logs" :to="{ name: 'view-activities' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '5'"
+        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '1')"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '6' && userInfo.password_reset == 1"
+        v-if="currentUser && (currentUser.role_id == '6' || currentUser.role_id == '1') && userInfo.password_reset == 1"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"
@@ -120,35 +128,35 @@
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Sessions"
         :to="{ name: 'view-sessions' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Semesters"
         :to="{ name: 'view-semesters' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Lecturers"
         :to="{ name: 'view-lecturers' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Students"
         :to="{ name: 'view-students' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-group
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Applications"
         :icon="icons.mdiFileOutline"
       >
@@ -170,26 +178,30 @@
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
-      <nav-menu-group v-if="currentUser && currentUser.role_id == '2'" title="Settings" :icon="icons.mdiFileOutline">
+      <nav-menu-group
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
+        title="Settings"
+        :icon="icons.mdiFileOutline"
+      >
         <nav-menu-link title="Admissions" :to="{ name: 'admission-status' }"></nav-menu-link>
         <nav-menu-link title="Registrations" :to="{ name: 'registration-status' }"></nav-menu-link>
       </nav-menu-group>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '2'"
+        v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Deferments"
         :to="{ name: 'view-deferments' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '5'"
+        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '1')"
         title="Student Fees"
         :to="{ name: 'view-student-fees' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
       <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '5'"
+        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '1')"
         title="Agents"
         :to="{ name: 'view-agents' }"
         :icon="icons.mdiAlphaTBoxOutline"
@@ -206,6 +218,42 @@
         v-if="currentUser && currentUser.role_id == '3'"
         title="Courses"
         :to="{ name: 'lecturer-courses' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <!-- // hod menus // -->
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Dashboard"
+        :to="{ name: 'hod-dashboard' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Course List"
+        :to="{ name: 'view-hod-courses' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Approve Marks"
+        :to="{ name: 'approve-marks-hod' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Lecturers"
+        :to="{ name: 'view-hod-lecturers' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
+
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Students"
+        :to="{ name: 'view-hod-students' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
 

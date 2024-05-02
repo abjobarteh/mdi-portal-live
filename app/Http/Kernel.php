@@ -68,14 +68,16 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'registrar' => \App\Http\Middleware\RegistrarMiddleware::class,
+        'registrar-admin' => \App\Http\Middleware\RegistrarAdminMiddleware::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'student' => \App\Http\Middleware\StudentMiddleware::class,
-        'finance' => \App\Http\Middleware\FinanceMiddleware::class,
+        'finance-admin' => \App\Http\Middleware\FinanceAdminMiddleware::class,
         'student-registrar' => \App\Http\Middleware\StudentRegistrarMiddleware::class,
         'student-finance-registrar-admin' => \App\Http\Middleware\StudentFinanceRegistrarAdminMiddleware::class,
         'lecturer' => \App\Http\Middleware\LecturerMiddleware::class,
-        'finance-vendor' => \App\Http\Middleware\FinanceVendorMiddleware::class,
+        'finance-vendor-admin' => \App\Http\Middleware\FinanceVendorAdminMiddleware::class,
+        'hod' => \App\Http\Middleware\HodMiddleware::class,
+        'hod-admin-registrar-finance-student' => \App\Http\Middleware\HodAdminRegistrarStudentFinanceMiddleware::class,
 
 
     ];

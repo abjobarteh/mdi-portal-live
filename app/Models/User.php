@@ -32,6 +32,7 @@ class User extends Authenticatable
         'is_active',
         'registration_token',
         'password_reset',
+        'department_id',
     ];
 
     /**

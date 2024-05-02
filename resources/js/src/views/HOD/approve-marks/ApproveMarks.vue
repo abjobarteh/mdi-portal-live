@@ -21,7 +21,10 @@
           >
             <template v-slot:[`item.action`]="{ item }">
               <v-btn @click="openStudentMarksPopup(item)">View Marks</v-btn>
-              <v-btn v-if="item.registrar_approved == 0" small color="error" @click="approveMark(item)">Approve</v-btn>
+              <v-btn v-if="item.approved == 0" small color="error" @click="approveMark(item)">Approve</v-btn>
+              <v-btn v-if="item.registrar_approved == 0" disabled small color="yellow"
+                >Registrar Approval Requested</v-btn
+              >
               <v-btn v-else small color="success">Approved</v-btn>
             </template>
           </v-data-table>
@@ -67,7 +70,9 @@
               {{ item.student.firstname + ' ' + item.student.lastname }}
             </template>
             <template v-slot:item.update_mark="{ item }">
-              <v-btn @click="openUpdateMarkDialog(item)" class="success small">Update</v-btn>
+              <v-btn :disabled="item.registrar_approved == 1" @click="openUpdateMarkDialog(item)" class="success small"
+                >Update</v-btn
+              >
             </template>
           </v-data-table>
         </v-card-text>
@@ -204,7 +209,7 @@ export default {
 
     getResults() {
       axios
-        .get('/api/courses-to-approve?page=' + this.page)
+        .get('/api/view-hod-courses-to-approve?page=' + this.page)
         .then(response => {
           this.courses = response.data.result.data
           this.pageCount = response.data.result.last_page
@@ -240,12 +245,12 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.post('/api/approve-courses', { course_id: item.course_id }).then(result => {
+            axios.post('/api/approve-courses-hod', { course_id: item.course_id }).then(result => {
               // show success alert
               swal
                 .fire({
                   title: 'Success!',
-                  text: 'Grades approved successfully',
+                  text: 'Sent to be approve by registrar',
                   icon: 'success',
                   confirmButtonText: 'OK',
                 })

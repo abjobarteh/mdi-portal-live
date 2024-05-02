@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RegistrarMiddleware
+class HodAdminRegistrarStudentFinanceMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class RegistrarMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || $user->role_id !== 2) {
+        if (!$user || ($user->role_id !== 7 && $user->role_id !== 1 && $user->role_id !== 2 && $user->role_id !== 4 && $user->role_id !== 5)) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
         return $next($request);
