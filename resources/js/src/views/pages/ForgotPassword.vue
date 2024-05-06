@@ -17,47 +17,24 @@
           /> -->
           <v-img width="170" height="120" :src="require('@/assets/images/logos/mdi_logo_square.png').default"></v-img>
 
-          <p class="text-h4 font-weight-semibold text-center mb-2">MDI PORTAL</p>
-          <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Sign in</p>
+          <p class="text-h6 font-weight-semibold text-center mb-2">Enter Your Valid Email</p>
         </v-card-text>
 
         <!-- login form -->
         <v-card-text>
           <v-form @submit.prevent="login">
+            <input type="hidden" name="_token" :value="csrfToken" />
             <v-text-field
               v-model="auth.email"
               outlined
-              label="Email/Username"
+              label="Email"
               placeholder="john@example.com"
               hide-details
               class="mb-3"
             ></v-text-field>
-
-            <v-text-field
-              v-model="auth.password"
-              outlined
-              :type="isPasswordVisible ? 'text' : 'password'"
-              label="Password"
-              placeholder="············"
-              :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
-              hide-details
-              @click:append="isPasswordVisible = !isPasswordVisible"
-            ></v-text-field>
-
-            <div class="d-flex align-center justify-space-between flex-wrap">
-              <!-- forgot link -->
-              <router-link :to="{ name: 'forgot-password' }" class="mt-1"> Forgot Password </router-link>
-            </div>
-
-            <v-btn block color="primary" type="submit" class="mt-6"> Login </v-btn>
+            <v-btn block color="primary" type="submit" class="mt-6"> Submit </v-btn>
           </v-form>
           <span v-if="error" style="color: red; margin-left: 100px; font-weight: bold">{{ errorMessage }}</span>
-        </v-card-text>
-
-        <!-- create new account  -->
-        <v-card-text class="d-flex align-center justify-center flex-wrap mt-2">
-          <span class="me-2"> New on our platform? </span>
-          <router-link :to="{ name: 'pages-register' }"> Create an account </router-link>
         </v-card-text>
       </v-card>
     </div>
@@ -67,17 +44,21 @@
 <script>
 import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
 import { mapActions } from 'vuex'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
-  name: 'Login',
+  name: 'ForgotPassword',
+  mounted() {
+    console.log('here')
+    // this.fetchCsrfToken()
+  },
   data() {
     return {
+      csrfToken: '',
       error: false,
       errorMessage: '',
       auth: {
         email: '',
-        password: '',
       },
       validationErrors: {},
       processing: false,
@@ -89,27 +70,46 @@ export default {
     }
   },
   methods: {
+    async fetchCsrfToken() {
+      console.log('here')
+      try {
+        const response = await axios.get('/api/csrf-token')
+        this.csrfToken = response.data.csrf_token
+        console.log('here ', this.csrfToken)
+      } catch (error) {
+        console.error('Error fetching CSRF token:', error)
+      }
+    },
+    async forgotPassword() {
+      // Form submission logic
+    },
     async login() {
-      if (this.auth.email == '' || this.auth.password == '') {
+      if (this.auth.email == '') {
         swal.fire({
           title: 'Error!',
-          text: 'Please fill the Email and Password',
+          text: 'Please fill the Email',
           icon: 'error',
           confirmButtonText: 'OK',
         })
         return
       }
       try {
-        await this.$store.dispatch('login', {
-          email: this.auth.email,
-          password: this.auth.password,
-          device_name: 'browser',
+        const response = await axios.post('/api/forgot-password', { email: this.auth.email })
+        console.log(response.data.message) // Success message
+        swal.fire({
+          title: 'Success!',
+          text: 'Password reset link sent to your email',
+          icon: 'success',
+          confirmButtonText: 'OK',
         })
-        await this.$store.dispatch('fetchUser')
       } catch (error) {
-        // console.log(error.response.data.errors)
-        this.error = true
-        this.errorMessage = error.response.data.errors
+        console.error('Error:', error.response.data.error) // Error message
+        swal.fire({
+          title: 'Error!',
+          text: error.response.data.error,
+          icon: 'error',
+          confirmButtonText: 'OK',
+        })
       }
     },
   },

@@ -119,6 +119,16 @@ export default {
         .then(response => {
           // Handle the API response if needed
           console.log(`Admission opened for ${item.status}`)
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Admission Open successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
         })
         .catch(error => {
           // Handle any errors that occurred during the API call
@@ -150,6 +160,16 @@ export default {
         .then(response => {
           // Handle the API response if needed
           console.log(`Admission closed for ${item.status}`)
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Admission closed successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
         })
         .catch(error => {
           // Handle any errors that occurred during the API call

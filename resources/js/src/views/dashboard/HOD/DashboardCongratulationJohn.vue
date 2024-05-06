@@ -2,11 +2,11 @@
   <v-card class="greeting-card">
     <v-row class="ma-0 pa-0">
       <v-col cols="8">
-        <v-card-title class="text-no-wrap pt-1 ps-2"> Total Tution Fee Paid! </v-card-title>
+        <v-card-title class="text-no-wrap pt-1 ps-2"> Total students! </v-card-title>
         <v-card-subtitle class="text-no-wrap ps-2"> Overall </v-card-subtitle>
         <v-card-text class="d-flex align-center mt-2 pb-2 ps-2">
           <div>
-            <p class="text-xl font-weight-semibold primary--text mb-2">D{{ Number(totalTutionFeePaid).toFixed(2) }}</p>
+            <p class="text-xl font-weight-semibold primary--text mb-2">{{ Number(myStudentCount) }} students</p>
           </div>
         </v-card-text>
       </v-col>
@@ -35,15 +35,17 @@
 export default {
   data() {
     return {
-      totalTutionFeePaid: 0,
+      myStudentCount: 0,
     }
   },
   methods: {
     fetchStatusCounts() {
       axios
-        .get('/api/profit-status')
+        .get('/api/hod-dashboard')
         .then(response => {
-          this.totalTutionFeePaid = response.data.totalTutionFeePaid
+          this.courses = response.data.myCourses.data
+          this.myStudentCount = response.data.myStudents
+          console.log('count', this.myStudentCount)
         })
         .catch(error => {
           console.error('Error fetching status counts:', error)

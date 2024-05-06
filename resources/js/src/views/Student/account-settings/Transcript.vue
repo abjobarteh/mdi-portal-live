@@ -33,6 +33,7 @@ export default {
     return {
       studentInfo: '',
       cgpa: 0,
+      count: 0,
       headers: [
         { text: 'CourseCode', value: 'CourseCode', width: '20%' },
         { text: 'CourseName', value: 'CourseName', width: '35%' },
@@ -70,6 +71,7 @@ export default {
   methods: {
     generatePDF() {
       const options = {
+        margin: [0.3, 0.3], // Add margin values for top and bottom, left and right
         filename: 'transcript.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
@@ -81,110 +83,109 @@ export default {
       const watermarkImage = './mdi_logo.png'
 
       const htmlContent = `
-    <html>
-      <head>
-        <style>
+      <html>
+        <head>
+          <style>
 
-            .semester-heading {
-              text-align: center;
-              margin-bottom: 5px;
-              font-size: 15px;
+              .semester-heading {
+                text-align: center;
+                margin-bottom: 5px;
+                font-size: 15px;
 
-            }
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+              }
+              th, td {
+                border: 1px solid #ddd;
+                padding: 4px;
+                text-align: left;
+              }
+              .transcript-title {
+                text-align: center;
+                margin-bottom: 10px;
+                margin-top: 10px;
+              }
+
+              .transcript-table {
+                table-layout: fixed;
+                width: 100%;
+              }
+
+              .transcript-table td,
+              .transcript-table th {
+                word-wrap: break-word;
+                text-align: center; /* Add this line */
+              }
+
+              /* Watermark styles */
+              .watermark-container {
+                position: relative;
+              }
+
+              // .watermark-image {
+              //   position: absolute;
+              //   top: 60%;
+              //   left: 50%;
+              //   transform: translate(-50%, -50%);
+              //   width: 100%;
+              //   height: 100%;
+              //   opacity: 0.09; /* Adjust the opacity as needed */
+              //   z-index: -1;
+              // }
+
+              .watermark-image {
+                position: fixed; /* Use fixed position to make it centered on the page */
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 45%;
+                height: 75%;
+                opacity: 0.09; /* Adjust the opacity as needed */
+                z-index: -1;
+              }
+
             table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 20px;
-            }
-            th, td {
-              border: 1px solid #ddd;
-              padding: 4px;
-              text-align: left;
-            }
-            .transcript-title {
-              text-align: center;
-              margin-bottom: 10px;
-              margin-top: 10px;
-            }
+                border-collapse: separate;
+                border-spacing: 1px;
+                width: 100%;
+                border: 1px ridge #CCCCCC;
+              }
 
-            .transcript-table {
-              table-layout: fixed;
-              width: 100%;
-            }
+              td {
+                border: 2px ridge #CCCCCC;
+                padding: 3px;
+                text-align: left;
+              }
 
-            .transcript-table td,
-            .transcript-table th {
-              word-wrap: break-word;
-              text-align: center; /* Add this line */
+              /* Add style for the page container to give it a border */
+            .page-container {
+              // margin: 25px;
+              // border: 0.7px solid #000; /* Set the border width and color for the page */
+              padding: 10px; /* Add some padding to create space around the content */
+              // height: auto;
             }
 
-            /* Watermark styles */
-            .watermark-container {
-              position: relative;
+            /* Add style for the body element to remove any default margin and padding */
+            body {
+              margin: 0;
+              padding: 0;
             }
 
-
-            // .watermark-image {
-            //   position: absolute;
-            //   top: 60%;
-            //   left: 50%;
-            //   transform: translate(-50%, -50%);
-            //   width: 100%;
-            //   height: 100%;
-            //   opacity: 0.09; /* Adjust the opacity as needed */
-            //   z-index: -1;
-            // }
-
-            .watermark-image {
-              position: fixed; /* Use fixed position to make it centered on the page */
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              width: 45%;
-              height: 75%;
-              opacity: 0.09; /* Adjust the opacity as needed */
-              z-index: -1;
-            }
-
-          table {
-              border-collapse: separate;
-              border-spacing: 1px;
-              width: 100%;
-              border: 1px ridge #CCCCCC;
-            }
-
-            td {
-              border: 2px ridge #CCCCCC;
-              padding: 4px;
-              text-align: left;
-            }
-
-            /* Add style for the page container to give it a border */
-          .page-container {
-            margin: 25px;
-            border: 1px solid #000; /* Set the border width and color for the page */
-            padding: 25px; /* Add some padding to create space around the content */
-            height: auto;
-          }
-
-          /* Add style for the body element to remove any default margin and padding */
-          body {
-            margin: 0;
-            padding: 0;
-          }
-
-        </style>
-      </head>
-      <body>
-        <div class="page-container">
-          <div class="watermark-container">
-            ${tableContent}
-            <img src="images/logos/mdi_logo.png" class="watermark-image" />
-          </div>
-      </div>
-      </body>
-    </html>
-  `
+          </style>
+        </head>
+        <body>
+          <div class="page-container">
+            <div class="watermark-container">
+              ${tableContent}
+              <img src="images/logos/mdi_logo.png" class="watermark-image" />
+            </div>
+        </div>
+        </body>
+      </html>
+    `
 
       html2pdf().set(options).from(htmlContent).save()
     },
@@ -224,11 +225,10 @@ export default {
       `
 
       this.transcripts.forEach((transcript, index) => {
+        this.count++
         let session = transcript.SemesterSession.substring(transcript.SemesterSession.indexOf('('))
         console.log('trans', transcript)
-        if (index == 3) {
-          content += `<br><br><br>`
-        }
+
         if (index === 2) {
           content += `
             <table class="transcript-table">
@@ -285,9 +285,10 @@ export default {
           `
       })
       content += `
-        <div style="text-align: right">
-          <td style='font-size: 13px'>CUMULATIVE GRADE POINT AVERAGE</td>
-          <td style='font-size: 13px'>${this.cgpa.toFixed(3)}</td>
+        <div style="position: relative">
+          <div style="text-align: right">
+          <td style='font-size: 10px'>CUMULATIVE GRADE POINT AVERAGE</td>
+          <td style='font-size: 10px'>${this.cgpa.toFixed(3)}</td>
         </div>
 
         <div style="display: flex; justify-content: space-between; margin-top: 50px">
@@ -296,6 +297,7 @@ export default {
             <div>Registrar</div>
           </div>
           <div>School Stamp</div>
+        </div>
         </div>
 
           `

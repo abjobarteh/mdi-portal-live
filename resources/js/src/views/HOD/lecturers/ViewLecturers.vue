@@ -175,15 +175,7 @@ export default {
         { text: 'Lecturer Type', value: 'lecturer_type' },
         { text: 'Action', value: 'action', sortable: false },
       ],
-      // editLecturerDialog: false,
-      // editedIndex: -1,
-      // editLecturerFormData: {
-      //   id: null,
-      //   mark_from: '',
-      //   mark_to: '',
-      //   grade: '',
-      //   interpretation: '',
-      // },
+
       allocateCourseFormData: {
         lecturer_id: '',
         semester_courses_ids: [],
@@ -246,65 +238,6 @@ export default {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'lecturers')
       XLSX.writeFile(workbook, 'lecturers.xlsx')
     },
-
-    // editlecturer(item) {
-    //   this.editedIndex = this.items.indexOf(item)
-    //   this.editLecturerFormData = Object.assign({}, item)
-    //   this.editLecturerDialog = true
-    // },
-
-    // submitEditlecturerForm() {
-    //   // make a PUT request to update the lecturerSystem data
-    //   axios
-    //     .put(`/api/lecturer/${this.editLecturerFormData.id}`, this.editLecturerFormData)
-    //     .then(response => {
-    //       // show success alert
-    //       this.editLecturerDialog = false
-    //       swal
-    //         .fire({
-    //           title: 'Success!',
-    //           text: 'Lecturer updated successfully.',
-    //           icon: 'success',
-    //           confirmButtonText: 'OK',
-    //         })
-    //         .then(() => {
-    //           this.getResults()
-    //         })
-    //     })
-    //     .catch(error => {
-    //       // show error alert
-    //       swal.fire({
-    //         title: 'Error!',
-    //         text: 'Failed to update grade.',
-    //         icon: 'error',
-    //         confirmButtonText: 'OK',
-    //       })
-    //     })
-    //   // hide the dialog
-    //   this.editLecturerDialog = false
-    //   // clear the edited item
-    //   this.editLecturerFormData = {
-    //     id: null,
-    //     mark_from: '',
-    //     mark_to: '',
-    //     grade: '',
-    //     interpretation: '',
-    //   }
-    //   this.editedIndex = -1
-    // },
-    // cancelEdit() {
-    //   // hide the editLecturerDialog
-    //   this.editLecturerDialog = false
-    //   // clear the edited item
-    //   this.editLecturerFormData = {
-    //     id: null,
-    //     mark_from: '',
-    //     mark_to: '',
-    //     grade: '',
-    //     interpretation: '',
-    //   }
-    //   this.editedIndex = -1
-    // },
 
     deleteLecturer(item) {
       // perform delete action on item

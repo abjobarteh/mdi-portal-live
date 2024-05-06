@@ -18,23 +18,26 @@
           <v-img width="170" height="120" :src="require('@/assets/images/logos/mdi_logo_square.png').default"></v-img>
 
           <p class="text-h4 font-weight-semibold text-center mb-2">MDI PORTAL</p>
-          <p class="text-h6 font-weight-semibold text-center mb-2">Welcome! Please Sign in</p>
+          <p class="text-h6 font-weight-semibold text-center mb-2">Reset Your Password</p>
         </v-card-text>
 
         <!-- login form -->
         <v-card-text>
-          <v-form @submit.prevent="login">
+          <v-form @submit.prevent="submit">
             <v-text-field
-              v-model="auth.email"
+              v-model="auth.password"
               outlined
-              label="Email/Username"
-              placeholder="john@example.com"
+              :type="isPasswordVisible ? 'text' : 'password'"
+              label="New Password"
+              placeholder="············"
+              :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
               hide-details
+              @click:append="isPasswordVisible = !isPasswordVisible"
               class="mb-3"
             ></v-text-field>
 
             <v-text-field
-              v-model="auth.password"
+              v-model="auth.passwordConfirmation"
               outlined
               :type="isPasswordVisible ? 'text' : 'password'"
               label="Password"
@@ -44,20 +47,9 @@
               @click:append="isPasswordVisible = !isPasswordVisible"
             ></v-text-field>
 
-            <div class="d-flex align-center justify-space-between flex-wrap">
-              <!-- forgot link -->
-              <router-link :to="{ name: 'forgot-password' }" class="mt-1"> Forgot Password </router-link>
-            </div>
-
-            <v-btn block color="primary" type="submit" class="mt-6"> Login </v-btn>
+            <v-btn block color="primary" type="submit" class="mt-6"> Submit </v-btn>
           </v-form>
           <span v-if="error" style="color: red; margin-left: 100px; font-weight: bold">{{ errorMessage }}</span>
-        </v-card-text>
-
-        <!-- create new account  -->
-        <v-card-text class="d-flex align-center justify-center flex-wrap mt-2">
-          <span class="me-2"> New on our platform? </span>
-          <router-link :to="{ name: 'pages-register' }"> Create an account </router-link>
         </v-card-text>
       </v-card>
     </div>
@@ -70,14 +62,16 @@ import { mapActions } from 'vuex'
 import axios from 'axios'
 
 export default {
-  name: 'Login',
+  props: ['token', 'email'], // Define props for token and email
+
+  name: 'ResetPassword',
   data() {
     return {
       error: false,
       errorMessage: '',
       auth: {
-        email: '',
         password: '',
+        passwordConfirmation: '',
       },
       validationErrors: {},
       processing: false,
@@ -89,27 +83,36 @@ export default {
     }
   },
   methods: {
-    async login() {
-      if (this.auth.email == '' || this.auth.password == '') {
+    async submit() {
+      if (this.auth.password == '' || this.auth.passwordConfirmation == '') {
         swal.fire({
           title: 'Error!',
-          text: 'Please fill the Email and Password',
+          text: 'Please fill the Password and Password Confirmation',
           icon: 'error',
           confirmButtonText: 'OK',
         })
         return
       }
       try {
-        await this.$store.dispatch('login', {
-          email: this.auth.email,
+        const response = await axios.post('/api/reset-user-password', {
+          email: this.email,
+          token: this.token,
           password: this.auth.password,
-          device_name: 'browser',
+          password_confirmation: this.auth.passwordConfirmation,
         })
-        await this.$store.dispatch('fetchUser')
+        console.log(response.data.message) // Success message
+        swal
+          .fire({
+            title: 'Success!',
+            text: 'Password reset successful',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
+          .then(() => {
+            this.$router.push('/login')
+          })
       } catch (error) {
-        // console.log(error.response.data.errors)
-        this.error = true
-        this.errorMessage = error.response.data.errors
+        console.error('Error:', error.response.data.error) // Error message
       }
     },
   },

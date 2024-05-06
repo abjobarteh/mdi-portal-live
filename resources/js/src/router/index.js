@@ -570,6 +570,34 @@ const routes = [
       layout: 'blank',
     },
   },
+  // {
+  //   path: '/api/reset-password/:token',
+  //   name: 'reset-password',
+  //   component: () => import('@/views/pages/ResetPassword.vue'),
+  //   meta: {
+  //     layout: 'blank',
+  //   },
+  // },
+  {
+    path: '/api/reset-user-password',
+    name: 'reset-user-password',
+    component: () => import('@/views/pages/ResetPassword.vue'),
+    props: route => ({
+      token: route.query.token,
+      email: route.query.email
+    }),
+    meta: {
+      layout: 'blank',
+    },
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    component: () => import('@/views/pages/ForgotPassword.vue'),
+    meta: {
+      layout: 'blank',
+    },
+  },
   {
     path: '/error-404',
     name: 'error-404',

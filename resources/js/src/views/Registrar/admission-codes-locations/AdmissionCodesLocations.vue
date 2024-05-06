@@ -18,7 +18,7 @@
         </div>
 
         <!-- Data table -->
-        <v-card-text style="height: 60vh">
+        <v-card-text style="height: 25vh">
           <v-data-table
             :headers="headers"
             :items="admissionCodeLocations"

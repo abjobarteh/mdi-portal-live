@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use App\Models\AdmissionCode;
 use App\Models\AdmissionCodeLocation;
+use App\Models\Course;
+use App\Models\Hod;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\StudentPayment;
@@ -160,6 +162,29 @@ class DashboardController extends Controller
         return response()->json([
             'myCourses' => $myCourses,
             'myStudents' => $myTotalStudents,
+
+        ]);
+    }
+
+    public function hodDashboardCounts()
+    {
+        $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
+
+        $userId = auth()->user()->id;
+        $departmentId = Hod::where('user_id', $userId)->value('department_id');
+        $query = Course::whereHas('program.department', function ($query) use ($departmentId) {
+            $query->where('id', $departmentId);
+        })->with(['program.department']);
+        $myCourses = $query->count();
+
+
+
+        $students = Student::where('department_id', $departmentId)->with('payments.semester', 'department')->where('accepted', 'accepted');
+        $studentsCount = $students->count();
+
+        return response()->json([
+            'myCourses' => $myCourses,
+            'myStudents' => $studentsCount,
 
         ]);
     }

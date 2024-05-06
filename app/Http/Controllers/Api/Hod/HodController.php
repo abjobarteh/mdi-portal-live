@@ -99,7 +99,10 @@ class HodController extends Controller
     }
     public function hodStudents(Request $request)
     {
-        $query = Student::with('payments.semester', 'department')->where('accepted', 'accepted');
+        $userId = auth()->user()->id;
+        $departmentId = Hod::where('user_id', $userId)->value('department_id');
+
+        $query = Student::where('department_id', $departmentId)->with('payments.semester', 'department')->where('accepted', 'accepted');
 
         if ($request->has('sponsored')) {
             $query->where('is_sponsored', 1);

@@ -19,7 +19,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <registered-courses v-if="courses.length" :courses="courses"></registered-courses>
+          <registered-courses v-if="registeredCourses.length" :courses="courses"></registered-courses>
           <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Registered Courses</h6>
         </v-tab-item>
 
@@ -85,6 +85,7 @@ export default {
       },
       courses: '',
       runnings: '',
+      registeredCourses: '',
     }
   },
   created() {
@@ -113,6 +114,18 @@ export default {
         })
         .catch(err => {
           this.courses = []
+          this.pageCount = 0
+        })
+
+      axios
+        .get('/api/registerd-courses')
+        .then(response => {
+          this.registeredCourses = response.data.result
+          console.log('registed courses', this.runnings)
+          this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.runnings = []
           this.pageCount = 0
         })
     },

@@ -29,7 +29,7 @@
               {{ statisticsData[0].title }}
             </p>
             <h3 class="text-xl font-weight-semibold">
-              {{ statisticsData[0].total }}
+              {{ coursesCount }}
             </h3>
           </div>
         </v-col>
@@ -51,51 +51,7 @@
               {{ statisticsData[1].title }}
             </p>
             <h3 class="text-xl font-weight-semibold">
-              {{ statisticsData[1].total }}
-            </h3>
-          </div>
-        </v-col>
-
-        <!-- Third instance -->
-        <v-col cols="6" md="3" class="d-flex align-center">
-          <v-avatar
-            size="44"
-            :color="resolveStatisticsIconVariation(statisticsData[2].title).color"
-            rounded
-            class="elevation-1"
-          >
-            <v-icon dark color="white" size="30">
-              {{ resolveStatisticsIconVariation(statisticsData[2].title).icon }}
-            </v-icon>
-          </v-avatar>
-          <div class="ms-3">
-            <p class="text-xs mb-0">
-              {{ statisticsData[2].title }}
-            </p>
-            <h3 class="text-xl font-weight-semibold">
-              {{ statisticsData[2].total }}
-            </h3>
-          </div>
-        </v-col>
-
-        <!-- Fourth instance -->
-        <v-col cols="6" md="3" class="d-flex align-center">
-          <v-avatar
-            size="44"
-            :color="resolveStatisticsIconVariation(statisticsData[3].title).color"
-            rounded
-            class="elevation-1"
-          >
-            <v-icon dark color="white" size="30">
-              {{ resolveStatisticsIconVariation(statisticsData[3].title).icon }}
-            </v-icon>
-          </v-avatar>
-          <div class="ms-3">
-            <p class="text-xs mb-0">
-              {{ statisticsData[3].title }}
-            </p>
-            <h3 class="text-xl font-weight-semibold">
-              {{ statisticsData[3].total }}
+              {{ myStudentCount }}
             </h3>
           </div>
         </v-col>
@@ -111,22 +67,17 @@ import { mdiAccountOutline, mdiCurrencyUsd, mdiTrendingUp, mdiDotsVertical, mdiL
 export default {
   data() {
     return {
+      myStudentCount: '',
+      coursesCount: '',
+
       statisticsData: [
         {
-          title: 'Active Lecturers',
+          title: 'Total Courses',
           total: '245',
         },
         {
           title: 'Active students',
           total: '12.5',
-        },
-        {
-          title: 'Accepted Students',
-          total: '100',
-        },
-        {
-          title: 'Rejected Students',
-          total: '88',
         },
       ],
 
@@ -153,12 +104,11 @@ export default {
   methods: {
     fetchStatusCounts() {
       axios
-        .get('/api/user-counts')
+        .get('/api/hod-dashboard')
         .then(response => {
-          this.statisticsData[0].total = response.data.activeLecturers
-          this.statisticsData[1].total = response.data.activeStudents
-          this.statisticsData[2].total = response.data.acceptedStudents
-          this.statisticsData[3].total = response.data.rejectedStudents
+          this.myStudentCount = response.data.myStudents
+          this.coursesCount = response.data.myCourses
+          console.log('count', this.myStudentCount)
         })
         .catch(error => {
           console.error('Error fetching status counts:', error)

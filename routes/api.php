@@ -251,6 +251,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-hod-lecturers', [HodController::class, 'hodLecturers']);
         Route::post('/approve-courses-hod', [HodController::class, 'approveCoursesHod']);  // for the student middleware
         Route::get('/view-hod-students', [HodController::class, 'hodStudents']);
+        Route::get('/hod-dashboard', [DashboardController::class, 'hodDashboardCounts']);
     });
 
 
@@ -288,3 +289,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+
+Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('reset-user-password', [AuthController::class, 'resetPassword'])->name('password.reset');
+
+// Route::get('verify-email/{id}/{hash}', [AuthController::class, 'verifyEmail']);
+// Route::post('email/verification-notification', [AuthController::class, 'verificationNotification']);

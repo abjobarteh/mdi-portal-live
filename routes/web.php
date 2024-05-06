@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
 use App\Mail\AdmissionCodeMail;
@@ -19,5 +20,7 @@ use Illuminate\Support\Facades\Mail;
 // Route::get('send', function () {
 //     Mail::to('babajasseh@gmail.com')->send(new AdmissionCodeMail("1343423432"));
 // });
+
+
 
 Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');

@@ -57,7 +57,7 @@
           >
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="editCourse(item)">Edit</v-btn>
-              <v-btn small color="error" @click="deleteCourse(item)">Delete</v-btn>
+              <v-btn small color="error" @click="deleteCourse(item)">X</v-btn>
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -165,7 +165,7 @@ export default {
       headers: [
         { text: 'Course Code', value: 'course_code' },
         { text: 'Course Name', value: 'course_name' },
-        { text: 'Program Name', value: 'program.name' },
+        // { text: 'Program Name', value: 'program.name' },
         { text: 'Department Name', value: 'program.department.name' },
 
         { text: 'Action', value: 'action', sortable: false },

@@ -192,8 +192,8 @@ class AdmissionCodeLocationController extends Controller
 
         $validatedData = $request->validate([
             'address' => 'required',
-            'username' => 'required',
-            'email' => 'required',
+            'username' => 'required|unique:users,username', // Ensure username is unique in the 'users' table
+            'email' => 'required|email|unique:users,email', // Ensure email is unique and in valid email format
             'password' => 'required'
         ]);
         // i want to create a user also who will be able to sell the codes

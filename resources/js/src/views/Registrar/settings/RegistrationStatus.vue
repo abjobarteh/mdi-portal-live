@@ -119,6 +119,12 @@ export default {
         .then(response => {
           // Handle the API response if needed
           console.log(`Registration opened for ${item.status}`)
+          swal.fire({
+            title: 'Success!',
+            text: 'Registration opened successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
         })
         .catch(error => {
           // Handle any errors that occurred during the API call
@@ -149,7 +155,13 @@ export default {
         .post('/api/update-registration-status', { status: 'Close' })
         .then(response => {
           // Handle the API response if needed
-          console.log(`Registration closed for ${item.status}`)
+          // console.log(`Registration closed for ${item.status}`)
+          swal.fire({
+            title: 'Success!',
+            text: 'Registration closed successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
         })
         .catch(error => {
           // Handle any errors that occurred during the API call

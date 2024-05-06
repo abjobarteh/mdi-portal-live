@@ -29,10 +29,8 @@ import StatisticsCardVertical from '@/components/statistics-card/StatisticsCardV
 // demos
 import DashboardCongratulationJohn from './DashboardCongratulationJohn.vue'
 import DashboardStatisticsCard from './DashboardStatisticsCard.vue'
-import DashboardCardTotalEarning from './DashboardCardTotalEarning.vue'
 import DashboardCardDepositAndWithdraw from './DashboardCardDepositAndWithdraw.vue'
 import DashboardCardSalesByCountries from './DashboardCardSalesByCountries.vue'
-import DashboardWeeklyOverview from './DashboardWeeklyOverview.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
 import 'vuetify/dist/vuetify.min.css'
 
@@ -41,10 +39,8 @@ export default {
     StatisticsCardVertical,
     DashboardCongratulationJohn,
     DashboardStatisticsCard,
-    DashboardCardTotalEarning,
     DashboardCardDepositAndWithdraw,
     DashboardCardSalesByCountries,
-    DashboardWeeklyOverview,
     DashboardDatatable,
   },
   setup() {

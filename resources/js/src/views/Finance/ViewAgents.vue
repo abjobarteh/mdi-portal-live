@@ -53,7 +53,7 @@
           <v-form ref="addUserForm">
             <v-text-field outlined v-model="addUserFormData.username" label="Username"></v-text-field>
             <v-text-field outlined v-model="addUserFormData.email" label="Email"></v-text-field>
-            <v-text-field outlined v-model="addUserFormData.address" label="Location"></v-text-field>
+            <v-text-field outlined v-model="addUserFormData.address" label="Company Issued To"></v-text-field>
             <v-row>
               <v-col cols="6">
                 <v-text-field outlined v-model="addUserFormData.password" label="Password"></v-text-field>
@@ -307,7 +307,7 @@ export default {
             swal
               .fire({
                 title: 'Success!',
-                text: 'User added successfully.',
+                text: 'Agent Added successfully.',
                 icon: 'success',
                 confirmButtonText: 'OK',
               })

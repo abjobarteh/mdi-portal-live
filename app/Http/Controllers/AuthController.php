@@ -13,6 +13,9 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
+
 
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
@@ -115,11 +118,27 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        // $validatedData = $request->validate([
+        //     'firstname' => 'required|max:255',
+        //     'lastname' => 'required|max:255',
+        //     'username' => 'required|unique:users,username',
+        //     'email' => 'required|email|unique:users,email',
+        //     'password' => 'required|max:255',
+        // ]);
         $validatedData = $request->validate([
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
+            'username' => [
+                'required',
+                Rule::unique('users', 'username'), // Unique in 'users' table
+                Rule::unique('students', 'username'), // Unique in 'students' table
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email'), // Unique in 'users' table
+                Rule::unique('students', 'email'), // Unique in 'students' table
+            ],
             'password' => 'required|max:255',
         ]);
 
@@ -144,7 +163,7 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 'is_applicant' => 1,
                 'application_completed' => 0,
-                'accepted' => 'pending'
+                'accepted' => 'pending',
             ]);
 
             // Generate a random 5-digit token
@@ -212,5 +231,44 @@ class AuthController extends Controller
         return [
             'message' => 'Logged out'
         ];
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Email not found in our records'], 404);
+        }
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'Reset link sent successfully'])
+            : response()->json(['error' => 'Unable to send reset link'], 500);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'token' => 'required',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill(['password' => bcrypt($password)])->save();
+            }
+        );
+
+        return $status == Password::PASSWORD_RESET
+            ? response()->json(['message' => 'Password reset successfully'])
+            : response()->json(['error' => 'Unable to reset password'], 500);
     }
 }
