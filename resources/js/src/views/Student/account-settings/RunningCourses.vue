@@ -114,15 +114,19 @@ export default {
                   })
               })
               .catch(error => {
-                console.log(error.response.data.message)
-
                 // show error alert
-                swal.fire({
-                  title: 'Error!',
-                  text: error.response.data.message,
-                  icon: 'error',
-                  confirmButtonText: 'OK',
-                })
+                swal
+                  .fire({
+                    title: 'Error!',
+                    text: error.response.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    {
+                      window.location.reload() // this sometimes causes 419
+                    }
+                  })
               })
           } else {
             // Checkbox state is reverted if confirmation is canceled

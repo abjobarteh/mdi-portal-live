@@ -90,8 +90,17 @@
               :items="departments.map(department => ({ id: department.id, name: department.name }))"
               item-value="id"
               item-text="name"
-              label="Lecturer Main Department?"
+              label="Lecturer's Main Department?"
               @input="onDepartmentSelected"
+            ></v-select>
+            <v-select
+              v-if="showhodDepts"
+              outlined
+              v-model="addUserFormData.main_department_id"
+              :items="departments.map(department => ({ id: department.id, name: department.name }))"
+              item-value="id"
+              item-text="name"
+              label="Hod Department?"
             ></v-select>
             <v-select
               v-if="showDepartments"
@@ -228,6 +237,7 @@ export default {
       users: [],
       departments: [],
       showDepartments: false,
+      showhodDepts: false,
       selectedDepartment: [],
 
       headers: [
@@ -306,8 +316,11 @@ export default {
     'addUserFormData.role_id': function (newVal, oldVal) {
       if (newVal === 3) {
         this.showDepartments = true
+      } else if (newVal === 7) {
+        this.showhodDepts = true
       } else {
         this.showDepartments = false
+        this.showhodDepts = false
       }
     },
   },

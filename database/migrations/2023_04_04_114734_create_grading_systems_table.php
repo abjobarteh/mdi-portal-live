@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->double('mark_from');
             $table->double('mark_to');
-            $table->string('grade_point');
+            // $table->string('grade_point');
             $table->string('grade');
             $table->string('interpretation');
             $table->timestamps();

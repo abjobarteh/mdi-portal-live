@@ -9,6 +9,17 @@ class Hod extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'email',
+        'address',
+        'phonenumber',
+        'username',
+        'user_id',
+        'department_id',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

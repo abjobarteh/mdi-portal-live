@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hod;
 use App\Models\Lecturer;
 use App\Models\User;
 use Carbon\Carbon;
@@ -145,6 +146,18 @@ class UserController extends Controller
 
 
                 $lecturer->teachables()->attach($request->course_ids);
+            } elseif ($validatedData['role_id'] == 7) {
+                $lecturer = Hod::create([
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'email' => $user->email,
+                    'address' => $user->address,
+                    'phonenumber' => $user->phonenumber,
+                    'username' => $user->username,
+                    'user_id' => $user->id,
+                    'department_id' => $request->get('main_department_id')
+
+                ]);
             }
             activity()
                 ->causedBy(auth()->user())

@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'middlename' => 'A',
             'lastname' => 'admin',
             'username' => 'admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'superadmin@gmail.com',
             'address' => '123 Main St',
             'role_id' => 1,
             'phonenumber' => '7936410',
@@ -60,20 +60,20 @@ class UserSeeder extends Seeder
             'email' => 'finance@gmail.com',
             'address' => '123 Main St',
             'phonenumber' => '7199012',
-            'role_id' => 5,  // student is having the role_of 5
+            'role_id' => 5,
             'password' => Hash::make('password'),
         ]);
 
-        User::create([
-            'firstname' => 'hod',
-            'middlename' => 'F',
-            'lastname' => 'hod',
-            'username' => 'hod',
-            'email' => 'hod@gmail.com',
-            'address' => '123 Main St',
-            'phonenumber' => '7199012',
-            'role_id' => 5,  // student is having the role_of 5
-            'password' => Hash::make('password'),
-        ]);
+        // User::create([
+        //     'firstname' => 'hod',
+        //     'middlename' => 'F',
+        //     'lastname' => 'hod',
+        //     'username' => 'hod',
+        //     'email' => 'hod@gmail.com',
+        //     'address' => '123 Main St',
+        //     'phonenumber' => '7199012',
+        //     'role_id' => 7,
+        //     'password' => Hash::make('password'),
+        // ]);
     }
 }

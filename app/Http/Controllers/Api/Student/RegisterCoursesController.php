@@ -27,12 +27,12 @@ class RegisterCoursesController extends Controller
         ])->count();
 
         if ($totalRegisteredCourses >= 6) {
-            return response()->json(['message' => 'Cannot register more than 6 courses in the same semester.'], 400);
+            return response()->json(['message' => 'Cannot register more than 6 courses in the same semester.'], 422);
         }
 
         $courseRegisteredBefore = StudentRegisteredCourse::where('student_id', $validatedData['student_id'])->where('course_id', $validatedData['course_id'])->exists();
         if ($courseRegisteredBefore) {
-            return response()->json(['message' => 'Please you have registered this course before.'], 400);
+            return response()->json(['message' => 'Please you have registered this course before.'], 422);
         }
 
         $studentRegisteredCourse = StudentRegisteredCourse::firstOrCreate([
