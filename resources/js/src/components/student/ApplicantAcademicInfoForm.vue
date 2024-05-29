@@ -25,10 +25,10 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field outlined v-model="school.startDate" label="Start Date" type="date"></v-text-field>
+                <v-text-field outlined v-model="school.startDate" label="Start Date" type="month"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field outlined v-model="school.endDate" label="Start Date" type="date"></v-text-field>
+                <v-text-field outlined v-model="school.endDate" label="Start Date" type="month"></v-text-field>
               </v-col>
               <v-col cols="12" sm="5">
                 <v-text-field

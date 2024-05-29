@@ -34,12 +34,24 @@ class ApplicantPersonalInfoController extends Controller
         $validatedData = $request->validate([
             'id' => 'required',
             'gender' => 'required',
-            'dob' => 'required',
-            'marital_status' => 'required',
+            'dob' => [
+                'required',
+                'date',
+                'before:today',
+                function ($attribute, $value, $fail) {
+                    $minDate = now()->subYears(18)->format('Y-m-d');
+                    if ($value > $minDate) {
+                        $fail('The date of birth must be at least 18 years ago.');
+                    }
+                },
+            ],            'marital_status' => 'required',
             'nationality' => 'required',
             'address' => 'required',
             'employment_status' => 'required',
-            'phonenumber' => 'required',
+            'phonenumber' => [
+                'required',
+                'regex:/^[2-9][0-9]{6}$/',
+            ],
             'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
