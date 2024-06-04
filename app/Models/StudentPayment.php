@@ -14,7 +14,9 @@ class StudentPayment extends Model
         'student_id',
         'semester_id',
         'amount_paid',
-        'payment_type'
+        'payment_type',
+        'semester_fee_completed',
+        'semester_fee_balance',
     ];
 
     public function semester()

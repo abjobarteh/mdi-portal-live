@@ -10,13 +10,14 @@
   <title>MDI Student Portal</title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+  <link rel="shortcut icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+  <!-- JavaScript -->
+  <script src="/js/app.js" defer></script>
 </head>
 
 <body>

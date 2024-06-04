@@ -1,28 +1,35 @@
 <template>
-  <v-card style="background-color: #fcfbfe">
-    <v-container class="my-5">
-      <v-col cols="12" md="12" class="mb-4">
-        <UserInfoCard :studentProfile="applicantProfile" />
-      </v-col>
-      <v-col cols="12" md="12" class="mb-4">
-        <education-card :education="education"></education-card>
-      </v-col>
-      <v-col cols="12" md="12" class="mb-4">
-        <certificate-card :certificates="certificates"></certificate-card>
-      </v-col>
-      <v-col cols="12" md="12" class="mb-4">
-        <DepartmentCard :program="program" />
-      </v-col>
-      <v-row v-if="this.$route.query.param == 'incoming'">
-        <v-col cols="6">
-          <v-btn @click="rejectStudentApplication" color="red" block dark>Reject</v-btn>
+  <div>
+    <v-card style="background-color: #fcfbfe">
+      <v-container class="my-5">
+        <v-col cols="12" md="12" class="mb-4">
+          <UserInfoCard :studentProfile="applicantProfile" />
         </v-col>
-        <v-col cols="6">
-          <v-btn @click="acceptStudentApplication" color="green" block dark>Accept</v-btn>
+        <v-col cols="12" md="12" class="mb-4">
+          <education-card :education="education"></education-card>
         </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+        <v-col cols="12" md="12" class="mb-4">
+          <certificate-card :certificates="certificates"></certificate-card>
+        </v-col>
+        <v-col cols="12" md="12" class="mb-4">
+          <DepartmentCard :program="program" />
+        </v-col>
+        <v-row v-if="this.$route.query.param == 'incoming'">
+          <v-col cols="6">
+            <v-btn @click="rejectStudentApplication" color="red" block dark>Reject</v-btn>
+          </v-col>
+          <v-col cols="6">
+            <v-btn @click="acceptStudentApplication" color="green" block dark>Accept</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+    <!-- loading spinner -->
+    <div v-if="isLoading" class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -43,6 +50,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       education: [],
       certificates: [],
       program: '',
@@ -113,6 +121,7 @@ export default {
               })
               .then(dateResult => {
                 if (dateResult.isConfirmed) {
+                  this.isLoading = true
                   const orientationDate = document.getElementById('orientationDate').value
 
                   // Perform API request to schedule interview
@@ -122,6 +131,7 @@ export default {
                       orientationDate: orientationDate,
                     })
                     .then(result => {
+                      this.isLoading = false
                       swal
                         .fire({
                           title: 'Success!',
@@ -153,6 +163,8 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
+            this.isLoading = true
+
             axios.post(`/api/reject-student-application `, { userId: this.$route.params.id }).then(result => {
               swal
                 .fire({
@@ -162,6 +174,8 @@ export default {
                   confirmButtonText: 'OK',
                 })
                 .then(() => {
+                  this.isLoading = false
+
                   this.$router.push('/view-incoming-applications')
                 })
             })
@@ -177,7 +191,7 @@ export default {
     getResults() {
       if (this.$route.query.param == 'accepted') {
         axios
-          .post(`/api/view-accepted-applications?page=` + this.page, { userId: this.$route.params.id })
+          .post(`/api/view-accepted-application-detail?page=` + this.page, { userId: this.$route.params.id })
           .then(response => {
             console.log('anme', response.data.result.data[0].firstname)
             this.education = response.data.result.data[0].education
@@ -269,3 +283,44 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  z-index: 9999;
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  animation-delay: -1s;
+}
+
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+</style>

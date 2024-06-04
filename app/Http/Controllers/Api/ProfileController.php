@@ -44,6 +44,8 @@ class ProfileController extends Controller
             return User::where('id', auth()->user()->id)->first();
         } else if (auth()->user()->role_id == 1) {
             return User::where('id', auth()->user()->id)->first();
+        } else if (auth()->user()->role_id == 7) {
+            return User::where('id', auth()->user()->id)->first();
         }
     }
 

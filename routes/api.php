@@ -66,6 +66,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // move it to middleware 
     Route::get('/view-semesters', [SemesterController::class, 'index']);
 
+    Route::post('/view-missing-semester', [StudentPaymentController::class, 'viewSemesters']);
+
+
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar-admin'])->group(function () {
@@ -126,11 +129,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         // applications
-        Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
-        Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
-        Route::post('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
-        Route::post('/accept-student-application', [ApplicationsController::class, 'acceptStudentApplication']);
-        Route::post('/reject-student-application', [ApplicationsController::class, 'rejectStudentApplication']);
+        // Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
+        // Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
+        // Route::post('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
+        // Route::post('/accept-student-application', [ApplicationsController::class, 'acceptStudentApplication']);
+        // Route::post('/reject-student-application', [ApplicationsController::class, 'rejectStudentApplication']);
 
 
 
@@ -152,6 +155,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/approve-deferment/{id}', [RegistrarDefermentController::class, 'approveDeferment']);
     });
+
+
+    ///////////////////////////////////  REGISTRAR ADMIN END POINTS  ////////////////////////////
+    Route::middleware(['registrar-admin-hod'])->group(function () {
+        Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
+        Route::post('/view-accepted-application-detail', [ApplicationsController::class, 'viewAceptedApplicationDetails']);
+        Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
+        Route::post('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
+        Route::post('/accept-student-application', [ApplicationsController::class, 'acceptStudentApplication']);
+        Route::post('/reject-student-application', [ApplicationsController::class, 'rejectStudentApplication']);
+    });
+
 
 
     ///////////////////////////////////  ADMIN END POINTS  ////////////////////////////

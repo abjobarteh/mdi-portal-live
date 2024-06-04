@@ -19,7 +19,8 @@ class Program extends Model
         'fee',
         'department_id',
         'program_duration_id',
-        'per_semester_fee'
+        'per_semester_fee',
+        'min_payable_per_semester'
     ];
 
     public function department()

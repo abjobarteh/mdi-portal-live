@@ -51,6 +51,12 @@
         :to="{ name: 'finance-dashboard' }"
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
+      <nav-menu-link
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Dashboard"
+        :to="{ name: 'hod-dashboard' }"
+        :icon="icons.mdiAlphaTBoxOutline"
+      ></nav-menu-link>
 
       <nav-menu-link
         v-if="
@@ -60,6 +66,7 @@
             currentUser.role_id == '3' ||
             currentUser.role_id == '4' ||
             currentUser.role_id == '5' ||
+            currentUser.role_id == '7' ||
             (currentUser.role_id == '6' && userInfo.password_reset == 1))
         "
         title="Account Settings"
@@ -222,12 +229,6 @@
       ></nav-menu-link>
 
       <!-- // hod menus // -->
-      <nav-menu-link
-        v-if="currentUser && currentUser.role_id == '7'"
-        title="Dashboard"
-        :to="{ name: 'hod-dashboard' }"
-        :icon="icons.mdiAlphaTBoxOutline"
-      ></nav-menu-link>
 
       <nav-menu-link
         v-if="currentUser && currentUser.role_id == '7'"
@@ -249,6 +250,16 @@
         :to="{ name: 'view-hod-lecturers' }"
         :icon="icons.mdiAlphaTBoxOutline"
       ></nav-menu-link>
+
+      <nav-menu-group
+        v-if="currentUser && currentUser.role_id == '7'"
+        title="Applications"
+        :icon="icons.mdiFileOutline"
+      >
+        <nav-menu-link title="Incoming Applications" :to="{ name: 'view-incoming-applications' }"></nav-menu-link>
+        <nav-menu-link title="Accepted Applications" :to="{ name: 'view-accepted-applications' }"></nav-menu-link>
+        <nav-menu-link title="Rejected Applications" :to="{ name: 'view-rejected-applications' }"></nav-menu-link>
+      </nav-menu-group>
 
       <nav-menu-link
         v-if="currentUser && currentUser.role_id == '7'"

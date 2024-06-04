@@ -8,7 +8,7 @@
 
 <body>
     <p>Dear Student,</p>
-    <p>Thank you for applying. Your application is accepted, come for interview on: <strong>{{ $date }}</strong>.</p>
+    <p>Thank you for applying. Your application is accepted, come for orientation on: <strong>{{ $date }}</strong>.</p>
     <p>Note: Your student number is <strong>{{ $matnumber }}</strong>.</p>
     <p>Thank you!</p>
 </body>

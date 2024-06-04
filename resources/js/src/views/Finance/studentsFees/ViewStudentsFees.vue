@@ -173,11 +173,18 @@
         <!-- Tab 1 Content (Payments) -->
         <v-tab-item :key="1">
           <v-card>
-            <v-card-title>
-              <p>
+            <div style="text-align: center; font-family: Arial, sans-serif; margin: 20px">
+              <p style="font-size: 1.2em; margin: 10px 0">
                 <span style="font-weight: bold">{{ studentFullName }}'s</span> Payments
               </p>
-            </v-card-title>
+
+              <p style="font-size: 1.2em; margin: 10px 0">
+                <span style="font-weight: bold">Semester Balance:</span> D{{ semester_balance }}
+              </p>
+              <p style="font-size: 1.2em; margin: 10px 0">
+                <span style="font-weight: bold">Program Balance:</span> D{{ program_remaining_balance }}
+              </p>
+            </div>
             <v-card-text>
               <v-data-table :headers="studentPaymentsHeaders" :items="studentPayments">
                 <!-- <template v-slot:item.admission_code="{ item }">
@@ -199,20 +206,15 @@
             <v-card-text>
               <v-form ref="addDepartmentForm">
                 <v-select
+                  v-if="semestersMissing"
                   outlined
                   v-model="addPaymentFormData.semester_id"
-                  :items="
-                    semesters.map(semester => ({
-                      id: semester.id,
-                      name:
-                        semester.semester_name +
-                        '(' +
-                        semester.session.session_start.split(' ')[0] +
-                        '-' +
-                        semester.session.session_end +
-                        ')',
-                    }))
-                  "
+                  :items="[
+                    {
+                      id: semestersMissing.id,
+                      name: `${semestersMissing.semester_name} (${session_start} - ${session_end})`,
+                    },
+                  ]"
                   item-value="id"
                   item-text="name"
                   label="Semester Name"
@@ -262,7 +264,7 @@
             v-model="scholarshipFormData.uploadedFile"
             label="Upload File (Optional)"
             show-size
-            @change="handleFileUpload"
+            @change="null"
           ></v-file-input>
         </v-card-text>
         <v-card-actions>
@@ -312,7 +314,11 @@ export default {
   components: {},
   data() {
     return {
+      session_start: '',
+      session_end: '',
+      semester_balance: '',
       userInfo: '',
+      program_remaining_balance: '',
       showSponsorshipDetails: false,
       addSponsorDialog: false,
       student_id: '',
@@ -345,10 +351,13 @@ export default {
       studentPayments: [],
       studentPaymentsHeaders: [],
       students: [],
+      mat_number: '',
       semesters: [],
+      semestersMissing: [],
       sponsorshipDetails: [],
       studentFullName: '',
       studentDetails: '',
+      department: '',
       headers: [
         { text: 'FullName', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
@@ -484,10 +493,32 @@ export default {
           })
         })
     },
+    // view-missing-semester
     viewStudentInfo(student) {
-      this.addPaymentFormData.student_id = student.id
+      axios
+        .post('/api/view-missing-semester', { student_id: student.id })
+        .then(response => {
+          this.semestersMissing = response.data.result
+          this.session_start = response.data.result.session.session_start
+          this.session_end = response.data.result.session.session_end
+
+          console.log('missing students ', response.data.result)
+          // this.addPaymentDialog = false
+        })
+        .catch(error => {
+          // show error alert
+        }),
+        (this.addPaymentFormData.student_id = student.id)
       this.paymentDialog = true
       this.studentFullName = student.firstname + ' ' + student.lastname
+      this.department = student.department.name
+      this.mat_number = student.mat_number
+      this.program_remaining_balance = student.remaining_balance
+      // this.semester_balance = student.payments[0].semester_fee_balance
+      this.semester_balance =
+        student.payments.length > 0 && student.payments[0].semester.is_current_semester != 0
+          ? student.payments[0].semester_fee_balance
+          : student.program.per_semester_fee
       console.log('student', student)
       ;(this.studentPaymentsHeaders = [
         { text: 'Semester Name', value: 'semester.semester_name' },
@@ -551,7 +582,7 @@ export default {
         .get('/api/view-semesters?page=' + this.page)
         .then(response => {
           this.semesters = response.data.result.data
-          this.addPaymentFormData.semester_id = this.semesters[this.semesters.length - 1].id
+          // this.addPaymentFormData.semester_id = this.semesters[this.semesters.length - 1].id
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {
@@ -612,6 +643,7 @@ export default {
                 .then(() => {
                   this.generatePDF()
                   this.getResults()
+                  this.addPaymentFormData.amount_paid = ''
                 })
           })
           .catch(error => {
@@ -731,6 +763,21 @@ export default {
         <div class="info-row">
           <span class="info-label">Received From:</span>
           <span class="info-value">${this.studentFullName}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Student Number:</span>
+          <span class="info-value">${this.mat_number}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Department:</span>
+          <span class="info-value">${this.department}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Year of Enrollment:</span>
+          <span class="info-value">${this.userInfo.created_at.split('-')[0]}</span>
         </div>
 
         <div class="info-row">

@@ -24,7 +24,7 @@ return [
     'allowed_methods' => ['*'],
 
     // 'allowed_origins' => ['*'],
-    'allowed_origins' => ['http://127.0.0.1:8000'], // Replace with your Vue.js app URL
+    'allowed_origins' => ['https://www.mdiportal.com'], // Replace with your Vue.js app URL
 
 
     'allowed_origins_patterns' => [],
