@@ -377,7 +377,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1, 7],
     }
   },
 
@@ -387,7 +387,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/AcceptedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1, 7],
     }
 
   },
@@ -398,7 +398,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/RejectedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1, 7],
     }
   },
 
@@ -408,7 +408,7 @@ const routes = [
     component: () => import('@/views/Registrar/student/ApplicantDeclarationAndPreview.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1, 7],
     }
 
   },

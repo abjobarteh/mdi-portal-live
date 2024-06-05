@@ -8,11 +8,15 @@ use App\Models\User;
 use App\Models\ApplicantEducation;
 use App\Models\Department;
 use App\Models\StudentPayment;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 
 
 class Student extends Model
 {
     use HasFactory;
+
+    protected $appends = ['total_amount_paid', 'remaining_balance'];
 
     protected $fillable = [
         'firstname',
@@ -61,5 +65,24 @@ class Student extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    protected function totalAmountPaid(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->payments->sum('amount_paid')
+        );
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
+
+    protected function remainingBalance(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->program ? $this->program->fee - $this->totalAmountPaid : null
+        );
     }
 }

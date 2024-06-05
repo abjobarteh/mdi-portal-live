@@ -27,6 +27,48 @@ class StudentPaymentController extends Controller
     //     ]);
     // }
 
+    // public function index(Request $request)
+    // {
+    //     $query = Student::with('payments.semester', 'department')->where('accepted', 'accepted');
+
+    //     if ($request->has('sponsored')) {
+    //         $query->where('is_sponsored', 1);
+    //     } else if ($request->has('notsponsored')) {
+    //         $query->where('is_sponsored', 0);
+    //     }
+
+    //     if ($request->has('selectedItem') && $request->has('advanceSearch')) {
+
+    //         $selectedItem = $request->input('selectedItem');
+    //         $advanceSearch = $request->input('advanceSearch');
+
+    //         switch ($selectedItem) {
+    //             case 1:
+    //                 $query->where('mat_number', 'like', '%' . $advanceSearch . '%');
+    //                 break;
+    //             case 2:
+    //                 $query->where('email', 'like', '%' . $advanceSearch . '%');
+    //                 break;
+
+    //             default:
+    //                 break;
+    //         }
+    //     }
+    //     $courses = $query->paginate(13);
+    //     return response()->json([
+    //         'status' => 200,
+    //         'result' => $courses
+    //     ]);
+    // }
+
+    // public function semesters()
+    // {
+    //     $semesters = Semester::with('session')->where('is_current_semester', 1)->orderBy('id', 'desc')->paginate(13);
+    //     return response()->json([
+    //         'status' => 200,
+    //         'result' => $semesters
+    //     ]);
+    // }
     public function index(Request $request)
     {
         $query = Student::with('payments.semester', 'department')->where('accepted', 'accepted');
@@ -61,6 +103,67 @@ class StudentPaymentController extends Controller
         ]);
     }
 
+    // public function viewSemesters(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'student_id' => 'required|max:255',
+    //     ]);
+
+    //     if (StudentPayment::where('student_id', $validatedData['student_id'])
+    //         ->where('semester_fee_completed', 0)->exist()
+    //     ) {
+    //         $studentPaymentSemesterId =  StudentPayment::where('student_id', $validatedData['student_id'])
+    //             ->where('semester_fee_completed', 0)->value('semester_id');
+    //         $semesters = Semester::with('session')->where('id', $studentPaymentSemesterId)->first();
+
+    //         return response()->json([
+    //             'status' => 200,
+    //             'result' => $semesters
+    //         ]);
+    //     } else {
+    //         $semesters = Semester::with('session')->where('is_current_semester', 1)->orderBy('id', 'desc')->paginate(13);
+    //         return response()->json([
+    //             'status' => 200,
+    //             'result' => $semesters
+    //         ]);
+    //     }
+    // }
+
+    public function viewSemesters(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_id' => 'required|max:255',
+        ]);
+
+        $studentId = $validatedData['student_id'];
+
+        $studentPayment = StudentPayment::where('student_id', $studentId)
+            ->where('semester_fee_completed', 0)
+            ->first();
+
+        if ($studentPayment) {
+            $semesterId = $studentPayment->semester_id;
+            $semester = Semester::with('session')->find($semesterId);
+
+            return response()->json([
+                'status' => 200,
+                'result' => $semester
+            ]);
+        } else {
+            $semesters = Semester::with('session')
+                ->where('is_current_semester', 1)
+                ->orderBy('id', 'desc')
+                ->first();
+
+            return response()->json([
+                'status' => 200,
+                'result' => $semesters
+            ]);
+        }
+    }
+
+
+
     public function addPayment(Request $request)
     {
         // know the student total fee
@@ -70,6 +173,7 @@ class StudentPaymentController extends Controller
             'semester_id' => 'required|max:255',
             'amount_paid' => 'required|max:255',
         ]);
+        $studentPayment = StudentPayment::where('student_id', $validatedData['student_id'])->where('semester_id', $validatedData['semester_id'])->first();
         $studentDepartmentFee = Student::find($validatedData['student_id'])->department->programs->first();
         // student have already paid all the fees
         if (Student::find($validatedData['student_id'])->payment_type == 1) {
@@ -84,7 +188,8 @@ class StudentPaymentController extends Controller
                 'student_id' => $validatedData['student_id'],
                 'semester_id' => $validatedData['semester_id'],
                 'amount_paid' => $validatedData['amount_paid'],
-                'payment_type' => 'Full Course Payment'
+                'payment_type' => 'Full Course Payment',
+                'semester_fee_balance' => -1,
             ]);
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 1,
@@ -96,10 +201,59 @@ class StudentPaymentController extends Controller
                 'student_id' => $validatedData['student_id'],
                 'semester_id' => $validatedData['semester_id'],
                 'amount_paid' => $validatedData['amount_paid'],
-                'payment_type' => 'Per semester installment'
+                'payment_type' => 'Per semester installment',
+                'semester_fee_balance' => 0,
             ]);
+            StudentPayment::where('student_id', $validatedData['student_id'])->where('semester_id', $validatedData['semester_id'])->update([
+                'semester_fee_completed' => 1
+            ]);
+        } else if (
+            $validatedData['amount_paid'] >= $studentDepartmentFee['min_payable_per_semester'] &&
+            ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'])
+        ) {
+            if (is_null($studentPayment)) {
+                StudentPayment::create([
+                    'student_id' => $validatedData['student_id'],
+                    'semester_id' => $validatedData['semester_id'],
+                    'amount_paid' => $validatedData['amount_paid'],
+                    'payment_type' => 'Per semester installment',
+                    'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
+                ]);
+            } else if ($validatedData['amount_paid'] > $studentPayment['semester_fee_balance']) {
+                return response()->json(['message' => 'Please you should only pay ' .  'D' . $studentPayment['semester_fee_balance'] . ' to complete your balance'], 422);
+            } else if ($validatedData['amount_paid'] == $studentPayment['semester_fee_balance']) {
+                $studentPayment->update([
+                    'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
+                    'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
+                    'semester_fee_completed' => 1,
+                ]);
+            } else {
+                $studentPayment->update([
+                    'semester_fee_balance' => ($studentPayment['semester_fee_balance'] - $validatedData['amount_paid']),
+                    'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
+                ]);
+            }
+        } else if ($validatedData['amount_paid'] <  $studentDepartmentFee['min_payable_per_semester'] && is_null($studentPayment)) {
+            return response()->json(['message' => 'The minimum amount to pay is ' .  $studentDepartmentFee['min_payable_per_semester']], 422);
+        } else if ($studentPayment) {
+            if ($validatedData['amount_paid'] > $studentPayment['semester_fee_balance']) {
+                if ($studentPayment['semester_fee_balance'] == 0) {
+                    return response()->json(['message' => 'You have completed all your payments for this semester'], 422);
+                } else {
+                    return response()->json(['message' => 'Clear your balance of ' . 'D' . $studentPayment['semester_fee_balance'] . ' first'], 422);
+                }
+            } else {
+                // you are expected to either pay fully or per semester
+                // return response()->json(['message' => 'Pay all the fee (' . $studentDepartmentFee->fee . ') or per semester installment (' . $studentDepartmentFee['per_semester_fee'] . ')'], 422);
+                $studentPayment->update([
+                    'semester_fee_balance' => ($studentPayment['semester_fee_balance'] - $validatedData['amount_paid']),
+                    'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
+                ]);
+                if ($studentPayment['semester_fee_balance'] == 0) {
+                    $studentPayment->update(['semester_fee_completed' => 1]);
+                }
+            }
         } else {
-            // you are expected to either pay fully or per semester
             return response()->json(['message' => 'Pay all the fee (' . $studentDepartmentFee->fee . ') or per semester installment (' . $studentDepartmentFee['per_semester_fee'] . ')'], 422);
         }
 
@@ -110,6 +264,8 @@ class StudentPaymentController extends Controller
 
         return response()->json(['message' => 'Payment created successfully.']);
     }
+
+
 
     public function studentPayments()
     {

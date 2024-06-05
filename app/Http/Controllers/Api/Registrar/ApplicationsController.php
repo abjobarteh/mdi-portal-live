@@ -21,7 +21,7 @@ class ApplicationsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function acceptedApplications()
+    public function acceptedApplications(Request $request)
     {
 
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
@@ -30,6 +30,28 @@ class ApplicationsController extends Controller
             ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'accepted')
+            ->paginate(10);
+        foreach ($students as $student) {
+            $student['education'] = ApplicantEducation::where('user_id', $student->id)->get();
+            $student['certificates'] = ApplicantCertificate::where('user_id', $student->id)->get();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'result' => $students
+        ]);
+    }
+
+    public function viewAceptedApplicationDetails(Request $request)
+    {
+
+        $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
+            ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
+            ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
+            ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
+            ->where('role_id', 4)
+            ->where('application_completed', 1)->where('accepted', 'accepted')
+            ->where('users.id', $request->get('userId'))
             ->paginate(10);
         foreach ($students as $student) {
             $student['education'] = ApplicantEducation::where('user_id', $student->id)->get();
@@ -138,6 +160,7 @@ class ApplicationsController extends Controller
         // Send email to the student
         Mail::to($student->email)->send(new RejectedApplicationEmail());
 
+        User::where('id', $student->user_id)->delete();
 
         activity()
             ->causedBy(auth()->user())

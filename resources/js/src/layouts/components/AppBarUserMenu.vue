@@ -31,6 +31,8 @@
               ? 'Finance'
               : user.role_id === 6
               ? 'Agent'
+              : user.role_id === 7
+              ? 'HOD'
               : 'Unknown'
           }}</small>
         </div>

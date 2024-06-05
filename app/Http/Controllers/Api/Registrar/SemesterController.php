@@ -17,6 +17,15 @@ class SemesterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index()
+    // {
+    //     $semesters = Semester::with('session')->where('is_current_semester', 1)->orderBy('id', 'desc')->paginate(13);
+    //     return response()->json([
+    //         'status' => 200,
+    //         'result' => $semesters
+    //     ]);
+    // }
+
     public function index()
     {
         $semesters = Semester::with('session')->where('is_current_semester', 1)->orderBy('id', 'desc')->paginate(13);
@@ -25,6 +34,7 @@ class SemesterController extends Controller
             'result' => $semesters
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
