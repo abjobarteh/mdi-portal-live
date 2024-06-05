@@ -23,8 +23,8 @@ return [
     ],
     'allowed_methods' => ['*'],
 
-    // 'allowed_origins' => ['*'],
-    'allowed_origins' => ['https://www.mdiportal.com'], // Replace with your Vue.js app URL
+    'allowed_origins' => ['*'],
+    // 'allowed_origins' => ['https://www.mdiportal.com'], // Replace with your Vue.js app URL
 
 
     'allowed_origins_patterns' => [],
@@ -36,7 +36,5 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
-
-
 
 ];
