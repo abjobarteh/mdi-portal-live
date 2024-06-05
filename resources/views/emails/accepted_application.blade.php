@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Application Status</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceptance Email</title>
 </head>
-
 <body>
     <p>Dear Student,</p>
-    <p>Thank you for applying. Your application is accepted, come for orientation on: <strong>{{ $date }}</strong>.</p>
-    <p>Note: Your student number is <strong>{{ $matnumber }}</strong>.</p>
-    <p>Thank you!</p>
+    <p>Please find your acceptance letter attached.</p>
+    <p>Sincerely,</p>
+    <p>Office of the Registrar</p>
 </body>
-
 </html>
