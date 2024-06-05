@@ -50,6 +50,7 @@ class ProgramController extends Controller
             'fee' => 'required',
             'department_id' => 'required',
             'program_duration_id' => 'required',
+            'min_payable_per_semester' => 'required',
 
         ]);
         Program::create([
@@ -58,7 +59,8 @@ class ProgramController extends Controller
             'fee' => $validatedData['fee'],
             'department_id' => $validatedData['department_id'],
             'program_duration_id' => $validatedData['program_duration_id'],
-            'per_semester_fee' => $validatedData['fee'] / ((ProgramDuration::where('id', $validatedData['program_duration_id'])->value('duration')) * 2)
+            'per_semester_fee' => $validatedData['fee'] / ((ProgramDuration::where('id', $validatedData['program_duration_id'])->value('duration')) * 2),
+            'min_payable_per_semester' => $validatedData['min_payable_per_semester'],
         ]);
 
 
@@ -112,6 +114,7 @@ class ProgramController extends Controller
             'fee' => 'required',
             'department_id' => 'required',
             'program_duration_id' => 'required',
+            'min_payable_per_semester' => 'required',
         ]);
 
         $program = Program::find($id);
@@ -125,6 +128,7 @@ class ProgramController extends Controller
             'fee' => $validatedData['fee'],
             'department_id' => $validatedData['department_id'],
             'program_duration_id' => $validatedData['program_duration_id'],
+            'min_payable_per_semester' => $validatedData['min_payable_per_semester'],
         ]);
 
 
@@ -144,7 +148,6 @@ class ProgramController extends Controller
      */
     public function destroy($id)
     {
-
         activity()
             ->causedBy(auth()->user())
             ->withProperties(['attributes' => auth()->user()])
