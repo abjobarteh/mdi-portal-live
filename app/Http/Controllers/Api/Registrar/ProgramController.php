@@ -148,7 +148,6 @@ class ProgramController extends Controller
      */
     public function destroy($id)
     {
-
         activity()
             ->causedBy(auth()->user())
             ->withProperties(['attributes' => auth()->user()])
