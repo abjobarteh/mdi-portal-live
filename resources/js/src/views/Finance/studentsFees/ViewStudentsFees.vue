@@ -751,7 +751,7 @@ export default {
       <div class="title">TUITION FEES RECEIPT</div>
       <div class="header">
         <p class="subtitle">Management Development Institute</p>
-        <p>No 9 Kanifing GRTS Street</p>
+        <p>No 1. Kanifing GRTS Street</p>
       </div>
 
       <div class="receipt-info">
