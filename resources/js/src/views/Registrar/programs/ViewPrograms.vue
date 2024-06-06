@@ -95,7 +95,12 @@
               :key="error.$uid"
               >{{ error.$message }}</span
             >
-            <v-text-field outlined v-model="addProgramFormData.fee" label="Program Fee"></v-text-field>
+            <v-text-field outlined v-model="addProgramFormData.fee" label="Min Payable Amount"></v-text-field>
+            <v-text-field
+              outlined
+              v-model="addProgramFormData.min_payable_per_semester"
+              label="Program Fee"
+            ></v-text-field>
             <span
               style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
               v-for="error in v$.value.fee.$errors"
@@ -130,6 +135,11 @@
               outlined
               v-model="editProgramFormData.program_abbreviation"
               label="Program Abbreviation"
+            ></v-text-field>
+            <v-text-field
+              outlined
+              v-model="editProgramFormData.min_payable_per_semester"
+              label="Min Payable Amount"
             ></v-text-field>
             <v-select
               outlined
@@ -192,6 +202,7 @@ export default {
         department_id: '',
         program_duration_id: '',
         fee: '',
+        min_payable_per_semester: '',
       },
 
       // edit department
@@ -203,6 +214,7 @@ export default {
         department_id: '',
         program_duration_id: '',
         fee: '',
+        min_payable_per_semester: '',
       },
 
       rules: {
