@@ -256,6 +256,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']); // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
+        Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);
     });
 
 

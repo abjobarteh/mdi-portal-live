@@ -84,6 +84,8 @@ class DashboardController extends Controller
     {
         $acceptedStudents = Student::where('accepted', 'accepted')->count();
         $rejectedStudents = Student::where('accepted', 'rejected')->count();
+        $maleStudents = Student::where('accepted', 'accepted')->where('gender', 'male')->count();
+        $femaleStudents = Student::where('accepted', 'rejected')->where('gender', 'female')->count();
 
         $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
 
@@ -134,6 +136,8 @@ class DashboardController extends Controller
         return response()->json([
             'acceptedStudents' => $acceptedStudents,
             'rejectedStudents' => $rejectedStudents,
+            'maleStudents' => $maleStudents,
+            'femaleStudents' => $femaleStudents,
             'activeStudents' => $activeStudents, // students who have taken courses this semester
             'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
             'weekyStudentLogins' => $counts,

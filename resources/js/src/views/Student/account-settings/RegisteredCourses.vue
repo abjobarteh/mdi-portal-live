@@ -1,24 +1,28 @@
 <template>
   <div>
     <v-card id="printable-content" v-for="transcript in registeredCourses" :key="transcript.SemesterSession">
-      <v-card-title class="text-center d-flex justify-center">{{ transcript.SemesterSession }}</v-card-title>
+      <v-card-title class="text-center d-flex justify-center">
+        {{ transcript.SemesterSession }}
+      </v-card-title>
       <v-data-table :headers="headers" :items="transcript.Courses" class="elevation-1" hide-default-footer>
         <!-- Slot for custom rendering of each row -->
         <template v-slot:item="props">
           <tr>
-            <td class="text-start" style="width: 30%">
-              <!-- Set the width as needed -->
+            <td class="text-start">
               {{ props.item.CourseCode }}
             </td>
-            <td class="text-start" style="width: 45%">
-              <!-- Set the width as needed -->
-              <!-- Render the course as a router-link -->
+            <td class="text-start">
               <router-link :to="`/courses/${props.item.SemesterCourseId}`" class="router-link">
                 {{ props.item.CourseName }}
               </router-link>
             </td>
-            <td class="text-start" style="width: 25%">
-              <!-- Set the width as needed -->
+            <td class="text-start">
+              {{ formatDate(props.item.created_at) }}
+            </td>
+            <td class="text-start">
+              {{ formatTime(props.item.created_at) }}
+            </td>
+            <td class="text-start">
               {{ props.item.Lecturer }}
             </td>
           </tr>
@@ -27,6 +31,7 @@
     </v-card>
   </div>
 </template>
+
 
 
 <style scoped>
@@ -48,6 +53,8 @@ export default {
       headers: [
         { text: 'CourseCode', value: 'CourseCode' },
         { text: 'CourseName', value: 'CourseName' },
+        { text: 'Date', value: 'created_at' },
+        { text: 'Time', value: 'created_at' },
         { text: 'Lecturer', value: 'Lecturer' },
       ],
       registeredCourses: [],
@@ -69,7 +76,16 @@ export default {
       })
   },
 
-  methods: {},
+  methods: {
+    formatDate(datetime) {
+      const date = new Date(datetime)
+      return date.toLocaleDateString('en-GB') // Format as 'DD/MM/YYYY'
+    },
+    formatTime(datetime) {
+      const date = new Date(datetime)
+      return date.toLocaleTimeString('en-GB') // Format as 'HH:MM:SS'
+    },
+  },
 }
 </script>
 

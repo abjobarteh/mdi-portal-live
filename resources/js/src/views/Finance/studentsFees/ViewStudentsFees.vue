@@ -1,60 +1,5 @@
 <template>
   <div>
-    <!-- <v-container fluid>
-      <v-card>
-        <v-toolbar color="primary" dark>
-          <v-toolbar-title>Students</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
-          <v-btn icon @click="showSearchDialog">
-            <fas icon="search"></fas>
-          </v-btn>
-        </v-toolbar>
-
-        <v-dialog v-model="searchDialog" max-width="400">
-          <v-card>
-            <v-card-title>Advanced Search</v-card-title>
-            <v-card-text>
-              <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
-              <v-text-field
-                v-model="advanceSearch"
-                :label="advanceSearchLabel"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                color="primary"
-                :disabled="selectedItem == null || advanceSearch === ''"
-                @click="performAdvancedSearch"
-                >Search</v-btn
-              >
-              <v-btn @click="closeSearchDialog">Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="students"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
-            <template v-slot:[`item.action`]="{ item }">
-              <v-btn @click="openStudentPaymentsPopup(item)">View Payments</v-btn>
-              <v-btn small color="primary" @click="showAddStudentPaymentDialog(item)">Add Payment</v-btn>
-              <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
-            </template>
-            <template v-slot:[`item.fullname`]="{ item }"> {{ item.firstname + ' ' + item.lastname }} </template>
-          </v-data-table>
-          <v-pagination v-model="page" :length="pageCount" @input="getResults" />
-        </v-card-text>
-      </v-card>
-    </v-container> -->
     <v-container fluid>
       <v-tabs v-model="activeTab" background-color="primary" fixed-tabs dark>
         <v-tab :key="1">Non Sponsored students</v-tab>
@@ -87,13 +32,23 @@
                 hide-default-footer
               >
                 <template v-slot:[`item.action`]="{ item }">
-                  <v-btn small @click="viewStudentInfo(item)">View</v-btn>
-                  <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
                   <v-btn icon @click="showAddSponsorDialog(item)">
                     <fas icon="graduation-cap" style="color: blue"></fas>
                   </v-btn>
+                  <v-btn icon @click="deleteLecturer(item)">
+                    <fas icon="fa-trash-alt" style="color: red; font-size: 16px"></fas>
+                  </v-btn>
+                  <v-btn icon @click="viewStudentInfo(item)">
+                    <fas size="24" icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
+                  </v-btn>
                 </template>
                 <template v-slot:[`item.fullname`]="{ item }"> {{ item.firstname + ' ' + item.lastname }} </template>
+                <template v-slot:[`item.program`]="{ item }">
+                  <span style="font-size: smaller">{{ item.program.name }}</span>
+                </template>
+                <template v-slot:[`item.admission_year`]="{ item }">
+                  {{ item.mat_number.toString().substring(0, 4) }}
+                </template>
               </v-data-table>
               <v-pagination v-model="page" :length="pageCount" @input="getResults" />
             </v-card-text>
@@ -361,8 +316,10 @@ export default {
       headers: [
         { text: 'FullName', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
+        { text: 'Program', value: 'program' },
+        { text: 'Admission Year', value: 'admission_year' },
         { text: 'Email', value: 'email' },
-        { text: 'Address', value: 'address' },
+        // { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
         { text: 'Action', value: 'action', sortable: false },
       ],

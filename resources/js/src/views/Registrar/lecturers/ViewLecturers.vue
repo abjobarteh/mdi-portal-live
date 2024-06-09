@@ -21,6 +21,9 @@
             class="elevation-1"
             hide-default-footer
           >
+            <template v-slot:[`item.fullname`]="{ item }">
+              {{ item.firstname + ' ' + item.lastname }}
+            </template>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn @click="openLecturerSemesterCoursesPopup(item)">View Courses</v-btn>
               <!-- <v-btn small color="primary" @click="editlecturer(item)">Edit</v-btn> -->
@@ -84,6 +87,9 @@
             <!-- <template v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
             </template> -->
+            <template v-slot:[`item.action`]="{ item }">
+              <v-btn small color="primary" @click="deallocateCourse(item)">Deallocate</v-btn>
+            </template>
           </v-data-table>
         </v-card-text>
       </v-card>
@@ -166,8 +172,7 @@ export default {
       lecturerFullName: '',
       semesterAvailableCourses: [],
       headers: [
-        { text: 'Firstname', value: 'firstname' },
-        { text: 'Lastname', value: 'lastname' },
+        { text: 'Fullname', value: 'fullname' },
         { text: 'username', value: 'username' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
@@ -237,6 +242,35 @@ export default {
         .catch(err => {
           this.lecturers = []
           this.pageCount = 0
+        })
+    },
+
+    deallocateCourse(item) {
+      axios
+        .post('/api/deallocate-lecturer-courses', { courseId: item.id })
+        .then(result => {
+          this.showLecturerSemesterCoursesPopup = false
+          // show success alert
+          // ;(this.allocateCourseFormData.semester_courses_ids = ''),
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'course deallocated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to allocate.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
         })
     },
 
@@ -345,6 +379,7 @@ export default {
       ;(this.lecturerSemesterCoursesHeaders = [
         { text: 'Course Code', value: 'course_code' },
         { text: 'Course Name', value: 'course_name' },
+        { text: 'Action', value: 'action', sortable: false },
       ]),
         (this.lecturerSemesterCoursesArr = lecturer.semester_courses.map(course => course.course)),
         (this.showLecturerSemesterCoursesPopup = true)
