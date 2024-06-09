@@ -57,7 +57,7 @@ export default {
   methods: {
     getImageUrl(filename) {
       // Use Laravel's asset function to generate the URL path
-      return apiBaseURL + filename
+      return apiBaseURL + '/' + filename
     },
   },
 }
