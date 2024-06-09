@@ -39,7 +39,7 @@
                     <fas icon="fa-trash-alt" style="color: red; font-size: 16px"></fas>
                   </v-btn>
                   <v-btn icon @click="viewStudentInfo(item)">
-                    <fas size="24" icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
+                    <fas icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
                   </v-btn>
                 </template>
                 <template v-slot:[`item.fullname`]="{ item }"> {{ item.firstname + ' ' + item.lastname }} </template>
@@ -382,6 +382,12 @@ export default {
   },
 
   methods: {
+    generateRandomReceiptNumber() {
+      const randomPart = Math.floor(Math.random() * 1000000)
+        .toString()
+        .padStart(6, '0')
+      return `REC-${randomPart}`
+    },
     scholarshipAward(award) {
       if (award == null) {
         swal.fire({
@@ -703,8 +709,15 @@ export default {
     },
 
     generateReceiptContent() {
+      const receiptNumber = this.generateRandomReceiptNumber()
+
       let content = `
     <div class="receipt-card">
+
+      <div style="display: flex; justify-content: center;">
+  <img src="images/logos/mdi_logo.png" style="width: 170px; margin-bottom: 20px;" />
+</div>
+
       <div class="title">TUITION FEES RECEIPT</div>
       <div class="header">
         <p class="subtitle">Management Development Institute</p>
@@ -712,10 +725,13 @@ export default {
       </div>
 
       <div class="receipt-info">
+
         <div class="info-row">
-          <span class="info-label">Date:</span>
-          <span class="info-value">${this.currentDate}</span>
-        </div>
+            <span class="info-label">Receipt Number:</span>
+            <span class="info-value">${receiptNumber}</span>
+            <span class="info-label" style="margin-left: 20px;">Date:</span>
+            <span class="info-value">${this.currentDate}</span>
+          </div>
 
         <div class="info-row">
           <span class="info-label">Received From:</span>
