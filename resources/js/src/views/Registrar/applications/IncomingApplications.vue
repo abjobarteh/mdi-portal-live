@@ -21,6 +21,16 @@
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="viewApplicationData(item)">View</v-btn>
             </template>
+            <template v-slot:[`item.checker`]="{ item }">
+              <v-btn
+                small
+                color="primary"
+                :href="'https://app.waecgambia.org/resultchecker/resultchecker.aspx'"
+                target="_blank"
+              >
+                Checker
+              </v-btn>
+            </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
@@ -49,8 +59,8 @@ export default {
         { text: 'Lastname', value: 'lastname' },
         { text: 'Email', value: 'email' },
         { text: 'Program', value: 'program_name' },
-
         { text: 'Action', value: 'action', sortable: false },
+        { text: 'Result Checker', value: 'checker', sortable: false },
       ],
       dialog: false,
       editedIndex: -1,

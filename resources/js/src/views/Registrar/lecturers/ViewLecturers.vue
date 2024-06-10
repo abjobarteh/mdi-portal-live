@@ -27,7 +27,7 @@
             <template v-slot:[`item.action`]="{ item }">
               <v-btn @click="openLecturerSemesterCoursesPopup(item)">View Courses</v-btn>
               <!-- <v-btn small color="primary" @click="editlecturer(item)">Edit</v-btn> -->
-              <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
+              <!-- <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn> -->
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
