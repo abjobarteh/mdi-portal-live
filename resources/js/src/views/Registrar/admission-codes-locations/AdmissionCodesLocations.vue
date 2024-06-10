@@ -32,10 +32,20 @@
               D{{ item.totalAmountSold }}.00
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
-              <v-btn @click="openAdmissionCodesPopup(item)">View Codes</v-btn>
-              <v-btn v-if="userRole != 6" small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn>
-              <v-btn v-if="userRole != 6" small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn>
+              <!-- <v-btn @click="openAdmissionCodesPopup(item)">View Codes</v-btn>
+               -->
+
+              <v-btn icon @click="openAdmissionCodesPopup(item)">
+                <fas size="24" icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
+              </v-btn>
+              <v-btn v-if="userRole != 6" icon @click="deleteAdmissionCodeLocation(item)">
+                <fas icon="fa-trash-alt" style="color: red; font-size: 16px"></fas>
+              </v-btn>
+              <v-btn v-if="userRole != 6" icon @click="addAdmissionCode(item)">
+                <fas icon="fa-add" style="color: green; font-size: 20px; font-weight: bold"></fas>
+              </v-btn>
+              <!-- <v-btn v-if="userRole != 6" small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn> -->
+              <!-- <v-btn v-if="userRole != 6" small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn> -->
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -190,6 +200,13 @@
             <template v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
             </template>
+            <template v-slot:[`item.time`]="{ item }">
+              <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
+              {{ formatTime(item.created_at) }} </template
+            ><template v-slot:[`item.date`]="{ item }">
+              <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
+              {{ formatDate(item.created_at) }}
+            </template>
             <template v-slot:item.is_sold="{ item }">
               <fas
                 v-if="item.is_sold == 0 && item.expired != 1"
@@ -332,11 +349,21 @@ export default {
   },
 
   methods: {
+    formatDate(datetime) {
+      const date = new Date(datetime)
+      return date.toLocaleDateString('en-GB') // Format as 'DD/MM/YYYY'
+    },
+    formatTime(datetime) {
+      const date = new Date(datetime)
+      return date.toLocaleTimeString('en-GB') // Format as 'HH:MM:SS'
+    },
     openAdmissionCodesPopup(admissionCodes) {
       console.log(admissionCodes)
       this.location = admissionCodes.location_name
       ;(this.admissionCodesHeaders = [
         { text: 'Admission Code', value: 'admission_code' },
+        { text: 'Date', value: 'date' },
+        { text: 'Time', value: 'time' },
         { text: 'Status', value: 'is_sold' },
       ]),
         (this.items = admissionCodes.admission_codes),

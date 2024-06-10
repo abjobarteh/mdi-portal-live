@@ -327,6 +327,8 @@ class CourseController extends Controller
                     'Lecturer' => $course->lecturer->firstname . ' ' . $course->lecturer->lastname,
                     'CourseName' => $course->course->course_name,
                     'SemesterCourseId' => $course->semester_course_id,
+                    'created_at' => $course->created_at,
+
                 ];
 
                 $semesterTranscript['Courses'][] = $courseTranscript;

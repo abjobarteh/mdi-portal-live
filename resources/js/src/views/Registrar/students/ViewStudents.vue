@@ -47,8 +47,17 @@
             hide-default-footer
           >
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="showStudent(item)">View</v-btn>
-              <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
+              <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
+              <v-btn small style="width: 30%" color="error" @click="deleteLecturer(item)">Del</v-btn>
+            </template>
+            <template v-slot:[`item.fullname`]="{ item }">
+              <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template
+            >
+            <template v-slot:[`item.program`]="{ item }">
+              <span style="font-size: smaller">{{ item.program.name }}</span>
+            </template>
+            <template v-slot:[`item.admission_year`]="{ item }">
+              {{ item.mat_number.toString().substring(0, 4) }}
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -85,10 +94,10 @@ export default {
       students: [],
       semesters: [],
       headers: [
-        { text: 'Firstname', value: 'firstname' },
-        { text: 'Lastname', value: 'lastname' },
-        { text: 'username', value: 'username' },
+        { text: 'Fullname', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
+        { text: 'Program', value: 'program' },
+        { text: 'Admission Year', value: 'admission_year' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },

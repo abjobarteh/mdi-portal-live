@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
+use App\Models\Semester;
 use App\Models\SemesterCourse;
 use Illuminate\Http\Request;
 
@@ -44,6 +45,20 @@ class SemesterCourseController extends Controller
         //     'status' => 200,
         //     'result' => $lecturerCourses
         // ]);
+    }
+
+
+    public function deallocateLecturerCourses(Request $request)
+    {
+        $validatedData = $request->validate([
+            'courseId' => 'required',
+        ]);
+
+        $currentSemsterId = Semester::where('is_current_semester', 1)->value('id');
+        SemesterCourse::where('course_id', $validatedData['courseId'])->where('semester_id', $currentSemsterId)
+            ->update(['lecturer_id' => null]);
+
+        return response()->json(['message' => 'Courses allocated successfully.']);
     }
 
     // i have to update the lecturer_id to be the comming lecturer_id where the course_id
