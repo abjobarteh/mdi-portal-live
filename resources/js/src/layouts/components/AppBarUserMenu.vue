@@ -88,7 +88,7 @@ export default {
   methods: {
     getImageUrl(filename) {
       // Use Laravel's asset function to generate the URL path
-      return apiBaseURL + 'images/avatars/' + filename
+      return apiBaseURL + '/images/avatars/' + filename
     },
     async logout() {
       console.log('created')
