@@ -115,7 +115,7 @@
         <nav-menu-link title="Logs" :to="{ name: 'view-activities' }"></nav-menu-link>
       </nav-menu-group>
       <nav-menu-link
-        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '1')"
+        v-if="currentUser && (currentUser.role_id == '5' || currentUser.role_id == '2' || currentUser.role_id == '1')"
         title="Admission Codes"
         :to="{ name: 'view-admission-codes-locations' }"
         :icon="icons.mdiAlphaTBoxOutline"

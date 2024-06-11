@@ -38,10 +38,10 @@
               <v-btn icon @click="openAdmissionCodesPopup(item)">
                 <fas size="24" icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
               </v-btn>
-              <v-btn v-if="userRole != 6" icon @click="deleteAdmissionCodeLocation(item)">
+              <v-btn v-if="userRole != 6 && userRole != 2" icon @click="deleteAdmissionCodeLocation(item)">
                 <fas icon="fa-trash-alt" style="color: red; font-size: 16px"></fas>
               </v-btn>
-              <v-btn v-if="userRole != 6" icon @click="addAdmissionCode(item)">
+              <v-btn v-if="userRole != 6 && userRole != 2" icon @click="addAdmissionCode(item)">
                 <fas icon="fa-add" style="color: green; font-size: 20px; font-weight: bold"></fas>
               </v-btn>
               <!-- <v-btn v-if="userRole != 6" small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn> -->
@@ -197,7 +197,10 @@
         <v-card-text>
           <!-- <v-data-table :headers="admissionCodesHeaders" :items="items"></v-data-table> -->
           <v-data-table :headers="admissionCodesHeaders" :items="items">
-            <template v-slot:item.admission_code="{ item }">
+            <template v-if="userRole == 2" v-slot:item.admission_code="{ item }">
+              {{ item.admission_code.substring(0, 5) + '*****' }}
+            </template>
+            <template v-else v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
             </template>
             <template v-slot:[`item.time`]="{ item }">
@@ -533,7 +536,7 @@ export default {
     },
 
     handleSold(item) {
-      if (this.userRole == 5) {
+      if (this.userRole == 5 || this.userRole == 2) {
         return false
       }
       console.log('item', item)

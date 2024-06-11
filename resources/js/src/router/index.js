@@ -293,7 +293,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [5, 6, 1],
+      roles: [5, 6, 1, 2],
     }
   },
 
