@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FinanceVendorAdminMiddleware
+class FinanceVendorAdminRegistrarMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class FinanceVendorAdminMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || ($user->role_id !== 5 && $user->role_id !== 6 && $user->role_id !== 1)) {
+        if (!$user || ($user->role_id !== 5 && $user->role_id !== 6 && $user->role_id !== 2 && $user->role_id !== 1)) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
         return $next($request);
