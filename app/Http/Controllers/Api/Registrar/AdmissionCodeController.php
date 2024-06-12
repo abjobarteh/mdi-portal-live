@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AdmissionCode;
+use App\Models\AdmissionCodeLocation;
 use App\Models\AdmissionCodeVerification;
 use Carbon\Carbon;
 
@@ -55,6 +56,13 @@ class AdmissionCodeController extends Controller
         if (!is_null($admissionCodeExist)) {
             if ($admissionCodeExist->expired === 0) {
                 $admissionCodeExist->update(['is_sold' => 1, 'expired' => 1]);
+                // i should also work on the admission code location
+                AdmissionCodeLocation::where('id', $admissionCodeExist->admission_code_location_id)
+                    ->decrement('total_remains');
+
+                AdmissionCodeLocation::where('id', $admissionCodeExist->admission_code_location_id)
+                    ->increment('total_sold');
+
                 AdmissionCodeVerification::create(['user_id' => auth()->user()->id, 'verified_at' => Carbon::now()]);
 
 
