@@ -55,20 +55,34 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            axios.post(`/api/submit-applicantion`).then(result => {
-              // show success alert
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'application submitted successfully.',
-                  icon: 'success',
+            axios
+              .post(`/api/submit-applicantion`)
+              .then(result => {
+                // show success alert
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'application submitted successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.$store.dispatch('userProfile')
+                    this.$router.push('/student')
+                  })
+              })
+              .catch(error => {
+                // show error alert
+                swal.fire({
+                  title: 'Error!',
+                  text: error.response.data.message,
+                  icon: 'error',
                   confirmButtonText: 'OK',
                 })
-                .then(() => {
-                  this.$store.dispatch('userProfile')
-                  this.$router.push('/student')
-                })
-            })
+              })
+              .then(res => {
+                this.$router.go(-1)
+              })
             // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })
