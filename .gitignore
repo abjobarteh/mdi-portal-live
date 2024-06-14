@@ -21,6 +21,7 @@ demo.zip
 .DS_Store
 node_modules
 /dist
+/public/certificates/
 
 
 # local env files
