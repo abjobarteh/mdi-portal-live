@@ -28,16 +28,17 @@ class ApplicantCertificateController extends Controller
             $certificateFile = $certificate['certificate'];
 
             // Generate a unique filename
-            $filename = time() . '_' . $certificateFile->getClientOriginalName();
+            $originalFilename = $certificateFile->getClientOriginalName();
+            $sanitizedFilename = time() . '_' . trim($originalFilename);
 
             // Save the certificate file
-            $certificateFile->move(public_path('certificates'), $filename);
+            $certificateFile->move(public_path('certificates'), $sanitizedFilename);
 
             // Create a new Certificate model and save it to the database
             $certificateModel = new ApplicantCertificate();
             $certificateModel->user_id = auth()->user()->id;
             $certificateModel->certificate_name = $certificateName;
-            $certificateModel->certificate = $filename;
+            $certificateModel->certificate = $sanitizedFilename;
             $certificateModel->save();
         }
 

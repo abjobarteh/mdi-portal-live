@@ -231,6 +231,7 @@ export default {
             this.pageCount = response.data.result.last_page
             this.applicantProfile = [
               {
+                id: response.data.result.data[0].studentId,
                 firstname: response.data.result.data[0].firstname,
                 lastname: response.data.result.data[0].lastname,
                 address: response.data.result.data[0].address,
