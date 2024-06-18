@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use App\Mail\AcceptedApplicationEmail;
 use App\Mail\RejectedApplicationEmail;
+use App\Mail\RevertApplicationMail;
 use App\Models\ApplicantCertificate;
 use App\Models\ApplicantEducation;
 use App\Models\Lecturer;
@@ -180,9 +181,23 @@ class ApplicationsController extends Controller
             'studentId' => 'required',
         ]);
 
+        $email = Student::where('id', $validatedData['studentId'])->value('email');
+
         Student::where('id', $validatedData['studentId'])->update([
             'application_completed' => 0,
         ]);
+
+
+        if ($request->get('message') != '') {
+            try {
+                Mail::to($email)->send(new RevertApplicationMail($request->get('message')));
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 422);
+            }
+
+            return response()->json(['message' => 'Email sent successfully']);
+        }
+
         return response()->json([
             'status' => 200,
             'result' => 'Student application reverted successfully'

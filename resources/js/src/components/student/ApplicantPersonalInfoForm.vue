@@ -11,7 +11,7 @@
             <!-- File Input for Image Upload -->
             <v-file-input
               v-model="applicantPersonalInfoData.profile_image"
-              label="Upload Profile Image"
+              label="Upload Passport Size"
               @change="handleImageUpload"
             ></v-file-input>
           </v-col>
