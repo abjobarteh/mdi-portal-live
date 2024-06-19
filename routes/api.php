@@ -284,6 +284,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
+        Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
     });
 
     ///////////////////////////////////  LECTURER END POINTS  ////////////////////////////
