@@ -14,7 +14,7 @@
         <v-card-text>
           <v-data-table
             :headers="headers"
-            :items="filteredprograms"
+            :items="programs"
             :items-per-page="13"
             :search="search"
             class="elevation-1"
@@ -253,7 +253,7 @@ export default {
         .get('/api/view-departments?page=' + this.page)
         .then(response => {
           this.departments = response.data.result.data
-          this.pageCount = response.data.result.last_page
+          // this.pageCount = response.data.result.last_page
         })
         .catch(err => {
           this.departments = []
@@ -263,7 +263,7 @@ export default {
         .get('/api/view-program-durations?page=' + this.page)
         .then(response => {
           this.programDurations = response.data.result.data
-          this.pageCount = response.data.result.last_page
+          // this.pageCount = response.data.result.last_page
         })
         .catch(err => {
           this.programDurations = []
