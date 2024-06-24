@@ -108,7 +108,7 @@ export default {
     //     this.pageCount = 0
     //   })
     axios
-      .get('/api/view-programs?page=' + this.page)
+      .get('/api/view-students-programs?page=' + this.page)
       .then(response => {
         this.programs = response.data.result.data
         this.pageCount = response.data.result.last_page

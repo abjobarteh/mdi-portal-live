@@ -211,6 +211,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/verify-registration-token', [AuthController::class, 'verifyRegistrationToken']);
 
         Route::get('registerd-courses', [CourseController::class, 'registeredCourses']);
+
+        Route::get('/view-students-programs', [CourseController::class, 'viewPrograms']);
     });
 
     ///////////////////////////////////  FINANCE END POINTS  ////////////////////////////

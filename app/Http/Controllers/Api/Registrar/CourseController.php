@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Deferment;
 use App\Models\GradingSystem;
+use App\Models\Program;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
@@ -359,6 +360,15 @@ class CourseController extends Controller
         return response()->json([
             'status' => 200,
             'result' => "Grades updated successfully"
+        ]);
+    }
+
+    public function viewPrograms()
+    {
+        $programs = Program::with(['department', 'duration'])->paginate(100);
+        return response()->json([
+            'status' => 200,
+            'result' => $programs
         ]);
     }
 }
