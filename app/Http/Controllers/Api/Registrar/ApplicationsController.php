@@ -162,7 +162,7 @@ class ApplicationsController extends Controller
         // Send email to the student
         Mail::to($student->email)->send(new RejectedApplicationEmail());
 
-        User::where('id', $student->user_id)->delete();
+    //    User::where('id', $student->user_id)->delete();
 
         activity()
             ->causedBy(auth()->user())
