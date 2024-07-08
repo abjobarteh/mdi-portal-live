@@ -105,8 +105,8 @@
         </div>        
         <h1>MDI Acceptance Letter</h1>
         <p>Dear {{ $fullname }},</p>
-        <p>Congratulations! We are pleased to inform you that you have been accepted into the Management Development Institute (MDI). Our admissions committee thoroughly reviewed your application and we were highly impressed by your academic achievements and letters of recommendation.</p>
-        <p>We are excited to have you as a part of our incoming class and look forward to seeing the incredible contributions you will make during your time with us. Please review the enclosed enrollment materials and submit the necessary forms and deposit by the stated deadline to secure your place. Should you have any questions or need any assistance, please do not hesitate to reach out to our office.</p>
+        <p>Congratulations! We are pleased to inform you that you have been accepted into the Management Development Institute (MDI). Our admissions committee thoroughly reviewed your application and we were highly impressed by your academic achievements.</p>
+        <p>We are excited to have you as a part of our incoming class and look forward to seeing the incredible contributions you will make during your time with us. Please pay the initial deposit by the stated deadline to secure your place. Should you have any questions or need any assistance, please do not hesitate to reach out to our office.</p>
         <p>Note: Your matriculation number is <strong>{{ $matnumber }}</strong>.</p>
         <p>You are invited for an orientation on <strong>{{ $date }}</strong>.</p>
         <p>Congratulations again and we cannot wait to welcome you to MDI.</p>
@@ -114,4 +114,4 @@
         <p>Office of the Registrar</p>
     </div>
 </body>
-</html>
+</html>  
