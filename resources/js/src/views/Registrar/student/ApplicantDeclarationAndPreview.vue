@@ -15,11 +15,14 @@
           <DepartmentCard :program="program" />
         </v-col>
         <v-row v-if="this.$route.query.param == 'incoming'">
-          <v-col cols="6">
+          <v-col cols="4">
             <v-btn @click="rejectStudentApplication" color="red" block dark>Reject</v-btn>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="4">
             <v-btn @click="acceptStudentApplication" color="green" block dark>Accept</v-btn>
+          </v-col>
+          <v-col cols="4">
+            <v-btn @click="conditionalStudentApplication" color="purple" block dark>Conditional</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -148,7 +151,59 @@ export default {
           }
         })
     },
+    conditionalStudentApplication() {
+      // perform delete action on item
+      swal
+        .fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Schedule Orientation',
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            // Show date selection popup
+            swal
+              .fire({
+                title: 'Select Orientation Date',
+                // html: '<input type="date" id="orientationDate">',
+                html: '<input type="datetime-local" id="orientationDate">',
 
+                showCancelButton: true,
+                confirmButtonText: 'Schedule',
+              })
+              .then(dateResult => {
+                if (dateResult.isConfirmed) {
+                  this.isLoading = true
+                  const orientationDate = document.getElementById('orientationDate').value
+
+                  // Perform API request to schedule interview
+                  axios
+                    .post(`/api/conditional-student-application`, {
+                      userId: this.$route.params.id,
+                      orientationDate: orientationDate,
+                    })
+                    .then(result => {
+                      this.isLoading = false
+                      swal
+                        .fire({
+                          title: 'Success!',
+                          text: 'Interview scheduled successfully.',
+                          icon: 'success',
+                          confirmButtonText: 'OK',
+                        })
+                        .then(() => {
+                          this.$router.push('/view-incoming-applications')
+                        })
+                    })
+                }
+              })
+          }
+        })
+    },
     rejectStudentApplication() {
       // perform delete action on item
       swal

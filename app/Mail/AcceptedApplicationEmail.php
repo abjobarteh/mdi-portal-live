@@ -14,17 +14,19 @@ class AcceptedApplicationEmail extends Mailable
     public $matnumber;
 
     public $fullname;
+    public $type;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($date, $matnumber, $fullname)
+    public function __construct($date, $matnumber, $fullname,$type)
     {
         $this->date = $date;
         $this->matnumber = $matnumber;
         $this->fullname = $fullname;
+        $this->type = $type;
     }
 
     /**
@@ -34,7 +36,8 @@ class AcceptedApplicationEmail extends Mailable
      */
     public function build()
     {
-        // Generate the PDF
+
+      if($this->type == 1){
         $pdf = Pdf::loadView('emails.accepted_application_pdf', [
             'date' => $this->date,
             'matnumber' => $this->matnumber,
@@ -46,5 +49,20 @@ class AcceptedApplicationEmail extends Mailable
             ->attachData($pdf->output(), 'AcceptanceLetter.pdf', [
                 'mime' => 'application/pdf',
             ]);
+      }else if ($this->type == 0){
+        $pdf = Pdf::loadView('emails.conditional_application_pdf', [
+            'date' => $this->date,
+            'matnumber' => $this->matnumber,
+            'fullname' => $this->fullname,
+        ]);
+
+        return $this->subject('Application Status')
+            ->view('emails.accepted_application')
+            ->attachData($pdf->output(), 'AcceptanceLetter.pdf', [
+                'mime' => 'application/pdf',
+            ]);
+      }
+        // Generate the PDF
+
     }
 }

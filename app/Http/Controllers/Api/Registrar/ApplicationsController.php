@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
+use App\Http\ConditionalApplicationEmail;
 use App\Mail\AcceptedApplicationEmail;
 use App\Mail\RejectedApplicationEmail;
 use App\Mail\RevertApplicationMail;
@@ -68,7 +69,7 @@ class ApplicationsController extends Controller
     public function rejectedApplications()
     {
 
-        $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
+       $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             ->select('users.*', 'students.gender', 'students.profile_image', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name',  'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
@@ -83,7 +84,7 @@ class ApplicationsController extends Controller
         return response()->json([
             'status' => 200,
             'result' => $students
-        ]);
+        ]); 
     }
 
     public function incomingApplications(Request $request)
@@ -117,9 +118,9 @@ class ApplicationsController extends Controller
         // interviewDate
         $student = Student::where('user_id', $request->get('userId'))->first();
         $studentName = $student->firstname . ' ' . $student->lastname;
-        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber()]);
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber(),'application_status'=> 1]);
         $orientaionDate = Carbon::parse($request->orientationDate);
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $this->generateStudentNumber(), $studentName));
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $this->generateStudentNumber(), $studentName,1));
 
 
         activity()
@@ -133,7 +134,27 @@ class ApplicationsController extends Controller
             'result' => 'Accepted Successful'
         ]);
     }
+    public function conditionalStudentApplication(Request $request)
+    {
+        // interviewDate
+        $student = Student::where('user_id', $request->get('userId'))->first();
+        $studentName = $student->firstname . ' ' . $student->lastname;
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber(),'application_status'=> 0]);
+        $orientaionDate = Carbon::parse($request->orientationDate);
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $this->generateStudentNumber(),$studentName,0));
 
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has accepted a student application');
+
+        // when the student application is accepted, then he needs a matnumber
+        return response()->json([
+            'status' => 200,
+            'result' => 'Accepted Successful'
+        ]);
+    }
     private function generateStudentNumber()
     {
         $currentYear = Carbon::now()->year;
