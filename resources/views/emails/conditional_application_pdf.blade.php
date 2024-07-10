@@ -114,6 +114,7 @@
         <div class="logo-container">
             <img src="images/logos/mdi_logo.png" alt="MDI Logo" />
         </div>
+        <h1>MDI Acceptance Letter</h1>
         <p>Dear {{ $fullname }},</p>
         <p>We are pleased to inform you that your application for admission to the Management Development Institute (MDI) Program has been reviewed by our admissions committee. After careful consideration, we are excited to offer you conditional admission to the program.</p>
         <p>Your academic achievements and qualifications demonstrate great potential, and we believe you will greatly benefit from our program. However, please note that there are certain conditions that need to be met to confirm your admission:</p>
@@ -124,11 +125,12 @@
         </ul>
         <p>Once these conditions are met, your admission will be confirmed, and you will become a full-fledged student of MDI. We are thrilled to have you as part of our incoming class and look forward to your contributions during your time with us.</p>
         <p>Please pay the initial deposit by the stated deadline to secure your place. Should you have any questions or need assistance, please do not hesitate to reach out to our office.</p>
-        <p>Note: Your matriculation number is <strong>{{ $matnumber }}</strong>. You are invited to an orientation on <strong>{{ $date }}</strong>.</p>
+        <p>Note: Your matriculation number is <strong>{{ $matnumber }}</strong>.</p>
+        <p>You are invited for an orientation on <strong>{{ $date }}</strong>.</p>
         <p>Congratulations once again! We look forward to welcoming you to MDI.</p>
         <p class="signature">Sincerely,</p>
         <p>Admissions Committee<br>
-            Management Development Institute</p>
+        Management Development Institute</p>
     </div>
 </body>
 
