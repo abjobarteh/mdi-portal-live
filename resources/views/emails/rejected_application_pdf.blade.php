@@ -94,7 +94,7 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="images/logos/rejected_logo.png" alt="Rejected Logo" />
+        <img src="images/logos/mdi_logo.png" alt="MDI Logo" />
         </div>
         <h1>MDI Rejection Letter</h1>
         <p>Dear Applicant,</p>
