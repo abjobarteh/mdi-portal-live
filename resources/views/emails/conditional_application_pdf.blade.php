@@ -70,7 +70,7 @@
         <div class="logo-container">
             <img src="images/logos/mdi_logo.png" alt="MDI Logo" />
         </div>
-        <h1>MDI Acceptance Letter</h1>
+        <h1>MDI Conditional Acceptance Letter</h1>
         <p>Dear {{ $fullname }},</p>
         <p>We are pleased to inform you that your application for admission to the Management Development Institute (MDI) Program has been reviewed by our admissions committee. After careful consideration, we are excited to offer you conditional admission to the program.</p>
         <p>Your academic achievements and qualifications demonstrate great potential, and we believe you will greatly benefit from our program. However, please note that there are certain conditions that need to be met to confirm your admission:</p>
