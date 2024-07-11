@@ -206,6 +206,7 @@ class ApplicationsController extends Controller
 
         Student::where('id', $validatedData['studentId'])->update([
             'application_completed' => 0,
+            'accepted' => 'pending'
         ]);
 
 
