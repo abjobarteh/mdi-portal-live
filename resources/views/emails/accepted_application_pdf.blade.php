@@ -83,7 +83,9 @@
         }
         p {
             margin: 10px 0;
-            text-align: left; /* Reset text alignment for paragraphs */
+            text-align: left;
+            font-size: 12px;
+             /* Reset text alignment for paragraphs */
         }
         .signature {
             margin-top: 20px;
@@ -108,6 +110,8 @@
         <p>Congratulations! We are pleased to inform you that you have been accepted into the Management Development Institute (MDI). Our admissions committee thoroughly reviewed your application and we were highly impressed by your academic achievements.</p>
         <p>We are excited to have you as a part of our incoming class and look forward to seeing the incredible contributions you will make during your time with us. Please pay the initial deposit by the stated deadline to secure your place. Should you have any questions or need any assistance, please do not hesitate to reach out to our office.</p>
         <p>Note: Your matriculation number is <strong>{{ $matnumber }}</strong>.</p>
+        <p>Program: <strong>{{ $programName }}</strong>.</p>
+        <p>Tuition: <strong>D{{ $programFee }}<strong></strong></p>
         <p>You are invited for an orientation on <strong>{{ $date }}</strong>.</p>
         <p>Congratulations again and we cannot wait to welcome you to MDI.</p>
         <p class="signature">Sincerely,</p>
