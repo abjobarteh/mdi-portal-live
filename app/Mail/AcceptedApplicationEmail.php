@@ -44,9 +44,7 @@ class AcceptedApplicationEmail extends Mailable
             ->get();
 
         // Initialize variables to hold program details
-        $programName = '';
-        $programFee = '';
-
+     
         // Loop through students (although typically we expect one student per mat_number)
         foreach ($studentsWithPrograms as $student) {
             $programName = $student->name; // Accessing name
