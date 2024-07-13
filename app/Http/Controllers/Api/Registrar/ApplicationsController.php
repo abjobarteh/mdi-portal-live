@@ -118,26 +118,13 @@ class ApplicationsController extends Controller
         // interviewDate
         $student = Student::where('user_id', $request->get('userId'))->first();
         $studentName = $student->firstname . ' ' . $student->lastname;
-        $studentid = $this->generateStudentNumber();
-        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentid,'acceptance_status'=> 1]);
+        $studentNumber = $this->generateStudentNumber();
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber,'acceptance_status'=> 1]);
         $orientaionDate = Carbon::parse($request->orientationDate);
-        $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id');
+
+     Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $studentNumber, $studentName,1));
+       
         
-        $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id')
-            ->where('students.mat_number',  $studentid)
-            ->select('b.fee', 'b.name')
-            ->get();
-
-        // Initialize variables to hold program details
-        // Loop through students (although typically we expect one student per mat_number)
-        foreach ($studentsWithPrograms as $student) {
-            $prname = $student->name; // Accessing name
-            $prfee = $student->fee; // Accessing fee
-        }
-
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $studentid, $studentName,1,$prname,$prfee));
-
-
         activity()
             ->causedBy(auth()->user())
             ->withProperties(['attributes' => auth()->user()])
@@ -154,23 +141,11 @@ class ApplicationsController extends Controller
         // interviewDate
         $student = Student::where('user_id', $request->get('userId'))->first();
         $studentName = $student->firstname . ' ' . $student->lastname;
-        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $this->generateStudentNumber(),'acceptance_status'=> 0]);
+        $studentNumber = $this->generateStudentNumber();
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber,'acceptance_status'=> 0]);
         $orientaionDate = Carbon::parse($request->orientationDate);
-        $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id');
-        $studentid = $this->generateStudentNumber();
-        $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id')
-            ->where('students.mat_number',  $studentid)
-            ->select('b.fee', 'b.name')
-            ->get();
-
-        // Initialize variables to hold program details
-        // Loop through students (although typically we expect one student per mat_number)
-        foreach ($studentsWithPrograms as $student) {
-            $prname = $student->name; // Accessing name
-            $prfee = $student->fee; // Accessing fee
-        }
-
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $studentid, $studentName,1,$prname,$prfee));
+        
+      Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $studentNumber,$studentName,0));
 
 
         activity()
@@ -212,7 +187,7 @@ class ApplicationsController extends Controller
         // Send email to the student
         Mail::to($student->email)->send(new RejectedApplicationEmail());
 
-    //    User::where('id', $student->user_id)->delete();
+     User::where('id', $student->user_id)->delete();
 
         activity()
             ->causedBy(auth()->user())

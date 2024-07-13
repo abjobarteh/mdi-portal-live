@@ -38,18 +38,6 @@ class AcceptedApplicationEmail extends Mailable
     public function build()
     {
 
-        $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id')
-            ->where('students.mat_number', $this->matnumber)
-            ->select('b.fee', 'b.name')
-            ->get();
-
-        // Initialize variables to hold program details
-     
-        // Loop through students (although typically we expect one student per mat_number)
-        foreach ($studentsWithPrograms as $student) {
-            $programName = $student->name; // Accessing name
-            $programFee = $student->fee; // Accessing fee
-        }
 
 
         if ($this->type == 1) {
@@ -57,8 +45,7 @@ class AcceptedApplicationEmail extends Mailable
                 'date' => $this->date,
                 'matnumber' => $this->matnumber,
                 'fullname' => $this->fullname,
-                'programName' => $programName,
-                'programFee' => $programFee,
+               
             ]);
 
             return $this->subject('Application Status')
@@ -71,8 +58,6 @@ class AcceptedApplicationEmail extends Mailable
                 'date' => $this->date,
                 'matnumber' => $this->matnumber,
                 'fullname' => $this->fullname,
-                'programName' => $programName,
-                'programFee' => $programFee,
             ]);
 
             return $this->subject('Application Status')

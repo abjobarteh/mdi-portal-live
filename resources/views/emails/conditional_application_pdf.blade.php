@@ -70,7 +70,19 @@
         }
     </style>
 </head>
+<?php 
+use App\Models\Student;
+   $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id')
+   ->where('students.mat_number', $matnumber)
+   ->select('b.fee', 'b.name')
+   ->get();
 
+// Loop through students (although typically we expect one student per mat_number)
+foreach ($studentsWithPrograms as $student) {
+    $prname=$student->name;
+    $prfee=$student->fee;
+}
+?>
 <body>
     <div class="container">
         <div class="logo-container">
@@ -88,8 +100,8 @@
         <p>Once these conditions are met, your admission will be confirmed, and you will become a full-fledged student of MDI. We are thrilled to have you as part of our incoming class and look forward to your contributions during your time with us.</p>
         <p>Note: Your matriculation number is <strong>{{ $matnumber }}</strong>.</p>
         <p>You are invited for an orientation on <strong>{{ $date }}</strong>.</p>
-        <p>Program: <strong>{{ $programName }}</strong>.</p>
-        <p>Tuition: <strong>D{{ $programFee }}<strong></strong></p>
+        <p>Program: <strong>{{ $prname }}</strong>.</p>
+        <p>Tuition: <strong>D{{ $prfee }}<strong></strong></p>
         <p>Congratulations once again! We look forward to welcoming you to MDI.</p>
         <p class="signature">Sincerely,</p>
         <p>Office of the Registrar</p>
