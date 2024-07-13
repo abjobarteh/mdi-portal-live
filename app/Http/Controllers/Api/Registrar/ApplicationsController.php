@@ -122,7 +122,7 @@ class ApplicationsController extends Controller
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber,'acceptance_status'=> 1]);
         $orientaionDate = Carbon::parse($request->orientationDate);
 
-     Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $studentNumber, $studentName,1));
+     Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $studentNumber, $studentName,1));
        
         
         activity()
@@ -145,7 +145,7 @@ class ApplicationsController extends Controller
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber,'acceptance_status'=> 0]);
         $orientaionDate = Carbon::parse($request->orientationDate);
         
-      Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s'), $studentNumber,$studentName,0));
+      Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $studentNumber,$studentName,0));
 
 
         activity()
