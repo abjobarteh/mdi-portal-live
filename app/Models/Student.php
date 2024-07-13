@@ -43,6 +43,7 @@ class Student extends Model
         'balance',
         'mat_number',
         'department_id',
+        'acceptance_status',
         'is_sponsored',
         'profile_image'
     ];
