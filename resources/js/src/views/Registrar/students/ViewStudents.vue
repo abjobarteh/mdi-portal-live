@@ -59,6 +59,9 @@
             <template v-slot:[`item.admission_year`]="{ item }">
               {{ item.mat_number.toString().substring(0, 4) }}
             </template>
+            <template v-slot:[`item.acceptance_status`]="{ item }">
+              {{ getAcceptanceStatusLabel(item.acceptance_status) }}
+            </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
@@ -101,6 +104,7 @@ export default {
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
+        { text: 'Acceptance Status', value: 'acceptance_status' },
         { text: 'Action', value: 'action', sortable: false },
       ],
       page: 1,
@@ -130,7 +134,20 @@ export default {
     this.setupValidation()
     this.getResults()
   },
-
+  computed: {
+    // Add a computed property to map the acceptance status
+    getAcceptanceStatusLabel() {
+      return (status) => {
+        if (status == '1') {
+          return 'Full';
+        } else if (status == '0') {
+          return 'Conditional';
+        } else {
+          return 'Unknown';
+        }
+      }
+    }
+  },
   methods: {
     showSearchDialog() {
       this.searchDialog = true
