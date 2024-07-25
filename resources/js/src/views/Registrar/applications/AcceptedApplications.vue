@@ -46,6 +46,7 @@ export default {
       acceptedApplications: [],
       headers: [
         { text: 'Firstname', value: 'firstname' },
+        { text: 'Middlename', value: 'middlename' },
         { text: 'Lastname', value: 'lastname' },
         { text: 'Email', value: 'email' },
         { text: 'Program', value: 'program_name' },
