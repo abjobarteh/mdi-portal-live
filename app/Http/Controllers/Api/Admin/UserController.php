@@ -116,7 +116,9 @@ class UserController extends Controller
             ]);
 
             if ($validatedData['role_id'] == 3) {
-
+                if (empty($request->course_ids)){
+                    return response()->json(['message' => "Teachable courses should not be empty"], 422);
+                }
 
                 if ($request->has('lecturer_type')) {
                     $lecturer = Lecturer::create([

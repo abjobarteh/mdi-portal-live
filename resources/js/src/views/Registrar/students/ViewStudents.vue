@@ -9,6 +9,7 @@
           <v-btn icon @click="showSearchDialog">
             <fas icon="search"></fas>
           </v-btn>
+          <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
         </v-toolbar>
 
         <v-dialog v-model="searchDialog" max-width="400">
@@ -179,6 +180,58 @@ export default {
     },
     setupValidation() {
       this.v$ = useVuelidate(this.rules, this.addPaymentFormData)
+    },
+    announce() {
+      swal
+        .fire({
+          title: 'Announcement',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Send',
+          input: 'textarea', // Adding textarea input field
+          inputPlaceholder: 'Enter your message here...(optional)', // Placeholder for the textarea
+          inputAttributes: {
+            'aria-label': 'Type your message here', // Accessibility label
+          },
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.isLoading = true
+            let message = result.value // Getting the value entered in the textarea
+
+            axios
+              .post('/api/announce-student', {
+                message: message, // Sending the message along with studentId
+              })
+              .then(response => {
+                this.isLoading = false
+                // Show success alert after successful revert
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'Announcement Sent Successfully',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.$router.go(-1)
+                    this.getResults()
+                  })
+              })
+              .catch(error => {
+                this.isLoading = false
+                // Show error alert if revert fails
+                swal.fire({
+                  title: 'Error!',
+                  text: 'Failed to Send.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                })
+              })
+          }
+        })
     },
     getResults() {
       axios

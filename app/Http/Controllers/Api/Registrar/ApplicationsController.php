@@ -15,6 +15,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\StudentAnounceMail;
+use App\Mail\LecturerAnnounceMail;
 
 class ApplicationsController extends Controller
 {
@@ -140,6 +142,47 @@ class ApplicationsController extends Controller
             'result' => 'Accepted Successful'
         ]);
     }
+
+    public function studentannouncement(Request $request){
+        /*    $validatedData = $request->validate([
+                'studentId' => 'required',
+            ]); */
+            $emails = Student::whereNotNull('mat_number')->pluck('email');
+
+            foreach ($emails as $email) {
+                try {
+                    Mail::to($email)->send(new StudentAnounceMail($request->get('message')));
+                } catch (\Exception $e) {
+                    return response()->json(['error' => $e->getMessage()], 422);
+                }
+
+            }
+            
+            return response()->json([
+                'status' => 200,
+                'result' => 'Announcement Sent Successfully'
+            ]);
+        }
+        
+        public function lecturerannouncement(Request $request){
+    
+            $emails = Lecturer::pluck('email');
+
+            foreach ($emails as $email) {
+                try {
+                    Mail::to($email)->send(new LecturerAnnounceMail($request->get('message')));
+                } catch (\Exception $e) {
+                    return response()->json(['error' => $e->getMessage()], 422);
+                }
+
+            }
+            
+            return response()->json([
+                'status' => 200,
+                'result' => 'Announcement Sent Successfully'
+            ]);
+    
+        }
     public function conditionalStudentApplication(Request $request)
     {
         // interviewDate

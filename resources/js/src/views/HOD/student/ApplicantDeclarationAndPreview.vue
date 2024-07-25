@@ -189,6 +189,7 @@ export default {
             this.applicantProfile = [
               {
                 firstname: response.data.result.data[0].firstname,
+                middlename: response.data.result.data[0].middlename,
                 lastname: response.data.result.data[0].lastname,
                 address: response.data.result.data[0].address,
                 phonenumber: response.data.result.data[0].phonenumber,
@@ -218,6 +219,7 @@ export default {
             this.applicantProfile = [
               {
                 firstname: response.data.result.data[0].firstname,
+                middlename: response.data.result.data[0].middlename,
                 lastname: response.data.result.data[0].lastname,
                 address: response.data.result.data[0].address,
                 phonenumber: response.data.result.data[0].phonenumber,
@@ -247,6 +249,7 @@ export default {
             this.applicantProfile = [
               {
                 firstname: response.data.result.data[0].firstname,
+                middlename: response.data.result.data[0].middlename,
                 lastname: response.data.result.data[0].lastname,
                 address: response.data.result.data[0].address,
                 phonenumber: response.data.result.data[0].phonenumber,

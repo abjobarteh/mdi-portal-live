@@ -16,6 +16,10 @@
                 <td>{{ item.firstname }}</td>
               </tr>
               <tr>
+                <td>Middlename</td>
+                <td>{{ item.middlename }}</td>
+              </tr>
+              <tr>
                 <td>Lastname</td>
                 <td>{{ item.lastname }}</td>
               </tr>
