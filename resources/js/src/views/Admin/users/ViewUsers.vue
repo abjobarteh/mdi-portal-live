@@ -400,9 +400,16 @@ export default {
       // make a PUT request to update the gradingSystem data
       axios.put(`/api/update-user/${this.editedItem.id}`, this.editedItem).then(response => {
         // show a success notification
-        this.$toast.success('users information has been updated.')
-        // refresh the data table
-        this.getResults()
+        swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'User Edited successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.getResults()
+                  })
       })
       // hide the dialog
       this.editUserDialog = false
