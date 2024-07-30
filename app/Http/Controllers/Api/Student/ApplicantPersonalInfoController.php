@@ -53,7 +53,8 @@ class ApplicantPersonalInfoController extends Controller
                 'regex:/^[2-9][0-9]{6}$/',
             ],
             'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-
+            'EmergencyContactName' => 'required',
+            'EmergencyContactNumber' => 'required',
         ]);
 
         $student = Student::where('user_id', $request->get('id'))->first();
@@ -74,6 +75,8 @@ class ApplicantPersonalInfoController extends Controller
             'employment_status' => $request->get('employment_status'),
             'phonenumber' => $request->get('phonenumber'),
             'personal_info_completed' => 1,
+            'eme_name' => $request->get('EmergencyContactName'),
+            'eme_numbr' => $request->get('EmergencyContactNumber')
         ];
 
         if ($request->hasFile('profile_image')) {

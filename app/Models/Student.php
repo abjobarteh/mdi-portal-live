@@ -45,7 +45,9 @@ class Student extends Model
         'department_id',
         'acceptance_status',
         'is_sponsored',
-        'profile_image'
+        'profile_image',
+        'eme_name',
+        'eme_numbr'
     ];
 
     public function user()
