@@ -106,6 +106,8 @@ export default {
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
         { text: 'Acceptance Status', value: 'acceptance_status' },
+        { text: 'Emergency Contact Name', value: 'eme_name' },
+        { text: 'Emergency Contact Number', value: 'eme_numbr' },
         { text: 'Action', value: 'action', sortable: false },
       ],
       page: 1,

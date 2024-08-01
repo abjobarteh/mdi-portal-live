@@ -43,6 +43,14 @@
                 <td>Employment</td>
                 <td>{{ item.employment_status }}</td>
               </tr>
+              <tr>
+                <td>Emergency Contact Name</td>
+                <td>{{ item.eme_name }}</td>
+              </tr>
+              <tr>
+                <td>Emergency Contact Number</td>
+                <td>{{ item.eme_numbr }}</td>
+              </tr>
             </tbody>
           </template>
         </v-simple-table>

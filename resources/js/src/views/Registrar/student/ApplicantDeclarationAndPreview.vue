@@ -268,6 +268,8 @@ export default {
                 email: response.data.result.data[0].email,
                 dob: response.data.result.data[0].dob,
                 profile_image: response.data.result.data[0].profile_image,
+                eme_name: response.data.result.data[0].eme_name,
+                eme_numbr: response.data.result.data[0].eme_numbr
               },
             ]
           })
@@ -299,6 +301,8 @@ export default {
                 email: response.data.result.data[0].email,
                 dob: response.data.result.data[0].dob,
                 profile_image: response.data.result.data[0].profile_image,
+                eme_name: response.data.result.data[0].eme_name,
+                eme_numbr: response.data.result.data[0].eme_numbr
               },
             ]
           })
@@ -329,6 +333,8 @@ export default {
                 email: response.data.result.data[0].email,
                 dob: response.data.result.data[0].dob,
                 profile_image: response.data.result.data[0].profile_image,
+                eme_name: response.data.result.data[0].eme_name,
+                eme_numbr: response.data.result.data[0].eme_numbr
               },
             ]
           })
