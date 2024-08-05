@@ -366,6 +366,7 @@ export default {
         .get('/api/view-roles?page=' + this.page)
         .then(response => {
           this.roles = response.data.result.data
+        
         })
         .catch(err => {
           this.programs = []
@@ -376,6 +377,7 @@ export default {
         .get('/api/view-departments?page=' + this.page)
         .then(response => {
           this.departments = response.data.result.data
+        
         })
         .catch(err => {
           this.departments = []

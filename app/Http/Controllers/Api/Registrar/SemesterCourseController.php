@@ -26,8 +26,8 @@ class SemesterCourseController extends Controller
                     ->from('lecturer_teachable_course')
                     ->where('lecturer_id', $lecturerId);
             })
-            ->with('course')
-            ->paginate(13);
+            ->with('course');
+   
 
         return response()->json([
             'status' => 200,
