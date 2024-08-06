@@ -260,7 +260,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
         Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
-        Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']); // hod also needs this
+        Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
+        Route::get('/view-departmental-courses/{lecturerId}', [SemesterCourseController::class, 'getcourses']); 
+        Route::post('/add-course-lect', [SemesterCourseController::class, 'addlectcourse']); 
+        Route::post('/remove-course-lect', [SemesterCourseController::class, 'removelectcourse']);  // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
         Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);
     });

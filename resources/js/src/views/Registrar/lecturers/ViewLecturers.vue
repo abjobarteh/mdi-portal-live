@@ -7,26 +7,22 @@
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
           <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
-          <v-btn color="primary" small class="white--text" @click="showAllocateSemesterCoursesDialog"
-            >Allocate Courses</v-btn
-          >
+          <v-btn color="primary" small class="white--text" @click="showAllocateSemesterCoursesDialog">Allocate
+            Courses</v-btn>
+
           <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
         </v-toolbar>
 
         <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="lecturers"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="lecturers" :items-per-page="13" :search="search" class="elevation-1"
+            hide-default-footer>
+
             <template v-slot:[`item.fullname`]="{ item }">
               {{ item.firstname + ' ' + item.lastname }}
             </template>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn @click="openLecturerSemesterCoursesPopup(item)">View Courses</v-btn>
+              <v-btn small color="primary" @click="showlecturercourse(item)">Edit Lecturer Courses</v-btn>
               <!-- <v-btn small color="primary" @click="editlecturer(item)">Edit</v-btn> -->
               <!-- <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn> -->
             </template>
@@ -63,8 +59,7 @@
             <span style="font-weight: bold">{{ lecturerFullName }}'s</span> Courses
           </p>
           <v-spacer></v-spacer>
-          <fas
-            style="
+          <fas style="
               font-size: 24px;
               cursor: pointer;
               display: inline-block;
@@ -75,13 +70,10 @@
               line-height: 1.5;
               width: 36px;
               height: 36px;
-            "
-            icon="times"
-            @click="
+            " icon="times" @click="
               canCloseLecturerSemesterCoursesPopup = true
-              closeLecturerSemesterCoursesPopup()
-            "
-          ></fas>
+            closeLecturerSemesterCoursesPopup()
+              "></fas>
         </v-card-title>
         <v-card-text>
           <v-data-table :headers="lecturerSemesterCoursesHeaders" :items="lecturerSemesterCoursesArr">
@@ -95,49 +87,41 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="editlectdialog" max-width="500px">
+      <v-card>
+        <v-card-title> Edit lecturer </v-card-title>
+        <v-card-text>
+          <v-form ref="form">
 
+            <v-select multiple outlined v-model="coursedetsformdata.course_ids" :items="formattedCourses"
+              item-value="id" item-text="name" label="Courses"
+              :rules="[v => !!v.length || 'At least one course is required']"></v-select>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="green" @click="addcourse">Add Course(s)</v-btn>
+          <v-btn color="red" @click="removecourse">Remove Course(s)</v-btn>
+          <v-btn color="secondary" @click="closepopup">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <!-- // allocate courses //  -->
     <v-dialog v-model="allocateCoursesDialog" max-width="500px">
       <v-card>
         <v-card-title>Allocate Courses</v-card-title>
         <v-card-text>
           <v-form ref="addDepartmentForm">
-            <v-select
-              outlined
-              v-model="allocateCourseFormData.lecturer_id"
-              :items="
-                lecturers.map(lecturer => ({ id: lecturer.id, name: lecturer.firstname + ' ' + lecturer.lastname }))
-              "
-              item-value="id"
-              item-text="name"
-              label="Lecturers"
-            ></v-select>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.lecturer_id.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
-            <v-select
-              multiple
-              outlined
-              v-model="allocateCourseFormData.semester_courses_ids"
-              :items="
-                semesterAvailableCourses.map(semesterCourse => ({
-                  id: semesterCourse.course_id,
-                  name: semesterCourse.course.course_name,
-                }))
-              "
-              item-value="id"
-              item-text="name"
-              label="Courses"
-            ></v-select>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.semester_courses_ids.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
+            <v-select outlined v-model="allocateCourseFormData.lecturer_id" :items="lecturers.map(lecturer => ({ id: lecturer.id, name: lecturer.firstname + ' ' + lecturer.lastname }))
+              " item-value="id" item-text="name" label="Lecturers"></v-select>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.lecturer_id.$errors" :key="error.$uid">{{ error.$message }}</span>
+            <v-select multiple outlined v-model="allocateCourseFormData.semester_courses_ids" :items="semesterAvailableCourses.map(semesterCourse => ({
+              id: semesterCourse.course_id,
+              name: semesterCourse.course.course_name,
+            }))
+              " item-value="id" item-text="name" label="Courses"></v-select>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.semester_courses_ids.$errors" :key="error.$uid">{{ error.$message }}</span>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -155,6 +139,7 @@ import Vue2Filters from 'vue2-filters'
 import 'vuetify/dist/vuetify.min.css'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
+import Swal from 'sweetalert2';
 
 Vue.use(Vue2Filters)
 
@@ -168,9 +153,14 @@ export default {
       lecturerSemesterCoursesArr: [],
       canCloseLecturerSemesterCoursesPopup: false,
       allocateCoursesDialog: false,
+      editlectdialog: false,
       lecturerSemesterCoursesHeaders: [],
       lecturers: [],
+      lecturer_id: '',
       lecturerFullName: '',
+      deptcourses: [],
+      courses: [],
+      formValid: false,
       semesterAvailableCourses: [],
       headers: [
         { text: 'Fullname', value: 'fullname' },
@@ -194,6 +184,10 @@ export default {
         lecturer_id: '',
         semester_courses_ids: [],
       },
+      coursedetsformdata: {
+        lecturerId: null,
+        course_ids: []
+      },
       page: 1,
       pageCount: 0,
       search: '',
@@ -206,7 +200,17 @@ export default {
       v$: null,
     }
   },
-
+  computed: {
+    // Flatten courses array and format it for v-select
+    formattedCourses() {
+      return this.deptcourses.flatMap(department =>
+        department.courses.map(course => ({
+          id: course.id,
+          name: course.course_name
+        }))
+      );
+    }
+  },
   watch: {
     'allocateCourseFormData.lecturer_id'(newLecturerId) {
       if (newLecturerId) {
@@ -373,6 +377,26 @@ export default {
           }
         })
     },
+    showlecturercourse(item) {
+      this.editlectdialog = true
+      this.lecturerId = item.id
+      axios
+        .get(`/api/view-departmental-courses/${item.id}`)
+        .then(response => {
+          console.log('Response:', response);
+          this.deptcourses = response.data.result.data
+
+          // this.pageCount = response.data.result.last_page
+        })
+        .catch(err => {
+          this.deptcourses = []
+          //  this.pageCount = 0
+        })
+    },
+    closepopup() {
+      this.editlectdialog = false;
+      this.coursedetsformdata = [];
+    },
     announce() {
       swal
         .fire({
@@ -409,7 +433,7 @@ export default {
                   })
                   .then(() => {
                     this.$router.go(-1)
-                   this.getResults()
+                    this.getResults()
                   })
               })
               .catch(error => {
@@ -428,13 +452,13 @@ export default {
     openLecturerSemesterCoursesPopup(lecturer) {
       this.lecturerFullName = lecturer.firstname + ' ' + lecturer.lastname
       console.log(lecturer)
-      ;(this.lecturerSemesterCoursesHeaders = [
-        { text: 'Course Code', value: 'course_code' },
-        { text: 'Course Name', value: 'course_name' },
-        { text: 'Action', value: 'action', sortable: false },
-      ]),
-        (this.lecturerSemesterCoursesArr = lecturer.semester_courses.map(course => course.course)),
-        (this.showLecturerSemesterCoursesPopup = true)
+        ; (this.lecturerSemesterCoursesHeaders = [
+          { text: 'Course Code', value: 'course_code' },
+          { text: 'Course Name', value: 'course_name' },
+          { text: 'Action', value: 'action', sortable: false },
+        ]),
+          (this.lecturerSemesterCoursesArr = lecturer.semester_courses.map(course => course.course)),
+          (this.showLecturerSemesterCoursesPopup = true)
       this.canCloseLecturerSemesterCoursesPopup = false
     },
 
@@ -443,7 +467,66 @@ export default {
         this.showLecturerSemesterCoursesPopup = false
       }
     },
+    addcourse() {
 
+      console.log('Lecturer ID:', this.lecturerId);
+      console.log('Selected Courses:', this.coursedetsformdata.semester_courses_ids);
+
+      axios.post('/api/add-course-lect', {
+        lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
+        courseids: this.coursedetsformdata.course_ids // The selected course IDs
+      })
+        .then(response => {
+          // Show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Course added successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults();
+              this.coursedetsformdata = [];
+              this.editlectdialog = false;
+              // Clear the selection
+            });
+        })
+        .catch(error => {
+          // Handle error
+          console.error(error);
+        })
+    },
+    removecourse() {
+
+console.log('Lecturer ID:', this.lecturerId);
+console.log('Selected Courses:', this.coursedetsformdata.semester_courses_ids);
+
+axios.post('/api/remove-course-lect', {
+  lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
+  courseids: this.coursedetsformdata.course_ids // The selected course IDs
+})
+  .then(response => {
+    // Show success alert
+    swal
+      .fire({
+        title: 'Success!',
+        text: 'Course removed successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      })
+      .then(() => {
+        this.getResults();
+        this.coursedetsformdata = [];
+        this.editlectdialog = false;
+        // Clear the selection
+      });
+  })
+  .catch(error => {
+    // Handle error
+    console.error(error);
+  })
+},
     //////////////  Allocate courses ///////////////////
     showAllocateSemesterCoursesDialog() {
       this.allocateCoursesDialog = true
@@ -456,18 +539,18 @@ export default {
           .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
           .then(result => {
             this.allocateCoursesDialog = false
-            // show success alert
-            ;(this.allocateCourseFormData.semester_courses_ids = ''),
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'course allocated successfully.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                })
-                .then(() => {
-                  this.getResults()
-                })
+              // show success alert
+              ; (this.allocateCourseFormData.semester_courses_ids = ''),
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'course allocated successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.getResults()
+                  })
           })
           .catch(error => {
             // show error alert
@@ -490,14 +573,3 @@ export default {
   },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-

@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use Illuminate\Http\Request;
-
+use App\Models\Department;
+use App\Models\Lecturer;
 class SemesterCourseController extends Controller
 {
     /**
@@ -16,7 +17,6 @@ class SemesterCourseController extends Controller
      */
     public function index($lecturerId)
     {
-
         $teachableAvailableSemesterCourses = SemesterCourse::whereHas('semester', function ($query) {
             $query->where('is_current_semester', 1);
         })
@@ -26,8 +26,8 @@ class SemesterCourseController extends Controller
                     ->from('lecturer_teachable_course')
                     ->where('lecturer_id', $lecturerId);
             })
-            ->with('course');
-   
+            ->with('course')
+            ->paginate(100000);
 
         return response()->json([
             'status' => 200,
@@ -60,7 +60,67 @@ class SemesterCourseController extends Controller
 
         return response()->json(['message' => 'Courses allocated successfully.']);
     }
+    public function addlectcourse(Request $request){
+        
+        $lecturerId = $request->input('lecturer_id');
+        $courseIds = $request->input('courseids');
+    
+        $lecturer = Lecturer::find($lecturerId);
+    
+        if (!$lecturer) {
+            return response()->json(['status' => 'error', 'message' => 'Lecturer not found',  'lecturer_id' => $lecturerId,'course_ids' => $courseIds], 404);
+        }
+    
+        // Attach courses to the lecturer
+        $lecturer->teachables()->sync($courseIds); // Use sync instead of attach if you want to replace existing records
+    
+        return response()->json(['status' => 'success', 'message' => 'Courses allocated successfully','lecturer_id' => $lecturerId,'course_ids' => $courseIds]);
+    }
+    public function removelectcourse(Request $request){
+        
+        $lecturerId = $request->input('lecturer_id');
+        $courseIds = $request->input('courseids');
+    
+        $lecturer = Lecturer::find($lecturerId);
+    
+        if (!$lecturer) {
+            return response()->json(['status' => 'error', 'message' => 'Lecturer not found',  'lecturer_id' => $lecturerId,'course_ids' => $courseIds], 404);
+        }
+    
+        // Attach courses to the lecturer
+        $lecturer->teachables()->detach($courseIds); // Use sync instead of attach if you want to replace existing records
+    
+        return response()->json(['status' => 'success', 'message' => 'Courses removed successfully','lecturer_id' => $lecturerId,'course_ids' => $courseIds]);
+    }
+    public function getcourses($lecturerId)
+    {
 
+        $lecturer = Lecturer::find($lecturerId);
+        if ($lecturer) {
+            $departmentCourses = Department::with('courses')
+                ->where('id', $lecturer->department_id)
+                ->paginate(13);
+        
+            return response()->json([
+                'status' => 200,
+                'lecturer_id' => $lecturerId,
+                'result' => $departmentCourses
+            ]);
+        } 
+
+
+        // $lecturerCourses = SemesterCourse::whereHas('semester', function ($query) {
+        //     $query->where('is_current_semester', 1);
+        // })
+        //     ->whereNotNull('lecturer_id')
+        //     ->with('course')
+        //     ->paginate(13);
+
+        // return response()->json([
+        //     'status' => 200,
+        //     'result' => $lecturerCourses
+        // ]);
+    }
     // i have to update the lecturer_id to be the comming lecturer_id where the course_id
     // is the courses_id coming
     public function allocateSemesterCourses(Request $request)
