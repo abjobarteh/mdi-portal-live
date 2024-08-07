@@ -89,9 +89,14 @@ class StudentPaymentController extends Controller
                     $query->where('mat_number', 'like', '%' . $advanceSearch . '%');
                     break;
                 case 2:
-                    $query->where('email', 'like', '%' . $advanceSearch . '%');
+                    $query->where('firstname', 'like', '%' . $advanceSearch . '%');
                     break;
-
+                case 3:
+                        $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                        break;
+                case 4:
+                        $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                        break;
                 default:
                     break;
             }

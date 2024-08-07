@@ -300,7 +300,9 @@ export default {
       items: [
         // Your dropdown items here
         { text: 'Student Number', value: '1' },
-        { text: 'Email', value: '2' },
+        { text: 'Firstname', value: '2' },
+        { text: 'Middlename', value: '3' },
+        { text: 'Lastname', value: '4' },
       ],
       selectedSemesterName: '',
       studentPayments: [],
