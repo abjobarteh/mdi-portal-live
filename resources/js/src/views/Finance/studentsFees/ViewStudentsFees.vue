@@ -35,9 +35,7 @@
                   <v-btn icon @click="showAddSponsorDialog(item)">
                     <fas icon="graduation-cap" style="color: blue"></fas>
                   </v-btn>
-                  <v-btn icon @click="deleteLecturer(item)">
-                    <fas icon="fa-trash-alt" style="color: red; font-size: 16px"></fas>
-                  </v-btn>
+                 
                   <v-btn icon @click="viewStudentInfo(item)">
                     <fas icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
                   </v-btn>
