@@ -19,7 +19,7 @@ class AdminMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || $user->role_id !== 1) {
+        if (!$user || $user->role_id !== 1 && $user->role_id !== 8 ) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
         return $next($request);

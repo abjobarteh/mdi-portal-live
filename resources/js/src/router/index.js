@@ -49,7 +49,7 @@ const routes = [
     component: () => import('@/views/dashboard/registrar/Dashboard.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2,8],
     }
   },
 
@@ -62,7 +62,15 @@ const routes = [
       roles: [7],
     }
   },
-
+  {
+    path: '/compliance-dashboard',
+    name: 'compliance-dashboard',
+    component: () => import('@/views/dashboard/compliance/Dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
   {
     path: '/lecturer-dashboard',
     name: 'lecturer-dashboard',
@@ -90,10 +98,11 @@ const routes = [
     component: () => import('@/views/Registrar/students/student-detail.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,8],
     }
   },
 
+  
   {
     path: '/student-detail-hod/:id',
     name: 'student-detail',
@@ -230,6 +239,15 @@ const routes = [
       roles: [2, 1],
     }
   },
+  {
+    path: '/view-compliance-gradings',
+    name: 'view-compliance-gradings',
+    component: () => import('@/views/Compliance/ViewGradings.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
 
   {
     path: '/view-departments',
@@ -241,6 +259,15 @@ const routes = [
     }
 
   },
+  {
+    path: '/view-compliance-departments',
+    name: 'view-compliance-departments',
+    component: () => import('@/views/Compliance/ViewDepartments.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
 
   {
     path: '/view-program-durations',
@@ -248,7 +275,17 @@ const routes = [
     component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5, 1],
+      roles: [2, 5, 8],
+    }
+
+  },
+  {
+    path: '/view-program-compliance-durations',
+    name: 'view-program-compliance-durations',
+    component: () => import('@/views/Compliance/ViewProgramDurations.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
     }
 
   },
@@ -262,18 +299,35 @@ const routes = [
       roles: [2, 5, 1],
     }
   },
-
+  {
+    path: '/view-compliance-programs',
+    name: 'view-compliance-programs',
+    component: () => import('@/views/Compliance/ViewPrograms.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
   {
     path: '/view-courses',
     name: 'view-courses',
     component: () => import('@/views/Registrar/courses/ViewCourses.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,8],
     }
 
   },
+  {
+    path: '/view-compliance-courses',
+    name: 'view-compliance-courses',
+    component: () => import('@/views/Compliance/ViewCourses.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2, 1,8],
+    }
 
+  },
   {
     path: '/approve-marks',
     name: 'approve-marks',
@@ -293,7 +347,17 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [5, 6, 1, 2],
+      roles: [5, 6, 1, 2,8],
+    }
+  },
+
+  {
+    path: '/view-compliance-admission-codes-locations',
+    name: 'view-compliance-admission-codes-locations',
+    component: () => import('@/views/Compliance/AdmissionCodesLocations.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
     }
   },
 
@@ -303,7 +367,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes/AdmissionCodes.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 6, 1],
+      roles: [2, 6, 1,8],
     }
   },
 
@@ -316,14 +380,31 @@ const routes = [
       roles: [2, 1],
     }
   },
-
+  {
+    path: '/view-compliance-sessions',
+    name: 'view-compliance-sessions',
+    component: () => import('@/views/Compliance/ViewSessions.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
   {
     path: '/view-semesters',
     name: 'view-semesters',
     component: () => import('@/views/Registrar/semesters/ViewSemesters.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,8],
+    }
+  },
+  {
+    path: '/view-compliance-semesters',
+    name: 'view-compliance-semesters',
+    component: () => import('@/views/Compliance/ViewSemesters.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
     }
   },
 
@@ -333,7 +414,17 @@ const routes = [
     component: () => import('@/views/Registrar/lecturers/ViewLecturers.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,8],
+    }
+  },
+
+  {
+    path: '/view-compliance-lecturers',
+    name: 'view-compliance-lecturers',
+    component: () => import('@/views/Compliance/ViewLecturers.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
     }
   },
 
@@ -358,6 +449,18 @@ const routes = [
 
   },
 
+
+  {
+    path: '/view-compliance-users',
+    name: 'view-compliance-users',
+    component: () => import('@/views/Compliance/ViewUsers.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+
+  },
+
   {
     path: '/view-activities',
     name: 'view-activities',
@@ -369,6 +472,15 @@ const routes = [
 
   },
 
+  {
+    path: '/view-compliance-activities',
+    name: 'view-compliance-activities',
+    component: () => import('@/views/Compliance/ViewActivities.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
 
 
   {
@@ -382,12 +494,33 @@ const routes = [
   },
 
   {
+    path: '/view-compliance-incoming-applications',
+    name: 'view-compliance-incoming-applications',
+    component: () => import('@/views/Compliance/IncomingApplications.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
+
+  {
     path: '/view-accepted-applications',
     name: 'view-accepted-applications',
     component: () => import('@/views/Registrar/applications/AcceptedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1, 7],
+      roles: [2, 1, 7,8],
+    }
+
+  },
+
+  {
+    path: '/view-compliance-accepted-applications',
+    name: 'view-compliance-accepted-applications',
+    component: () => import('@/views/Compliance/AcceptedApplications.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
     }
 
   },
@@ -398,7 +531,16 @@ const routes = [
     component: () => import('@/views/Registrar/applications/RejectedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1, 7],
+      roles: [2, 1, 7,8],
+    }
+  },
+  {
+    path: '/view-compliance-rejected-applications',
+    name: 'view-compliance-rejected-applications',
+    component: () => import('@/views/Compliance/RejectedApplications.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2, 1, 7,8],
     }
   },
 
@@ -413,6 +555,16 @@ const routes = [
 
   },
 
+  {
+    path: '/view-compliance-application-preview/:id',
+    name: 'view-compliance-application-preview',
+    component: () => import('@/views/Compliance/ApplicantDeclarationAndPreview.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+
+  },
 
   {
     path: '/registration-status',
@@ -444,6 +596,16 @@ const routes = [
   },
 
   {
+    path: '/view-compliance-students',
+    name: 'view-compliance-students',
+    component: () => import('@/views/Compliance/ViewStudents.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
+
+  {
     path: '/view-student-fees',
     name: 'view-student-fees',
     component: () => import('@/views/Finance/studentsFees/ViewStudentsFees.vue'),
@@ -453,7 +615,16 @@ const routes = [
     }
 
   },
+  {
+    path: '/view-compliance-student-fees',
+    name: 'view-compliance-student-fees',
+    component: () => import('@/views/Finance/studentsFees/ViewStudentFeesCompliance.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
 
+  },
   {
     path: '/password-reset',
     name: 'password-reset',
@@ -475,7 +646,16 @@ const routes = [
     }
 
   },
+  {
+    path: '/view-compliance-agents',
+    name: 'view-compliance-agents',
+    component: () => import('@/views/Compliance/ViewAgents.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
 
+  },
   {
     path: '/manage-student-marks',
     name: 'manage-student-marks',
@@ -649,6 +829,8 @@ router.beforeEach(async (to, from, next) => {
       next('/password-reset')
     } else if (userRole == 7) {
       next('/hod-dashboard')
+    }else if(userRole===8){
+      next('/compliance-dashboard');
     }
   }
   else if (allowedRoles && !allowedRoles.includes(currentUser.role_id)) { // will check this

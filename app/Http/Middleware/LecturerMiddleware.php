@@ -19,7 +19,7 @@ class LecturerMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || ($user->role_id !== 3)) {
+        if (!$user || ($user->role_id !== 3 && $user->role_id !== 8)) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
         return $next($request);

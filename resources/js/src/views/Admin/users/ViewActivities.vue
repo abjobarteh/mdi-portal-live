@@ -31,6 +31,8 @@
                   ? 'Lecturer'
                   : item.properties.attributes.role_id == 5
                   ? 'Finance'
+                   : item.properties.attributes.role_id == 8
+                  ? 'Compliance'
                   : ''
               }}
             </template>

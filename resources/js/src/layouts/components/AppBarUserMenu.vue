@@ -18,23 +18,9 @@
           <span class="text--primary font-weight-semibold mb-n1">
             {{ user.firstname + ' ' + user.lastname }}
           </span>
-          <small class="text--disabled text-capitalize">{{
-            user.role_id === 1
-              ? 'Admin'
-              : user.role_id === 2
-              ? 'Registrar'
-              : user.role_id === 3
-              ? 'Lecturer'
-              : user.role_id === 4
-              ? 'Student'
-              : user.role_id === 5
-              ? 'Finance'
-              : user.role_id === 6
-              ? 'Agent'
-              : user.role_id === 7
-              ? 'HOD'
-              : 'Unknown'
-          }}</small>
+          <small class="text--disabled text-capitalize">
+            {{ getRole(user.role_id) }}
+          </small>
         </div>
       </div>
 
@@ -86,6 +72,19 @@ export default {
     }
   },
   methods: {
+    getRole(roleId) {
+      const roles = {
+        1: 'Admin',
+        2: 'Registrar',
+        3: 'Lecturer',
+        4: 'Student',
+        5: 'Finance',
+        6: 'Agent',
+        7: 'HOD',
+        8: 'Compliance'
+      };
+      return roles[roleId] || 'Unknown';
+    },
     getImageUrl(filename) {
       // Use Laravel's asset function to generate the URL path
       return apiBaseURL + '/images/avatars/' + filename

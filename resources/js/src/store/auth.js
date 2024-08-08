@@ -73,6 +73,8 @@ export default {
           }
         } else if (state.user.role_id == 7) {
           router.push({ name: 'hod-dashboard' });
+        }else if (state.user.role_id == 8) {
+          router.push({ name: 'compliance-dashboard' });
         }
 
 
