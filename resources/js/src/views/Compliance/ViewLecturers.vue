@@ -79,9 +79,7 @@
             <!-- <template v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
             </template> -->
-            <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="deallocateCourse(item)">Deallocate</v-btn>
-            </template>
+          
           </v-data-table>
         </v-card-text>
       </v-card>
