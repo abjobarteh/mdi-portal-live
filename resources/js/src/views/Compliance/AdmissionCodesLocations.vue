@@ -190,7 +190,7 @@
         <v-card-text>
           <!-- <v-data-table :headers="admissionCodesHeaders" :items="items"></v-data-table> -->
           <v-data-table :headers="admissionCodesHeaders" :items="items">
-            <template v-if="userRole == 5" v-slot:item.admission_code="{ item }">
+            <template v-if="userRole == 5 || userRole==8" v-slot:item.admission_code="{ item }">
               {{ item.admission_code.substring(0, 5) + '*****' }}
             </template>
             <template v-else v-slot:item.admission_code="{ item }">
@@ -529,7 +529,7 @@ export default {
     },
 
     handleSold(item) {
-      if (this.userRole == 5) {
+      if (this.userRole == 5 || this.userRole==8) {
         return false
       }
       console.log('item', item)

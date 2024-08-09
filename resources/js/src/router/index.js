@@ -275,7 +275,7 @@ const routes = [
     component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5, 8],
+      roles: [2, 5],
     }
 
   },
@@ -314,7 +314,7 @@ const routes = [
     component: () => import('@/views/Registrar/courses/ViewCourses.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1,8],
+      roles: [2, 1],
     }
 
   },
@@ -324,7 +324,7 @@ const routes = [
     component: () => import('@/views/Compliance/ViewCourses.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1,8],
+      roles: [8],
     }
 
   },
