@@ -58,7 +58,17 @@ class CourseController extends Controller
     {
         //
     }
-
+    public function getprogcourse($id)
+    {
+        $results = Course::join('programs', 'courses.program_id', '=', 'programs.id')
+            ->where('programs.id', $id)
+            ->select('courses.*') // or select specific columns if needed
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'result' => $results
+        ]);
+    }
     /**
      * Store a newly created resource in storage.
      *

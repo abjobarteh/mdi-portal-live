@@ -21,7 +21,15 @@ class DepartmentController extends Controller
             'result' => $departments
         ]);
     }
+    public function getdept(){
+        $departments = Department::with('courses')->get();
 
+        // Return the response as JSON
+        return response()->json([
+            'status' => 200,
+            'result' => $departments
+        ]);
+    }
     public function deparmentCourses(Request $request)
     {
         $departmentCourses = Department::with('courses')->where('id', $request->get('department_id'))->paginate(13);

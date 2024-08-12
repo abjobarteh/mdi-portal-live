@@ -90,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/add-department', [DepartmentController::class, 'store']);
         Route::get('/department/{id}', [DepartmentController::class, 'show']);
+        Route::get('/get-departments', [DepartmentController::class, 'getdept']);
         Route::put('/department/{id}', [DepartmentController::class, 'update']);
         Route::delete('/delete-department/{id}', [DepartmentController::class, 'destroy']);
 
@@ -109,6 +110,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-course', [CourseController::class, 'store']);
         Route::get('/view-courses', [CourseController::class, 'index']);
         Route::get('/course/{id}', [CourseController::class, 'show']);
+        Route::get('/get-course/{id}', [CourseController::class, 'getprogcourse']);
         Route::put('/course/{id}', [CourseController::class, 'update']);
         Route::delete('/delete-course/{id}', [CourseController::class, 'destroy']);
 
