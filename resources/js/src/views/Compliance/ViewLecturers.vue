@@ -79,36 +79,13 @@
             <!-- <template v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
             </template> -->
-          
+            <template v-slot:[`item.action`]="{ item }">
+              <v-btn small color="primary" @click="deallocateCourse(item)">Deallocate</v-btn>
+            </template>
           </v-data-table>
         </v-card-text>
       </v-card>
     </v-dialog>
-
-    <v-dialog v-model="editlectdept" max-width="650px">
-      <v-card>
-        <v-card-title> Edit lecturer Program Courses </v-card-title>
-        <v-card-text>
-          <v-form ref="form">
-            <v-select outlined v-model="progs.program_id"
-              :items="programs.map(program => ({ id: program.id, name: program.name }))" item-value="id"
-              item-text="name" label="Program" @input="handleProgramChange"
-              :rules="[v => !!v || 'A Program is required']"></v-select>
-
-            <v-select multiple outlined v-model="deptdetsformdata.id" :items="formatteddepts" item-value="id"
-              item-text="name" label="Course"  :rules="[v => !!v.length || 'At least one course is required']">
-            </v-select>
-
-          </v-form>
-
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="green" @click="addnonprogcourse">Add Program Course(s)</v-btn>
-          <v-btn color="secondary" @click="closebtn">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <v-dialog v-model="editlectdialog" max-width="500px">
       <v-card>
         <v-card-title> Edit lecturer </v-card-title>
@@ -127,8 +104,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    
     <!-- // allocate courses //  -->
     <v-dialog v-model="allocateCoursesDialog" max-width="500px">
       <v-card>
@@ -417,26 +392,9 @@ export default {
           //  this.pageCount = 0
         })
     },
-    showAllocateDepartment(item) {
-      this.editlectdept = true
-      this.lecturerId = item.id
-      axios
-        .get('/api/view-programs')
-        .then(response => {
-          this.programs = response.data.result.data
-        })
-        .catch(err => {
-          this.programs = []
-        })
-    },
     closepopup() {
       this.editlectdialog = false;
-
       this.coursedetsformdata = [];
-    },
-    closebtn() {
-      this.editlectdept = false;
-       this.deptdetsformdata = [];
     },
     announce() {
       swal
@@ -507,35 +465,6 @@ export default {
       if (this.canCloseLecturerSemesterCoursesPopup) {
         this.showLecturerSemesterCoursesPopup = false
       }
-    },
-    addnonprogcourse(){
-      console.log('Selected Courses:', this.deptdetsformdata.id);
-      console.log('Lecturer ID:', this.lecturerId);
-
-      axios.post('/api/add-course-lect', {
-        lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
-        courseids: this.deptdetsformdata.id // The selected course IDs
-      })
-        .then(response => {
-          // Show success alert
-          swal
-            .fire({
-              title: 'Success!',
-              text: 'Course added successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            .then(() => {
-              this.getResults();
-              this.deptdetsformdata = [];
-              this.editlectdialog = false;
-              // Clear the selection
-            });
-        })
-        .catch(error => {
-          // Handle error
-          console.error(error);
-        })
     },
     addcourse() {
 

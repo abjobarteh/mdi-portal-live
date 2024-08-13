@@ -8,6 +8,9 @@
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
           <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
           <v-btn color="primary" small class="white--text" @click="showAddUserDialog">Add User</v-btn>
+          <v-btn icon @click="showSearchDialog">
+                <fas icon="search"></fas>
+              </v-btn>
         </v-toolbar>
 
         <!-- Data table -->
@@ -146,6 +149,31 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="searchDialog" max-width="400">
+          <v-card>
+            <v-card-title>Advanced Search</v-card-title>
+            <v-card-text>
+              <!-- Add your dropdown or any additional search options here -->
+              <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
+              <v-text-field
+                v-model="advanceSearch"
+                :label="advanceSearchLabel"
+                append-icon="mdi-magnify"
+                clearable
+                hide-details
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="primary"
+                :disabled="selectedItem == null || advanceSearch === ''"
+                @click="performAdvancedSearch"
+                >Search</v-btn
+              >
+              <v-btn @click="closeSearchDialog">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
     <!-- Edit user duration dialog -->
     <v-dialog v-model="editUserDialog" max-width="750px">
       <v-card>
@@ -235,6 +263,9 @@ export default {
     return {
       roles: [],
       users: [],
+      advanceSearchLabel: '',
+      advanceSearch: '',
+      searchDialog: false,
       departments: [],
       showDepartments: false,
       showhodDepts: false,
@@ -259,7 +290,14 @@ export default {
       page: 1,
       pageCount: 0,
       search: '',
-
+      selectedItem: null,
+      items: [
+        // Your dropdown items here
+        { text: 'Username', value: '1' },
+        { text: 'Firstname', value: '2' },
+        { text: 'Middlename', value: '3' },
+        { text: 'Lastname', value: '4' },
+      ],
       //////////////// add new User /////////
       addUserDialog: false,
       addUserFormData: {
@@ -339,6 +377,30 @@ export default {
         }))
       })
     },
+    performAdvancedSearch() {
+      // Implement your advanced search logic here
+      console.log('Performing advanced search...')
+      // Close the dialog after searching
+      axios
+        .get('/api/search-users', {
+          params: {
+            page: this.page,
+            advanceSearch: this.advanceSearch,
+            selectedItem: this.selectedItem, // Add the selectedItem here
+          },
+        })
+        .then(response => {
+          this.users = response.data.result
+          this.pageCount = response.data.result.last_page
+          
+          console.log(this.users);
+        })
+        .catch(err => {
+          this.courses = []
+          this.pageCount = 0
+        })
+      this.closeSearchDialog()
+    },
     onDepartmentSelected() {
       // Remove deselected departments
       this.selectedDepartment = this.departments.filter(department =>
@@ -397,7 +459,12 @@ export default {
       this.editedItem = Object.assign({}, item)
       this.editUserDialog = true
     },
-
+    showSearchDialog() {
+      this.searchDialog = true
+    },
+    closeSearchDialog() {
+      this.searchDialog = false
+    },
     submitupdateUserForm() {
       // make a PUT request to update the gradingSystem data
       axios.put(`/api/update-user/${this.editedItem.id}`, this.editedItem).then(response => {
@@ -585,6 +652,7 @@ export default {
           }
         })
     },
+
   },
 
   computed: {

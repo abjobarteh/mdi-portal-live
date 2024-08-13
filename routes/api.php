@@ -180,6 +180,7 @@ Route::middleware('auth:sanctum')->group(function () {
         /////////////////// users controller ////////////
         Route::post('/add-user', [UserController::class, 'store']);
         Route::get('/view-users', [UserController::class, 'index']);
+        Route::get('/search-users', [UserController::class, 'searchuser']);
         // Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         // Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);

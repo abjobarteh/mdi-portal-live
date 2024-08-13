@@ -51,6 +51,41 @@ class UserController extends Controller
         return response()->json(['message' => 'User blocked', 'user' => $user]);
     }
 
+    public function searchuser(Request $request)
+    {
+        $query = User::query();
+
+        // Check if the request has the necessary parameters
+        if ($request->has('selectedItem') && $request->has('advanceSearch')) {
+            $selectedItem = $request->input('selectedItem');
+            $advanceSearch = $request->input('advanceSearch');
+
+            // Apply filters based on the selected item
+            switch ($selectedItem) {
+                case 1:
+                    $query->where('username', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 2:
+                    $query->where('firstname', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 3:
+                    $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 4:
+                    $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Execute the query and return results
+        $users = $query->get();
+        return response()->json([
+            'status' => 200,
+            'result' => $users
+        ]);
+    }
     public function unBlockUser($id)
     {
         $user = User::find($id);
