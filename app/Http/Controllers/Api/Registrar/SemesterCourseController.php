@@ -20,14 +20,13 @@ class SemesterCourseController extends Controller
         $teachableAvailableSemesterCourses = SemesterCourse::whereHas('semester', function ($query) {
             $query->where('is_current_semester', 1);
         })
-            ->whereNull('lecturer_id')
             ->whereIn('course_id', function ($query) use ($lecturerId) {
                 $query->select('teachable_course_id')
                     ->from('lecturer_teachable_course')
                     ->where('lecturer_id', $lecturerId);
             })
             ->with('course')
-            ->paginate(100000);
+            ->paginate(1000);
 
         return response()->json([
             'status' => 200,
