@@ -118,7 +118,7 @@
               :rules="[v => !!v || 'A Program is required']"></v-select>
 
             <v-select multiple outlined v-model="deptdetsformdata.id" :items="formatteddepts" item-value="id"
-              item-text="name" label="Course"  :rules="[v => !!v.length || 'At least one course is required']">
+              item-text="name" label="Course" :rules="[v => !!v.length || 'At least one course is required']">
             </v-select>
 
           </v-form>
@@ -193,13 +193,13 @@ export default {
       formValid: false,
       semesterAvailableCourses: [],
       headers: [
+        { text: 'Action', value: 'action', sortable: false },
         { text: 'Fullname', value: 'fullname' },
         { text: 'username', value: 'username' },
         { text: 'Email', value: 'email' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
         { text: 'Lecturer Type', value: 'lecturer_type' },
-        { text: 'Action', value: 'action', sortable: false },
       ],
       // editLecturerDialog: false,
       // editedIndex: -1,
@@ -230,78 +230,78 @@ export default {
       rules: {
         lecturer_id: { required },
         semester_courses_ids: { required },
-        id : {required}
+        id: { required }
       },
 
       v$: null,
     }
   },
   handleProgramChange(selectedProgramId) {
-      console.log('Selected Program ID:', selectedProgramId);
-      axios
-        .get(`/api/get-course/${selectedProgramId}`)
-        .then(response => {
+    console.log('Selected Program ID:', selectedProgramId);
+    axios
+      .get(`/api/get-course/${selectedProgramId}`)
+      .then(response => {
 
-          this.progcourses = response.data.result.data;
-          this.progcourses = response.data.result;
-          console.log("DATA: ", this.progcourses);
+        this.progcourses = response.data.result.data;
+        this.progcourses = response.data.result;
+        console.log("DATA: ", this.progcourses);
 
-        })
-        .catch(err => {
-          console.error('Error fetching courses:', err);
-          this.progcourses = [];
-        });
-    },
-    showAllocateDepartment(item) {
-      this.editlectdept = true
-      this.lecturerId = item.id
-      axios
-        .get('/api/view-programs')
-        .then(response => {
-          this.programs = response.data.result.data
-        })
-        .catch(err => {
-          this.programs = []
-        })
-    },
-    closepopup() {
-      this.editlectdialog = false;
-
-      this.coursedetsformdata = [];
-    },
-    closebtn() {
-      this.editlectdept = false;
-       this.deptdetsformdata = [];
-    },
-    addnonprogcourse(){
-      console.log('Selected Courses:', this.deptdetsformdata.id);
-      console.log('Lecturer ID:', this.lecturerId);
-
-      axios.post('/api/add-course-lect', {
-        lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
-        courseids: this.deptdetsformdata.id // The selected course IDs
       })
-        .then(response => {
-          // Show success alert
-          swal
-            .fire({
-              title: 'Success!',
-              text: 'Course added successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            .then(() => {
-              this.getResults();
-              this.deptdetsformdata = [];
-              this.editlectdialog = false;
-              // Clear the selection
-            });
-        })
-        .catch(error => {
-          // Handle error
-          console.error(error);
-        })
-    },
+      .catch(err => {
+        console.error('Error fetching courses:', err);
+        this.progcourses = [];
+      });
+  },
+  showAllocateDepartment(item) {
+    this.editlectdept = true
+    this.lecturerId = item.id
+    axios
+      .get('/api/view-programs')
+      .then(response => {
+        this.programs = response.data.result.data
+      })
+      .catch(err => {
+        this.programs = []
+      })
+  },
+  closepopup() {
+    this.editlectdialog = false;
+
+    this.coursedetsformdata = [];
+  },
+  closebtn() {
+    this.editlectdept = false;
+    this.deptdetsformdata = [];
+  },
+  addnonprogcourse() {
+    console.log('Selected Courses:', this.deptdetsformdata.id);
+    console.log('Lecturer ID:', this.lecturerId);
+
+    axios.post('/api/add-course-lect', {
+      lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
+      courseids: this.deptdetsformdata.id // The selected course IDs
+    })
+      .then(response => {
+        // Show success alert
+        swal
+          .fire({
+            title: 'Success!',
+            text: 'Course added successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
+          .then(() => {
+            this.getResults();
+            this.deptdetsformdata = [];
+            this.editlectdialog = false;
+            // Clear the selection
+          });
+      })
+      .catch(error => {
+        // Handle error
+        console.error(error);
+      })
+  },
   computed: {
     // Flatten courses array and format it for v-select
     formattedCourses() {
@@ -336,26 +336,26 @@ export default {
     },
   },
   showAllocateDepartment(item) {
-      this.editlectdept = true
-      this.lecturerId = item.id
-      axios
-        .get('/api/view-programs')
-        .then(response => {
-          this.programs = response.data.result.data
-        })
-        .catch(err => {
-          this.programs = []
-        })
-    },
-    closepopup() {
-      this.editlectdialog = false;
+    this.editlectdept = true
+    this.lecturerId = item.id
+    axios
+      .get('/api/view-programs')
+      .then(response => {
+        this.programs = response.data.result.data
+      })
+      .catch(err => {
+        this.programs = []
+      })
+  },
+  closepopup() {
+    this.editlectdialog = false;
 
-      this.coursedetsformdata = [];
-    },
-    closebtn() {
-      this.editlectdept = false;
-       this.deptdetsformdata = [];
-    },
+    this.coursedetsformdata = [];
+  },
+  closebtn() {
+    this.editlectdept = false;
+    this.deptdetsformdata = [];
+  },
   created() {
     this.setupValidation()
     this.getResults()
@@ -536,7 +536,7 @@ export default {
           //  this.pageCount = 0
         })
     },
-    addnonprogcourse(){
+    addnonprogcourse() {
       console.log('Selected Courses:', this.deptdetsformdata.id);
       console.log('Lecturer ID:', this.lecturerId);
 
@@ -579,7 +579,7 @@ export default {
     },
     closebtn() {
       this.editlectdept = false;
-       this.deptdetsformdata = [];
+      this.deptdetsformdata = [];
     },
     closepopup() {
       this.editlectdialog = false;
@@ -687,34 +687,34 @@ export default {
     },
     removecourse() {
 
-console.log('Lecturer ID:', this.lecturerId);
-console.log('Selected Courses:', this.coursedetsformdata.semester_courses_ids);
+      console.log('Lecturer ID:', this.lecturerId);
+      console.log('Selected Courses:', this.coursedetsformdata.semester_courses_ids);
 
-axios.post('/api/remove-course-lect', {
-  lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
-  courseids: this.coursedetsformdata.course_ids // The selected course IDs
-})
-  .then(response => {
-    // Show success alert
-    swal
-      .fire({
-        title: 'Success!',
-        text: 'Course removed successfully.',
-        icon: 'success',
-        confirmButtonText: 'OK',
+      axios.post('/api/remove-course-lect', {
+        lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
+        courseids: this.coursedetsformdata.course_ids // The selected course IDs
       })
-      .then(() => {
-        this.getResults();
-        this.coursedetsformdata = [];
-        this.editlectdialog = false;
-        // Clear the selection
-      });
-  })
-  .catch(error => {
-    // Handle error
-    console.error(error);
-  })
-},
+        .then(response => {
+          // Show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Course removed successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults();
+              this.coursedetsformdata = [];
+              this.editlectdialog = false;
+              // Clear the selection
+            });
+        })
+        .catch(error => {
+          // Handle error
+          console.error(error);
+        })
+    },
     //////////////  Allocate courses ///////////////////
     showAllocateSemesterCoursesDialog() {
       this.allocateCoursesDialog = true
@@ -722,42 +722,42 @@ axios.post('/api/remove-course-lect', {
 
     async submitallocateCourseForm() {
       const result = await this.v$.value.$validate()
-    /*  if (result) { */
-        axios
-          .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
-          .then(result => {
-            this.allocateCoursesDialog = false
-              // show success alert
-              ; (this.allocateCourseFormData.semester_courses_ids = ''),
-                swal
-                  .fire({
-                    title: 'Success!',
-                    text: 'course allocated successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                  })
-                  .then(() => {
-                    this.getResults()
-                    window.location.reload()
-                  })
-          })
-          .catch(error => {
-            // show error alert
-            swal.fire({
-              title: 'Error!',
-              text: 'Failed to allocate.',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            })
-          })
-    /*  } else {
-        swal.fire({
-          title: 'Error!',
-          text: 'Failed to allocate courses.',
-          icon: 'error',
-          confirmButtonText: 'OK',
+      /*  if (result) { */
+      axios
+        .post('/api/allocate-semester-available-courses', this.allocateCourseFormData)
+        .then(result => {
+          this.allocateCoursesDialog = false
+            // show success alert
+            ; (this.allocateCourseFormData.semester_courses_ids = ''),
+              swal
+                .fire({
+                  title: 'Success!',
+                  text: 'course allocated successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+                .then(() => {
+                  this.getResults()
+                  window.location.reload()
+                })
         })
-      } */
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to allocate.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
+      /*  } else {
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to allocate courses.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        } */
     },
   },
 }
