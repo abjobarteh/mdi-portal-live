@@ -18,43 +18,27 @@
             <v-card-text>
               <!-- Add your dropdown or any additional search options here -->
               <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
-              <v-text-field
-                v-model="advanceSearch"
-                :label="advanceSearchLabel"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field>
+              <v-text-field v-model="advanceSearch" :label="advanceSearchLabel" append-icon="mdi-magnify" clearable
+                hide-details></v-text-field>
             </v-card-text>
             <v-card-actions>
-              <v-btn
-                color="primary"
-                :disabled="selectedItem == null || advanceSearch === ''"
-                @click="performAdvancedSearch"
-                >Search</v-btn
-              >
+              <v-btn color="primary" :disabled="selectedItem == null || advanceSearch === ''"
+                @click="performAdvancedSearch">Search</v-btn>
               <v-btn @click="closeSearchDialog">Close</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
 
         <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="students"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="students" :items-per-page="13" :search="search" class="elevation-1"
+            hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
               <v-btn small style="width: 100%" color="green" @click="showprogram(item)">Edit Student</v-btn>
               <v-btn small style="width: 30%" color="error" @click="deleteLecturer(item)">Del</v-btn>
             </template>
             <template v-slot:[`item.fullname`]="{ item }">
-              <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template
-            >
+              <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template>
             <template v-slot:[`item.program`]="{ item }">
               <span style="font-size: smaller">{{ item.program.name }}</span>
             </template>
@@ -117,7 +101,7 @@ export default {
       studentId: '',
       progs: [],
       studentId: null,                // Student ID for operations
-      programId: null,   
+      programId: null,
       studentid: null,
       editstudentprog: false,
       programs: [],
@@ -132,6 +116,7 @@ export default {
       students: [],
       semesters: [],
       headers: [
+        { text: 'Action', value: 'action', sortable: false },
         { text: 'Fullname', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
         { text: 'Program', value: 'program' },
@@ -142,7 +127,6 @@ export default {
         { text: 'Acceptance Status', value: 'acceptance_status' },
         { text: 'Emergency Contact Name', value: 'eme_name' },
         { text: 'Emergency Contact Number', value: 'eme_numbr' },
-        { text: 'Action', value: 'action', sortable: false },
       ],
       page: 1,
       pageCount: 0,
@@ -364,14 +348,3 @@ export default {
   },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
