@@ -7,6 +7,7 @@ use App\Models\Program;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Models\StudentRegisteredCourse;
 
 class ApplicantDeparmentInfoController extends Controller
 {
@@ -48,4 +49,47 @@ class ApplicantDeparmentInfoController extends Controller
             'data' => $student,
         ], 200);
     }
+
+
+    public function changeprogram(Request $request)
+    {
+
+        $studentId = $request->input('studentId');
+        $programId = $request->input('programId');
+
+        // Check the number of rows in student_registered_courses for the given studentId
+        $registeredCoursesCount = StudentRegisteredCourse::where('student_id', $studentId)
+            ->count();
+
+        
+        // Perform the update only if the count is not 10
+
+        if ($registeredCoursesCount ==0) {
+            return response()->json([
+                'success' => false,
+                'error' => true,
+                'errorMessage' => 'Sorry, cannot change programs'
+            ]);
+        }
+
+        $student = Student::where('id', $studentId)->first();
+
+        if ($student) {
+            $student->update([
+                'program_id' => $programId,
+                'department_id' => Program::where('id', $programId)->value('department_id'),
+            ]);
+
+            return response()->json([
+                'success' => true
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'error' => true,
+            'errorMessage' => 'Failed to update student'
+        ]);
+    }
+
 }

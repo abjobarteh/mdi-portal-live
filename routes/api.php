@@ -164,6 +164,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         Route::post('/view-accepted-application-detail', [ApplicationsController::class, 'viewAceptedApplicationDetails']);
         Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
+        Route::get('/rejected-application/{user_id}', [ApplicationsController::class, 'getrejectedApplications']);
         Route::post('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
         Route::post('/accept-student-application', [ApplicationsController::class, 'acceptStudentApplication']);
         Route::post('/conditional-student-application', [ApplicationsController::class, 'conditionalStudentApplication']);
@@ -206,6 +207,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
         Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
         Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
+      
         Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
 
         Route::get('/running-courses', [CourseController::class, 'runningCourses']);
@@ -262,10 +264,12 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
         Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
+
         Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
-        Route::get('/view-departmental-courses/{lecturerId}', [SemesterCourseController::class, 'getcourses']); 
-        Route::post('/add-course-lect', [SemesterCourseController::class, 'addlectcourse']); 
+        Route::get('/view-departmental-courses/{lecturerId}', [SemesterCourseController::class, 'getcourses']);
+        Route::post('/add-course-lect', [SemesterCourseController::class, 'addlectcourse']);
+        Route::post('/change-program', [ApplicantDeparmentInfoController::class, 'changeprogram']) ;
         Route::post('/remove-course-lect', [SemesterCourseController::class, 'removelectcourse']);  // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
         Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);

@@ -49,6 +49,7 @@
           >
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
+              <v-btn small style="width: 100%" color="green" @click="showprogram(item)">Edit Student</v-btn>
               <v-btn small style="width: 30%" color="error" @click="deleteLecturer(item)">Del</v-btn>
             </template>
             <template v-slot:[`item.fullname`]="{ item }">
@@ -67,6 +68,22 @@
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
       </v-card>
+      <v-dialog v-model="editstudentprog" max-width="650px">
+        <v-card>
+          <v-card-title> Edit Student Program</v-card-title>
+          <v-card-text>
+            <v-form ref="form">
+              <v-select outlined v-model="progs.program_id"
+                :items="programs.map(program => ({ id: program.id, name: program.name }))" item-value="id"
+                item-text="name" label="Program" :rules="[v => !!v || 'A Program is required']"></v-select>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="green" @click="editprogram">Edit Program</v-btn>
+            <v-btn color="secondary" @click="closebtn">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -90,6 +107,23 @@ export default {
       advanceSearch: '',
       searchDialog: false,
       selectedItem: null,
+      editstudentprog: false,
+      searchDialog: false,
+      selectedItem: null,
+      deptcourses: [],
+      depts: [],
+      studentid: '',
+      programId: '',
+      studentId: '',
+      progs: [],
+      studentId: null,                // Student ID for operations
+      programId: null,   
+      studentid: null,
+      editstudentprog: false,
+      programs: [],
+      progcourses: [],
+      programs: [],
+      courses: [],
       items: [
         // Your dropdown items here
         { text: 'Student Number', value: '1' },
@@ -182,6 +216,69 @@ export default {
     },
     setupValidation() {
       this.v$ = useVuelidate(this.rules, this.addPaymentFormData)
+    },
+    closebtn() {
+      this.editstudentprog = false;
+      this.programs = []
+    },
+    showprogram(item) {
+      this.editstudentprog = true
+      this.studentid = item.id
+      axios
+        .get('/api/view-programs')
+        .then(response => {
+          this.programs = response.data.result.data
+        })
+        .catch(err => {
+          this.programs = []
+        })
+    },
+    editprogram() {
+      // Validate the form
+      this.$refs.form.validate();
+
+      // Log values
+      console.log('Program ID', this.progs.program_id);
+      console.log('Student ID', this.studentid);
+
+      // Ensure axios is properly used to make a POST request
+      axios.post('/api/change-program', {
+        programId: this.progs.program_id,
+        studentId: this.studentid
+      })
+        .then(result => {
+          // Check if the update was successful
+          if (result.data.success) {
+            this.editstudentprog = false;
+            this.programs = [];
+
+            swal.fire({
+              title: 'Success!',
+              text: 'Program Edited Successfully',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              this.getResults(); // Refresh or fetch updated data
+            });
+          } else if (result.data.error) {
+            // Handle specific error cases
+            swal.fire({
+              title: 'Error!',
+              text: result.data.errorMessage || 'Failed to Edit Program',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
+          }
+        })
+        .catch(error => {
+          // Handle network or server errors
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to Edit Program',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        });
     },
     announce() {
       swal
