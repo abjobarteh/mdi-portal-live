@@ -10,13 +10,26 @@ use App\Models\Student;
 use App\Models\StudentPayment;
 use App\Models\StudentRegisteredCourse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegistrarDefermentController extends Controller
 {
 
     public function index(Request $request)
     {
-        $deferments = Deferment::where('is_approved', 0)->paginate(13);
+        $deferments = Deferment::join('students', 'deferments.student_id', '=', 'students.id')
+            ->join('semesters', 'semesters.id', '=', 'deferments.semester_id')
+            ->join('programs', 'students.program_id', '=', 'programs.id')
+            ->select(
+                'deferments.student_id',
+                'deferments.deferment_reason',
+                DB::raw("CONCAT(students.firstname, ' ', COALESCE(students.middlename, ''), ' ', students.lastname) as fullname"),
+                'students.mat_number',
+                'programs.name',
+                'semesters.semester_name'
+            )
+            ->where('deferments.is_approved', 0)
+            ->paginate(13);
         return response()->json([
             'status' => 200,
             'result' => $deferments

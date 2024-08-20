@@ -8,14 +8,8 @@
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
         </v-toolbar>
         <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="deferments"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="deferments" :items-per-page="13" :search="search" class="elevation-1"
+            hide-default-footer>
             <template v-slot:[`item.is_approved`]="{ item }">
               <v-btn small color="success" @click="approveDeferment(item)">Approve</v-btn>
             </template>
@@ -42,7 +36,10 @@ export default {
   data() {
     return {
       headers: [
-        { text: 'Semester', value: 'semester.semester_name' },
+        { text: 'Student', value: 'fullname' },
+        { text: 'Mat Number', value: 'mat_number' },
+        { text: 'Program', value: 'name' },
+        { text: 'Semester', value: 'semester_name' },
         { text: 'Reason', value: 'deferment_reason' },
         { text: 'Status', value: 'is_approved' },
       ],
@@ -111,4 +108,3 @@ export default {
   },
 }
 </script>
-
