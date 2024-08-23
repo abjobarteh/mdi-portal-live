@@ -64,7 +64,7 @@ class ApplicantDeparmentInfoController extends Controller
         
         // Perform the update only if the count is not 10
 
-        if ($registeredCoursesCount ==0) {
+        if ($registeredCoursesCount > 0) {
             return response()->json([
                 'success' => false,
                 'error' => true,
