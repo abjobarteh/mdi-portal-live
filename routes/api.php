@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Registrar\DepartmentController;
 use App\Http\Controllers\Api\Registrar\EmployeeController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\Registrar\GradingSystemController;
+use App\Http\Controllers\Api\Registrar\LocationController;
 use App\Http\Controllers\Api\Registrar\ProgramController;
 use App\Http\Controllers\Api\Registrar\ProgramDurationController;
 use App\Http\Controllers\Api\Registrar\RolesController;
@@ -128,8 +129,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::delete('/delete-lecturer/{id}', [LecturerController::class, 'destroy']);
 
+        Route::get('/view-locations', [LocationController::class, 'index']);
 
-
+        Route::post('/add-location', [LocationController::class, 'store']);
+        Route::post('/update-location/{id}', [LocationController::class, 'update']);
+        Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);
         // applications
         // Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         // Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
@@ -207,7 +211,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
         Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
         Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
-      
+
         Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
 
         Route::get('/running-courses', [CourseController::class, 'runningCourses']);
@@ -269,7 +273,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::get('/view-departmental-courses/{lecturerId}', [SemesterCourseController::class, 'getcourses']);
         Route::post('/add-course-lect', [SemesterCourseController::class, 'addlectcourse']);
-        Route::post('/change-program', [ApplicantDeparmentInfoController::class, 'changeprogram']) ;
+        Route::post('/change-program', [ApplicantDeparmentInfoController::class, 'changeprogram']);
         Route::post('/remove-course-lect', [SemesterCourseController::class, 'removelectcourse']);  // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
         Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);

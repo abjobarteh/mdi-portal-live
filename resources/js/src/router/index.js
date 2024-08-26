@@ -399,6 +399,24 @@ const routes = [
     }
   },
   {
+    path: '/view-locations',
+    name: 'view-locations',
+    component: () => import('@/views/Registrar/Locations/ViewLocations.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2, 1],
+    }
+  },
+  {
+    path: '/view-compliance-locations',
+    name: 'view-compliance-locations',
+    component: () => import('@/views/Compliance/ViewLocations.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [8],
+    }
+  },
+  {
     path: '/view-compliance-semesters',
     name: 'view-compliance-semesters',
     component: () => import('@/views/Compliance/ViewSemesters.vue'),

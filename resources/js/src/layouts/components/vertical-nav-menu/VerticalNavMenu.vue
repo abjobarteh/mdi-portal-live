@@ -111,6 +111,12 @@
       <nav-menu-link v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')" title="Semesters"
         :to="{ name: 'view-semesters' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
 
+        <nav-menu-link v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')" title="Locations"
+        :to="{ name: 'view-locations' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
+
+        <nav-menu-link v-if="currentUser && (currentUser.role_id == '8')" title="Locations"
+        :to="{ name: 'view-compliance-locations' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
+
         <nav-menu-link v-if="currentUser && ( currentUser.role_id == '8' )" title="Semesters"
         :to="{ name: 'view-compliance-semesters' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
 
