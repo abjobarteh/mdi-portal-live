@@ -104,6 +104,8 @@
       <nav-menu-link v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')" title="Sessions"
         :to="{ name: 'view-sessions' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
 
+        
+
         <nav-menu-link v-if="currentUser && ( currentUser.role_id == '8' )" title="Sessions"
         :to="{ name: 'view-compliance-sessions' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
 
