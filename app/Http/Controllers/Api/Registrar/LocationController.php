@@ -168,6 +168,9 @@ class LocationController extends Controller
             'message' => 'Location not found'
         ]);
     }
+
+
+    
 }
 
     /**

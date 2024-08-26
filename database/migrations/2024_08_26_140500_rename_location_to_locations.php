@@ -29,6 +29,9 @@ return new class extends Migration
         Schema::table('locations', function (Blueprint $table) {
             //
             Schema::rename('location', 'locations');
+
+
+            
         });
     }
 };

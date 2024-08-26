@@ -30,6 +30,9 @@ return new class extends Migration
             //   
             $table->string('location_code', 255)->change();
             $table->dropUnique(['location_code']);
+
+
+            
         });
     }
 };

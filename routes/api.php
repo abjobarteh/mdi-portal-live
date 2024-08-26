@@ -134,6 +134,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-location', [LocationController::class, 'store']);
         Route::post('/update-location/{id}', [LocationController::class, 'update']);
         Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);
+
+        
         // applications
         // Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         // Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);

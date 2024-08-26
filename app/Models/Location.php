@@ -17,5 +17,7 @@ class Location extends Model
         'location_name',
         'location_code',
         'location_id'
+
+        
     ];  
 }

@@ -415,6 +415,8 @@ const routes = [
       requiresAuth: true,
       roles: [8],
     }
+
+    
   },
   {
     path: '/view-compliance-semesters',

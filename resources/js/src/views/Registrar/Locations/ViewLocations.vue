@@ -37,6 +37,7 @@
             hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="allocatelocation(item)">Allocate</v-btn>
+              
               <v-btn small color="primary" @click="editlocation(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteCourse(item)">Delete</v-btn>
             </template>
