@@ -48,40 +48,6 @@
       </v-card>
     </v-container>
 
-    <v-dialog v-model="showcourselocations" persistent max-width="600px">
-      <!-- <template v-slot:activator="{ on }"></template> -->
-      <v-card>
-        <v-card-title>
-          <p>
-            <span style="font-weight: bold"></span> Course Location
-          </p>
-          <v-spacer></v-spacer>
-          <fas style="
-              font-size: 24px;
-              cursor: pointer;
-              display: inline-block;
-              background-color: #3498db;
-              color: #fff;
-              border-radius: 50%;
-              text-align: center;
-              line-height: 1.5;
-              width: 36px;
-              height: 36px;
-            " icon="times" @click="closecourselocation
-              "></fas>
-        </v-card-title>
-        <v-card-text>
-          <v-data-table :headers="courselocations" :items="locationcourseArr">
-            <!-- <template v-slot:item.admission_code="{ item }">
-              {{ item.admission_code }}
-            </template> -->
-            <template v-slot:[`item.action`]="{ item }">
-              <v-btn small color="primary" @click="deallocatelocation(item)">Deallocate</v-btn>
-            </template>
-          </v-data-table>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
     <!-- Add course duration dialog -->
     <v-dialog v-model="addLocationDialog" max-width="500px">
       <v-card>
@@ -102,6 +68,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="allocatelocationDialog" max-width="500px">
       <v-card>
         <v-card-title>Allocate Location</v-card-title>
@@ -157,8 +124,7 @@
                     :min="allocatelocationformdata.start" full-width @click:save="menuEnd = false" format="24hr"
                     @click:cancel="menuEnd = false"></v-time-picker>
                 </v-menu>
-                <span style="color: #e6676b; position: absolute; margin-top: -10px; margin-left: 10px"
-                  v-for="error in allocateLocationV$.value.end.$errors" :key="error.$uid">{{ error.$message }}</span>
+
               </v-col>
 
             </v-row>
@@ -168,6 +134,40 @@
           <v-btn color="primary" @click="submitallocatelocationForm">Add</v-btn>
           <v-btn color="secondary" @click="closebtn">Cancel</v-btn>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="showcourselocations" persistent max-width="600px">
+      <template v-slot:activator="{ on }"></template>
+      <v-card>
+        <v-card-title>
+          <p>
+            <span style="font-weight: bold"></span> Course Location
+          </p>
+          <v-spacer></v-spacer>
+          <fas style="
+                font-size: 24px;
+                cursor: pointer;
+                display: inline-block;
+                background-color: #3498db;
+                color: #fff;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 1.5;
+                width: 36px;
+                height: 36px;
+              " icon="times" @click="closecourselocation
+                "></fas>
+        </v-card-title>
+        <v-card-text>
+          <v-data-table :headers="courselocations" :items="locationcourseArr">
+            <template v-slot:item.admission_code="{ item }">
+              {{ item.admission_code }}
+            </template>
+            <template v-slot:[`item.action`]="{ item }">
+              <v-btn small color="primary" @click="deallocatelocation(item)">Deallocate</v-btn>
+            </template>
+          </v-data-table>
+        </v-card-text>
       </v-card>
     </v-dialog>
     <!-- Edit course duration dialog -->
@@ -195,7 +195,6 @@ import Vue2Filters from 'vue2-filters'
 import 'vuetify/dist/vuetify.min.css'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import axios from 'axios'
 
 Vue.use(Vue2Filters)
 
@@ -283,7 +282,8 @@ export default {
       }, this.allocatelocationformdata),
 
     }
-  },
+  }
+  ,
 
   created() {
     this.getResults()
@@ -359,7 +359,7 @@ export default {
 
       // Fetch locations
       axios
-        .get('/api/get-locations?page=' + this.page)
+        .get('/api/view-locations')
         .then(response => {
           this.locations = response.data.result.data;
         })
@@ -448,29 +448,58 @@ export default {
       this.editlocationDialog = true
     },
 
-    closeLecturerSemesterCoursesPopup() {
-      if (this.canCloseLecturerSemesterCoursesPopup) {
-        this.showcourselocation = false
-      }
-    },
-
     closecourselocation() {
       this.showcourselocations = false
     },
     deallocatelocation(item) {
-      /* console(item.start_date)
-      console(item.end_date)
-     axios
-      .post(`/api/deallocate-location/${item.location_id}`, {
-      param1: item.start_date,
-      param2: item.end_date
-    }) */
+         
+      const day = item.day;
+      const course = item.course_name;
+      const startTime = item.start_time;
+      const endTime = item.end_time;
+      console.log(item)
+      
+      console.log("Day:", day);
+      console.log("Start Time:", startTime);
+      console.log("Start Time:", endTime);
+      console.log("Course:", course);
+      axios
+        .post(`/api/deallocate-location`, {
+          course : course,
+          day: day,
+          start_dt: startTime,
+          end_dt: endTime
+        }).then(response => {
+          // show success alert
+          this.editlocationDialog = false
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Location deallocated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.getResults()
+              this.showcourselocations = false;
+            })
+        })
+        .catch(error => {
+          // Check if the error response exists and contains a message
+          const errorMessage = error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : 'Failed to add Location';
+
+          // Show error alert with the appropriate message
+          swal.fire({
+            title: 'Error!',
+            text: errorMessage,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        })
     },
     allocatelocation(item) {
-      // Display the course locations dialog
-
-
-      // Fetch course-location data from the API
       axios
         .get(`/api/get-course-location/${item.location_id}`)
         .then(response => {
@@ -508,8 +537,7 @@ export default {
           this.course_location = [];
           console.error("Error fetching course location data:", err);
         });
-    }
-    ,
+    },
 
     // submitupdateLocationForm() {
     //   // make a PUT request to update the gradingSystem data

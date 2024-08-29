@@ -130,15 +130,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::delete('/delete-lecturer/{id}', [LecturerController::class, 'destroy']);
 
-        Route::get('/view-locations', [LocationController::class, 'index']);
+        Route::get('/view-locations', [LocationController::class, 'getlocation']);
 
 
-        Route::post('/add-location', [LocationController::class, 'store']);
-        Route::post('/update-location/{id}', [LocationController::class, 'update']);
-        Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);
-        Route::post('/allocate-location', [LocationController::class, 'allocate']);
-        Route::get('/get-course-location/{id}', [LocationController::class, 'getlocations']);
-       // Route::post('/deallocate-location/{id}', [LocationController::class, 'deallocate']);
+        Route::post('/deallocate-location', [LocationController::class, 'deallocate']);
     
         // applications
         // Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
@@ -283,6 +278,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/remove-course-lect', [SemesterCourseController::class, 'removelectcourse']);  // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
         Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);
+        
+        Route::post('/add-location', [LocationController::class, 'store']);
+        Route::post('/update-location/{id}', [LocationController::class, 'update']);
+        Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);
+        Route::post('/allocate-location', [LocationController::class, 'allocate']);
+        Route::get('/get-course-location/{id}', [LocationController::class, 'getlocations']);
     });
 
 

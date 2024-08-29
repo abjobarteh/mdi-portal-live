@@ -24,7 +24,14 @@ class LocationController extends Controller
             'result' => $location
         ]);
     }
+public function getlocation(){
+    $location = Location::paginate(100); // or use ->get() if you don't need pagination
 
+    return response()->json([
+        'status' => 200,
+        'result' => $location
+    ]);
+}
     /**
      * Show the form for creating a new resource.
      *
@@ -36,27 +43,50 @@ class LocationController extends Controller
     }
 
 
-/* public function deallocate($id){
-    $location = CourseLocation::where('location_id', $id);
+ public function deallocate(Request $request){
+
+    $day = $request->input('day');
+    $course=$request->input('course');
+    $sdt = $request->input('start_dt');
+    $edt = $request->input('end_dt');
+    
+    $location = CourseLocation::join('courses as b', 'course_locations.course_id', '=', 'b.id')
+    ->join('locations as c', 'course_locations.location_id', '=', 'c.location_id')
+    ->select(
+        'course_locations.id',
+        'course_locations.location_id',
+        'course_locations.day',
+        'course_locations.start_time',
+        'course_locations.end_time',
+        'b.course_name',
+        'c.location_name'
+    )
+    ->where('b.course_name', $course)
+    ->where('course_locations.start_time', $sdt)
+    ->where('course_locations.end_time', $edt)
+    ->where('course_locations.day', $day)
+    ->first(); // or get() if expecting multiple results
+
 
     if ($location) {
         $location->delete();
         return response()->json([
             'status' => 200,
-            'message' => 'Location deleted successfully'
+            'message' => 'Location deallocated deleted successfully'
         ]);
     } else {
         return response()->json([
             'status' => 404,
-            'message' => 'Location not found'
+            'message' => 'Location Allocation not found'
         ]);
     }
-} */
+} 
     public function   getlocations($id){
         $results = CourseLocation::join('courses as b', 'course_locations.course_id', '=', 'b.id')
         ->join('locations as c', 'course_locations.location_id', '=', 'c.location_id')
         ->select(
             'course_locations.id',
+            'course_locations.location_id',
             'course_locations.day',
             'course_locations.start_time',
             'course_locations.end_time',
@@ -225,19 +255,7 @@ class LocationController extends Controller
         // Check if the location name already exists
         $existsName = Location::where('location_name', $name)->exists();
 
-        if ($existsCode) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'The location code already exists.'
-            ], 400);
-        }
-
-        if ($existsName) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'The location name already exists.'
-            ], 400);
-        }
+      
 
         if ($location) {
             // Update the location record
