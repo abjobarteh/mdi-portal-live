@@ -32,4 +32,11 @@ class Course extends Model
     {
         return $this->hasMany(SemesterCourse::class);
     }
+
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class, 'course_location')
+                    ->withPivot('day', 'start_time', 'end_time')
+                    ->withTimestamps();
+    }
 }

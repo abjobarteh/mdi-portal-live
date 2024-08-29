@@ -17,7 +17,12 @@ class Location extends Model
         'location_name',
         'location_code',
         'location_id'
-
-        
-    ];  
+    ];
+    
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_location')
+                    ->withPivot('day', 'start_time', 'end_time')
+                    ->withTimestamps();
+    }
 }
