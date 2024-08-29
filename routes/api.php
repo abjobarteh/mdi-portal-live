@@ -110,6 +110,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/add-course', [CourseController::class, 'store']);
         Route::get('/view-courses', [CourseController::class, 'index']);
+        Route::get('/get-courses', [CourseController::class, 'getcourse']);
         Route::get('/course/{id}', [CourseController::class, 'show']);
         Route::get('/get-course/{id}', [CourseController::class, 'getprogcourse']);
         Route::put('/course/{id}', [CourseController::class, 'update']);
@@ -131,11 +132,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/view-locations', [LocationController::class, 'index']);
 
+
         Route::post('/add-location', [LocationController::class, 'store']);
         Route::post('/update-location/{id}', [LocationController::class, 'update']);
         Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);
-
-        
+        Route::post('/allocate-location', [LocationController::class, 'allocate']);
+        Route::get('/get-course-location/{id}', [LocationController::class, 'getlocations']);
+       // Route::post('/deallocate-location/{id}', [LocationController::class, 'deallocate']);
+    
         // applications
         // Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         // Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
