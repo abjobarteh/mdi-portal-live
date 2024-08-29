@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id('location_id'); // Creates 'location_id' as the primary key
             $table->string('location_name'); // Creates a 'location_name' column
             $table->timestamps(); // Creates 'created_at' and 'updated_at' columns
+
+            
         });
     }
 
