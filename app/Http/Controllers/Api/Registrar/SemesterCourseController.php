@@ -8,6 +8,7 @@ use App\Models\SemesterCourse;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Models\Lecturer;
+use App\Models\TeachableCourse;
 class SemesterCourseController extends Controller
 {
     /**
@@ -63,15 +64,32 @@ class SemesterCourseController extends Controller
         
         $lecturerId = $request->input('lecturer_id');
         $courseIds = $request->input('courseids');
-    
+        
         $lecturer = Lecturer::find($lecturerId);
     
         if (!$lecturer) {
             return response()->json(['status' => 'error', 'message' => 'Lecturer not found',  'lecturer_id' => $lecturerId,'course_ids' => $courseIds], 404);
         }
     
+      
         // Attach courses to the lecturer
-        $lecturer->teachables()->sync($courseIds); // Use sync instead of attach if you want to replace existing records
+       // TeachableCourse
+    foreach ($courseIds as $courseId) {
+        TeachableCourse::updateOrCreate(
+            [
+                'lecturer_id' => $lecturer,
+                'teachable_course_id' => $courseId
+            ],
+            [
+                'lecturer_id' => $lecturerId,
+                'teachable_course_id' => $courseId
+            ]
+        );
+    
+    }
+    
+    
+       // $lecturer->teachables()->sync($courseIds); // Use sync instead of attach if you want to replace existing records
     
         return response()->json(['status' => 'success', 'message' => 'Courses allocated successfully','lecturer_id' => $lecturerId,'course_ids' => $courseIds]);
     }

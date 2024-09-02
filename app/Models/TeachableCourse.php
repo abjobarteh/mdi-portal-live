@@ -9,9 +9,9 @@ use App\Models\Lecturer;
 class TeachableCourse extends Model
 {
     use HasFactory;
-
+    protected $table = 'lecturer_teachable_course';
     protected $fillable = [
-        'course_id',
+        'teachable_course_id',
         'lecturer_id',
     ];
 

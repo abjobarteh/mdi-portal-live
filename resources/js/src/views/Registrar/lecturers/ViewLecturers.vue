@@ -554,9 +554,11 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
+                    location.reload();
               this.getResults();
               this.deptdetsformdata = [];
               this.editlectdialog = false;
+              
               // Clear the selection
             });
         })
@@ -674,6 +676,7 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
+              location.reload();
               this.getResults();
               this.coursedetsformdata = [];
               this.editlectdialog = false;
@@ -704,6 +707,7 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
+              location.reload();
               this.getResults();
               this.coursedetsformdata = [];
               this.editlectdialog = false;
