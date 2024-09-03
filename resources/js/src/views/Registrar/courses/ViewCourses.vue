@@ -50,7 +50,7 @@
           <v-data-table
             :headers="headers"
             :items="courses"
-            :items-per-page="13"
+            :items-per-page="100"
             :search="search"
             class="elevation-1"
             hide-default-footer
@@ -268,7 +268,7 @@ export default {
         })
 
       axios
-        .get('/api/view-programs?page=' + this.page)
+        .get('/api/view-programs')
         .then(response => {
           this.programs = response.data.result.data
         })

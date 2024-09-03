@@ -425,7 +425,7 @@ export default {
         })
 
       axios
-        .get('/api/view-roles?page=' + this.page)
+        .get('/api/view-roles')
         .then(response => {
           this.roles = response.data.result.data
         

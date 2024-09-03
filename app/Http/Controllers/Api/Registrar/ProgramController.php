@@ -19,7 +19,7 @@ class ProgramController extends Controller
     public function index()
     {
 
-        $programs = Program::with(['department', 'duration'])->paginate(13);
+        $programs = Program::with(['department', 'duration'])->paginate(300);
         return response()->json([
             'status' => 200,
             'result' => $programs
