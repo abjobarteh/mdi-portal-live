@@ -19,7 +19,16 @@ class ProgramController extends Controller
     public function index()
     {
 
-        $programs = Program::with(['department', 'duration'])->paginate(300);
+        $programs = Program::with(['department', 'duration'])->paginate(13);
+        return response()->json([
+            'status' => 200,
+            'result' => $programs
+        ]);
+    }
+
+    public function getprograms()
+    {
+        $programs = Program::with(['department', 'duration'])->paginate(45);
         return response()->json([
             'status' => 200,
             'result' => $programs

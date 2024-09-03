@@ -303,6 +303,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::get('/view-departments', [DepartmentController::class, 'index']);
         Route::get('/view-programs', [ProgramController::class, 'index']);
+        Route::get('/get-programs', [ProgramController::class, 'getprograms']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
         Route::get('/user-counts', [DashboardController::class, 'counts']);
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);

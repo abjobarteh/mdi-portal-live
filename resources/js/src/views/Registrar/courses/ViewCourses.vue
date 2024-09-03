@@ -268,7 +268,7 @@ export default {
         })
 
       axios
-        .get('/api/view-programs')
+        .get('/api/get-programs')
         .then(response => {
           this.programs = response.data.result.data
         })
