@@ -112,7 +112,7 @@ export default {
     },
     submitForm() {
       axios
-        .put(`/api/update-user/${this.accountDataLocale.id}`, this.accountDataLocale)
+        .put(`/api/update-account-info/${this.accountDataLocale.id}`, this.accountDataLocale)
         .then(result => {
           // show success alert
           this.$store.dispatch('fetchUser')

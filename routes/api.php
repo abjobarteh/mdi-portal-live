@@ -189,6 +189,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/search-users', [UserController::class, 'searchuser']);
         // Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/update-user/{id}', [UserController::class, 'update']);
+        Route::put('/update-account-info/{id}', [UserController::class, 'updateaccountsettings']);
+        
         // Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);

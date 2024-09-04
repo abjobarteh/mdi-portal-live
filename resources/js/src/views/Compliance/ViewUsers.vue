@@ -396,7 +396,7 @@ export default {
 
     submitupdateUserForm() {
       // make a PUT request to update the gradingSystem data
-      axios.put(`/api/update-user/${this.editedItem.id}`, this.editedItem).then(response => {
+      axios.put(`/api/update-account-info/${this.editedItem.id}`, this.editedItem).then(response => {
         // show a success notification
         swal
                   .fire({

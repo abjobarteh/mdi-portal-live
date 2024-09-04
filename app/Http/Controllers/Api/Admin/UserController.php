@@ -211,6 +211,8 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
         $validatedData = $request->validate([
             'firstname' => 'required|max:255',
             'lastname' => 'required',
@@ -241,6 +243,71 @@ class UserController extends Controller
             $user->save();
 
             if ($validatedData['role_id'] == 3) {
+                $lecturer = Lecturer::where('user_id', $id)->first();
+
+                if (!$lecturer) {
+                    $lecturer = new Lecturer([
+                        'firstname' => $user->firstname,
+                        'lastname' => $user->lastname,
+                        'email' => $user->email,
+                        'address' => $user->address,
+                        'phonenumber' => $user->phonenumber,
+                        'username' => $user->username,
+                        'user_id' => $user->id,
+                    ]);
+                }
+
+                if ($request->has('lecturer_type')) {
+                    $lecturer->lecturer_type = $request->get('lecturer_type');
+                }
+
+                $lecturer->save();
+
+                $lecturer->teachables()->sync($request->course_ids);
+            }
+
+            activity()
+                ->causedBy(auth()->user())
+                ->withProperties(['attributes' => auth()->user()])
+                ->log(auth()->user()->firstname . ' has updated a user');
+
+            DB::commit();
+
+            return response()->json(['message' => 'User updated successfully.']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()]);
+        }
+    }
+
+    public function updateaccountsettings(Request $request, $id){
+        
+        $roleId = DB::table('users')
+        ->where('id', $id)
+        ->value('role_id');
+
+           $validatedData = $request->validate([
+            'firstname' => 'required|max:255',
+            'lastname' => 'required',
+            'username' => 'required|unique:users,username,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $user = User::findOrFail($id);
+            $user->fill([
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+            ]);
+
+
+            $user->save();
+
+            if ($roleId== 3) {
                 $lecturer = Lecturer::where('user_id', $id)->first();
 
                 if (!$lecturer) {
