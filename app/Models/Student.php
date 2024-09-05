@@ -47,7 +47,10 @@ class Student extends Model
         'is_sponsored',
         'profile_image',
         'eme_name',
-        'eme_numbr'
+        'eme_numbr',
+        'employee',
+        'empaddr',
+        'empcontact'
     ];
 
     public function user()
