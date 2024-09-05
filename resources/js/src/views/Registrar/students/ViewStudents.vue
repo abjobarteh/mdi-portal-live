@@ -40,8 +40,9 @@
             <template v-slot:[`item.fullname`]="{ item }">
               <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template>
             <template v-slot:[`item.program`]="{ item }">
-              <span style="font-size: smaller">{{ item.program.name }}</span>
+              <span style="font-size: smaller">{{ item.program ? item.program.name : 'N/A' }}</span>
             </template>
+
             <template v-slot:[`item.admission_year`]="{ item }">
               {{ item.mat_number.toString().substring(0, 4) }}
             </template>

@@ -108,6 +108,7 @@
               outlined
               v-model="applicantPersonalInfoData.employment_status"
               :items="applicantPersonalInfoData.employmentStatusOptions"
+             
               required
             >
               <template v-slot:label>
@@ -117,7 +118,42 @@
             <span v-if="errors.employment_status" class="error-message">{{ errors.employment_status[0] }}</span>
           </v-col>
         
+        
+          
         </v-row>
+        <v-row v-if="applicantPersonalInfoData.employment_status === 'Employed'">
+          <v-col cols="12" md="6" >
+            <v-text-field
+           v-if="applicantPersonalInfoData.employment_status === 'Employed'"
+              outlined
+              v-model="applicantPersonalInfoData.employeename"
+              label="Employee Name"
+              required
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+            v-if="applicantPersonalInfoData.employment_status === 'Employed'"
+            
+              outlined
+              v-model="applicantPersonalInfoData.employeeadresss"
+              label="Employee Address"
+              required
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-if="applicantPersonalInfoData.employment_status === 'Employed'"
+              outlined
+              v-model="applicantPersonalInfoData.employeecontact"
+              label="Employee Contact Number"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+          
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field outlined v-model="applicantPersonalInfoData.EmergencyContactName" required
@@ -135,8 +171,8 @@
             >
             <span v-if="errors.EmergencyContactNumber" class="error-message">{{ errors.EmergencyContactNumber[0] }}</span>
           </v-col>
-        
         </v-row>
+       
         <v-card-actions class="d-flex justify-center">
           <v-btn color="primary" class="col-12" @click="submitForm()">Save</v-btn>
         </v-card-actions>
@@ -153,8 +189,12 @@ export default {
     return {
       previewImage: null, // Store the URL for previewing the image
       studentInfo: '',
+      showemployee: false,
       applicantPersonalInfoData: {
         middlename: '',
+        employeename:'',
+        employeeadresss:'',
+        employeecontact:'',
         phonenumber: '',
         gender: '',
         genderOptions: ['Male', 'Female', 'Other'],
@@ -162,6 +202,7 @@ export default {
         maritalStatusOptions: ['Single', 'Married', 'Divorced', 'Widowed'],
         dob: '',
         nationality: '',
+
         nationalityOptions: [
           "Gambia",
     "Afghanistan",
@@ -388,6 +429,11 @@ export default {
         this.previewImage = null
       }
     },
+    selectemployee(){
+      if (this.applicantPersonalInfoData.employment_status=='Employed'){
+        
+      }
+    },
     submitForm() {
       const formData = new FormData()
       this.applicantPersonalInfoData['id'] = this.studentInfo.user_id
@@ -402,7 +448,10 @@ export default {
       formData.append('nationality', this.applicantPersonalInfoData.nationality) // Add other form fields as needed
       formData.append('address', this.applicantPersonalInfoData.address) // Add other form fields as needed
       formData.append('employment_status', this.applicantPersonalInfoData.employment_status) // Add other form fields as needed
-      formData.append('employmentStatusOptions', this.applicantPersonalInfoData.employmentStatusOptions) // Add other form fields as needed
+      formData.append('employmentStatusOptions', this.applicantPersonalInfoData.employmentStatusOptions)
+      formData.append('employeename', this.applicantPersonalInfoData.employeename)
+      formData.append('employeeadresss', this.applicantPersonalInfoData.employeeadresss)
+      formData.append('employeecontact', this.applicantPersonalInfoData.employeecontact) // Add other form fields as needed
       formData.append('profile_image', this.applicantPersonalInfoData.profile_image) // Add other form fields as needed
       formData.append('EmergencyContactName', this.applicantPersonalInfoData.EmergencyContactName)
       formData.append('EmergencyContactNumber', this.applicantPersonalInfoData.EmergencyContactNumber)

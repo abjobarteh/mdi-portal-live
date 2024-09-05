@@ -10,14 +10,8 @@
 
         <!-- Data table -->
         <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="rejectedApplications"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="rejectedApplications" :items-per-page="13" :search="search"
+            class="elevation-1" hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="viewApplicationData(item)">View</v-btn>
             </template>
@@ -87,23 +81,26 @@ export default {
 
     viewApplicationData(item) {
       console.log(item)
-      this.$router.push({
-        name: 'view-application-preview',
-        params: { id: item.user_id },
-        query: { param: 'rejected' },
-      })
+      axios
+        .post('/api/view-rejected-applications?page=' + this.page)
+        .then(response => {
+          this.arejectedApplications = response.data.result.data
+          this.pageCount = response.data.result.last_page
+
+          // Now that the data has been fetched, navigate to the desired route
+          this.$router.push({
+            name: 'view-application-preview',
+            params: { id: item.user_id },
+            query: { param: 'rejected' },
+          })
+        })
+        .catch(err => {
+          console.log('applications')
+          this.rejectedApplications = []
+          this.pageCount = 0
+        })
+
     },
   },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-

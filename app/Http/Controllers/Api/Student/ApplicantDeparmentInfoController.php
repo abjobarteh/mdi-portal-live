@@ -54,6 +54,7 @@ class ApplicantDeparmentInfoController extends Controller
     public function changeprogram(Request $request)
     {
 
+        
         $studentId = $request->input('studentId');
         $programId = $request->input('programId');
 
@@ -61,10 +62,13 @@ class ApplicantDeparmentInfoController extends Controller
         $registeredCoursesCount = StudentRegisteredCourse::where('student_id', $studentId)
             ->count();
 
+
+                 $checkprogramid = Program::where('id', $programId)
+            ->count();
         
         // Perform the update only if the count is not 10
 
-        if ($registeredCoursesCount > 0) {
+        if ($registeredCoursesCount > 10) {
             return response()->json([
                 'success' => false,
                 'error' => true,
@@ -72,6 +76,14 @@ class ApplicantDeparmentInfoController extends Controller
             ]);
         }
 
+        if($checkprogramid == 0){
+            return response()->json([
+                'success' => false,
+                'error' => true,
+                'errorMessage' => 'Select Program'
+            ]);
+        }
+        
         $student = Student::where('id', $studentId)->first();
 
         if ($student) {

@@ -269,7 +269,10 @@ export default {
                 dob: response.data.result.data[0].dob,
                 profile_image: response.data.result.data[0].profile_image,
                 eme_name: response.data.result.data[0].eme_name,
-                eme_numbr: response.data.result.data[0].eme_numbr
+                eme_numbr: response.data.result.data[0].eme_numbr,
+                employee:response.data.result.data[0].employee,
+                empaddress:response.data.result.data[0].empaddr,
+                empcontact:response.data.result.data[0].empcontact
               },
             ]
           })
@@ -302,7 +305,11 @@ export default {
                 dob: response.data.result.data[0].dob,
                 profile_image: response.data.result.data[0].profile_image,
                 eme_name: response.data.result.data[0].eme_name,
-                eme_numbr: response.data.result.data[0].eme_numbr
+                eme_numbr: response.data.result.data[0].eme_numbr,
+                employee:response.data.result.data[0].employee,
+                empaddress:response.data.result.data[0].empaddr,
+                empcontact:response.data.result.data[0].empcontact
+
               },
             ]
           })
@@ -313,7 +320,7 @@ export default {
           })
       } else if (this.$route.query.param == 'rejected') {
         axios
-          .post(`/api/view-rejected-applications?page=` + this.page, { userId: this.$route.params.id })
+          .post(`/api/get-rejected-applications/${this.$route.params.id}?page=` + this.page, { userId: this.$route.params.id })
           .then(response => {
             console.log(response.data.result.data)
             this.education = response.data.result.data[0].education
@@ -334,7 +341,10 @@ export default {
                 dob: response.data.result.data[0].dob,
                 profile_image: response.data.result.data[0].profile_image,
                 eme_name: response.data.result.data[0].eme_name,
-                eme_numbr: response.data.result.data[0].eme_numbr
+                eme_numbr: response.data.result.data[0].eme_numbr,
+                employee:response.data.result.data[0].employee,
+                empaddress:response.data.result.data[0].empaddr,
+                empcontact:response.data.result.data[0].empcontact
               },
             ]
           })

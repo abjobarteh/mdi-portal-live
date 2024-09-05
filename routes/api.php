@@ -169,6 +169,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         Route::post('/view-accepted-application-detail', [ApplicationsController::class, 'viewAceptedApplicationDetails']);
         Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
+        Route::post('/get-rejected-applications/{user_id}', [ApplicationsController::class, 'getrejectedApplications']);
         Route::get('/rejected-application/{user_id}', [ApplicationsController::class, 'getrejectedApplications']);
         Route::post('/view-incoming-applications', [ApplicationsController::class, 'incomingApplications']);
         Route::post('/accept-student-application', [ApplicationsController::class, 'acceptStudentApplication']);

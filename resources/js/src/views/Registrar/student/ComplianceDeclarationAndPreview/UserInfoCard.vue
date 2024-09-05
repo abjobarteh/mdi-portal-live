@@ -44,6 +44,18 @@
                 <td>{{ item.employment_status }}</td>
               </tr>
               <tr>
+                <td>Employee</td>
+                <td>{{ item.employee }}</td>
+              </tr>
+              <tr>
+                <td>Employee Address</td>
+                <td>{{ item.empaddress }}</td>
+              </tr>
+              <tr>
+                <td>Employee Contact</td>
+                <td>{{ item.empcontact }}</td>
+              </tr>
+              <tr>
                 <td>Emergency Contact Name</td>
                 <td>{{ item.eme_name }}</td>
               </tr>

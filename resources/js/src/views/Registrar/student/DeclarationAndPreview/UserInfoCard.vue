@@ -8,7 +8,7 @@
       <v-card-text>
         <v-simple-table>
           <template v-slot:default>
-            <tbody v-for="item in studentProfile" :key="item.id">
+            <tbody v-for="item in studentProfile" :key="item.user_id">
               <v-img max-width="170" :src="getImageUrl(item.profile_image)"></v-img>
 
               <tr>
@@ -44,6 +44,18 @@
                 <td>{{ item.employment_status }}</td>
               </tr>
               <tr>
+                <td>Employee</td>
+                <td>{{ item.employee }}</td>
+              </tr>
+              <tr>
+                <td>Employee Address</td>
+                <td>{{ item.empaddress }}</td>
+              </tr>
+              <tr>
+                <td>Employee Contact</td>
+                <td>{{ item.empcontact }}</td>
+              </tr>
+              <tr>
                 <td>Emergency Contact Name</td>
                 <td>{{ item.eme_name }}</td>
               </tr>
@@ -51,6 +63,7 @@
                 <td>Emergency Contact Number</td>
                 <td>{{ item.eme_numbr }}</td>
               </tr>
+              
             </tbody>
           </template>
         </v-simple-table>

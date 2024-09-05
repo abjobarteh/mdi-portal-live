@@ -89,6 +89,7 @@ export default {
     viewApplicationData(item) {
       console.log(item)
       // this.$router.push('/view-application-preview/' + item.user_id)
+      
       this.$router.push({
         name: 'view-application-preview',
         params: { id: item.user_id },
