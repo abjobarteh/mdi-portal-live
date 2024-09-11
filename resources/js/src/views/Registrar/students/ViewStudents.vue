@@ -31,7 +31,7 @@
         </v-dialog>
 
         <v-card-text>
-          <v-data-table :headers="headers" :items="students" :items-per-page="13" :search="search" class="elevation-1"
+          <v-data-table :headers="headers" :items="students" :items-per-page="200" :search="search" class="elevation-1"
             hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
