@@ -83,7 +83,7 @@
               id: course.id,
               name: course.course_name,
             }))
-              " item-value="id" item-text="name" label="Courses"  :searchable="true" return-object></v-select>
+              " item-value="id" item-text="name" label="Courses"  :searchable="true" ></v-select>
             <span style="color: #e6676b; position: absolute; margin-top: -20px; margin-left: 10px"
               v-for="error in allocateLocationV$.value.course.$errors" :key="error.$uid">{{ error.$message }}</span>
             <v-select outlined v-model="allocatelocationformdata.day" :items="[
