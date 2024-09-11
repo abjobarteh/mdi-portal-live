@@ -115,6 +115,7 @@ public function getlocation(){
 
         if($validated['start'] < $validated['end'] ){
             $existsCode = CourseLocation::where('day', $validated['day'])
+            ->where('location_id', $validated['locations_id'])
             ->where(function ($query) use ($validated) {
                 $query->whereBetween('start_time', [$validated['start'], $validated['end']])
                       ->orWhereBetween('end_time', [$validated['start'], $validated['end']])
