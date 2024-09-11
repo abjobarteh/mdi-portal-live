@@ -9,6 +9,7 @@
           <v-btn icon @click="showSearchDialog">
             <fas icon="search"></fas>
           </v-btn>
+          <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
           <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
         </v-toolbar>
 
@@ -112,7 +113,13 @@ export default {
       items: [
         // Your dropdown items here
         { text: 'Student Number', value: '1' },
-        { text: 'Email', value: '2' },
+        { text: 'First Name', value: '2' },
+        { text: 'Middle Name', value: '3' },
+        { text: 'Last Name', value: '4' },
+        { text: 'Email', value: '5' },
+        { text: 'Program', value: '6' },
+        { text: 'Gender', value: '7' },
+        { text: 'Nationality', value: '8' },
       ],
       students: [],
       semesters: [],
@@ -123,6 +130,7 @@ export default {
         { text: 'Program', value: 'program' },
         { text: 'Admission Year', value: 'admission_year' },
         { text: 'Email', value: 'email' },
+        { text: 'Nationality', value: 'nationality' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
         { text: 'Acceptance Status', value: 'acceptance_status' },
@@ -182,7 +190,7 @@ export default {
       console.log('Performing advanced search...')
       // Close the dialog after searching
       axios
-        .get('/api/view-students', {
+        .get('/api/search-student', {
           params: {
             page: this.page,
             advanceSearch: this.advanceSearch,
@@ -264,6 +272,12 @@ export default {
             confirmButtonText: 'OK',
           });
         });
+    },
+    exportToExcel() {
+      const worksheet = XLSX.utils.json_to_sheet(this.students)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Students')
+      XLSX.writeFile(workbook, 'students.xlsx')
     },
     announce() {
       swal

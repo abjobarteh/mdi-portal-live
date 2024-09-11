@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Hod;
 use App\Models\Lecturer;
+use App\Models\Program;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
@@ -122,6 +123,11 @@ class HodController extends Controller
                 case 2:
                     $query->where('email', 'like', '%' . $advanceSearch . '%');
                     break;
+                case 3:
+                    
+                    $programid = Program::where('id', 'like', '%' . $advanceSearch . '%' );
+                        $query->where('program_id', '=','' . $programid . '');
+                        break;
 
                 default:
                     break;

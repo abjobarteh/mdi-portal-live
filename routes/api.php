@@ -236,6 +236,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['finance-admin'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
+        Route::get('/search-student', [StudentPaymentController::class, 'searchstudent']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
         Route::post('/add-student-sponsorship', [StudentPaymentController::class, 'storeStudentSponsorship']);
         Route::get('/view-scholarship-details/{id}', [StudentPaymentController::class, 'scholarshipDetails']);

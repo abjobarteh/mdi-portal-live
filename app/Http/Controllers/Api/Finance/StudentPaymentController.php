@@ -92,11 +92,11 @@ class StudentPaymentController extends Controller
                     $query->where('firstname', 'like', '%' . $advanceSearch . '%');
                     break;
                 case 3:
-                        $query->where('middlename', 'like', '%' . $advanceSearch . '%');
-                        break;
+                    $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                    break;
                 case 4:
-                        $query->where('lastname', 'like', '%' . $advanceSearch . '%');
-                        break;
+                    $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                    break;
                 default:
                     break;
             }
@@ -105,6 +105,60 @@ class StudentPaymentController extends Controller
         return response()->json([
             'status' => 200,
             'result' => $courses
+        ]);
+    }
+
+    public function searchstudent(Request $request)
+    {
+        if ($request->has('selectedItem') && $request->has('advanceSearch')) {
+            $query = Student::where('accepted', 'accepted');
+            $selectedItem = $request->input('selectedItem');
+            $advanceSearch = $request->input('advanceSearch');
+
+            switch ($selectedItem) {
+                case 1:
+                    $query->where('mat_number', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 2:
+                    $query->where('firstname', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 3:
+                    $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 4:
+                    $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 5:
+                    $query->where('email', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 7:
+                    $query->where('gender', '=', '' . $advanceSearch . '');
+                    break;
+                case 8:
+                    $query->where('nationality', 'like', '%' . $advanceSearch . '%');
+                    break;
+                case 6:
+                    // Find the program by name or other field and get the id
+                    $program = Program::where('name', 'like', '%' . $advanceSearch . '%')->first(); // Adjust the column if needed
+                    if ($program) {
+                        $query->where('program_id', '=', $program->id);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            // Execute the query and get the result
+            $courses = $query->paginate(1000);
+            return response()->json([
+                'status' => 200,
+                'result' => $courses
+            ]);
+        }
+
+        return response()->json([
+            'status' => 400,
+            'message' => 'Invalid search parameters'
         ]);
     }
 
