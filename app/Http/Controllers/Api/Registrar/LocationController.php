@@ -118,7 +118,6 @@ public function getlocation(){
             ->where('location_id', $validated['locations_id'])
             ->where(function ($query) use ($validated) {
                 $query->whereBetween('start_time', [$validated['start'], $validated['end']])
-                      ->orWhereBetween('end_time', [$validated['start'], $validated['end']])
                       ->orWhere(function ($query) use ($validated) {
                           $query->where('start_time', '<=', $validated['start'])
                                 ->where('end_time', '>=', $validated['end']);
