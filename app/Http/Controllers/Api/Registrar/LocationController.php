@@ -179,12 +179,12 @@ public function getlocation(){
             ], 400);
         }
 
-        if ($existsName) {
+/*        if ($existsName) {
             return response()->json([
                 'status' => 400,
                 'message' => 'The location name already exists.'
             ], 400);
-        }
+        } */
 
         // Create a new location if it does not already exist
         $location = Location::create([
