@@ -40,6 +40,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Registrar\MatriculationStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['registrar-admin'])->group(function () {
 
         Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
-
+        Route::get('/matriculation-status', [MatriculationStatusController::class, 'index']);
+        Route::post('/update-matriculation', [MatriculationStatusController::class, 'updateMatriculationStatus']);
         Route::post('/add-employee', [EmployeeController::class, 'store']);
         Route::get('/view-employees', [EmployeeController::class, 'index']);
         Route::get('/employee/{id}', [EmployeeController::class, 'show']);

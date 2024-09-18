@@ -44,6 +44,9 @@ export default {
         { text: 'Status', value: 'is_approved' },
       ],
       deferments: [],
+      page: 1,
+      pageCount: 0,
+      search: '',
     }
   },
   //
@@ -52,11 +55,11 @@ export default {
   },
 
   methods: {
-    approveDeferment(student) {
+    approveDeferment(item) {
       swal
         .fire({
           title: 'Are you sure?',
-          text: "You won't be able to revert this!",
+          text: 'Do you want to approve this deferement',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -65,9 +68,12 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
+       
+            console.log('Data: ', item.student_id)
             axios
-              .post('/api/approve-deferment/' + student.id)
+              .post('/api/approve-deferment/' + item.student_id)
               .then(result => {
+
                 // show success alert
                 swal.fire({
                   title: 'Success!',

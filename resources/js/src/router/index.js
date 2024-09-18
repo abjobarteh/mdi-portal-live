@@ -596,6 +596,15 @@ const routes = [
     }
   },
   {
+    path: '/matriculation-status',
+    name: 'matriculation-status',
+    component: () => import('@/views/Registrar/settings/MatriculationStatus.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: [2, 1],
+    }
+  },
+  {
     path: '/admission-status',
     name: 'admission-status',
     component: () => import('@/views/Registrar/settings/AdmissionStatus.vue'),

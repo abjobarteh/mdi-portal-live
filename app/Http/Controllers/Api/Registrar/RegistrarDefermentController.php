@@ -38,7 +38,7 @@ class RegistrarDefermentController extends Controller
 
     public function approveDeferment($id)
     {
-        $deferment = Deferment::where('id', $id)->update([
+        $deferment = Deferment::where('student_id', $id)->update([
             'is_approved' => 1,
         ]);
         // 1. check if the student is under scholarship, if yes then refund

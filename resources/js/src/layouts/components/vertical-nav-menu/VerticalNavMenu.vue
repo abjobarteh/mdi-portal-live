@@ -157,6 +157,7 @@
         :icon="icons.mdiFileOutline">
         <nav-menu-link title="Admissions" :to="{ name: 'admission-status' }"></nav-menu-link>
         <nav-menu-link title="Registrations" :to="{ name: 'registration-status' }"></nav-menu-link>
+        <nav-menu-link title="Matriculation Modifications" :to="{ name: 'matriculation-status' }"></nav-menu-link>
       </nav-menu-group>
 
       <nav-menu-link v-if="currentUser && (currentUser.role_id == '2' || currentUser.role_id == '1')" title="Deferments"
