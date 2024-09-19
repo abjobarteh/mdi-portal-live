@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\SponsoredStudents;
 use App\Models\Student;
 use App\Models\StudentPayment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class StudentPaymentController extends Controller
@@ -142,6 +143,12 @@ class StudentPaymentController extends Controller
                     $program = Program::where('name', 'like', '%' . $advanceSearch . '%')->first(); // Adjust the column if needed
                     if ($program) {
                         $query->where('program_id', '=', $program->id);
+                    }
+                    break;
+                case 9:
+                    $department = Department::where('name', 'like', '%' . $advanceSearch . '%')->first(); // Adjust the column if needed
+                    if ($department) {
+                        $query->where('department_id', '=',  $department->id);
                     }
                     break;
                 default:

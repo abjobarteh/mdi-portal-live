@@ -63,6 +63,7 @@ export default {
         firstname: currentUser.value.firstname,
         lastname: currentUser.value.lastname,
         email: currentUser.value.email,
+        mat_number: currentUser.value.mat_number
       },
     }
 

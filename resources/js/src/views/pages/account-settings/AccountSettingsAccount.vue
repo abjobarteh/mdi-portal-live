@@ -68,10 +68,31 @@
 
           <v-col cols="12">
             <v-btn type="submit" color="primary" class="me-3 mt-4"> Save changes </v-btn>
+            <v-btn v-if="user.role_id === 4 || user.role_id === 1" color="primary" class="me-3 mt-4"
+              @click="changematnumberdialog"> View Matriculation Number </v-btn>
             <v-btn color="secondary" outlined class="mt-4" type="reset" @click.prevent="resetForm"> Cancel </v-btn>
           </v-col>
         </v-row>
       </v-form>
+      <v-dialog v-model="changematnumber" max-width="500px">
+        <v-card>
+          <v-card-title>Matriculation Number</v-card-title>
+          <v-card-text>
+            <v-form ref="addLocationForm">
+              <v-text-field outlined v-model="changematnumberformData.mat_number"
+                label="Matriculation Number"></v-text-field>
+              <!--
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in addLocationV$.value.location_code.$errors" :key="error.$uid">{{ error.$message }}</span>
+            -->
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="green" @click="updatematnumber">Update</v-btn>
+            <v-btn color="secondary" @click="changematnumber = false">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card-text>
   </v-card>
 </template>
@@ -87,20 +108,27 @@ export default {
   props: {
     accountData: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
 
   data() {
     return {
       user: '',
+      changematnumber: false,
       status: ['Active', 'Inactive', 'Pending', 'Closed'],
       accountDataLocale: JSON.parse(JSON.stringify(this.accountData)),
       icons: {
         mdiAlertOutline,
         mdiCloudUploadOutline,
       },
+      matnumber : '',
+      matriculation: [],
+      changematnumberformData: {
+        mat_number: '',
+      }
     }
+
   },
   methods: {
     getImageUrl(filename) {
@@ -132,6 +160,77 @@ export default {
             confirmButtonText: 'OK',
           })
         })
+    },
+    changematnumberdialog() {
+      // changematnumberformData.mat_number = accountDataLocale.mat_number
+      this.changematnumber = true
+     // console.log('Data: ', this.accountDataLocale.id);
+      axios
+        .get(`/api/get-matnumber/${this.accountDataLocale.id}`)
+        
+        .then(response => {
+          // show success alert
+
+          this.matriculation = response.data.result;
+
+          console.log('Data: ', response.data.result[0].mat_number);
+          this.changematnumberformData.mat_number = response.data.result[0].mat_number;
+
+        })
+        .catch(error => {
+
+         console.log('Data 2: ', error);
+          // Check if the error response exists and contains a message
+         const errorMessage = error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : 'Error';
+
+          // Show error alert with the appropriate message
+          swal.fire({
+            title: 'Error!',
+            text: error,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }); 
+        });
+    },
+
+    updatematnumber(){
+      console.log('Debug 1: ',this.changematnumberformData);
+      console.log('Debug 2 :',this.changematnumberformData.mat_number);
+      console.log('Debug 3 :',this.accountDataLocale.id);
+      axios
+        .post(`/api/update-matnumber/${this.accountDataLocale.id}`,this.changematnumberformData)
+        
+        .then(response => {
+        
+   swal
+            .fire({
+              title: 'Success!',
+              text: 'Matriculation Number updated successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.changematnumber = false
+            })
+        })
+        .catch(error => {
+          // Check if the error response exists and contains a message
+          const errorMessage = error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : 'Error';
+
+          // Show error alert with the appropriate message
+          swal.fire({
+            title: 'Error!',
+            text: errorMessage,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }).then(
+          this.changematnumber = false
+        )
     },
     openFileInput() {
       // Trigger the file input element

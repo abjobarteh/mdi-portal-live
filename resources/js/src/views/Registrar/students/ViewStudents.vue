@@ -31,7 +31,7 @@
         </v-dialog>
 
         <v-card-text>
-          <v-data-table :headers="headers" :items="students" :items-per-page="200" :search="search" class="elevation-1"
+          <v-data-table :headers="headers" :items="students" :items-per-page="500" :search="search" class="elevation-1"
             hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
@@ -120,6 +120,7 @@ export default {
         { text: 'Program', value: '6' },
         { text: 'Gender', value: '7' },
         { text: 'Nationality', value: '8' },
+        { text: 'Department', value: '9' },
       ],
       students: [],
       semesters: [],
@@ -128,6 +129,7 @@ export default {
         { text: 'Fullname', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
         { text: 'Program', value: 'program' },
+        { text: 'Department', value: 'department.name' },
         { text: 'Admission Year', value: 'admission_year' },
         { text: 'Email', value: 'email' },
         { text: 'Nationality', value: 'nationality' },

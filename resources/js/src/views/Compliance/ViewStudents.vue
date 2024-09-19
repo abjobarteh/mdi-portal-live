@@ -9,6 +9,7 @@
           <v-btn icon @click="showSearchDialog">
             <fas icon="search"></fas>
           </v-btn>
+          <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
           <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
         </v-toolbar>
 
@@ -18,45 +19,30 @@
             <v-card-text>
               <!-- Add your dropdown or any additional search options here -->
               <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
-              <v-text-field
-                v-model="advanceSearch"
-                :label="advanceSearchLabel"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field>
+              <v-text-field v-model="advanceSearch" :label="advanceSearchLabel" append-icon="mdi-magnify" clearable
+                hide-details></v-text-field>
             </v-card-text>
             <v-card-actions>
-              <v-btn
-                color="primary"
-                :disabled="selectedItem == null || advanceSearch === ''"
-                @click="performAdvancedSearch"
-                >Search</v-btn
-              >
+              <v-btn color="primary" :disabled="selectedItem == null || advanceSearch === ''"
+                @click="performAdvancedSearch">Search</v-btn>
               <v-btn @click="closeSearchDialog">Close</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
 
         <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="students"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="students" :items-per-page="500" :search="search" class="elevation-1"
+            hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
-         
-             
+              <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
+
             </template>
             <template v-slot:[`item.fullname`]="{ item }">
-              <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template
-            >
+              <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template>
             <template v-slot:[`item.program`]="{ item }">
-              <span style="font-size: smaller">{{ item.program.name }}</span>
+              <span style="font-size: smaller">{{ item.program ? item.program.name : 'N/A' }}</span>
             </template>
+
             <template v-slot:[`item.admission_year`]="{ item }">
               {{ item.mat_number.toString().substring(0, 4) }}
             </template>
@@ -67,6 +53,22 @@
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
       </v-card>
+      <v-dialog v-model="editstudentprog" max-width="650px">
+        <v-card>
+          <v-card-title> Edit Student Program</v-card-title>
+          <v-card-text>
+            <v-form ref="form">
+              <v-select outlined v-model="progs.program_id"
+                :items="programs.map(program => ({ id: program.id, name: program.name }))" item-value="id"
+                item-text="name" label="Program" :rules="[v => !!v || 'A Program is required']"></v-select>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="green" @click="editprogram">Edit Program</v-btn>
+            <v-btn color="secondary" @click="closebtn">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -90,19 +92,46 @@ export default {
       advanceSearch: '',
       searchDialog: false,
       selectedItem: null,
+      editstudentprog: false,
+      searchDialog: false,
+      selectedItem: null,
+      deptcourses: [],
+      depts: [],
+      studentid: '',
+      programId: '',
+      studentId: '',
+      progs: [],
+      studentId: null,                // Student ID for operations
+      programId: null,
+      studentid: null,
+      editstudentprog: false,
+      programs: [],
+      progcourses: [],
+      programs: [],
+      courses: [],
       items: [
         // Your dropdown items here
         { text: 'Student Number', value: '1' },
-        { text: 'Email', value: '2' },
+        { text: 'First Name', value: '2' },
+        { text: 'Middle Name', value: '3' },
+        { text: 'Last Name', value: '4' },
+        { text: 'Email', value: '5' },
+        { text: 'Program', value: '6' },
+        { text: 'Gender', value: '7' },
+        { text: 'Nationality', value: '8' },
+        { text: 'Department', value: '9' },
       ],
       students: [],
       semesters: [],
       headers: [
+        { text: 'Action', value: 'action', sortable: false },
         { text: 'Fullname', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
         { text: 'Program', value: 'program' },
+        { text: 'Department', value: 'department.name' },
         { text: 'Admission Year', value: 'admission_year' },
         { text: 'Email', value: 'email' },
+        { text: 'Nationality', value: 'nationality' },
         { text: 'Address', value: 'address' },
         { text: 'Phonenumber', value: 'phonenumber' },
         { text: 'Acceptance Status', value: 'acceptance_status' },
@@ -162,7 +191,7 @@ export default {
       console.log('Performing advanced search...')
       // Close the dialog after searching
       axios
-        .get('/api/view-students', {
+        .get('/api/search-student', {
           params: {
             page: this.page,
             advanceSearch: this.advanceSearch,
@@ -181,6 +210,75 @@ export default {
     },
     setupValidation() {
       this.v$ = useVuelidate(this.rules, this.addPaymentFormData)
+    },
+    closebtn() {
+      this.editstudentprog = false;
+      this.programs = []
+    },
+    showprogram(item) {
+      this.editstudentprog = true
+      this.studentid = item.id
+      axios
+        .get('/api/view-programs')
+        .then(response => {
+          this.programs = response.data.result.data
+        })
+        .catch(err => {
+          this.programs = []
+        })
+    },
+    editprogram() {
+      // Validate the form
+      this.$refs.form.validate();
+
+      // Log values
+      console.log('Program ID', this.progs.program_id);
+      console.log('Student ID', this.studentid);
+
+      // Ensure axios is properly used to make a POST request
+      axios.post('/api/change-program', {
+        programId: this.progs.program_id,
+        studentId: this.studentid
+      })
+        .then(result => {
+          // Check if the update was successful
+          if (result.data.success) {
+            this.editstudentprog = false;
+            this.programs = [];
+
+            swal.fire({
+              title: 'Success!',
+              text: 'Program Edited Successfully',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              this.getResults(); // Refresh or fetch updated data
+            });
+          } else if (result.data.error) {
+            // Handle specific error cases
+            swal.fire({
+              title: 'Error!',
+              text: result.data.errorMessage || 'Failed to Edit Program',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
+          }
+        })
+        .catch(error => {
+          // Handle network or server errors
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to Edit Program',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        });
+    },
+    exportToExcel() {
+      const worksheet = XLSX.utils.json_to_sheet(this.students)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Students')
+      XLSX.writeFile(workbook, 'students.xlsx')
     },
     announce() {
       swal
@@ -266,14 +364,3 @@ export default {
   },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
