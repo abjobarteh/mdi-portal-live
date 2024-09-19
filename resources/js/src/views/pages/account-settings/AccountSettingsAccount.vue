@@ -68,7 +68,7 @@
 
           <v-col cols="12">
             <v-btn type="submit" color="primary" class="me-3 mt-4"> Save changes </v-btn>
-            <v-btn v-if="user.role_id === 4 || user.role_id === 1" color="primary" class="me-3 mt-4"
+            <v-btn v-if="user.role_id === 4 " color="primary" class="me-3 mt-4"
               @click="changematnumberdialog"> View Matriculation Number </v-btn>
             <v-btn color="secondary" outlined class="mt-4" type="reset" @click.prevent="resetForm"> Cancel </v-btn>
           </v-col>
