@@ -16,16 +16,16 @@
         </v-col>
         <v-row v-if="this.$route.query.param == 'incoming'">
           <v-col cols="4">
-            <v-btn @click="rejectStudentApplication" color="red" block dark>Reject</v-btn>
+            <v-btn @click="rejectStudentApplication" color="red" block dark style="width: 50px; height: 40px;">Reject</v-btn>
           </v-col>
           <v-col cols="4">
-            <v-btn @click="acceptStudentApplication" color="green" block dark>Accept</v-btn>
+            <v-btn @click="acceptStudentApplication" color="green" block dark style="width: 50px; height: 40px;">Accept</v-btn>
           </v-col>
           <v-col cols="4">
-            <v-btn @click="conditionalStudentApplication" color="purple" block dark>Conditional</v-btn>
+            <v-btn @click="conditionalStudentApplication" color="purple" block dark style="width: 50px; height: 40px;">Conditional</v-btn>
           </v-col>
           <v-col cols="4">
-            <v-btn @click="enrollstudentApplication" color="blue" block dark>Enroll</v-btn>
+            <v-btn @click="enrollstudentApplication" color="blue" block dark style="width: 50px; height: 40px;" >Enroll</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -419,6 +419,12 @@ export default {
   left: 0;
   animation: sk-bounce 2s infinite ease-in-out;
 }
+
+.custom-size-btn {
+  width: 100px;
+  height: 40px;
+}
+
 
 .double-bounce2 {
   animation-delay: -1s;

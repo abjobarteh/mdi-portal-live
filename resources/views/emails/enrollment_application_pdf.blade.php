@@ -141,9 +141,9 @@ foreach ($studentsWithPrograms as $student) {
         <p> Program: <strong>{{ $prname }}</strong>.</p>
         <p class="signature">Sincerely,</p>
         <p>Office of the Registrar</p>
-     <!--   <div class="signature">
-            <img src="images/logos/registrar_signature.png" alt="Registrar Signature" style="width: 100px; height: 100px;" />
-        </div> !> 
+        <div class="signature">
+            <img src="E:/mdiportal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="100px;"  height="100px;"  />
+        </div> 
     </div>
 </body>
 
