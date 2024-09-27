@@ -24,6 +24,9 @@
           <v-col cols="4">
             <v-btn @click="conditionalStudentApplication" color="purple" block dark>Conditional</v-btn>
           </v-col>
+          <v-col cols="4">
+            <v-btn @click="enrollstudentApplication" color="blue" block dark>Enroll</v-btn>
+          </v-col>
         </v-row>
       </v-container>
     </v-card>
@@ -148,6 +151,38 @@ export default {
                     })
                 }
               })
+          }
+        })
+    },
+    enrollstudentApplication(){
+      swal
+        .fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, Enroll Applicant!',
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.isLoading = true
+            axios.post(`/api/enroll-student-application`, { userId: this.$route.params.id }).then(result => {
+              swal
+                .fire({
+                  title: 'Success!',
+                  text: 'Applicant Enrolled successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+                .then(() => {
+                  this.isLoading = false
+
+                  this.$router.push('/view-incoming-applications')
+                })
+            })
+            // swal.fire('Deleted!', 'Department has been deleted.', 'success')
           }
         })
     },

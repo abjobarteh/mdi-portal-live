@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EnrollmentApplicationEmail;
 use App\Http\ConditionalApplicationEmail;
 use App\Mail\AcceptedApplicationEmail;
 use App\Mail\RejectedApplicationEmail;
@@ -17,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentAnounceMail;
 use App\Mail\LecturerAnnounceMail;
+
 
 class ApplicationsController extends Controller
 {
@@ -226,6 +228,27 @@ class ApplicationsController extends Controller
             'result' => 'Accepted Successful'
         ]);
     }
+
+    public function enrollStudentApplication(Request $request)
+    {
+        // interviewDate
+        $student = Student::where('user_id', $request->get('userId'))->first();
+        $studentName = $student->firstname . ' ' . $student->lastname;
+        $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'acceptance_status' => 1]);
+       
+        Mail::to($student->email)->send(new EnrollmentApplicationEmail($studentName,$request->get('userId')));
+
+        activity()
+            ->causedBy(auth()->user())
+            ->withProperties(['attributes' => auth()->user()])
+            ->log(auth()->user()->firstname . '  has enrolled a student application');
+
+        // when the student application is accepted, then he needs a matnumber
+        return response()->json([
+            'status' => 200,
+            'result' => 'Enrollment Successful'
+        ]);
+    }
     private function generateStudentNumber()
     {
         $currentYear = Carbon::now()->year;
@@ -245,6 +268,8 @@ class ApplicationsController extends Controller
         return $studentNumber;
     }
 
+
+    
     public function rejectStudentApplication(Request $request)
     {
         $student = Student::where('user_id', $request->get('userId'))->first();

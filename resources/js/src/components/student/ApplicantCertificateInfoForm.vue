@@ -24,6 +24,7 @@
                   :label="'Certificate Obtained for Certificate ' + (index + 1)"
                   v-model="certificate.certificate"
                   outlined
+                  accept=".pdf"
                   @change="onChange($event, index)"
                 ></v-file-input>
               </v-col>
