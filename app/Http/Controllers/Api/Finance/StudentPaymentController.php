@@ -118,7 +118,7 @@ class StudentPaymentController extends Controller
 
             switch ($selectedItem) {
                 case 1:
-                    $query->where('mat_number', '=', '' . $advanceSearch . '');
+                    $query->where('mat_number', 'like', '%' . $advanceSearch . '%');
                     break;
                 case 2:
                     $query->where('firstname', 'like', '%' . $advanceSearch . '%');
