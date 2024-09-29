@@ -261,6 +261,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-admission_codes_location', [AdmissionCodeLocationController::class, 'store']);
         Route::post('/add-admission_codes_to_location', [AdmissionCodeLocationController::class, 'addAdmissionCodes']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
+        Route::get('/get-totals/{id}', [AdmissionCodeController::class, 'getottal']);
         Route::put('/sell-code/{id}', [AdmissionCodeController::class, 'sellCode']);
         Route::get('/view-admission_codes_locations', [AdmissionCodeLocationController::class, 'index']);
         Route::post('/send-email', [EmailController::class, 'sendEmail']);

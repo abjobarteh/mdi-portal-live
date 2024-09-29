@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-container fluid>
@@ -7,9 +6,8 @@
           <v-toolbar-title>Admission Codes Locations</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
-          <v-btn color="primary" v-if="userRole != 6" small class="white--text" @click="showAddDialog"
-            >Add AdmissionCodeLocation</v-btn
-          >
+          <v-btn color="primary" v-if="userRole != 6" small class="white--text" @click="showAddDialog">Add
+            AdmissionCodeLocation</v-btn>
         </v-toolbar>
 
         <div v-if="isLoading" class="spinner">
@@ -19,14 +17,8 @@
 
         <!-- Data table -->
         <v-card-text style="height: 25vh">
-          <v-data-table
-            :headers="headers"
-            :items="admissionCodeLocations"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="admissionCodeLocations" :items-per-page="13" :search="search"
+            class="elevation-1" hide-default-footer>
             <template v-slot:[`item.totalAmountSold`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
               D{{ item.totalAmountSold }}.00
@@ -70,63 +62,32 @@
               :key="error.$uid"
               >{{ error.$message }}</span
             > -->
-            <v-select
-              outlined
-              v-model="addAdmissionCodeLocationFormData.semester_id"
-              :items="
-                semesters.map(semester => ({
-                  id: semester.id,
-                  name:
-                    semester.semester_name +
-                    '(' +
-                    semester.session.session_start.split(' ')[0] +
-                    '-' +
-                    semester.session.session_end +
-                    ')',
-                }))
-              "
-              item-value="id"
-              item-text="name"
-              label="Semester Name"
-            ></v-select>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.semester_id.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
-            <v-text-field
-              outlined
-              v-model="addAdmissionCodeLocationFormData.total_number"
-              label="Total Number"
-            ></v-text-field>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.total_number.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
+            <v-select outlined v-model="addAdmissionCodeLocationFormData.semester_id" :items="semesters.map(semester => ({
+              id: semester.id,
+              name:
+                semester.semester_name +
+                '(' +
+                semester.session.session_start.split(' ')[0] +
+                '-' +
+                semester.session.session_end +
+                ')',
+            }))
+              " item-value="id" item-text="name" label="Semester Name"></v-select>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.semester_id.$errors" :key="error.$uid">{{ error.$message }}</span>
+            <v-text-field outlined v-model="addAdmissionCodeLocationFormData.total_number"
+              label="Total Number"></v-text-field>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.total_number.$errors" :key="error.$uid">{{ error.$message }}</span>
             <v-text-field outlined v-model="addAdmissionCodeLocationFormData.price" label="Price"></v-text-field>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.value.price.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.value.price.$errors" :key="error.$uid">{{ error.$message }}</span>
 
-            <v-select
-              outlined
-              v-model="addAdmissionCodeLocationFormData.agent_id"
-              :items="
-                agents.map(agent => ({
-                  id: agent.id,
-                  name: agent.address,
-                }))
-              "
-              item-value="id"
-              item-text="name"
-              label="Location"
-            ></v-select>
+            <v-select outlined v-model="addAdmissionCodeLocationFormData.agent_id" :items="agents.map(agent => ({
+              id: agent.id,
+              name: agent.address,
+            }))
+              " item-value="id" item-text="name" label="Location"></v-select>
 
             <!-- New code -->
             <!-- <h3 class="mb-2 text-center" style="font-size: 20px">User Info</h3>
@@ -149,11 +110,8 @@
         <v-card-title>Increase Admission Codes</v-card-title>
         <v-card-text>
           <v-form ref="IncreaseAdmissionCodeLocationForm">
-            <v-text-field
-              outlined
-              v-model="increaseAdmissionCodesToLocationFormData.number_to_add"
-              label="Number of Codes to Add"
-            ></v-text-field>
+            <v-text-field outlined v-model="increaseAdmissionCodesToLocationFormData.number_to_add"
+              label="Number of Codes to Add"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -173,8 +131,7 @@
           </p>
           <v-spacer></v-spacer>
           <v-btn color="purple darken-2" @click="exportCodesToExcel" small class="white--text">Export Codes</v-btn>
-          <fas
-            style="
+          <fas style="
               margin-left: 30px;
               font-size: 24px;
               cursor: pointer;
@@ -186,13 +143,10 @@
               line-height: 1.5;
               width: 36px;
               height: 36px;
-            "
-            icon="times"
-            @click="
+            " icon="times" @click="
               canCloseAdminssionCodesPopup = true
-              closeAdmissionCodesPopup()
-            "
-          ></fas>
+            closeAdmissionCodesPopup()
+              "></fas>
         </v-card-title>
         <v-card-text>
           <!-- <v-data-table :headers="admissionCodesHeaders" :items="items"></v-data-table> -->
@@ -205,16 +159,12 @@
             </template>
             <template v-slot:[`item.time`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
-              {{ formatTime(item.created_at) }} </template
-            ><template v-slot:[`item.date`]="{ item }">
+              {{ formatTime(item.created_at) }} </template><template v-slot:[`item.date`]="{ item }">
               <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
               {{ formatDate(item.created_at) }}
             </template>
             <template v-slot:item.is_sold="{ item }">
-              <fas
-                v-if="item.is_sold == 0 && item.expired != 1"
-                icon="check"
-                style="
+              <fas v-if="item.is_sold == 0 && item.expired != 1" icon="check" style="
                   font-size: 24px;
                   cursor: pointer;
                   background-color: lightgreen;
@@ -224,14 +174,8 @@
                   line-height: 1.5;
                   width: 36px;
                   height: 36px;
-                "
-                @click="handleSold(item)"
-              ></fas>
-              <fas
-                v-else
-                icon="times"
-                disabled
-                style="
+                " @click="handleSold(item)"></fas>
+              <fas v-else icon="times" disabled style="
                   font-size: 24px;
                   background-color: red;
                   color: #fff;
@@ -240,8 +184,7 @@
                   line-height: 1.5;
                   width: 36px;
                   height: 36px;
-                "
-              ></fas>
+                "></fas>
             </template>
           </v-data-table>
         </v-card-text>
@@ -312,10 +255,18 @@ export default {
         semester_id: '',
         total_number: '',
         price: '',
+        total_sold: '',
+        total_remain: '',
         agent_id: '',
         // username: '',
         // email: '',
         // password: '',
+      },
+
+      admissioncodelocationdata:{
+        total_number: '',
+        total_sold: '',
+        total_remain: '',
       },
 
       rules: {
@@ -363,14 +314,14 @@ export default {
     openAdmissionCodesPopup(admissionCodes) {
       console.log(admissionCodes)
       this.location = admissionCodes.location_name
-      ;(this.admissionCodesHeaders = [
-        { text: 'Admission Code', value: 'admission_code' },
-        { text: 'Date', value: 'date' },
-        { text: 'Time', value: 'time' },
-        { text: 'Status', value: 'is_sold' },
-      ]),
-        (this.items = admissionCodes.admission_codes),
-        (this.showAdmissionCodesPopup = true)
+        ; (this.admissionCodesHeaders = [
+          { text: 'Admission Code', value: 'admission_code' },
+          { text: 'Date', value: 'date' },
+          { text: 'Time', value: 'time' },
+          { text: 'Status', value: 'is_sold' },
+        ]),
+          (this.items = admissionCodes.admission_codes),
+          (this.showAdmissionCodesPopup = true)
       this.canCloseAdminssionCodesPopup = false
     },
     closeAdmissionCodesPopup() {
@@ -501,10 +452,12 @@ export default {
       const result = await this.v$.value.$validate()
       if (result) {
         axios
+
           .post('/api/add-admission_codes_location', this.addAdmissionCodeLocationFormData)
           .then(result => {
-            // show success alert
-            this.addAdmissionCodeLocationDialog = false
+            total_number =
+              // show success alert
+              this.addAdmissionCodeLocationDialog = false
             swal
               .fire({
                 title: 'Success!',
@@ -536,133 +489,153 @@ export default {
     },
 
     handleSold(item) {
+      axios
       if (this.userRole == 5) {
         return false
       }
-      console.log('item', item)
-      this.showAdmissionCodesPopup = false
-      swal
-        .fire({
-          title: 'Are you sure you want to sell this code?',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Yes',
-          cancelButtonText: 'No',
+      axios
+        .get(`/api/get-totals/${item.id}`)
+        .then(response => {
+          console.log('Totals', response.data.total_number); // Logs the entire response data
+          console.log('Total Sold:', response.data.total_sold); // Logs total_sold
+          console.log('Total Remains:', response.data.total_remains);
+          this.admissioncodelocationdata.total_sold=response.data.total_sold+1
+          this.admissioncodelocationdata.total_remain=response.data.total_remains-1
+          console.log('New Total Sold:', this.admissioncodelocationdata.total_sold); // Logs total_sold
+          console.log('New Total Remains:',  this.admissioncodelocationdata.total_remain);
+          console.log('item', item)
+       this.showAdmissionCodesPopup = false
+       swal
+         .fire({
+           title: 'Are you sure you want to sell this code?',
+           icon: 'question',
+           showCancelButton: true,
+           confirmButtonText: 'Yes',
+           cancelButtonText: 'No',
+         })
+         .then(result => {
+           if (result.isConfirmed) {
+             swal
+               .fire({
+                 title: 'What would you like to do next?',
+                 icon: 'question',
+                 showCancelButton: true,
+                 confirmButtonText: 'Send',
+                 cancelButtonText: 'Done',
+                 cancelButtonColor: '#aaa',
+               })
+               .then(result => {
+                 this.showAdmissionCodesPopup = false
+ 
+                 if (result.isConfirmed) {
+                   swal
+                     .fire({
+                       title: 'Please enter your email address',
+                       input: 'email',
+                       confirmButtonText: 'Send',
+                       showCancelButton: true,
+                       cancelButtonText: 'Cancel',
+                       cancelButtonColor: '#aaa',
+                     })
+                     .then(result => {
+                       if (result.isConfirmed) {
+                         // console.log(`Email: ${result.value}`)
+                         this.isLoading = true
+                         axios
+                           .post('/api/send-email', { email: result.value, admission_code: item.admission_code })
+                           .then(result => {
+                             this.isLoading = false
+ 
+                             // show success alert
+                             this.addDepartmentDialog = false
+                             axios
+                               .put(`/api/sell-code/${item.id}`,this.admissioncodelocationdata)
+                               .then(response => {
+                                 // show success alert
+                                 this.editCourseDialog = false
+                                 swal
+                                   .fire({
+                                     title: 'Success!',
+                                     text: 'Code sold successfully.',
+                                     icon: 'success',
+                                     confirmButtonText: 'OK',
+                                   })
+                                   .then(() => {
+                                     // this.showAdmissionCodesPopup = true
+                                     this.getResults()
+                                   })
+                               })
+                               .catch(error => {
+                                 // show error alert
+                                 swal.fire({
+                                   title: 'Error!',
+                                   text: 'Failed to update course.',
+                                   icon: 'error',
+                                   confirmButtonText: 'OK',
+                                 })
+                               })
+                           })
+                           .catch(error => {
+                             this.isLoading = false
+                             // show error alert
+                             swal.fire({
+                               title: 'Error!',
+                               text: error.response.data.error,
+                               icon: 'error',
+                               confirmButtonText: 'OK',
+                             })
+                           })
+                       } else if (result.dismiss === swal.DismissReason.cancel) {
+                         console.log('Cancelled')
+                       }
+                     })
+                 } else if (result.dismiss === swal.DismissReason.cancel) {
+                   // this is when done is selected
+                   axios
+                     .put(`/api/sell-code/${item.id}`,this.admissioncodelocationdata)
+                     .then(response => {
+                       // show success alert
+                       this.editCourseDialog = false
+                       swal
+                         .fire({
+                           title: 'Success!',
+                           text: 'Code sold successfully.',
+                           icon: 'success',
+                           confirmButtonText: 'OK',
+                         })
+                         .then(() => {
+                           // this.showAdmissionCodesPopup = true
+                           this.getResults()
+                         })
+                     })
+                     .catch(error => {
+                       // show error alert
+                       swal.fire({
+                         title: 'Error!',
+                         text: 'Failed to update course.',
+                         icon: 'error',
+                         confirmButtonText: 'OK',
+                       })
+                     })
+                 }
+               })
+               .finally(() => {
+                 // Set isLoading to false when the request completes
+                 this.isLoading = false
+               })
+           } else if (result.dismiss === swal.DismissReason.cancel) {
+             console.log('Cancelled')
+           }
+         }) 
         })
-        .then(result => {
-          if (result.isConfirmed) {
-            swal
-              .fire({
-                title: 'What would you like to do next?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Send',
-                cancelButtonText: 'Done',
-                cancelButtonColor: '#aaa',
-              })
-              .then(result => {
-                this.showAdmissionCodesPopup = false
 
-                if (result.isConfirmed) {
-                  swal
-                    .fire({
-                      title: 'Please enter your email address',
-                      input: 'email',
-                      confirmButtonText: 'Send',
-                      showCancelButton: true,
-                      cancelButtonText: 'Cancel',
-                      cancelButtonColor: '#aaa',
-                    })
-                    .then(result => {
-                      if (result.isConfirmed) {
-                        // console.log(`Email: ${result.value}`)
-                        this.isLoading = true
-                        axios
-                          .post('/api/send-email', { email: result.value, admission_code: item.admission_code })
-                          .then(result => {
-                            this.isLoading = false
+        
+    
+ // Logs the entire response data
+     
 
-                            // show success alert
-                            this.addDepartmentDialog = false
-                            axios
-                              .put(`/api/sell-code/${item.id}`)
-                              .then(response => {
-                                // show success alert
-                                this.editCourseDialog = false
-                                swal
-                                  .fire({
-                                    title: 'Success!',
-                                    text: 'Code sold successfully.',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK',
-                                  })
-                                  .then(() => {
-                                    // this.showAdmissionCodesPopup = true
-                                    this.getResults()
-                                  })
-                              })
-                              .catch(error => {
-                                // show error alert
-                                swal.fire({
-                                  title: 'Error!',
-                                  text: 'Failed to update course.',
-                                  icon: 'error',
-                                  confirmButtonText: 'OK',
-                                })
-                              })
-                          })
-                          .catch(error => {
-                            this.isLoading = false
-                            // show error alert
-                            swal.fire({
-                              title: 'Error!',
-                              text: error.response.data.error,
-                              icon: 'error',
-                              confirmButtonText: 'OK',
-                            })
-                          })
-                      } else if (result.dismiss === swal.DismissReason.cancel) {
-                        console.log('Cancelled')
-                      }
-                    })
-                } else if (result.dismiss === swal.DismissReason.cancel) {
-                  // this is when done is selected
-                  axios
-                    .put(`/api/sell-code/${item.id}`)
-                    .then(response => {
-                      // show success alert
-                      this.editCourseDialog = false
-                      swal
-                        .fire({
-                          title: 'Success!',
-                          text: 'Code sold successfully.',
-                          icon: 'success',
-                          confirmButtonText: 'OK',
-                        })
-                        .then(() => {
-                          // this.showAdmissionCodesPopup = true
-                          this.getResults()
-                        })
-                    })
-                    .catch(error => {
-                      // show error alert
-                      swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to update course.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                      })
-                    })
-                }
-              })
-              .finally(() => {
-                // Set isLoading to false when the request completes
-                this.isLoading = false
-              })
-          } else if (result.dismiss === swal.DismissReason.cancel) {
-            console.log('Cancelled')
-          }
-        })
+
+     /* */
     },
 
     addAdmissionCode(item) {
@@ -746,23 +719,14 @@ export default {
 }
 
 @keyframes sk-bounce {
+
   0%,
   100% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1);
   }
 }
 </style>
-
-
-
-
-
-
-
-
-
-
-

@@ -20,17 +20,40 @@ class AdmissionCodeController extends Controller
     {
         //
     }
-
-    public function sellCode($id)
+    public function getottal($id)
     {
         $admissionCode = AdmissionCode::find($id);
         if (!$admissionCode) {
             return response()->json(['message' => 'Code not found.'], 404);
         }
 
+        // Check if the related AdmissionCodeLocation exists
+        $admissionCodeLocation = $admissionCode->admissionCodeLocation;
+        if (!$admissionCodeLocation) {
+            return response()->json(['message' => 'Admission code location not found.'], 404);
+        }
+        return response()->json([
+            'total_sold' => $admissionCodeLocation->total_sold,
+            'total_remains' => $admissionCodeLocation->total_remains,
+            'total_number' => $admissionCodeLocation->total_number
+        ], 200);
+    }
+    public function sellCode(Request $request, $id)
+    {
+        $request->input('total_sold');
+        $admissionCode = AdmissionCode::find($id);
+
+        if ($request->input('total_remain') == -1) {
+            return response()->json(['message' => 'Code Has Been Exhausted'], 404);
+        }
+
+        if (!$admissionCode) {
+            return response()->json(['message' => 'Code not found.'], 404);
+        }
+
         $admissionCode->admissionCodeLocation()->update([
-            'total_sold' => $admissionCode->admissionCodeLocation->total_sold + 1,
-            'total_remains' => $admissionCode->admissionCodeLocation->total_remains - 1
+            'total_sold' => $request->input('total_sold'),
+            'total_remains' => $request->input('total_remain')
         ]);
 
         $admissionCode->update([
