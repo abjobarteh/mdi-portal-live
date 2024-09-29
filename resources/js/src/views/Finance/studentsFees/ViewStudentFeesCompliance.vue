@@ -505,7 +505,7 @@ export default {
       console.log('Performing advanced search...')
       // Close the dialog after searching
       axios
-        .get('/api/view-students', {
+        .get('/api/search-student', {
           params: {
             page: this.page,
             advanceSearch: this.advanceSearch,
