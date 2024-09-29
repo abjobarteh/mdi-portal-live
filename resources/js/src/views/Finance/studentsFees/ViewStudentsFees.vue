@@ -132,9 +132,6 @@
               </p>
 
               <p style="font-size: 1.2em; margin: 10px 0">
-                <span style="font-weight: bold">Semester Balance:</span> D{{ semester_balance }}
-              </p>
-              <p style="font-size: 1.2em; margin: 10px 0">
                 <span style="font-weight: bold">Program Balance:</span> D{{ program_remaining_balance }}
               </p>
             </div>
@@ -316,7 +313,7 @@ export default {
       headers: [
         { text: 'FullName', value: 'fullname' },
         { text: 'Student Number', value: 'mat_number' },
-        { text: 'Program', value: 'program' },
+        { text: 'Program', value: 'program.name' },
         { text: 'Admission Year', value: 'admission_year' },
         { text: 'Email', value: 'email' },
         // { text: 'Address', value: 'address' },
@@ -337,6 +334,7 @@ export default {
         amount_paid: '',
         semester_id: '',
         student_id: '',
+        balance: '',
       },
       page: 1,
       pageCount: 0,
@@ -590,6 +588,7 @@ export default {
     async submitAddPaymentForm() {
       // const result = await this.v$.value.$validate()
       if (true) {
+        this.addPaymentFormData.balance=this.program_remaining_balance
         axios
           .post('/api/add-student-fee', this.addPaymentFormData)
           .then(result => {

@@ -238,12 +238,16 @@ class StudentPaymentController extends Controller
             'student_id' => 'required|max:255',
             'semester_id' => 'required|max:255',
             'amount_paid' => 'required|max:255',
+            'balance' => 'required'
         ]);
         $studentPayment = StudentPayment::where('student_id', $validatedData['student_id'])->where('semester_id', $validatedData['semester_id'])->first();
         $studentDepartmentFee = Student::find($validatedData['student_id'])->department->programs->first();
         // student have already paid all the fees
-        if (Student::find($validatedData['student_id'])->payment_type == 1) {
+         if (Student::find($validatedData['student_id'])->payment_type == 1) {
             return response()->json(['message' => 'You have already made a complete payment'], 422);
+        } 
+        if($validatedData['balance'] < $validatedData['amount_paid']){
+            return response()->json(['message' => 'Amount Paid Is More Than Balance'], 422);
         }
 
         // student want to pay a fee that is above the total course fee or smaller than a semster fee * work later *
@@ -255,7 +259,7 @@ class StudentPaymentController extends Controller
                 'semester_id' => $validatedData['semester_id'],
                 'amount_paid' => $validatedData['amount_paid'],
                 'payment_type' => 'Full Course Payment',
-                'semester_fee_balance' => -1,
+                'semester_fee_balance' => 0,
             ]);
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 1,
@@ -273,8 +277,8 @@ class StudentPaymentController extends Controller
             StudentPayment::where('student_id', $validatedData['student_id'])->where('semester_id', $validatedData['semester_id'])->update([
                 'semester_fee_completed' => 1
             ]);
-        } else if (
-            $validatedData['amount_paid'] >= $studentDepartmentFee['min_payable_per_semester'] &&
+        } /*else if (
+            
             ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'])
         ) {
             if (is_null($studentPayment)) {
@@ -299,7 +303,27 @@ class StudentPaymentController extends Controller
                     'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
                 ]);
             }
-        } else if ($validatedData['amount_paid'] <  $studentDepartmentFee['min_payable_per_semester'] && is_null($studentPayment)) {
+        } */ else if ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'] || $validatedData['amount_paid'] < $studentDepartmentFee->fee) {
+            StudentPayment::create([
+                'student_id' => $validatedData['student_id'],
+                'semester_id' => $validatedData['semester_id'],
+                'amount_paid' => $validatedData['amount_paid'],
+                'payment_type' => 'Installment',
+                'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
+            ]);
+
+            $student = Student::find($validatedData['student_id']);
+
+            Student::find($validatedData['student_id'])->update([
+                'payment_type' => 0,
+                'balance' => $validatedData['balance'] - $validatedData['amount_paid'],
+                'remaining' => $validatedData['balance'] - $validatedData['amount_paid']
+            ]);
+        } else if ($validatedData['amount_paid'] >= $studentDepartmentFee) {
+            return response()->json(['message' => 'Pay all the fee (' . $studentDepartmentFee->fee . ') or per semester installment (' . $studentDepartmentFee['per_semester_fee'] . ' or per installment)'], 422);
+        }
+
+        /*else if ($validatedData['amount_paid'] <  $studentDepartmentFee['min_payable_per_semester'] && is_null($studentPayment)) {
             return response()->json(['message' => 'The minimum amount to pay is ' .  $studentDepartmentFee['min_payable_per_semester']], 422);
         } else if ($studentPayment) {
             if ($validatedData['amount_paid'] > $studentPayment['semester_fee_balance']) {
@@ -321,7 +345,7 @@ class StudentPaymentController extends Controller
             }
         } else {
             return response()->json(['message' => 'Pay all the fee (' . $studentDepartmentFee->fee . ') or per semester installment (' . $studentDepartmentFee['per_semester_fee'] . ')'], 422);
-        }
+        } */
 
         activity()
             ->causedBy(auth()->user())
