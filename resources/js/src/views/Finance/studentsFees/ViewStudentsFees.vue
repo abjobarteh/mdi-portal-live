@@ -10,32 +10,21 @@
           <v-card>
             <v-toolbar color="primary" dark>
               <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                label="Search"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field>
+              <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable
+                hide-details></v-text-field>
               <v-btn icon @click="showSearchDialog">
                 <fas icon="search"></fas>
               </v-btn>
             </v-toolbar>
 
             <v-card-text>
-              <v-data-table
-                :headers="headers"
-                :items="students"
-                :items-per-page="13"
-                :search="search"
-                class="elevation-1"
-                hide-default-footer
-              >
+              <v-data-table :headers="headers" :items="students" :items-per-page="13" :search="search"
+                class="elevation-1" hide-default-footer>
                 <template v-slot:[`item.action`]="{ item }">
                   <v-btn icon @click="showAddSponsorDialog(item)">
                     <fas icon="graduation-cap" style="color: blue"></fas>
                   </v-btn>
-                 
+
                   <v-btn icon @click="viewStudentInfo(item)">
                     <fas icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
                   </v-btn>
@@ -58,27 +47,16 @@
           <v-card>
             <v-toolbar color="primary" dark>
               <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                label="Search"
-                append-icon="mdi-magnify"
-                clearable
-                hide-details
-              ></v-text-field>
+              <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable
+                hide-details></v-text-field>
               <v-btn icon @click="showSearchDialog">
                 <fas icon="search"></fas>
               </v-btn>
             </v-toolbar>
 
             <v-card-text>
-              <v-data-table
-                :headers="headers"
-                :items="students"
-                :items-per-page="13"
-                :search="search"
-                class="elevation-1"
-                hide-default-footer
-              >
+              <v-data-table :headers="headers" :items="students" :items-per-page="13" :search="search"
+                class="elevation-1" hide-default-footer>
                 <template v-slot:[`item.action`]="{ item }">
                   <v-btn @click="sponsorship(item)">Sponsorship</v-btn>
                   <v-btn small color="error" @click="deleteLecturer(item)">Delete</v-btn>
@@ -96,21 +74,12 @@
           <v-card-title>Advanced Search</v-card-title>
           <v-card-text>
             <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
-            <v-text-field
-              v-model="advanceSearch"
-              :label="advanceSearchLabel"
-              append-icon="mdi-magnify"
-              clearable
-              hide-details
-            ></v-text-field>
+            <v-text-field v-model="advanceSearch" :label="advanceSearchLabel" append-icon="mdi-magnify" clearable
+              hide-details></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn
-              color="primary"
-              :disabled="selectedItem == null || advanceSearch === ''"
-              @click="performAdvancedSearch"
-              >Search</v-btn
-            >
+            <v-btn color="primary" :disabled="selectedItem == null || advanceSearch === ''"
+              @click="performAdvancedSearch">Search</v-btn>
             <v-btn @click="closeSearchDialog">Close</v-btn>
           </v-card-actions>
         </v-card>
@@ -155,26 +124,14 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="addDepartmentForm">
-                <v-select
-                  v-if="semestersMissing"
-                  outlined
-                  v-model="addPaymentFormData.semester_id"
-                  :items="[
-                    {
-                      id: semestersMissing.id,
-                      name: `${semestersMissing.semester_name} (${session_start} - ${session_end})`,
-                    },
-                  ]"
-                  item-value="id"
-                  item-text="name"
-                  label="Semester Name"
-                ></v-select>
-                <span
-                  style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-                  v-for="error in v$.value.semester_id.$errors"
-                  :key="error.$uid"
-                  >{{ error.$message }}</span
-                >
+                <v-select v-if="semestersMissing" outlined v-model="addPaymentFormData.semester_id" :items="[
+                  {
+                    id: semestersMissing.id,
+                    name: `${semestersMissing.semester_name} (${session_start} - ${session_end})`,
+                  },
+                ]" item-value="id" item-text="name" label="Semester Name"></v-select>
+                <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+                  v-for="error in v$.value.semester_id.$errors" :key="error.$uid">{{ error.$message }}</span>
                 <v-text-field outlined v-model="addPaymentFormData.amount_paid" label="Fee"></v-text-field>
               </v-form>
             </v-card-text>
@@ -190,17 +147,11 @@
       <v-card>
         <v-card-title>Scholarship Information</v-card-title>
         <v-card-text>
-          <v-text-field
-            outlined
-            v-model="scholarshipFormData.scholarshipProvider"
-            label="Scholarship Provider"
-          ></v-text-field>
+          <v-text-field outlined v-model="scholarshipFormData.scholarshipProvider"
+            label="Scholarship Provider"></v-text-field>
           <v-text-field outlined v-model="scholarshipFormData.scholarshipName" label="Scholarship Name"></v-text-field>
-          <v-text-field
-            outlined
-            v-model="scholarshipFormData.scholarship_amount"
-            label="Scholarship Amount"
-          ></v-text-field>
+          <v-text-field outlined v-model="scholarshipFormData.scholarship_amount"
+            label="Scholarship Amount"></v-text-field>
           <v-row>
             <v-col cols="6">
               <v-text-field type="month" v-model="scholarshipFormData.startDate" label="Start Date"></v-text-field>
@@ -210,12 +161,8 @@
             </v-col>
           </v-row>
 
-          <v-file-input
-            v-model="scholarshipFormData.uploadedFile"
-            label="Upload File (Optional)"
-            show-size
-            @change="null"
-          ></v-file-input>
+          <v-file-input v-model="scholarshipFormData.uploadedFile" label="Upload File (Optional)" show-size
+            @change="null"></v-file-input>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="saveScholarship">Save</v-btn>
@@ -227,14 +174,8 @@
     <v-dialog v-model="showSponsorshipDetails" max-width="1000">
       <v-card>
         <v-card-text>
-          <v-data-table
-            :headers="sponsorshipDetailsHeader"
-            :items="sponsorshipDetails"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="sponsorshipDetailsHeader" :items="sponsorshipDetails" :items-per-page="13"
+            :search="search" class="elevation-1" hide-default-footer>
             <template v-slot:[`item.award`]="{ item }">
               <v-btn @click="scholarshipAward(item.scholarship_file)">View</v-btn>
             </template>
@@ -282,6 +223,7 @@ export default {
       // student info dialog
       paymentDialog: false,
       paymentTab: 0,
+      program: '',
       paymentHeaders: [], // Add headers for your Payments table
       payments: [], // Add data for your Payments table
       paymentAmount: '', // Add form field for payment amount
@@ -469,25 +411,49 @@ export default {
         .catch(error => {
           // show error alert
         }),
+        axios
+          .post('/api/get-prog-dept', { student_id: student.id })
+          .then(responses => {
+            this.department = responses.data.result.department_name
+            this.program = responses.data.result.program_name
+
+            /* this.session_start = responses.data.result.session.session_start
+            this.session_end = responses.data.result.session.session_end */
+
+            console.log('department', responses.data.result.department_name)
+            console.log('program', responses.data.result.program_name)
+            // this.addPaymentDialog = false
+          })
+          .catch(error => {
+            // show error alert
+          }),
         (this.addPaymentFormData.student_id = student.id)
       this.paymentDialog = true
       this.studentFullName = student.firstname + ' ' + student.lastname
-      this.department = student.department.name
+      //  = student.program.name
       this.mat_number = student.mat_number
-      this.program_remaining_balance = student.remaining_balance
+      if (student.remaining_balance !== undefined && student.remaining_balance !== null) {
+        console.log('Remaining Balance:', student.remaining_balance);
+        this.program_remaining_balance = student.remaining_balance;
+      } else {
+        // If no remaining balance, use program fee
+        this.program_remaining_balance = student.program.fee;
+        console.log('No remaining balance, using program fee:', this.program_remaining_balance);
+      }
       // this.semester_balance = student.payments[0].semester_fee_balance
       this.semester_balance =
-        student.payments.length > 0 && student.payments[0].semester.is_current_semester != 0
+        student.payments.length > 0 && this.semestersMissing.is_current_semester != 0
           ? student.payments[0].semester_fee_balance
           : student.program.per_semester_fee
       console.log('student', student)
-      ;(this.studentPaymentsHeaders = [
-        { text: 'Semester Name', value: 'semester.semester_name' },
-        { text: 'Amount Paid', value: 'amount_paid' },
-        { text: 'Payment Type', value: 'payment_type' },
-      ]),
-        (this.studentPayments = student.payments)
-    },
+        ; (this.studentPaymentsHeaders = [
+          { text: 'Semester Name', value: 'semester.semester_name' },
+          { text: 'Amount Paid', value: 'amount_paid' },
+          { text: 'Payment Type', value: 'payment_type' },
+        ]),
+          (this.studentPayments = student.payments)
+    }
+    ,
     showAddSponsorDialog(item) {
       this.student_id = item.id
       this.addSponsorDialog = true
@@ -588,25 +554,25 @@ export default {
     async submitAddPaymentForm() {
       // const result = await this.v$.value.$validate()
       if (true) {
-        this.addPaymentFormData.balance=this.program_remaining_balance
+        this.addPaymentFormData.balance = this.program_remaining_balance
         axios
           .post('/api/add-student-fee', this.addPaymentFormData)
           .then(result => {
             this.paymentDialog = false
-            // show success alert
-            ;(this.addPaymentFormData.semester_id = ''),
-              swal
-                .fire({
-                  title: 'Success!',
-                  text: 'Payment added successfully.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                })
-                .then(() => {
-                  this.generatePDF()
-                  this.getResults()
-                  this.addPaymentFormData.amount_paid = ''
-                })
+              // show success alert
+              ; (this.addPaymentFormData.semester_id = ''),
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'Payment added successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.generatePDF()
+                    this.getResults()
+                    this.addPaymentFormData.amount_paid = ''
+                  })
           })
           .catch(error => {
             // show error alert
@@ -748,6 +714,11 @@ export default {
         </div>
 
         <div class="info-row">
+          <span class="info-label">Program:</span>
+          <span class="info-value">${this.program}</span>
+        </div>
+
+        <div class="info-row">
           <span class="info-label">Year of Enrollment:</span>
           <span class="info-value">${this.userInfo.created_at.split('-')[0]}</span>
         </div>
@@ -839,14 +810,3 @@ export default {
   // },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-

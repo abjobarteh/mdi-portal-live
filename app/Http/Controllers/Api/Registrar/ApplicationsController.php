@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentAnounceMail;
 use App\Mail\LecturerAnnounceMail;
+use Illuminate\Support\Facades\DB;
 
 
 class ApplicationsController extends Controller
@@ -34,7 +35,7 @@ class ApplicationsController extends Controller
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             // ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr','students.employee','students.empaddr','students.empcontact')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact')
 
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'accepted')
@@ -57,7 +58,7 @@ class ApplicationsController extends Controller
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             // ->select('users.*', 'students.gender', 'students.id',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr','students.employee','students.empaddr','students.empcontact')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact')
 
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'accepted')
@@ -74,13 +75,30 @@ class ApplicationsController extends Controller
         ]);
     }
 
+
+    public function getprogdept(Request $request)
+    {
+
+
+        $studentData = DB::table('students as a')
+            ->join('departments as b', 'a.department_id', '=', 'b.id')
+            ->join('programs as c', 'a.program_id', '=', 'c.id')
+            ->select('b.name as department_name', 'c.name as program_name')  // Customize the columns you want
+            ->where('a.id', '=', $request->get('student_id'))
+            ->first();
+
+        return response()->json([
+            'status' => 200,
+            'result' => $studentData
+        ]);
+    }
     public function rejectedApplications()
     {
 
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
-            ->select('users.*', 'students.gender', 'students.profile_image', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name',  'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr','students.employee','students.empaddr','students.empcontact')
+            ->select('users.*', 'students.gender', 'students.profile_image', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name',  'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact')
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'rejected')
             ->paginate(15);
@@ -122,7 +140,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr','students.employee','students.empaddr','students.empcontact')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status',  'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact')
             ->where('role_id', 4)
             ->where('application_completed', 1)
             ->where('accepted', 'pending')
@@ -235,8 +253,8 @@ class ApplicationsController extends Controller
         $student = Student::where('user_id', $request->get('userId'))->first();
         $studentName = $student->firstname . ' ' . $student->lastname;
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'acceptance_status' => 1]);
-       
-        Mail::to($student->email)->send(new EnrollmentApplicationEmail($studentName,$request->get('userId')));
+
+        Mail::to($student->email)->send(new EnrollmentApplicationEmail($studentName, $request->get('userId')));
 
         activity()
             ->causedBy(auth()->user())
@@ -269,7 +287,7 @@ class ApplicationsController extends Controller
     }
 
 
-    
+
     public function rejectStudentApplication(Request $request)
     {
         $student = Student::where('user_id', $request->get('userId'))->first();
