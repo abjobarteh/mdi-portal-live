@@ -137,6 +137,7 @@
             </v-card-text>
             <v-card-actions>
               <v-btn color="primary" @click="submitAddPaymentForm">Add</v-btn>
+              <v-btn color="green" @click="waivestudent">Waive</v-btn>
               <!-- <v-btn color="secondary" @click="addProgramDialog = false">Cancel</v-btn> -->
             </v-card-actions>
           </v-card>
@@ -396,6 +397,36 @@ export default {
           })
         })
     },
+
+    waivestudent(){
+      axios
+      .post('/api/waive', this.addPaymentFormData)
+      .then(result => {
+          // this.addPaymentDialog = false
+          // show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Student Waived Successfully',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.paymentDialog = false
+              this.getResults()
+            })
+        })
+        .catch(error => {
+          // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: error.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
+    },
+    
     // view-missing-semester
     viewStudentInfo(student) {
       axios

@@ -213,7 +213,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/view-current-semesters', [SemesterController::class, 'index']);
         Route::post('/add-deferment', [DefermentController::class, 'addDeferment']);
         Route::get('/deferments', [DefermentController::class, 'index']);
-
+        Route::get('/get-waive', [StudentPaymentController::class, 'getwaive']);
         // Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
         Route::get('/get-matnumber/{id}', [MatriculationStatusController::class, 'getmat_number']);
@@ -243,6 +243,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware(['finance-admin'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
+        Route::post('/waive', [StudentPaymentController::class, 'waive']);
+
+        
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::get('/search-student', [StudentPaymentController::class, 'searchstudent']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);

@@ -50,7 +50,8 @@ class Student extends Model
         'eme_numbr',
         'employee',
         'empaddr',
-        'empcontact'
+        'empcontact',
+        'waive'
     ];
 
     public function user()

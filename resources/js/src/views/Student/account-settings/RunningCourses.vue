@@ -12,11 +12,8 @@
           {{ item.lecturer.firstname }} {{ item.lecturer.lastname }}
         </template>
         <template v-slot:[`item.action`]="{ item }">
-          <v-checkbox
-            :disabled="registrationStatus == 0 || !item.can_register"
-            v-model="item.course.registered"
-            @change="handleCheckboxChange(item)"
-          ></v-checkbox>
+          <v-checkbox :disabled="registrationStatus == 0  || (!item.can_register && waivestatus == 0)" v-model="item.course.registered"
+            @change="handleCheckboxChange(item)"></v-checkbox>
         </template>
       </v-data-table>
       <v-pagination v-model="page" :length="pageCount" />
@@ -36,7 +33,14 @@ export default {
   data() {
     return {
       registrationStatus: '',
+      waivestatus: '',
       studentInfo: '',
+      waivestudents: [],
+      waiveData: {
+        amount_paid: '',
+        semester_id: '',
+        student_id: '',
+      },
       headers: [
         { text: 'Course Code', value: 'course_code' },
         { text: 'Course Name', value: 'course_name' },
@@ -52,12 +56,29 @@ export default {
     axios.get('/api/registerd-courses').then(response => {
       console.log('response ', response)
     })
+    console.log('View',this.getUserProfile.id)
+    this.waiveData.student_id = this.studentInfo.id
+    axios.get(`/api/get-waive`, {
+      params: {
+        student_id: this.getUserProfile.id
+      }
+    })
+      .then(response => {
+        this.waivestatus=response.data.result
+        console.log('Waive Data:', this.waivestatus);
+      
+      })
+      .catch(error => {
+        console.error('Error fetching waive data:', error);
+      });
+
 
     axios
       .get('/api/registration-status')
       .then(response => {
         this.registrationStatus = response.data.result.registration_status
         console.log('running courses', this.runnings)
+        console.log('running courses 2', this.registrationStatus)
         this.pageCount = response.data.result.last_page
       })
       .catch(err => {
@@ -205,5 +226,3 @@ export default {
   },
 }
 </script>
-
-

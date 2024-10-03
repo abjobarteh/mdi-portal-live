@@ -195,6 +195,42 @@ class StudentPaymentController extends Controller
     //     }
     // }
 
+    public function waive(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_id' => 'required|max:255',
+        ]);
+        $studentId = $validatedData['student_id'];
+        $waive = Student::where('id', $studentId)->update(['waive' => 1]);
+
+
+        return response()->json([
+            'status' => 200,
+            'result' => $waive
+        ]);
+    }
+
+    public function getwaive(Request $request)
+    {
+
+        $studentId = $request->get('student_id');
+
+        // Find the student by ID and get the waive status
+        $waive = Student::where('id', $studentId)->value('waive');
+
+        // Check if the waive status was found
+        if ($waive !== null) {
+            return response()->json([
+                'status' => 200,
+                'result' => $waive
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Student not found'
+            ], 404);
+        }
+    }
     public function viewSemesters(Request $request)
     {
         $validatedData = $request->validate([
@@ -243,10 +279,10 @@ class StudentPaymentController extends Controller
         $studentPayment = StudentPayment::where('student_id', $validatedData['student_id'])->where('semester_id', $validatedData['semester_id'])->first();
         $studentDepartmentFee = Student::find($validatedData['student_id'])->department->programs->first();
         // student have already paid all the fees
-         if (Student::find($validatedData['student_id'])->payment_type == 1) {
+        if (Student::find($validatedData['student_id'])->payment_type == 1) {
             return response()->json(['message' => 'You have already made a complete payment'], 422);
-        } 
-        if($validatedData['balance'] < $validatedData['amount_paid']){
+        }
+        if ($validatedData['balance'] < $validatedData['amount_paid']) {
             return response()->json(['message' => 'Amount Paid Is More Than Balance'], 422);
         }
 
@@ -264,6 +300,7 @@ class StudentPaymentController extends Controller
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 1,
                 'balance' => 0,
+                'waive' => 1,
                 'remaining' => $validatedData['amount_paid']
             ]);
         } else if ($validatedData['amount_paid'] == $studentDepartmentFee['per_semester_fee']) {
@@ -316,6 +353,7 @@ class StudentPaymentController extends Controller
 
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 0,
+                'waive' => 1,
                 'balance' => $validatedData['balance'] - $validatedData['amount_paid'],
                 'remaining' => $validatedData['balance'] - $validatedData['amount_paid']
             ]);
