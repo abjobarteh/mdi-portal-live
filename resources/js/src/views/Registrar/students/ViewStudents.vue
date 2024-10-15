@@ -220,7 +220,7 @@ export default {
       this.editstudentprog = true
       this.studentid = item.id
       axios
-        .get('/api/view-programs')
+        .get('/api/get-programs')
         .then(response => {
           this.programs = response.data.result.data
         })

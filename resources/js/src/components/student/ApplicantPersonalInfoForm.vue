@@ -4,6 +4,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <span class="headline font-weight-medium">PERSONAL INFORMATION</span>
+          <strong><span class="headline font-weight-medium" style="font-size: 15px;">  Upload Passport Size  (Any Other Photo Form Shall Result To Automatic Rejection) </span></strong>  
         </v-card-title>
 
         <v-row>
@@ -11,7 +12,6 @@
             <!-- File Input for Image Upload -->
             <v-file-input
               v-model="applicantPersonalInfoData.profile_image"
-              label="Upload Passport Size  (Any Other Photo Form Shall Result To Automatic Rejection)"
               @change="handleImageUpload"
             ></v-file-input>
           </v-col>

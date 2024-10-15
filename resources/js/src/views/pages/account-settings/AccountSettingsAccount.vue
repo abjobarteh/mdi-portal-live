@@ -68,8 +68,8 @@
 
           <v-col cols="12">
             <v-btn type="submit" color="primary" class="me-3 mt-4"> Save changes </v-btn>
-            <v-btn v-if="user.role_id === 4 " color="primary" class="me-3 mt-4"
-              @click="changematnumberdialog"> View Matriculation Number </v-btn>
+            <v-btn v-if="user.role_id === 4" color="primary" class="me-3 mt-4" @click="changematnumberdialog"> View
+              Matriculation Number </v-btn>
             <v-btn color="secondary" outlined class="mt-4" type="reset" @click.prevent="resetForm"> Cancel </v-btn>
           </v-col>
         </v-row>
@@ -122,7 +122,7 @@ export default {
         mdiAlertOutline,
         mdiCloudUploadOutline,
       },
-      matnumber : '',
+      matnumber: '',
       matriculation: [],
       changematnumberformData: {
         mat_number: '',
@@ -164,10 +164,10 @@ export default {
     changematnumberdialog() {
       // changematnumberformData.mat_number = accountDataLocale.mat_number
       this.changematnumber = true
-     // console.log('Data: ', this.accountDataLocale.id);
+      // console.log('Data: ', this.accountDataLocale.id);
       axios
         .get(`/api/get-matnumber/${this.accountDataLocale.id}`)
-        
+
         .then(response => {
           // show success alert
 
@@ -179,9 +179,9 @@ export default {
         })
         .catch(error => {
 
-         console.log('Data 2: ', error);
+          console.log('Data 2: ', error);
           // Check if the error response exists and contains a message
-         const errorMessage = error.response && error.response.data && error.response.data.message
+          const errorMessage = error.response && error.response.data && error.response.data.message
             ? error.response.data.message
             : 'Error';
 
@@ -191,20 +191,20 @@ export default {
             text: error,
             icon: 'error',
             confirmButtonText: 'OK',
-          }); 
+          });
         });
     },
 
-    updatematnumber(){
-      console.log('Debug 1: ',this.changematnumberformData);
-      console.log('Debug 2 :',this.changematnumberformData.mat_number);
-      console.log('Debug 3 :',this.accountDataLocale.id);
+    updatematnumber() {
+      console.log('Debug 1: ', this.changematnumberformData);
+      console.log('Debug 2 :', this.changematnumberformData.mat_number);
+      console.log('Debug 3 :', this.accountDataLocale.id);
       axios
-        .post(`/api/update-matnumber/${this.accountDataLocale.id}`,this.changematnumberformData)
-        
+        .post(`/api/update-matnumber/${this.accountDataLocale.id}`, this.changematnumberformData)
+
         .then(response => {
-        
-   swal
+
+          swal
             .fire({
               title: 'Success!',
               text: 'Matriculation Number updated successfully.',
