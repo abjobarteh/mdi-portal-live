@@ -569,7 +569,7 @@ export default {
                                  // show error alert
                                  swal.fire({
                                    title: 'Error!',
-                                   text: 'Failed to update course.',
+                                   text: error.response.data.error,
                                    icon: 'error',
                                    confirmButtonText: 'OK',
                                  })
@@ -612,7 +612,7 @@ export default {
                        // show error alert
                        swal.fire({
                          title: 'Error!',
-                         text: 'Failed to update course.',
+                         text: error.response.data.error,
                          icon: 'error',
                          confirmButtonText: 'OK',
                        })
