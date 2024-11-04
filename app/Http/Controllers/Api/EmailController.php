@@ -43,8 +43,8 @@ class EmailController extends Controller
         }
         try {
             Mail::to($validatedData['email'])->send(new AdmissionCodeMail($validatedData['admission_code']));
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Email sending failed'], 422);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
         }
 
         return response()->json(['message' => 'Email sent successfully']);
