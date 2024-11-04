@@ -127,10 +127,10 @@
       <v-card>
         <v-card-title>
           <p>
-            Admission Codes for <span style="font-weight: bold">{{ location }}</span>
+            Admission Codess for <span style="font-weight: bold">{{ location }}</span>
           </p>
           <v-spacer></v-spacer>
-          <v-btn color="purple darken-2" @click="exportCodesToExcel" small class="white--text">Export Codes</v-btn>
+          <v-btn v-if="this.getUserProfile.role_id != 6" color="purple darken-2" @click="exportCodesToExcel" small class="white--text">Export Codes</v-btn>
           <fas style="
               margin-left: 30px;
               font-size: 24px;
@@ -151,8 +151,8 @@
         <v-card-text>
           <!-- <v-data-table :headers="admissionCodesHeaders" :items="items"></v-data-table> -->
           <v-data-table :headers="admissionCodesHeaders" :items="items">
-            <template v-if="userRole == 5" v-slot:item.admission_code="{ item }">
-              {{ item.admission_code.substring(0, 5) + '*****' }}
+            <template v-if="this.getUserProfile.role_id == 6" v-slot:item.admission_code="{ item }">
+              {{ item.admission_code.substring(0, 0) + '**********' }}
             </template>
             <template v-else v-slot:item.admission_code="{ item }">
               {{ item.admission_code }}
