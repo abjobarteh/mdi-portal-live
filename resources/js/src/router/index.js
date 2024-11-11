@@ -275,9 +275,8 @@ const routes = [
     component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5],
+      roles: [2, 5,1],
     }
-
   },
   {
     path: '/view-program-compliance-durations',
