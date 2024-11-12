@@ -554,7 +554,7 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
-                    location.reload();
+                  //  location.reload();
               this.getResults();
               this.deptdetsformdata = [];
               this.editlectdialog = false;
@@ -660,7 +660,7 @@ export default {
     addcourse() {
 
       console.log('Lecturer ID:', this.lecturerId);
-      console.log('Selected Courses:', this.coursedetsformdata.semester_courses_ids);
+      console.log('Selected Courses:', this.coursedetsformdata.course_ids);
 
       axios.post('/api/add-course-lect', {
         lecturer_id: this.lecturerId, // Ensure you have this property in your data or computed
@@ -676,7 +676,7 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
-              location.reload();
+      
               this.getResults();
               this.coursedetsformdata = [];
               this.editlectdialog = false;
@@ -707,7 +707,7 @@ export default {
               confirmButtonText: 'OK',
             })
             .then(() => {
-              location.reload();
+      
               this.getResults();
               this.coursedetsformdata = [];
               this.editlectdialog = false;

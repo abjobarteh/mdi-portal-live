@@ -74,19 +74,23 @@ class SemesterCourseController extends Controller
       
         // Attach courses to the lecturer
        // TeachableCourse
-    foreach ($courseIds as $courseId) {
+       foreach ($courseIds as $courseId) {
         TeachableCourse::updateOrCreate(
             [
-                'lecturer_id' => $lecturer,
+                'lecturer_id' => $lecturerId, // Condition to match existing records
                 'teachable_course_id' => $courseId
             ],
             [
-                'lecturer_id' => $lecturerId,
+                'lecturer_id' => $lecturerId, // Data to insert/update
                 'teachable_course_id' => $courseId
             ]
         );
     
+        SemesterCourse::where('course_id', $courseId)
+            ->update(['lecturer_id' => $lecturerId]); // Use `where` instead of `whereIn`
     }
+    
+    
     
     
        // $lecturer->teachables()->sync($courseIds); // Use sync instead of attach if you want to replace existing records
