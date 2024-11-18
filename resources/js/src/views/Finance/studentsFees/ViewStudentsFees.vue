@@ -124,12 +124,11 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="addDepartmentForm">
-                <v-select v-if="semestersMissing" outlined v-model="addPaymentFormData.semester_id" :items="[
-                  {
-                    id: semestersMissing.id,
-                    name: `${semestersMissing.semester_name} (${session_start} - ${session_end})`,
-                  },
-                ]" item-value="id" item-text="name" label="Semester Name"></v-select>
+                <v-select v-if="semestersMissing && semestersMissing.length" outlined
+                  v-model="addPaymentFormData.semester_id" :items="semestersMissing.map(semester => ({
+                    id: semester.id,
+                    name: `${semester.semester_name} (${semester.session_start} - ${semester.session_end})`
+                  }))" item-value="id" item-text="name" label="Semester Name"></v-select>
                 <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
                   v-for="error in v$.value.semester_id.$errors" :key="error.$uid">{{ error.$message }}</span>
                 <v-text-field outlined v-model="addPaymentFormData.amount_paid" label="Fee"></v-text-field>
@@ -138,6 +137,7 @@
             <v-card-actions>
               <v-btn color="primary" @click="submitAddPaymentForm">Add</v-btn>
               <v-btn color="green" @click="waivestudent">Waive</v-btn>
+              <v-btn color="secondary" @click="waivestudents">Clear</v-btn>
               <!-- <v-btn color="secondary" @click="addProgramDialog = false">Cancel</v-btn> -->
             </v-card-actions>
           </v-card>
@@ -398,10 +398,10 @@ export default {
         })
     },
 
-    waivestudent(){
+    waivestudent() {
       axios
-      .post('/api/waive', this.addPaymentFormData)
-      .then(result => {
+        .post('/api/waive', this.addPaymentFormData)
+        .then(result => {
           // this.addPaymentDialog = false
           // show success alert
           swal
@@ -426,21 +426,50 @@ export default {
           })
         })
     },
-    
-    // view-missing-semester
-    viewStudentInfo(student) {
+    waivestudents() {
       axios
-        .post('/api/view-missing-semester', { student_id: student.id })
-        .then(response => {
-          this.semestersMissing = response.data.result
-          this.session_start = response.data.result.session.session_start
-          this.session_end = response.data.result.session.session_end
-
-          console.log('missing students ', response.data.result)
+        .post('/api/clear', this.addPaymentFormData)
+        .then(result => {
           // this.addPaymentDialog = false
+          // show success alert
+          swal
+            .fire({
+              title: 'Success!',
+              text: 'Student Cleared Successfully',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              this.paymentDialog = false
+              this.getResults()
+            })
         })
         .catch(error => {
           // show error alert
+          swal.fire({
+            title: 'Error!',
+            text: error.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+        })
+    },
+
+    // view-missing-semester
+    viewStudentInfo(student) {
+      axios
+        .get('/api/view-semester')
+        .then(response => {
+
+          this.semestersMissing = response.data.result.map(semester => ({
+            id: semester.id,
+            semester_name: semester.semester_name,
+            session_start: semester.session.session_start || 'N/A',
+            session_end: semester.session.session_end || 'N/A'
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching semesters:', error);
         }),
         axios
           .post('/api/get-prog-dept', { student_id: student.id })

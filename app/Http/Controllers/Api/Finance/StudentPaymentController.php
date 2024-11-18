@@ -210,6 +210,29 @@ class StudentPaymentController extends Controller
         ]);
     }
 
+    public function clear(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_id' => 'required|max:255',
+            'semester_id' => 'required'
+        ]);
+        $studentId = $validatedData['student_id'];
+
+        $exists = StudentPayment::where('student_id', $studentId)->where('semester_id', $validatedData['semester_id'])->exists();
+        if ($exists) {
+            $waive = Student::where('id', $studentId)->update(['waive' => 1]);
+            return response()->json([
+                'status' => 200,
+                'result' => $waive
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Not Payment For This Semester'
+            ], 404);
+        }
+    }
+
     public function getwaive(Request $request)
     {
 
@@ -265,6 +288,19 @@ class StudentPaymentController extends Controller
     }
 
 
+    public function viewSemester(Request $request)
+    {
+        $semesters = Semester::with('session')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'result' => $semesters
+        ]);
+    }
+
+
 
     public function addPayment(Request $request)
     {
@@ -300,7 +336,6 @@ class StudentPaymentController extends Controller
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 1,
                 'balance' => 0,
-                'waive' => 1,
                 'remaining' => $validatedData['amount_paid']
             ]);
         } else if ($validatedData['amount_paid'] == $studentDepartmentFee['per_semester_fee']) {
@@ -353,7 +388,7 @@ class StudentPaymentController extends Controller
 
             Student::find($validatedData['student_id'])->update([
                 'payment_type' => 0,
-                'waive' => 1,
+
                 'balance' => $validatedData['balance'] - $validatedData['amount_paid'],
                 'remaining' => $validatedData['balance'] - $validatedData['amount_paid']
             ]);

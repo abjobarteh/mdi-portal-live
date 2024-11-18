@@ -69,9 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // move it to middleware 
     Route::get('/view-semesters', [SemesterController::class, 'index']);
 
-    Route::post('/view-missing-semester', [StudentPaymentController::class, 'viewSemesters']);
-
-
+    Route::get('/view-semester', [StudentPaymentController::class, 'viewSemester']);
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar-admin'])->group(function () {
@@ -244,8 +242,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['finance-admin'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::post('/waive', [StudentPaymentController::class, 'waive']);
-
-        
+        Route::post('/clear',[StudentPaymentController::class,'clear']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::get('/search-student', [StudentPaymentController::class, 'searchstudent']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
