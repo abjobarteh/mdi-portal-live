@@ -80,14 +80,13 @@ class AdmissionCodeController extends Controller
             if ($admissionCodeExist->expired === 0) {
                 $admissionCodeExist->update(['is_sold' => 1, 'expired' => 1]);
                 // i should also work on the admission code location
-                AdmissionCodeLocation::where('id', $admissionCodeExist->admission_code_location_id)
+               /* AdmissionCodeLocation::where('id', $admissionCodeExist->admission_code_location_id)
                     ->decrement('total_remains');
 
                 AdmissionCodeLocation::where('id', $admissionCodeExist->admission_code_location_id)
-                    ->increment('total_sold');
+                    ->increment('total_sold'); */
 
-                AdmissionCodeVerification::create(['user_id' => auth()->user()->id, 'verified_at' => Carbon::now()]);
-
+                AdmissionCodeVerification::create(['user_id' => auth()->user()->id, 'verified_at' => Carbon::now(),'admission_code'=>$validatedData['admission_code']]);
 
                 activity()
                     ->causedBy(auth()->user())

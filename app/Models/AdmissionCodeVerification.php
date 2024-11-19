@@ -11,6 +11,7 @@ class AdmissionCodeVerification extends Model
 
     protected $fillable = [
         'user_id',
-        'verified_at'
+        'verified_at',
+        'admission_code'
     ];
 }
