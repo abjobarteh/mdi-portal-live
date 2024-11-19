@@ -28,6 +28,10 @@
                     <td>Status</td>
                     <td>{{ profile.status }}</td>
                   </tr>
+                  <tr>
+                    <td>Semester Applied For</td>
+                    <td>{{ profile.semester_name }}</td>
+                  </tr>
                 </tbody>
               </template>
             </v-simple-table>

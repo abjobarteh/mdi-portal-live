@@ -14,6 +14,9 @@
         <v-col cols="12" md="12" class="mb-4">
           <DepartmentCard :program="program" />
         </v-col>
+        <v-col cols="12" md="12" class="mb-4">
+          <SemesterCard :studentProfile="applicantProfile" />
+        </v-col>
         <v-row v-if="this.$route.query.param == 'incoming'">
           <v-col cols="4">
             <v-btn @click="rejectStudentApplication" color="red" block dark style="width: 50px; height: 40px;">Reject</v-btn>
@@ -40,6 +43,7 @@
 
 <script>
 // import EducationCard from '../../components/student/DeclarationAndPreview/EducationCard.vue'
+import SemesterCard from '../student/DeclarationAndPreview/SemesterCard.vue'
 import EducationCard from '../student/DeclarationAndPreview/EducationCard.vue'
 import CertificateCard from '../student/DeclarationAndPreview/CertificateCard.vue'
 import DepartmentCard from '../student/DeclarationAndPreview/DepartmentCard.vue'
@@ -47,8 +51,10 @@ import UserInfoCard from '../student/DeclarationAndPreview/UserInfoCard.vue'
 
 import 'vuetify/dist/vuetify.min.css'
 
+
 export default {
   components: {
+    SemesterCard,
     UserInfoCard,
     EducationCard,
     CertificateCard,
@@ -307,7 +313,8 @@ export default {
                 eme_numbr: response.data.result.data[0].eme_numbr,
                 employee:response.data.result.data[0].employee,
                 empaddress:response.data.result.data[0].empaddr,
-                empcontact:response.data.result.data[0].empcontact
+                empcontact:response.data.result.data[0].empcontact,
+                semester_name:response.data.result.data[0].semester_name
               },
             ]
           })
@@ -343,8 +350,8 @@ export default {
                 eme_numbr: response.data.result.data[0].eme_numbr,
                 employee:response.data.result.data[0].employee,
                 empaddress:response.data.result.data[0].empaddr,
-                empcontact:response.data.result.data[0].empcontact
-
+                empcontact:response.data.result.data[0].empcontact,
+                semester_name:response.data.result.data[0].semester_name
               },
             ]
           })
@@ -379,6 +386,7 @@ export default {
                 eme_numbr: response.data.result.data[0].eme_numbr,
                 employee:response.data.result.data[0].employee,
                 empaddress:response.data.result.data[0].empaddr,
+                semester_name:response.data.result.data[0].semester_name,
                 empcontact:response.data.result.data[0].empcontact
               },
             ]

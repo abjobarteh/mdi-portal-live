@@ -26,7 +26,7 @@ class ProfileController extends Controller
                 ->leftJoin('departments', 'students.department_id', '=', 'departments.id') // Join the departments table
                 ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
                 ->where('users.id', auth()->user()->id)
-                ->select('users.*', 'programs.name as program_name', 'students.profile_image', 'students.gender', 'students.id', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.mat_number', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'registration_verification_tokens.student_email_verified_at',)
+                ->select('users.*', 'programs.name as program_name', 'students.profile_image', 'students.gender', 'students.id', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.mat_number', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'registration_verification_tokens.student_email_verified_at','students.semester_name')
                 ->first();
             $student['education'] = ApplicantEducation::where('user_id', $student->user_id)->get();
             $student['certificates'] = ApplicantCertificate::where('user_id', $student->user_id)->get();
@@ -59,7 +59,7 @@ class ProfileController extends Controller
             ->leftJoin('departments', 'students.department_id', '=', 'departments.id') // Join the departments table
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             ->where('users.id', $id)
-            ->select('users.*', 'programs.name as program_name', 'students.gender', 'students.id', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.mat_number', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'registration_verification_tokens.student_email_verified_at',)
+            ->select('users.*', 'programs.name as program_name', 'students.gender', 'students.id', 'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.mat_number', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.department_id', 'departments.name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'registration_verification_tokens.student_email_verified_at','students.semester_name')
             ->first();
         $student['education'] = ApplicantEducation::where('user_id', $student->user_id)->get();
         $student['certificates'] = ApplicantCertificate::where('user_id', $student->user_id)->get();

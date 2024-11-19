@@ -28,6 +28,7 @@ class ApplicantDeparmentInfoController extends Controller
         $validatedData = $request->validate([
             'id' => 'required',
             'program_id' => 'required',
+            'semester_name' => 'required',
         ]);
 
         $student = Student::where('user_id', $request->get('id'))->first();
@@ -41,6 +42,7 @@ class ApplicantDeparmentInfoController extends Controller
 
         $student->update([
             'program_id' => $request->get('program_id'),
+            'semester_name' => $request->get('semester_name'),
             'department_id' => Program::where('id', $request->get('program_id'))->value('department_id'),
         ]);
 

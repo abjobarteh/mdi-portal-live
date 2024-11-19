@@ -4,14 +4,12 @@
       <v-container style="background-color: #fefcff">
         <v-card-title class="headline">Course Applied For:</v-card-title>
         <v-card-text>
-          <v-select
-            outlined
-            v-model="addApplicantProgramFormData.program_id"
-            :items="programs.map(program => ({ id: program.id, name: program.name }))"
-            item-value="id"
-            item-text="name"
-            label="Program"
-          ></v-select>
+          <v-select outlined v-model="addApplicantProgramFormData.program_id"
+            :items="programs.map(program => ({ id: program.id, name: program.name }))" item-value="id" item-text="name"
+            label="Program"></v-select>
+          <v-select outlined v-model="addApplicantProgramFormData.semester_name"
+            :items="semesters.map(semester => ({ id: semester.id, name: semester.semester_name }))" item-value="name"
+            item-text="name" label="Semester"></v-select>
           <!-- <v-select
             outlined
             v-model="addApplicantProgramFormData.course_level"
@@ -19,8 +17,7 @@
             required
             ><template v-slot:label>
               <span class="required-field">Course Level</span>
-            </template></v-select
-          > -->
+            </template></v-select> -->
           <v-card-actions class="d-flex justify-center">
             <v-btn color="primary" class="col-12" @click="submit()">Save</v-btn>
           </v-card-actions>
@@ -37,10 +34,12 @@ export default {
   data() {
     return {
       programs: [],
+      semesters: [],
       studentInfo: '',
       educationFormData: {},
       addApplicantProgramFormData: {
         program_id: '',
+        semester_name: '',
         course_level: '',
         courseLevelOptions: [
           'Diploma',
@@ -106,6 +105,7 @@ export default {
     //   .catch(err => {
     //     this.departments = []
     //     this.pageCount = 0
+    //  /api/view-semester
     //   })
     axios
       .get('/api/view-students-programs?page=' + this.page)
@@ -116,6 +116,19 @@ export default {
       .catch(err => {
         this.departments = []
         this.pageCount = 0
+      })
+
+    axios
+      .get('/api/view-semester')
+      .then(response => {
+        console.log(response.data);  // Log the full response to inspect the structure
+        this.semesters = response.data.result;  // Access result
+        this.pageCount = response.data.last_page || 0;  // Handle pageCount
+      })
+      .catch(err => {
+        console.error(err);  // Log the error to see if there's an issue with the request
+        this.semesters = [];
+        this.pageCount = 0;
       })
   },
   watch: {

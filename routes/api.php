@@ -76,14 +76,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
         Route::get('/matriculation-status', [MatriculationStatusController::class, 'index']);
-     //   Route::get('/get-matnumber/{id}', [MatriculationStatusController::class, 'getmat_number']);
+        //   Route::get('/get-matnumber/{id}', [MatriculationStatusController::class, 'getmat_number']);
         Route::post('/update-matriculation', [MatriculationStatusController::class, 'updateMatriculationStatus']);
         Route::post('/add-employee', [EmployeeController::class, 'store']);
         Route::get('/view-employees', [EmployeeController::class, 'index']);
         Route::get('/employee/{id}', [EmployeeController::class, 'show']);
         Route::delete('/delete-employee/{id}', [EmployeeController::class, 'destroy']);
 
-    
+
         Route::post('/add-grading', [GradingSystemController::class, 'store']);
         Route::get('/view-gradings', [GradingSystemController::class, 'index']);
         Route::get('/grading/{id}', [GradingSystemController::class, 'show']);
@@ -136,7 +136,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         Route::post('/deallocate-location', [LocationController::class, 'deallocate']);
-    
+
         // applications
         // Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         // Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
@@ -195,7 +195,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/update-account-info/{id}', [UserController::class, 'updateaccountsettings']);
-        
+
         // Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);
@@ -216,7 +216,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/redeem-admission-code', [AdmissioncodeController::class, 'redeemAdmissionCode']);
         Route::get('/get-matnumber/{id}', [MatriculationStatusController::class, 'getmat_number']);
         Route::post('/update-matnumber/{id}', [MatriculationStatusController::class, 'updatemat_number']);
-     
+        Route::get('/view-semester', [StudentPaymentController::class, 'viewSemester']);
         Route::post('/add-applicant-education', [ApplicantEducationController::class, 'store']);
         Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
         Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
@@ -242,7 +242,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['finance-admin'])->group(function () {
         Route::post('/add-student-fee', [StudentPaymentController::class, 'addPayment']);
         Route::post('/waive', [StudentPaymentController::class, 'waive']);
-        Route::post('/clear',[StudentPaymentController::class,'clear']);
+        Route::post('/clear', [StudentPaymentController::class, 'clear']);
         Route::get('/view-students', [StudentPaymentController::class, 'index']);
         Route::get('/search-student', [StudentPaymentController::class, 'searchstudent']);
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
@@ -291,7 +291,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/remove-course-lect', [SemesterCourseController::class, 'removelectcourse']);  // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
         Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);
-        
+
         Route::post('/add-location', [LocationController::class, 'store']);
         Route::post('/update-location/{id}', [LocationController::class, 'update']);
         Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);

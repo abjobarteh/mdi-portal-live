@@ -51,7 +51,9 @@ class Student extends Model
         'employee',
         'empaddr',
         'empcontact',
-        'waive'
+        'waive',
+        'semester_name',
+   
     ];
 
     public function user()
@@ -92,4 +94,6 @@ class Student extends Model
             get: fn () => $this->program ? $this->program->fee - $this->totalAmountPaid : null
         );
     }
+
+  
 }

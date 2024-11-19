@@ -43,7 +43,7 @@ export default {
         { text: 'Lastname', value: 'lastname' },
         { text: 'Email', value: 'email' },
         { text: 'Program', value: 'program_name' },
-
+        { text: 'Semester Applied For', value: 'semester_name' },
         { text: 'Action', value: 'action', sortable: false },
       ],
       dialog: false,

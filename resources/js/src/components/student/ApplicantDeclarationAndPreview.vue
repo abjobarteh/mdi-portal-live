@@ -13,12 +13,14 @@
       <v-col cols="12" md="12" class="mb-4">
         <DepartmentCard :program="program" />
       </v-col>
+     
       <v-btn @click="submitApplication" color="success lighten-2" block>Confirm</v-btn>
     </v-container>
   </v-card>
 </template>
 
 <script>
+import SemesterCard from '../../components/student/DeclarationAndPreview/SemesterCard.vue'
 import EducationCard from '../../components/student/DeclarationAndPreview/EducationCard.vue'
 import CertificateCard from '../../components/student/DeclarationAndPreview/CertificateCard.vue'
 import DepartmentCard from '../../components/student/DeclarationAndPreview/Department.vue'
@@ -27,6 +29,7 @@ import 'vuetify/dist/vuetify.min.css'
 
 export default {
   components: {
+    SemesterCard,
     EducationCard,
     CertificateCard,
     DepartmentCard,
@@ -107,6 +110,7 @@ export default {
           email: this.studentInfo.email,
           dob: this.studentInfo.dob,
           profile_image: this.studentInfo.profile_image,
+          semester_name: this.studentInfo.semester_name,
         },
       ]
     },
