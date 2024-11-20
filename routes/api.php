@@ -69,7 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // move it to middleware 
     Route::get('/view-semesters', [SemesterController::class, 'index']);
 
-    Route::get('/view-semester', [StudentPaymentController::class, 'viewSemester']);
+    Route::get('/view-sem', [StudentPaymentController::class, 'viewSemester']);
 
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar-admin'])->group(function () {
@@ -248,7 +248,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete-admission_codes_location/{id}', [AdmissionCodeLocationController::class, 'destroy']);
         Route::post('/add-student-sponsorship', [StudentPaymentController::class, 'storeStudentSponsorship']);
         Route::get('/view-scholarship-details/{id}', [StudentPaymentController::class, 'scholarshipDetails']);
-
+        Route::get('/view-sem', [StudentPaymentController::class, 'viewSemester']);
         // view-scholarship-details
         // storeStudentSponsorship
     });
@@ -282,7 +282,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
         Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
-
+        Route::get('/view-semester', [StudentPaymentController::class, 'viewSemester']);
         Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-semester-available-courses/{lecturerId}', [SemesterCourseController::class, 'index']);
         Route::get('/view-departmental-courses/{lecturerId}', [SemesterCourseController::class, 'getcourses']);
