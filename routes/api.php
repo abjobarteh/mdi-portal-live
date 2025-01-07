@@ -181,6 +181,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/reject-student-application', [ApplicationsController::class, 'rejectStudentApplication']);
         Route::post('/revert-student-application', [ApplicationsController::class, 'revertStudentApplication']);
         Route::post('/announce-student', [ApplicationsController::class, 'studentannouncement']);
+        Route::post('/announce-applicant', [ApplicationsController::class, 'applicantannouncement']);
         Route::post('/announce-lecturer', [ApplicationsController::class, 'lecturerannouncement']);
     });
 

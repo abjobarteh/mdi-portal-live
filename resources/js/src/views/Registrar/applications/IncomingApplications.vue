@@ -4,8 +4,10 @@
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>Incoming Applications</v-toolbar-title>
+      
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
+          <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
         </v-toolbar>
 
         <!-- Data table -->
@@ -96,7 +98,58 @@ export default {
           this.pageCount = 0
         })
     },
+    announce() {
+      swal
+        .fire({
+          title: 'Announcement',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Send',
+          input: 'textarea', // Adding textarea input field
+          inputPlaceholder: 'Enter your message here...(optional)', // Placeholder for the textarea
+          inputAttributes: {
+            'aria-label': 'Type your message here', // Accessibility label
+          },
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.isLoading = true
+            let message = result.value // Getting the value entered in the textarea
 
+            axios
+              .post('/api/announce-applicant', {
+                message: message, // Sending the message along with studentId
+              })
+              .then(response => {
+                this.isLoading = false
+                // Show success alert after successful revert
+                swal
+                  .fire({
+                    title: 'Success!',
+                    text: 'Announcement Sent Successfully',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
+                  .then(() => {
+                    this.$router.go(-1)
+                    this.getResults()
+                  })
+              })
+              .catch(error => {
+                this.isLoading = false
+                // Show error alert if revert fails
+                swal.fire({
+                  title: 'Error!',
+                  text: 'Failed to Send.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                })
+              })
+          }
+        })
+    },
     viewApplicationData(item) {
       console.log(item)
       this.$router.push({

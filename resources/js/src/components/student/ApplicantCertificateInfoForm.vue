@@ -3,6 +3,7 @@
     <v-form ref="form" @submit.prevent="submit">
       <v-container style="background-color: #fefcff">
         <v-card-title class="headline">Certificates</v-card-title>
+        <v-card-title class="headline">All Uploaded Documents Should Be In PDF Format</v-card-title>
         <v-card-text>
           <v-container v-for="(certificate, index) in certificateFormData.certificates" :key="index" class="py-3">
             <v-row>

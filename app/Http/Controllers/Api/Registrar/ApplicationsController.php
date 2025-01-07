@@ -205,9 +205,30 @@ class ApplicationsController extends Controller
         ]);
     }
 
+
+    public function applicantannouncement(Request $request)
+    {
+        /*    $validatedData = $request->validate([
+                'studentId' => 'required',
+            ]); */
+        $emails = Student::where('application_completed','=',0)->pluck('email');
+
+        foreach ($emails as $email) {
+            try {
+                Mail::to($email)->send(new StudentAnounceMail($request->get('message')));
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 422);
+            }
+        }
+
+        return response()->json([
+            'status' => 200,
+            'result' => 'Announcement Sent Successfully'
+        ]);
+    }
+
     public function lecturerannouncement(Request $request)
     {
-
         $emails = Lecturer::pluck('email');
 
         foreach ($emails as $email) {
