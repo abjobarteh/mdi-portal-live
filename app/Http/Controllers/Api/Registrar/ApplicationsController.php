@@ -21,6 +21,7 @@ use App\Mail\LecturerAnnounceMail;
 use Illuminate\Support\Facades\DB;
 
 
+
 class ApplicationsController extends Controller
 {
     /**
@@ -292,18 +293,18 @@ class ApplicationsController extends Controller
     {
         $currentYear = Carbon::now()->year;
         $currentMonth = Carbon::now()->month;
-
+    
         // Determine the month range and assign the fifth digit accordingly
         $fifthDigit = ($currentMonth >= 1 && $currentMonth <= 6) ? 1 : 2;
-
-        // Retrieve the last student number from the database and increment it by one
-        $lastStudent = Student::whereNotNull('mat_number')->orderBy('mat_number', 'desc')->first();
-        $lastNumber = ($lastStudent) ? intval(substr($lastStudent->mat_number, -4)) + 1 : 1;
+    
+        // Retrieve the count of students with a non-null mat_number
+        $count = DB::table('students')->whereNotNull('mat_number')->count();
+        $lastNumber = $count + 1;
         $lastNumber = str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
-
+    
         // Generate the complete student number
         $studentNumber = $currentYear . $fifthDigit . sprintf('%04d', $lastNumber);
-
+    
         return $studentNumber;
     }
 
