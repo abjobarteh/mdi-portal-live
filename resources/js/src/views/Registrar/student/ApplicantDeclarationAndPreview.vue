@@ -19,16 +19,20 @@
         </v-col>
         <v-row v-if="this.$route.query.param == 'incoming'">
           <v-col cols="4">
-            <v-btn @click="rejectStudentApplication" color="red" block dark style="width: 50px; height: 40px;">Reject</v-btn>
+            <v-btn @click="rejectStudentApplication" color="red" block dark
+              style="width: 50px; height: 40px;">Reject</v-btn>
           </v-col>
           <v-col cols="4">
-            <v-btn @click="acceptStudentApplication" color="green" block dark style="width: 50px; height: 40px;">Accept</v-btn>
+            <v-btn @click="acceptStudentApplication" color="green" block dark
+              style="width: 50px; height: 40px;">Accept</v-btn>
           </v-col>
           <v-col cols="4">
-            <v-btn @click="conditionalStudentApplication" color="purple" block dark style="width: 50px; height: 40px;">Conditional</v-btn>
+            <v-btn @click="conditionalStudentApplication" color="purple" block dark
+              style="width: 50px; height: 40px;">Conditional</v-btn>
           </v-col>
           <v-col cols="4">
-            <v-btn @click="enrollstudentApplication" color="blue" block dark style="width: 50px; height: 40px;" >Enroll</v-btn>
+            <v-btn @click="enrollstudentApplication" color="blue" block dark
+              style="width: 50px; height: 40px;">Enroll</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -124,9 +128,13 @@ export default {
             // Show date selection popup
             swal
               .fire({
-                title: 'Select Orientation Date',
-                // html: '<input type="date" id="orientationDate">',
-                html: '<input type="datetime-local" id="orientationDate">',
+                html: `
+    <label for="orientationDate">Orientation Date:</label>
+    <input type="datetime-local" id="orientationDate">
+    <br><br>
+    <label for="commencementDate">Lecture Commencement Date:</label>
+    <input type="datetime-local" id="commencementDate">
+  `,
 
                 showCancelButton: true,
                 confirmButtonText: 'Schedule',
@@ -135,19 +143,20 @@ export default {
                 if (dateResult.isConfirmed) {
                   this.isLoading = true
                   const orientationDate = document.getElementById('orientationDate').value
-
+                  const commencementDate = document.getElementById('commencementDate').value
                   // Perform API request to schedule interview
                   axios
                     .post(`/api/accept-student-application`, {
                       userId: this.$route.params.id,
                       orientationDate: orientationDate,
+                      commencementDate: commencementDate
                     })
                     .then(result => {
                       this.isLoading = false
                       swal
                         .fire({
                           title: 'Success!',
-                          text: 'Interview scheduled successfully.',
+                          text: ' Accepted successfully.',
                           icon: 'success',
                           confirmButtonText: 'OK',
                         })
@@ -160,7 +169,7 @@ export default {
           }
         })
     },
-    enrollstudentApplication(){
+    enrollstudentApplication() {
       swal
         .fire({
           title: 'Are you sure?',
@@ -209,9 +218,13 @@ export default {
             // Show date selection popup
             swal
               .fire({
-                title: 'Select Orientation Date',
-                // html: '<input type="date" id="orientationDate">',
-                html: '<input type="datetime-local" id="orientationDate">',
+                html: `
+    <label for="orientationDate">Orientation Date:</label>
+    <input type="datetime-local" id="orientationDate">
+    <br><br>
+    <label for="commencementDate">Lecture Commencement Date:</label>
+    <input type="datetime-local" id="commencementDate">
+  `,
 
                 showCancelButton: true,
                 confirmButtonText: 'Schedule',
@@ -220,12 +233,14 @@ export default {
                 if (dateResult.isConfirmed) {
                   this.isLoading = true
                   const orientationDate = document.getElementById('orientationDate').value
+                  const commencementDate = document.getElementById('commencementDate').value
 
                   // Perform API request to schedule interview
                   axios
                     .post(`/api/conditional-student-application`, {
                       userId: this.$route.params.id,
                       orientationDate: orientationDate,
+                      commencementDate: commencementDate
                     })
                     .then(result => {
                       this.isLoading = false
@@ -311,10 +326,10 @@ export default {
                 profile_image: response.data.result.data[0].profile_image,
                 eme_name: response.data.result.data[0].eme_name,
                 eme_numbr: response.data.result.data[0].eme_numbr,
-                employee:response.data.result.data[0].employee,
-                empaddress:response.data.result.data[0].empaddr,
-                empcontact:response.data.result.data[0].empcontact,
-                semester_name:response.data.result.data[0].semester_name
+                employee: response.data.result.data[0].employee,
+                empaddress: response.data.result.data[0].empaddr,
+                empcontact: response.data.result.data[0].empcontact,
+                semester_name: response.data.result.data[0].semester_name
               },
             ]
           })
@@ -348,10 +363,10 @@ export default {
                 profile_image: response.data.result.data[0].profile_image,
                 eme_name: response.data.result.data[0].eme_name,
                 eme_numbr: response.data.result.data[0].eme_numbr,
-                employee:response.data.result.data[0].employee,
-                empaddress:response.data.result.data[0].empaddr,
-                empcontact:response.data.result.data[0].empcontact,
-                semester_name:response.data.result.data[0].semester_name
+                employee: response.data.result.data[0].employee,
+                empaddress: response.data.result.data[0].empaddr,
+                empcontact: response.data.result.data[0].empcontact,
+                semester_name: response.data.result.data[0].semester_name
               },
             ]
           })
@@ -384,10 +399,10 @@ export default {
                 profile_image: response.data.result.data[0].profile_image,
                 eme_name: response.data.result.data[0].eme_name,
                 eme_numbr: response.data.result.data[0].eme_numbr,
-                employee:response.data.result.data[0].employee,
-                empaddress:response.data.result.data[0].empaddr,
-                semester_name:response.data.result.data[0].semester_name,
-                empcontact:response.data.result.data[0].empcontact
+                employee: response.data.result.data[0].employee,
+                empaddress: response.data.result.data[0].empaddr,
+                semester_name: response.data.result.data[0].semester_name,
+                empcontact: response.data.result.data[0].empcontact
               },
             ]
           })
@@ -439,10 +454,12 @@ export default {
 }
 
 @keyframes sk-bounce {
+
   0%,
   100% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1);
   }

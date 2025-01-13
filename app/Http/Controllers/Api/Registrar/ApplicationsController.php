@@ -169,8 +169,9 @@ class ApplicationsController extends Controller
         $studentNumber = $this->generateStudentNumber();
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 1]);
         $orientaionDate = Carbon::parse($request->orientationDate);
+        $commencementDate = Carbon::parse($request->commencementDate);
 
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1));
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'),$commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1));
 
 
         activity()
@@ -187,62 +188,55 @@ class ApplicationsController extends Controller
 
     public function studentannouncement(Request $request)
     {
-        /*    $validatedData = $request->validate([
-                'studentId' => 'required',
-            ]); */
         $emails = Student::whereNotNull('mat_number')->pluck('email');
-
+    
         foreach ($emails as $email) {
             try {
-                Mail::to($email)->send(new StudentAnounceMail($request->get('message')));
+                Mail::to($email)->queue(new StudentAnounceMail($request->get('message')));
             } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 422);
             }
         }
-
+    
         return response()->json([
             'status' => 200,
-            'result' => 'Announcement Sent Successfully'
+            'result' => 'Announcement queued successfully for students!'
         ]);
     }
-
-
+    
     public function applicantannouncement(Request $request)
     {
-        /*    $validatedData = $request->validate([
-                'studentId' => 'required',
-            ]); */
-        $emails = Student::where('application_completed','=',0)->pluck('email');
-
+        $emails = Student::where('application_completed', 0)->pluck('email');
+    
         foreach ($emails as $email) {
             try {
-                Mail::to($email)->send(new StudentAnounceMail($request->get('message')));
+                Mail::to($email)->queue(new StudentAnounceMail($request->get('message')));
             } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 422);
             }
         }
-
+    
         return response()->json([
             'status' => 200,
-            'result' => 'Announcement Sent Successfully'
+            'result' => 'Announcement queued successfully for applicants!'
         ]);
     }
-
+    
     public function lecturerannouncement(Request $request)
     {
         $emails = Lecturer::pluck('email');
-
+    
         foreach ($emails as $email) {
             try {
-                Mail::to($email)->send(new LecturerAnnounceMail($request->get('message')));
+                Mail::to($email)->queue(new LecturerAnnounceMail($request->get('message')));
             } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 422);
             }
         }
-
+    
         return response()->json([
             'status' => 200,
-            'result' => 'Announcement Sent Successfully'
+            'result' => 'Announcement queued successfully for lecturers!'
         ]);
     }
     public function conditionalStudentApplication(Request $request)
@@ -253,8 +247,9 @@ class ApplicationsController extends Controller
         $studentNumber = $this->generateStudentNumber();
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 0]);
         $orientaionDate = Carbon::parse($request->orientationDate);
+        $commencementDate = Carbon::parse($request->commencementDate);
 
-        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0));
+        Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'),$commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0));
 
 
         activity()
@@ -298,7 +293,7 @@ class ApplicationsController extends Controller
         $fifthDigit = ($currentMonth >= 1 && $currentMonth <= 6) ? 1 : 2;
     
         // Retrieve the count of students with a non-null mat_number
-        $count = DB::table('students')->whereNotNull('mat_number')->count();
+        $count = DB::table('students')->where('is_applicant','=',0)->where('accepted','=','accepted')->count();
         $lastNumber = $count + 1;
         $lastNumber = str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
     

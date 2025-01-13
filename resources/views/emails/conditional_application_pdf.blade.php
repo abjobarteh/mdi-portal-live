@@ -153,6 +153,7 @@ if ($duration == 6) {
         <p>I am pleased to inform you that your application for admission as a conditional student at the Management Development Institute to undertake a course in the <strong>{{$department}}</strong> is successful.</p>
         <p>The course will last for <strong>{{$tenure}}</strong> leading to {{$prname}}.</p>
 
+        <p>Orientation will start on <strong>{{$date}}</strong></p>
         <p>Lectures will start on <strong>{{$date}}</strong></p>
         <p>The course fee is <strong>D{{ $prfee }} {{$otherfee}}; other costs/fees include an Online Library fee of D1000.00 per annum.</strong> </p>
       

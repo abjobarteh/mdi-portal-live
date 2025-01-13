@@ -12,6 +12,8 @@ class AcceptedApplicationEmail extends Mailable
 {
     use Queueable, SerializesModels;
     public $date;
+    public $cdate;
+
     public $matnumber;
 
     public $fullname;
@@ -22,12 +24,13 @@ class AcceptedApplicationEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($date, $matnumber, $fullname, $type)
+    public function __construct($date, $cdate,$matnumber, $fullname, $type)
     {
         $this->date = $date;
         $this->matnumber = $matnumber;
         $this->fullname = $fullname;
         $this->type = $type;
+        $this->cdate = $cdate;
     }
 
     /**
@@ -43,6 +46,7 @@ class AcceptedApplicationEmail extends Mailable
         if ($this->type == 1) {
             $pdf = Pdf::loadView('emails.accepted_application_pdf', [
                 'date' => $this->date,
+                'cdate' => $this->cdate,
                 'matnumber' => $this->matnumber,
                 'fullname' => $this->fullname,
                
@@ -56,6 +60,7 @@ class AcceptedApplicationEmail extends Mailable
         } else if ($this->type == 0) {
             $pdf = Pdf::loadView('emails.conditional_application_pdf', [
                 'date' => $this->date,
+                'cdate' => $this->cdate,
                 'matnumber' => $this->matnumber,
                 'fullname' => $this->fullname,
             ]);
