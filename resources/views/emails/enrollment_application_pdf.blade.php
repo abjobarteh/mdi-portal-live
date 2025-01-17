@@ -92,7 +92,7 @@ if ($duration == 6) {
         p {
             margin: 10px 0;
             text-align: left;
-            font-size: 12px;
+            font-size: 10px;
             /* Reset text alignment for paragraphs */
         }
 
@@ -197,8 +197,11 @@ if ($duration == 6) {
             <p>9.You are required to respect and obey the instructions from the Trainers and to conform to the Rules and Regulations of the Institute.</p>
             <p>10.At the end of your studies at this particular level, you are required to renew your registration with the Registry for enrolment into the next level upon satisfying the requirements to do so. This must be done within <u><strong>two weeks</strong></u> of completion of your study of the current level.</p>
         </div>
+<<<<<<< HEAD
             <img src="/var/www/mdi-portal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="100px;"  height="100px;"  />
         </div> 
+=======
+>>>>>>> bd38457 (Slight Fixes)
     </div>
 </body>
 
