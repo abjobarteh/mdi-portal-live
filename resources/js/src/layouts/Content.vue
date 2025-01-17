@@ -40,7 +40,7 @@
       <div class="boxed-container w-full">
         <div class="mx-6 d-flex justify-space-between">
           <span>
-            &copy; 2023
+            &copy; {{ currentYear }}
             <a href="https://niftyict.com" class="text-decoration-none" target="_blank">Nifty ICT Solutions</a></span
           >
         </div>
@@ -67,7 +67,7 @@ export default {
 
     return {
       isDrawerOpen,
-
+      currentYear: new Date().getFullYear(),
       // Icons
       icons: {
         mdiMagnify,
@@ -77,6 +77,7 @@ export default {
     }
   },
 }
+
 </script>
 
 <style lang="scss" scoped>

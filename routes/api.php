@@ -183,6 +183,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/announce-student', [ApplicationsController::class, 'studentannouncement']);
         Route::post('/announce-applicant', [ApplicationsController::class, 'applicantannouncement']);
         Route::post('/announce-lecturer', [ApplicationsController::class, 'lecturerannouncement']);
+        Route::post('/new-program',[ApplicationsController::class,'new']);
     });
 
 
