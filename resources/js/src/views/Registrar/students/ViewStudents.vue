@@ -34,9 +34,11 @@
           <v-data-table :headers="headers" :items="students" :items-per-page="500" :search="search" class="elevation-1"
             hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn small style="width: 30%" color="primary" @click="showStudent(item)">View</v-btn>
-              <v-btn small style="width: 100%" color="green" @click="showprogram(item)">Edit Student</v-btn>
-              <v-btn small style="width: 30%" color="error" @click="deleteLecturer(item)">Del</v-btn>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <v-btn medium style="flex: 1 1 auto;" color="primary" @click="showStudent(item)">View</v-btn>
+                <v-btn medium style="flex: 1 1 auto;" color="green" @click="showprogram(item)">Edit Student</v-btn>
+                <v-btn large style="flex: 1 1 auto;" color="error" @click="newprogram(item)">New Program</v-btn>
+              </div>
             </template>
             <template v-slot:[`item.fullname`]="{ item }">
               <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template>
@@ -105,6 +107,7 @@ export default {
       studentId: null,                // Student ID for operations
       programId: null,
       studentid: null,
+      user_id: null,
       editstudentprog: false,
       programs: [],
       progcourses: [],
@@ -228,6 +231,41 @@ export default {
           this.programs = []
         })
     },
+    newprogram(item) {
+      console.log(item.id);
+      console.log(item.user_id)
+      this.studentid = item.id;
+      this.user_id = item.user_id;
+      this.isLoading = true; // Add a loading indicator
+      axios
+        .post('/api/new-program', {
+          id: this.studentid,
+          user_id: this.user_id
+        })
+        .then(response => {
+          swal.fire({
+            title: 'Success!',
+            text: response.data.result || 'Student Can Now Apply For A New Program',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.getResults(); // Refresh or fetch updated data
+          });
+        })
+        .catch(error => {
+          swal.fire({
+            title: 'Error!',
+            text: error.response?.data?.errorMessage || 'An unexpected error occurred',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        })
+        .finally(() => {
+          this.isLoading = false; // Reset the loading indicator
+        });
+    }
+    ,
+
     editprogram() {
       // Validate the form
       this.$refs.form.validate();

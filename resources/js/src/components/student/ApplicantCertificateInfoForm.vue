@@ -131,7 +131,7 @@ export default {
           // show error alert
           swal.fire({
             title: 'Error!',
-            text: 'Failed to add session duration.',
+            text: 'File Size Exceeded 10MB or File Not PDF',
             icon: 'error',
             confirmButtonText: 'OK',
           })

@@ -53,7 +53,53 @@
                     <th>Status</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="studentInfo.apply_new_course == 1">
+                  <tr>
+                    <td><router-link to="/applicant-academic-info">Academic Information</router-link></td>
+                    <td
+                      v-if="studentInfo.education.length !== 0"
+                      style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
+                    >
+                      Completed
+                    </td>
+                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
+                  </tr>
+                  <tr>
+                    <td><router-link to="/applicant-personal-info">Personal Information</router-link></td>
+                    <td
+                      v-if="studentInfo.personal_info_completed == 1"
+                      style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
+                    >
+                      Completed
+                    </td>
+                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
+                  </tr>
+                  <tr>
+                    <td><router-link to="/applicant-applied-department">Course Details</router-link></td>
+                    <td
+                      v-if="studentInfo.program_name != null"
+                      style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
+                    >
+                      Completed
+                    </td>
+                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
+                  </tr>
+                  <tr>
+                    <td><router-link to="/applicant-certificate-info">Upload Documents</router-link></td>
+                    <td
+                      v-if="studentInfo.certificates.length !== 0"
+                      style="background-color: rgb(125, 209, 125); border-top: 5px solid white"
+                    >
+                      Completed
+                    </td>
+                    <td v-else style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
+                  </tr>
+                  <tr>
+                    <td><router-link to="/applicant-declaration">Declaration and Preview</router-link></td>
+                    <td style="background-color: rgb(218, 115, 115); border-top: 5px solid white">Incomplete</td>
+                  </tr>
+                </tbody>
+                <tbody v-else>
                   <tr>
                     <td><router-link to="/applicant-academic-info">Academic Information</router-link></td>
                     <td

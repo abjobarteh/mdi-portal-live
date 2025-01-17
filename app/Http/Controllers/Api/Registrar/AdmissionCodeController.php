@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AdmissionCode;
+use App\Models\Student;
 use App\Models\AdmissionCodeLocation;
 use App\Models\AdmissionCodeVerification;
 use Carbon\Carbon;
@@ -87,7 +88,9 @@ class AdmissionCodeController extends Controller
                     ->increment('total_sold'); */
 
                 AdmissionCodeVerification::create(['user_id' => auth()->user()->id, 'verified_at' => Carbon::now(),'admission_code'=>$validatedData['admission_code']]);
-
+                
+               // Student::where('user_id',auth()->user()->id)->update(['apply_new_course'=>1]);
+                
                 activity()
                     ->causedBy(auth()->user())
                     ->withProperties(['attributes' => auth()->user()])

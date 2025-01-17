@@ -53,7 +53,7 @@ class Student extends Model
         'empcontact',
         'waive',
         'semester_name',
-   
+        'apply_new_course'
     ];
 
     public function user()
