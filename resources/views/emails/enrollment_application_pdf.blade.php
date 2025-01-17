@@ -160,7 +160,8 @@ if ($duration == 6) {
         <p class="signature">Sincerely,</p>
         <p>Office of the Registrar</p>
         <div class="signature">
-            <img src="E:/mdiportal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="50px;" height="50px;" />
+<<<<<<< HEAD
+            <img src="/var/www/mdi-portal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="50px;" height="50px;" />
         </div>
 
         <div class="page-break"></div>
@@ -197,6 +198,10 @@ if ($duration == 6) {
             <p>9.You are required to respect and obey the instructions from the Trainers and to conform to the Rules and Regulations of the Institute.</p>
             <p>10.At the end of your studies at this particular level, you are required to renew your registration with the Registry for enrolment into the next level upon satisfying the requirements to do so. This must be done within <u><strong>two weeks</strong></u> of completion of your study of the current level.</p>
         </div>
+=======
+            <img src="/var/www/mdi-portal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="100px;"  height="100px;"  />
+        </div> 
+>>>>>>> c7f05ab (STASH)
     </div>
 </body>
 
