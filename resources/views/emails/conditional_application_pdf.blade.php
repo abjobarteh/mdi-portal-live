@@ -107,11 +107,9 @@ if ($duration == 6) {
         p {
             margin: 10px 0;
             text-align: left;
-<<<<<<< HEAD
-            font-size: 12px;
-=======
+
             font-size: 10px;
->>>>>>> bd38457 (Slight Fixes)
+
             /* Reset text alignment for paragraphs */
         }
 
@@ -156,11 +154,7 @@ if ($duration == 6) {
         <p>Dear {{ $fullname }},</p>
         <p>I am pleased to inform you that your application for admission as a conditional student at the Management Development Institute to undertake a course in the <strong>{{$department}}</strong> is successful.</p>
         <p>The course will last for <strong>{{$tenure}}</strong> leading to {{$prname}}.</p>
-
-<<<<<<< HEAD
         <p>Orientation will start on <strong>{{$date}}</strong></p>
-=======
->>>>>>> bd38457 (Slight Fixes)
         <p>Lectures will start on <strong>{{$date}}</strong></p>
         <p>The course fee is <strong>D{{ $prfee }} {{$otherfee}}; other costs/fees include an Online Library fee of D1000.00 per annum.</strong> </p>
       
@@ -189,11 +183,7 @@ if ($duration == 6) {
         <p class="signature">Sincerely,</p>
         <p>Office of the Registrar</p>
         <div class="signature">
-<<<<<<< HEAD
-            <img src="E:/mdiportal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="50px;" height="50px;" />
-=======
             <img src="/var/www/mdi-portal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="50px;" height="50px;" />
->>>>>>> bd38457 (Slight Fixes)
         </div>
 
         <div class="page-break"></div>

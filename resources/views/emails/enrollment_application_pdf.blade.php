@@ -200,8 +200,7 @@ if ($duration == 6) {
 <<<<<<< HEAD
             <img src="/var/www/mdi-portal/resources/js/src/assets/images/logos/mdiesign.png" alt="Registrar Signature" width="100px;"  height="100px;"  />
         </div> 
-=======
->>>>>>> bd38457 (Slight Fixes)
+
     </div>
 </body>
 
