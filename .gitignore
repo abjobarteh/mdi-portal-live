@@ -23,7 +23,8 @@ demo.zip
 node_modules
 /dist
 /public/certificates/
-
+api-config.js
+resources/js/api-config.js
 
 # local env files
 .env.local
@@ -43,3 +44,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+.codegpt
