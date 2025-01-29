@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Registrar;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
@@ -21,7 +22,8 @@ class DepartmentController extends Controller
             'result' => $departments
         ]);
     }
-    public function getdept(){
+    public function getdept()
+    {
         $departments = Department::with('courses')->get();
 
         // Return the response as JSON
@@ -37,6 +39,25 @@ class DepartmentController extends Controller
             'status' => 200,
             'result' => $departmentCourses
         ]);
+    }
+
+
+    public function getstudentdepartmentcount()
+    {
+
+
+        
+        $departmentCount = DB::table('departments')
+            ->leftJoin('students', 'departments.id', '=', 'students.department_id')
+            ->select('departments.name', DB::raw('COUNT(students.id) as student_count'))
+            ->where('students.accepted', 'accepted')
+            ->groupBy('departments.name')
+            ->get(); 
+
+        return response()->json([
+            'status' => 200,
+            'result' => $departmentCount
+        ]); 
     }
 
     /**

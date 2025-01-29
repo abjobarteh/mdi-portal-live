@@ -90,7 +90,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/grading/{id}', [GradingSystemController::class, 'update']);
         Route::delete('/delete-grading/{id}', [GradingSystemController::class, 'destroy']);
 
-
         Route::post('/add-department', [DepartmentController::class, 'store']);
         Route::get('/department/{id}', [DepartmentController::class, 'show']);
         Route::get('/get-departments', [DepartmentController::class, 'getdept']);
@@ -184,6 +183,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/announce-applicant', [ApplicationsController::class, 'applicantannouncement']);
         Route::post('/announce-lecturer', [ApplicationsController::class, 'lecturerannouncement']);
         Route::post('/new-program',[ApplicationsController::class,'new']);
+        Route::get('/search-incoming-applicant', [ApplicationsController::class, 'searchIncomingApplicant']);
+        Route::get('/search-accepted-applicant', [ApplicationsController::class, 'searchAcceptedapplicant']);
+        Route::get('/search-rejected-applicant', [ApplicationsController::class, 'searchRejectedapplicant']);
     });
 
 
@@ -197,7 +199,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/update-account-info/{id}', [UserController::class, 'updateaccountsettings']);
-
+      
         // Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);
@@ -321,16 +323,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-programs', [ProgramController::class, 'getprograms']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
         Route::get('/user-counts', [DashboardController::class, 'counts']);
+        Route::get('/deptcount',[DashboardController::class, 'getstudentdepartmentcount']);
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
+       
         // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
     });
-
-    ///////////////////////////////////  LECTURER END POINTS  ////////////////////////////
-
+ 
     Route::middleware(['lecturer'])->group(function () {
 
         Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']);

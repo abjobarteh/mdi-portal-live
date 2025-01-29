@@ -6,6 +6,9 @@
           <v-toolbar-title>Accepted Applications</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
+          <v-btn icon @click="showSearchDialog">
+            <fas icon="search"></fas>
+          </v-btn>
         </v-toolbar>
 
         <!-- Data table -->
@@ -24,6 +27,23 @@
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
+
+        <v-dialog v-model="searchDialog" max-width="400">
+          <v-card>
+            <v-card-title>Advanced Search</v-card-title>
+            <v-card-text>
+              <!-- Add your dropdown or any additional search options here -->
+              <v-select v-model="selectedItem" :items="items" label="Search by Item"></v-select>
+              <v-text-field v-model="advanceSearch" :label="advanceSearchLabel" append-icon="mdi-magnify" clearable
+                hide-details></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="primary" :disabled="selectedItem == null || advanceSearch === ''"
+                @click="performAdvancedSearch">Search</v-btn>
+              <v-btn @click="closeSearchDialog">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </v-container>
   </div>
@@ -44,6 +64,18 @@ export default {
   data() {
     return {
       acceptedApplications: [],
+      advanceSearchLabel: '',
+      advanceSearch: '',
+      searchDialog: false,
+      selectedItem: null,
+      selectedItem: null,
+      items: [
+        { text: 'Username', value: '1' },
+        { text: 'First Name', value: '2' },
+        { text: 'Middle Name', value: '3' },
+        { text: 'Last Name', value: '4' },
+        { text: 'Email', value: '5' },
+      ],
       headers: [
         { text: 'Firstname', value: 'firstname' },
         { text: 'Middlename', value: 'middlename' },
@@ -85,7 +117,43 @@ export default {
           this.pageCount = 0
         })
     },
+    showSearchDialog() {
+      this.searchDialog = true
+    },
+    closeSearchDialog() {
+      this.searchDialog = false
+    },
+    performAdvancedSearch() {
+      console.log('Performing advanced search...');
 
+      axios
+        .get('/api/search-accepted-applicant', {
+          params: {
+            page: this.page,
+            advanceSearch: this.advanceSearch,
+            selectedItem: this.selectedItem,
+          },
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure auth token is included
+          }
+        })
+        .then(response => {
+          if (response.data.result) {
+            this.acceptedApplications = response.data.result.data;
+            this.pageCount = response.data.result.last_page;
+          } else {
+            this.students = [];
+            this.pageCount = 0;
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching search results:', err);
+          this.acceptedApplications = [];
+          this.pageCount = 0;
+        });
+
+      this.closeSearchDialog();
+    },
     viewApplicationData(item) {
       console.log(item)
       // this.$router.push('/view-application-preview/' + item.user_id)

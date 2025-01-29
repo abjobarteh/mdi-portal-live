@@ -25,7 +25,8 @@ node_modules
 /public/certificates/
 api-config.js
 resources/js/api-config.js
-
+DB BACKUPS/
+MDI QUERIES.sql
 # local env files
 .env.local
 .env.*.local

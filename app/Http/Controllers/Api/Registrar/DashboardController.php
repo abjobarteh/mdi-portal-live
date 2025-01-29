@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmissionCode;
 use App\Models\AdmissionCodeLocation;
 use App\Models\Course;
+use App\Models\Department;
 use App\Models\Hod;
 use App\Models\Semester;
 use App\Models\Student;
@@ -13,8 +14,8 @@ use App\Models\StudentPayment;
 use App\Models\StudentRegisteredCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
-
 class DashboardController extends Controller
 {
     public function statusCount()
@@ -132,6 +133,13 @@ class DashboardController extends Controller
             ->take(5) // Limit the results to the first 5 lecturers
             ->get();
 
+            $departmentCount = DB::table('departments')
+            ->leftJoin('students', 'departments.id', '=', 'students.department_id')
+            ->select('departments.name', DB::raw('COUNT(students.id) as student_count'))
+            ->where('students.accepted', 'accepted')
+            ->groupBy('departments.name')
+            ->orderBy('departments.name')
+            ->get();
 
         return response()->json([
             'acceptedStudents' => $acceptedStudents,
@@ -142,6 +150,7 @@ class DashboardController extends Controller
             'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
             'weekyStudentLogins' => $counts,
             'lecturersWithMostCourses'  => $lecturersWithMostCourses,
+            'departmentCount' => $departmentCount
         ]);
     }
 
@@ -190,6 +199,23 @@ class DashboardController extends Controller
             'myCourses' => $myCourses,
             'myStudents' => $studentsCount,
 
+        ]);
+    }
+
+    public function getstudentdepartmentcount()
+    {
+
+        $departmentCount = DB::table('departments')
+            ->leftJoin('students', 'departments.id', '=', 'students.department_id')
+            ->select('departments.name', DB::raw('COUNT(students.id) as student_count'))
+            ->where('students.accepted', 'accepted')
+            ->groupBy('departments.name')
+            ->orderBy('departments.name')
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'result' => $departmentCount
         ]);
     }
 }

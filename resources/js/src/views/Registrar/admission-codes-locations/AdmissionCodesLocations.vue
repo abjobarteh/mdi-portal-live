@@ -7,7 +7,7 @@
           <v-spacer></v-spacer>
           <v-text-field v-model="search" label="Search" append-icon="mdi-magnify" clearable hide-details></v-text-field>
           <v-btn color="primary" v-if="userRole != 6" small class="white--text" @click="showAddDialog">Add
-            AdmissionCodeLocation</v-btn>
+            Admission Code Location</v-btn>
         </v-toolbar>
 
         <div v-if="isLoading" class="spinner">
@@ -16,32 +16,37 @@
         </div>
 
         <!-- Data table -->
-        <v-card-text style="height: 25vh">
+        <v-card-text style="height: 70vh">
           <v-data-table :headers="headers" :items="admissionCodeLocations" :items-per-page="13" :search="search"
             class="elevation-1" hide-default-footer>
+            <!-- Slot for Total Amount Sold -->
             <template v-slot:[`item.totalAmountSold`]="{ item }">
-              <!-- <v-btn small color="primary" @click="showAdmissionCodes(item.id, item.admission_codes)">Codes</v-btn> -->
               D{{ item.totalAmountSold }}.00
             </template>
-            <template v-slot:[`item.action`]="{ item }">
-              <!-- <v-btn @click="openAdmissionCodesPopup(item)">View Codes</v-btn>
-               -->
 
+            <!-- Slot for Actions -->
+            <template v-slot:[`item.action`]="{ item }">
+              <!-- View Codes Button -->
               <v-btn icon @click="openAdmissionCodesPopup(item)">
-                <fas size="24" icon=" fa-eye" style="color: blue; font-size: 16px"></fas>
+                <fas size="24" icon="fa-eye" style="color: blue; font-size: 16px"></fas>
               </v-btn>
+
+              <!-- Delete Button (Visible for Specific Roles) -->
               <v-btn v-if="userRole != 6 && userRole != 5" icon @click="deleteAdmissionCodeLocation(item)">
                 <fas icon="fa-trash-alt" style="color: red; font-size: 16px"></fas>
               </v-btn>
+
+              <!-- Add Codes Button (Visible for Specific Roles) -->
               <v-btn v-if="userRole != 6 && userRole != 5" icon @click="addAdmissionCode(item)">
                 <fas icon="fa-add" style="color: green; font-size: 20px; font-weight: bold"></fas>
               </v-btn>
-              <!-- <v-btn v-if="userRole != 6" small color="error" @click="deleteAdmissionCodeLocation(item)">Delete</v-btn> -->
-              <!-- <v-btn v-if="userRole != 6" small color="secondary" @click="addAdmissionCode(item)">Add Codes</v-btn> -->
             </template>
           </v-data-table>
+
+          <!-- Pagination -->
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
         </v-card-text>
+
       </v-card>
     </v-container>
 
@@ -130,7 +135,8 @@
             Admission Codess for <span style="font-weight: bold">{{ location }}</span>
           </p>
           <v-spacer></v-spacer>
-          <v-btn v-if="this.getUserProfile.role_id != 6" color="purple darken-2" @click="exportCodesToExcel" small class="white--text">Export Codes</v-btn>
+          <v-btn v-if="this.getUserProfile.role_id != 6" color="purple darken-2" @click="exportCodesToExcel" small
+            class="white--text">Export Codes</v-btn>
           <fas style="
               margin-left: 30px;
               font-size: 24px;
@@ -263,7 +269,7 @@ export default {
         // password: '',
       },
 
-      admissioncodelocationdata:{
+      admissioncodelocationdata: {
         total_number: '',
         total_sold: '',
         total_remain: '',
@@ -473,7 +479,7 @@ export default {
             // show error alert
             swal.fire({
               title: 'Error!',
-              text: error.response.data.message,
+              text: error.response.data,
               icon: 'error',
               confirmButtonText: 'OK',
             })
@@ -499,143 +505,143 @@ export default {
           console.log('Totals', response.data.total_number); // Logs the entire response data
           console.log('Total Sold:', response.data.total_sold); // Logs total_sold
           console.log('Total Remains:', response.data.total_remains);
-          this.admissioncodelocationdata.total_sold=response.data.total_sold+1
-          this.admissioncodelocationdata.total_remain=response.data.total_remains-1
+          this.admissioncodelocationdata.total_sold = response.data.total_sold + 1
+          this.admissioncodelocationdata.total_remain = response.data.total_remains - 1
           console.log('New Total Sold:', this.admissioncodelocationdata.total_sold); // Logs total_sold
-          console.log('New Total Remains:',  this.admissioncodelocationdata.total_remain);
+          console.log('New Total Remains:', this.admissioncodelocationdata.total_remain);
           console.log('item', item)
-       this.showAdmissionCodesPopup = false
-       swal
-         .fire({
-           title: 'Are you sure you want to sell this code?',
-           icon: 'question',
-           showCancelButton: true,
-           confirmButtonText: 'Yes',
-           cancelButtonText: 'No',
-         })
-         .then(result => {
-           if (result.isConfirmed) {
-             swal
-               .fire({
-                 title: 'What would you like to do next?',
-                 icon: 'question',
-                 showCancelButton: true,
-                 confirmButtonText: 'Send',
-                 cancelButtonText: 'Done',
-                 cancelButtonColor: '#aaa',
-               })
-               .then(result => {
-                 this.showAdmissionCodesPopup = false
- 
-                 if (result.isConfirmed) {
-                   swal
-                     .fire({
-                       title: 'Please enter your email address',
-                       input: 'email',
-                       confirmButtonText: 'Send',
-                       showCancelButton: true,
-                       cancelButtonText: 'Cancel',
-                       cancelButtonColor: '#aaa',
-                     })
-                     .then(result => {
-                       if (result.isConfirmed) {
-                         // console.log(`Email: ${result.value}`)
-                         this.isLoading = true
-                         axios
-                           .post('/api/send-email', { email: result.value, admission_code: item.admission_code })
-                           .then(result => {
-                             this.isLoading = false
- 
-                             // show success alert
-                             this.addDepartmentDialog = false
-                             axios
-                               .put(`/api/sell-code/${item.id}`,this.admissioncodelocationdata)
-                               .then(response => {
-                                 // show success alert
-                                 this.editCourseDialog = false
-                                 swal
-                                   .fire({
-                                     title: 'Success!',
-                                     text: 'Code sold successfully.',
-                                     icon: 'success',
-                                     confirmButtonText: 'OK',
-                                   })
-                                   .then(() => {
-                                     // this.showAdmissionCodesPopup = true
-                                     this.getResults()
-                                   })
-                               })
-                               .catch(error => {
-                                 // show error alert
-                                 swal.fire({
-                                   title: 'Error!',
-                                   text: error.response.data.error,
-                                   icon: 'error',
-                                   confirmButtonText: 'OK',
-                                 })
-                               })
-                           })
-                           .catch(error => {
-                             this.isLoading = false
-                             // show error alert
-                             swal.fire({
-                               title: 'Error!',
-                               text: error.response.data.error,
-                               icon: 'error',
-                               confirmButtonText: 'OK',
-                             })
-                           })
-                       } else if (result.dismiss === swal.DismissReason.cancel) {
-                         console.log('Cancelled')
-                       }
-                     })
-                 } else if (result.dismiss === swal.DismissReason.cancel) {
-                   // this is when done is selected
-                   axios
-                     .put(`/api/sell-code/${item.id}`,this.admissioncodelocationdata)
-                     .then(response => {
-                       // show success alert
-                       this.editCourseDialog = false
-                       swal
-                         .fire({
-                           title: 'Success!',
-                           text: 'Code sold successfully.',
-                           icon: 'success',
-                           confirmButtonText: 'OK',
-                         })
-                         .then(() => {
-                           // this.showAdmissionCodesPopup = true
-                           this.getResults()
-                         })
-                     })
-                     .catch(error => {
-                       // show error alert
-                       swal.fire({
-                         title: 'Error!',
-                         text: error.response.data.error,
-                         icon: 'error',
-                         confirmButtonText: 'OK',
-                       })
-                     })
-                 }
-               })
-               .finally(() => {
-                 // Set isLoading to false when the request completes
-                 this.isLoading = false
-               })
-           } else if (result.dismiss === swal.DismissReason.cancel) {
-             console.log('Cancelled')
-           }
-         }) 
+          this.showAdmissionCodesPopup = false
+          swal
+            .fire({
+              title: 'Are you sure you want to sell this code?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonText: 'Yes',
+              cancelButtonText: 'No',
+            })
+            .then(result => {
+              if (result.isConfirmed) {
+                swal
+                  .fire({
+                    title: 'What would you like to do next?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Send',
+                    cancelButtonText: 'Done',
+                    cancelButtonColor: '#aaa',
+                  })
+                  .then(result => {
+                    this.showAdmissionCodesPopup = false
+
+                    if (result.isConfirmed) {
+                      swal
+                        .fire({
+                          title: 'Please enter your email address',
+                          input: 'email',
+                          confirmButtonText: 'Send',
+                          showCancelButton: true,
+                          cancelButtonText: 'Cancel',
+                          cancelButtonColor: '#aaa',
+                        })
+                        .then(result => {
+                          if (result.isConfirmed) {
+                            // console.log(`Email: ${result.value}`)
+                            this.isLoading = true
+                            axios
+                              .post('/api/send-email', { email: result.value, admission_code: item.admission_code })
+                              .then(result => {
+                                this.isLoading = false
+
+                                // show success alert
+                                this.addDepartmentDialog = false
+                                axios
+                                  .put(`/api/sell-code/${item.id}`, this.admissioncodelocationdata)
+                                  .then(response => {
+                                    // show success alert
+                                    this.editCourseDialog = false
+                                    swal
+                                      .fire({
+                                        title: 'Success!',
+                                        text: 'Code sold successfully.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK',
+                                      })
+                                      .then(() => {
+                                        // this.showAdmissionCodesPopup = true
+                                        this.getResults()
+                                      })
+                                  })
+                                  .catch(error => {
+                                    // show error alert
+                                    swal.fire({
+                                      title: 'Error!',
+                                      text: error.response.data.error,
+                                      icon: 'error',
+                                      confirmButtonText: 'OK',
+                                    })
+                                  })
+                              })
+                              .catch(error => {
+                                this.isLoading = false
+                                // show error alert
+                                swal.fire({
+                                  title: 'Error!',
+                                  text: error.response.data.error,
+                                  icon: 'error',
+                                  confirmButtonText: 'OK',
+                                })
+                              })
+                          } else if (result.dismiss === swal.DismissReason.cancel) {
+                            console.log('Cancelled')
+                          }
+                        })
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
+                      // this is when done is selected
+                      axios
+                        .put(`/api/sell-code/${item.id}`, this.admissioncodelocationdata)
+                        .then(response => {
+                          // show success alert
+                          this.editCourseDialog = false
+                          swal
+                            .fire({
+                              title: 'Success!',
+                              text: 'Code sold successfully.',
+                              icon: 'success',
+                              confirmButtonText: 'OK',
+                            })
+                            .then(() => {
+                              // this.showAdmissionCodesPopup = true
+                              this.getResults()
+                            })
+                        })
+                        .catch(error => {
+                          // show error alert
+                          swal.fire({
+                            title: 'Error!',
+                            text: error.response.data.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                          })
+                        })
+                    }
+                  })
+                  .finally(() => {
+                    // Set isLoading to false when the request completes
+                    this.isLoading = false
+                  })
+              } else if (result.dismiss === swal.DismissReason.cancel) {
+                console.log('Cancelled')
+              }
+            })
         })
 
-        
-    
- // Logs the entire response data
-     
 
 
-     /* */
+      // Logs the entire response data
+
+
+
+      /* */
     },
 
     addAdmissionCode(item) {

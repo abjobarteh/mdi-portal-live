@@ -167,22 +167,22 @@ class ApplicationsController extends Controller
     {
         // interviewDate
         $student = Student::where('user_id', $request->get('userId'))->first();
-        if($student->apply_new_course==1){
+        if ($student->apply_new_course == 1) {
             $studentName = $student->firstname . ' ' . $student->lastname;
             $studentNumber = $student->mat_number;
-            $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 1,'apply_new_course' => 0]);
+            $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 1, 'apply_new_course' => 0]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
             Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1));
-        }else{
+        } else {
             $studentName = $student->firstname . ' ' . $student->lastname;
-            $studentNumber = $this->generateStudentNumber();
+            $studentNumber = $this->generateStudentNumber($student->id);
             $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 1]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
             Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1));
         }
- 
+
 
 
         activity()
@@ -200,7 +200,7 @@ class ApplicationsController extends Controller
     public function studentannouncement(Request $request)
     {
 
-        ini_set('max_execution_time',3600);
+        ini_set('max_execution_time', 3600);
 
         $emails = Student::whereNotNull('mat_number')->pluck('email');
 
@@ -220,7 +220,7 @@ class ApplicationsController extends Controller
 
     public function applicantannouncement(Request $request)
     {
-        ini_set('max_execution_time',3600);
+        ini_set('max_execution_time', 3600);
         $emails = Student::where('application_completed', 0)->pluck('email');
 
         foreach ($emails as $email) {
@@ -238,46 +238,170 @@ class ApplicationsController extends Controller
     }
 
 
+    public function searchIncomingapplicant(Request $request)
+    {
+        if (!$request->has('selectedItem') || !$request->has('advanceSearch')) {
+            return response()->json(['error' => 'Invalid search parameters'], 400);
+        }
+
+        $query = Student::where('application_completed', 1)
+            ->where('accepted', 'pending');
+
+        $selectedItem = $request->input('selectedItem');
+        $advanceSearch = $request->input('advanceSearch');
+
+        switch ($selectedItem) {
+            case 1:
+                $query->where('username', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 2:
+                $query->where('firstname', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 3:
+                $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 4:
+                $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 5:
+                $query->where('email', 'like', '%' . $advanceSearch . '%');
+                break;
+            default:
+                return response()->json(['error' => 'Invalid search type'], 400);
+        }
+
+        $students = $query->paginate(13); // Paginate results
+
+        return response()->json([
+            'status' => 200,
+            'result' => $students
+        ]);
+    }
+
+
+
+    public function searchAcceptedapplicant(Request $request)
+    {
+        if (!$request->has('selectedItem') || !$request->has('advanceSearch')) {
+            return response()->json(['error' => 'Invalid search parameters'], 400);
+        }
+
+        $query = Student::where('application_completed', 1)->where('accepted', 'accepted');
+
+        $selectedItem = $request->input('selectedItem');
+        $advanceSearch = $request->input('advanceSearch');
+
+        switch ($selectedItem) {
+            case 1:
+                $query->where('username', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 2:
+                $query->where('firstname', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 3:
+                $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 4:
+                $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 5:
+                $query->where('email', 'like', '%' . $advanceSearch . '%');
+                break;
+            default:
+                return response()->json(['error' => 'Invalid search type'], 400);
+        }
+
+        $students = $query->paginate(13); // Paginate results
+
+        return response()->json([
+            'status' => 200,
+            'result' => $students
+        ]);
+
+    }
+
+
+
+    public function searchRejectedapplicant(Request $request)
+    {
+        if (!$request->has('selectedItem') || !$request->has('advanceSearch')) {
+            return response()->json(['error' => 'Invalid search parameters'], 400);
+        }
+
+        $query = Student::where('application_completed', 1)->where('accepted', 'rejected');
+
+        $selectedItem = $request->input('selectedItem');
+        $advanceSearch = $request->input('advanceSearch');
+
+        switch ($selectedItem) {
+            case 1:
+                $query->where('username', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 2:
+                $query->where('firstname', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 3:
+                $query->where('middlename', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 4:
+                $query->where('lastname', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 5:
+                $query->where('email', 'like', '%' . $advanceSearch . '%');
+                break;
+            default:
+                return response()->json(['error' => 'Invalid search type'], 400);
+        }
+
+        $students = $query->paginate(13); // Paginate results
+
+        return response()->json([
+            'status' => 200,
+            'result' => $students
+        ]);
+
+    }
+
     public function new(Request $request)
     {
         $request->validate([
             'id' => 'required|integer|exists:students,id',
             'user_id' => 'required|integer|exists:users,id',
         ]);
-    
+
         // Attempt to retrieve the student
         $student = Student::where('id', $request->id)
             ->whereNull('apply_new_course')
-            ->orWhere('apply_new_course',0)
+            ->orWhere('apply_new_course', 0)
             ->first();
-    
+
         // Handle case when no record is found
-        
+
         if (!$student) {
             return response()->json([
                 'status' => 404,
                 'errorMessage' => 'Student not found or already eligible for a new program',
             ], 404);
         }
-    
+
         // Perform the update
         DB::transaction(function () use ($student, $request) {
             $student->update([
                 'is_applicant' => 1,
                 'apply_new_course' => 1,
-                'application_completed' =>  0,
-                'accepted'=>'Pending',
+                'application_completed' => 0,
+                'accepted' => 'Pending',
                 'personal_info_completed' => 0,
-                 'program_id' => NULL,
-                 'department_id' => NULL,
-                 'waive'=>NULL
+                'program_id' => NULL,
+                'department_id' => NULL,
+                'waive' => NULL
             ]);
 
-            ApplicantCertificate::where('user_id',$request->user_id)->delete();
-            ApplicantEducation::where('user_id',$request->user_id)->delete();
+            ApplicantCertificate::where('user_id', $request->user_id)->delete();
+            ApplicantEducation::where('user_id', $request->user_id)->delete();
             AdmissionCodeVerification::where('user_id', $request->user_id)->delete();
         });
-    
+
         // Return a success response
         return response()->json([
             'status' => 200,
@@ -288,7 +412,7 @@ class ApplicationsController extends Controller
 
     public function lecturerannouncement(Request $request)
     {
-        ini_set('max_execution_time',3600);
+        ini_set('max_execution_time', 3600);
         $emails = Lecturer::pluck('email');
 
         foreach ($emails as $email) {
@@ -308,19 +432,19 @@ class ApplicationsController extends Controller
     {
         // interviewDate
 
-        
+
         $student = Student::where('user_id', $request->get('userId'))->first();
-        if($student->apply_new_course==1){
+        if ($student->apply_new_course == 1) {
             $studentName = $student->firstname . ' ' . $student->lastname;
             $studentNumber = $student->mat_number;
-            $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 0,'apply_new_course' => 0]);
+            $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 0, 'apply_new_course' => 0]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
-    
+
             Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0));
-        }else{
+        } else {
             $studentName = $student->firstname . ' ' . $student->lastname;
-            $studentNumber = $this->generateStudentNumber();
+            $studentNumber = $this->generateStudentNumber($student->id);
             $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 0]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
@@ -362,7 +486,7 @@ class ApplicationsController extends Controller
             'result' => 'Enrollment Successful'
         ]);
     }
-    private function generateStudentNumber()
+    private function generateStudentNumber(int $id)
     {
         $currentYear = Carbon::now()->year;
         $currentMonth = Carbon::now()->month;
@@ -371,9 +495,8 @@ class ApplicationsController extends Controller
         $fifthDigit = ($currentMonth >= 1 && $currentMonth <= 6) ? 1 : 2;
 
         // Retrieve the count of students with a non-null mat_number
-        $count = DB::table('students')->where('is_applicant', '=', 0)->where('accepted', '=', 'accepted')->count();
-        $lastNumber = $count + 1;
-        $lastNumber = str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
+
+        $lastNumber = str_pad($id, 4, '0', STR_PAD_LEFT);
 
         // Generate the complete student number
         $studentNumber = $currentYear . $fifthDigit . sprintf('%04d', $lastNumber);

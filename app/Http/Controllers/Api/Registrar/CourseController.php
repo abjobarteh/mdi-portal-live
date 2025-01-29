@@ -50,7 +50,7 @@ class CourseController extends Controller
     }
 
 
-    
+
     public function getcourse(Request $request)
     {
         $query = Course::with(['program.department'])->orderBy("course_name");
@@ -234,7 +234,7 @@ class CourseController extends Controller
 
             $current_semester = Semester::where('is_current_semester', 1)->value('id');
 
-            $student_id =  Student::join('student_payments', 'students.id', '=', 'student_payments.student_id')->where('students.user_id', auth()->user()->id)->value('student_id');
+            $student_id = Student::join('student_payments', 'students.id', '=', 'student_payments.student_id')->where('students.user_id', auth()->user()->id)->value('student_id');
             if (Deferment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists()) {
                 $runningCourse["can_register"] = false;
             } else if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || ((Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 || Student::where('user_id', auth()->user()->id)->value('is_sponsored') == 1) && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
@@ -285,7 +285,7 @@ class CourseController extends Controller
             $sumOfMarks = 0;
             foreach ($courses as $course) {
                 $noOfCourses++;
-                $totalMark = $course->test_mark  + $course->exam_mark;
+                $totalMark = $course->test_mark + $course->exam_mark;
                 $sumOfMarks += $totalMark;
                 $courseTranscript = [
                     'CourseCode' => $course->course->course_code,
@@ -296,7 +296,7 @@ class CourseController extends Controller
                     'EndDate' => $course->semester->session->end_date,
                     'Grade' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('grade'),
                     'GradePoint' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('grade_point'),
-                    'Interpretation' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=',  $totalMark)->value('interpretation'),
+                    'Interpretation' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('interpretation'),
                 ];
 
                 $semesterTranscript['Courses'][] = $courseTranscript;
@@ -333,7 +333,7 @@ class CourseController extends Controller
     {
         SemesterCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
-            ->update(['registrar_approved' =>  1]);
+            ->update(['registrar_approved' => 1]);
 
         StudentRegisteredCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
@@ -342,6 +342,8 @@ class CourseController extends Controller
 
     public function registeredCourses()
     {
+
+        $programId = Student::where('user_id', auth()->user()->id)->value('program_id');
         $registeredCourses = StudentRegisteredCourse::with('course', 'semester.session', 'lecturer')
             ->where('student_id', Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
                 ->where('students.user_id', auth()->user()->id)->value('students.id'))->get();
@@ -391,9 +393,9 @@ class CourseController extends Controller
             'semester_id' => $request->get('semester_id'),
             'course_id' => $request->get('course_id')
         ])->update([
-            'test_mark' => $request->get('testMark'),
-            'exam_mark' => $request->get('examMark'),
-        ]);
+                    'test_mark' => $request->get('testMark'),
+                    'exam_mark' => $request->get('examMark'),
+                ]);
 
         return response()->json([
             'status' => 200,
