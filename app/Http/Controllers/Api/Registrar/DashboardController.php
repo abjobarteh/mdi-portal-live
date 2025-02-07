@@ -133,13 +133,14 @@ class DashboardController extends Controller
             ->take(5) // Limit the results to the first 5 lecturers
             ->get();
 
-            $departmentCount = DB::table('departments')
-            ->leftJoin('students', 'departments.id', '=', 'students.department_id')
-            ->select('departments.name', DB::raw('COUNT(students.id) as student_count'))
-            ->where('students.accepted', 'accepted')
-            ->groupBy('departments.name')
-            ->orderBy('departments.name')
-            ->get();
+            $departmentCount = DB::select("
+            SELECT b.name AS department_name, COUNT(a.id) AS student_count
+            FROM students a
+            JOIN departments b ON a.department_id = b.id
+            WHERE a.accepted = 'accepted'
+            GROUP BY b.name
+            ORDER BY b.name
+        ");
 
         return response()->json([
             'acceptedStudents' => $acceptedStudents,
@@ -149,7 +150,7 @@ class DashboardController extends Controller
             'activeStudents' => $activeStudents, // students who have taken courses this semester
             'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
             'weekyStudentLogins' => $counts,
-            'lecturersWithMostCourses'  => $lecturersWithMostCourses,
+            'lecturersWithMostCourses' => $lecturersWithMostCourses,
             'departmentCount' => $departmentCount
         ]);
     }
@@ -205,17 +206,20 @@ class DashboardController extends Controller
     public function getstudentdepartmentcount()
     {
 
-        $departmentCount = DB::table('departments')
-            ->leftJoin('students', 'departments.id', '=', 'students.department_id')
-            ->select('departments.name', DB::raw('COUNT(students.id) as student_count'))
-            ->where('students.accepted', 'accepted')
-            ->groupBy('departments.name')
-            ->orderBy('departments.name')
-            ->get();
+        $departmentCount = DB::select("
+        SELECT b.name AS department_name, COUNT(a.id) AS student_count
+        FROM students a
+        JOIN departments b ON a.department_id = b.id
+        WHERE a.accepted = 'accepted'
+        GROUP BY b.name
+        ORDER BY b.name
+    ");
 
         return response()->json([
             'status' => 200,
             'result' => $departmentCount
         ]);
     }
+
+
 }

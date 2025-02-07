@@ -46,13 +46,14 @@ class DepartmentController extends Controller
     {
 
 
-        
-        $departmentCount = DB::table('departments')
-            ->leftJoin('students', 'departments.id', '=', 'students.department_id')
-            ->select('departments.name', DB::raw('COUNT(students.id) as student_count'))
-            ->where('students.accepted', 'accepted')
-            ->groupBy('departments.name')
-            ->get(); 
+        $departmentCount = DB::select("
+        SELECT b.name AS department_name, COUNT(a.id) AS student_count
+        FROM students a
+        JOIN departments b ON a.department_id = b.id
+        WHERE a.accepted = 'accepted'
+        GROUP BY b.name
+        ORDER BY b.name
+    ");
 
         return response()->json([
             'status' => 200,

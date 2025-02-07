@@ -15,9 +15,6 @@
       <dashboard-card-total-earning></dashboard-card-total-earning>
     </v-col>
     <v-col cols="12">
-      <dashboard-total-dept-students></dashboard-total-dept-students>
-    </v-col>
-    <v-col cols="12">
       <dashboard-datatable></dashboard-datatable>
     </v-col>
   </v-row>
@@ -35,7 +32,6 @@ import DashboardCardTotalEarning from './DashboardCardTotalEarning.vue'
 import DashboardCardDepositAndWithdraw from './DashboardCardDepositAndWithdraw.vue'
 import DashboardCardSalesByCountries from './DashboardCardSalesByCountries.vue'
 import DashboardWeeklyOverview from './DashboardWeeklyOverview.vue'
-import DashboardTotalDeptStudents from './DashboardTotalDeptStudents.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
 import 'vuetify/dist/vuetify.min.css'
 
@@ -48,7 +44,6 @@ export default {
     DashboardCardDepositAndWithdraw,
     DashboardCardSalesByCountries,
     DashboardWeeklyOverview,
-    DashboardTotalDeptStudents,
     DashboardDatatable,
   },
   setup() {

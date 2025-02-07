@@ -323,16 +323,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-programs', [ProgramController::class, 'getprograms']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
         Route::get('/user-counts', [DashboardController::class, 'counts']);
-        Route::get('/deptcount',[DashboardController::class, 'getstudentdepartmentcount']);
+
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
-       
+        
         // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
     });
  
+   
+
+
     Route::middleware(['lecturer'])->group(function () {
 
         Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']);
