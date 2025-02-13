@@ -42,12 +42,13 @@
             </template>
             <template v-slot:[`item.fullname`]="{ item }">
               <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template>
+
             <template v-slot:[`item.program`]="{ item }">
               <span style="font-size: smaller">{{ item.program ? item.program.name : 'N/A' }}</span>
             </template>
 
             <template v-slot:[`item.admission_year`]="{ item }">
-              {{ item.mat_number.toString().substring(0, 4) }}
+              {{ item.mat_number ? item.mat_number.toString().substring(0, 4) : 'N/A' }}
             </template>
             <template v-slot:[`item.acceptance_status`]="{ item }">
               {{ getAcceptanceStatusLabel(item.acceptance_status) }}
@@ -205,6 +206,7 @@ export default {
         .then(response => {
           this.students = response.data.result.data
           this.pageCount = response.data.result.last_page
+          console.log(this.students);
         })
         .catch(err => {
           this.courses = []

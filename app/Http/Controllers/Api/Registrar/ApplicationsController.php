@@ -266,6 +266,9 @@ class ApplicationsController extends Controller
             case 5:
                 $query->where('email', 'like', '%' . $advanceSearch . '%');
                 break;
+            case 6:
+                $query->where('semester_name', 'like', '%' . $advanceSearch . '%');
+                break;
             default:
                 return response()->json(['error' => 'Invalid search type'], 400);
         }
@@ -306,6 +309,9 @@ class ApplicationsController extends Controller
                 break;
             case 5:
                 $query->where('email', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 6:
+                $query->where('semester_name', 'like', '%' . $advanceSearch . '%');
                 break;
             default:
                 return response()->json(['error' => 'Invalid search type'], 400);
@@ -348,6 +354,9 @@ class ApplicationsController extends Controller
                 break;
             case 5:
                 $query->where('email', 'like', '%' . $advanceSearch . '%');
+                break;
+            case 6:
+                $query->where('semester_name', 'like', '%' . $advanceSearch . '%');
                 break;
             default:
                 return response()->json(['error' => 'Invalid search type'], 400);

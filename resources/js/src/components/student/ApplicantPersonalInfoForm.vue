@@ -131,7 +131,7 @@
            v-if="applicantPersonalInfoData.employment_status === 'Employed'"
               outlined
               v-model="applicantPersonalInfoData.employeename"
-              label="Employee Name"
+              label="Employer Name"
               required
             ></v-text-field>
           </v-col>
@@ -142,7 +142,7 @@
             
               outlined
               v-model="applicantPersonalInfoData.employeeadresss"
-              label="Employee Address"
+              label="Employer Address"
               required
             ></v-text-field>
           </v-col>
@@ -152,7 +152,7 @@
               v-if="applicantPersonalInfoData.employment_status === 'Employed'"
               outlined
               v-model="applicantPersonalInfoData.employeecontact"
-              label="Employee Contact Number"
+              label="Employer Contact Number"
               required
             ></v-text-field>
           </v-col>

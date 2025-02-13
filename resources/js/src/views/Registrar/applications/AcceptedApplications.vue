@@ -75,6 +75,7 @@ export default {
         { text: 'Middle Name', value: '3' },
         { text: 'Last Name', value: '4' },
         { text: 'Email', value: '5' },
+        { text: 'Semester Applied For', value: '6' },
       ],
       headers: [
         { text: 'Firstname', value: 'firstname' },

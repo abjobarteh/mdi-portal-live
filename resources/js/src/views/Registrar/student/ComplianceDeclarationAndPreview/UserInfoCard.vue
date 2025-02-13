@@ -44,15 +44,15 @@
                 <td>{{ item.employment_status }}</td>
               </tr>
               <tr>
-                <td>Employee</td>
+                <td>Employer's</td>
                 <td>{{ item.employee }}</td>
               </tr>
               <tr>
-                <td>Employee Address</td>
+                <td>Employer's Address</td>
                 <td>{{ item.empaddress }}</td>
               </tr>
               <tr>
-                <td>Employee Contact</td>
+                <td>Employer's Contact</td>
                 <td>{{ item.empcontact }}</td>
               </tr>
               <tr>
