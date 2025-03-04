@@ -11,7 +11,7 @@ $session_end = $session->session_end;
 
 
 $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id')
-    ->where('students.mat_number', $matnumber)
+    ->where('students.id', $id)
     ->select('b.fee', 'b.name')
     ->get();
 

@@ -11,7 +11,7 @@ $session_end = $session->session_end;
 
 
 $studentsWithPrograms = Student::join('programs as b', 'students.program_id', '=', 'b.id')
-    ->where('students.mat_number', $matnumber)
+    ->where('students.id', $id)
     ->select('b.fee', 'b.name')
     ->get();
 
@@ -141,7 +141,7 @@ if ($duration == 6) {
         <p>Orientation will start on <strong>{{$date}}</strong></p>
         <p>Lectures will start on <strong>{{$cdate}}</strong></p>
 
-        <p>Lectures will start on <strong>{{$date}}</strong></p>
+       
 
         <p>The course fee is <strong>D{{ $prfee }} {{$otherfee}}; other costs/fees include an Online Library fee of D1000.00 per annum.</strong> </p>
 
