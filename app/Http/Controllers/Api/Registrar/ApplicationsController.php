@@ -166,21 +166,29 @@ class ApplicationsController extends Controller
     public function acceptStudentApplication(Request $request)
     {
         // interviewDate
+
         $student = Student::where('user_id', $request->get('userId'))->first();
+
         if ($student->apply_new_course == 1) {
             $studentName = $student->firstname . ' ' . $student->lastname;
-            $studentNumber = $student->mat_number;
+
+            if ($student->mat_number == NULL) {
+                $studentNumber = $student->mat_number;
+            } else {
+                $studentNumber = $this->generateStudentNumber($student->id);
+            }
+
             $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 1, 'apply_new_course' => 0]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
-            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1));
+            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1, $student->id));
         } else {
             $studentName = $student->firstname . ' ' . $student->lastname;
             $studentNumber = $this->generateStudentNumber($student->id);
             $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 1]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
-            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1));
+            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 1, $student->id));
         }
 
 
@@ -450,14 +458,14 @@ class ApplicationsController extends Controller
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
 
-            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0));
+            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0, $student->id));
         } else {
             $studentName = $student->firstname . ' ' . $student->lastname;
             $studentNumber = $this->generateStudentNumber($student->id);
             $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'mat_number' => $studentNumber, 'acceptance_status' => 0]);
             $orientaionDate = Carbon::parse($request->orientationDate);
             $commencementDate = Carbon::parse($request->commencementDate);
-            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0));
+            Mail::to($student->email)->send(new AcceptedApplicationEmail($orientaionDate->format('jS F Y H:i:s A'), $commencementDate->format('jS F Y H:i:s A'), $studentNumber, $studentName, 0, $student->id));
         }
 
 
@@ -482,7 +490,7 @@ class ApplicationsController extends Controller
         $studentName = $student->firstname . ' ' . $student->lastname;
         $student->update(['is_applicant' => 0, 'accepted' => 'accepted', 'acceptance_status' => 1]);
 
-        Mail::to($student->email)->send(new EnrollmentApplicationEmail($studentName, $request->get('userId')));
+        Mail::to($student->email)->send(new EnrollmentApplicationEmail($studentName, $request->get('userId'), $student->id));
 
         activity()
             ->causedBy(auth()->user())
@@ -509,6 +517,11 @@ class ApplicationsController extends Controller
 
         // Generate the complete student number
         $studentNumber = $currentYear . $fifthDigit . sprintf('%04d', $lastNumber);
+
+        
+        if (Student::where('mat_number', $studentNumber)->exists()) {
+            $studentNumber = $currentYear . '1' . $fifthDigit . sprintf('%04d', $lastNumber);
+        }
 
         return $studentNumber;
     }

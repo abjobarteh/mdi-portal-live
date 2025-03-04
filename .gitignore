@@ -24,7 +24,9 @@ node_modules
 /dist
 /public/certificates/
 api-config.js
-resources/js/api-config.js
+
+/resources/views/emails/
+#resources/js/api-config.js
 DB BACKUPS/
 MDI QUERIES.sql
 # local env files

@@ -19,18 +19,21 @@ class AcceptedApplicationEmail extends Mailable
     public $fullname;
     public $type;
 
+    public $id;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($date, $cdate,$matnumber, $fullname, $type)
+    public function __construct($date, $cdate,$matnumber, $fullname, $type,$id)
     {
         $this->date = $date;
         $this->matnumber = $matnumber;
         $this->fullname = $fullname;
         $this->type = $type;
         $this->cdate = $cdate;
+        $this->id = $id;
     }
 
     /**
@@ -49,6 +52,7 @@ class AcceptedApplicationEmail extends Mailable
                 'cdate' => $this->cdate,
                 'matnumber' => $this->matnumber,
                 'fullname' => $this->fullname,
+                'id' => $this->id
                
             ]);
 
@@ -63,6 +67,7 @@ class AcceptedApplicationEmail extends Mailable
                 'cdate' => $this->cdate,
                 'matnumber' => $this->matnumber,
                 'fullname' => $this->fullname,
+                'id' => $this->id
             ]);
 
             return $this->subject('Application Status')

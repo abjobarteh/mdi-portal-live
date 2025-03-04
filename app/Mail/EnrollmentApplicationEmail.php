@@ -13,20 +13,23 @@ class EnrollmentApplicationEmail extends Mailable
     use Queueable, SerializesModels;
     public $date;
     public $matnumber;
-     public $userid;
+    public $userid;
     public $fullname;
     public $type;
+
+    public $id;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct( $fullname,$user_id)
+    public function __construct($fullname, $user_id, $id)
     {
- 
+
         $this->fullname = $fullname;
-        $this->userid=$user_id;
+        $this->userid = $user_id;
+        $this->id = $id;
     }
 
     /**
@@ -39,7 +42,8 @@ class EnrollmentApplicationEmail extends Mailable
 
         $pdf = Pdf::loadView('emails.enrollment_application_pdf', [
             'fullname' => $this->fullname,
-             'userid' => $this->userid
+            'userid' => $this->userid,
+            'id' => $this->id
         ]);
 
         return $this->subject('Enrollment Status')
