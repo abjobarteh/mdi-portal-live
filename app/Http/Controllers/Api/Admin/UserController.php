@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Hod;
 use App\Models\Lecturer;
+use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -266,6 +267,15 @@ class UserController extends Controller
                 $lecturer->save();
 
                 $lecturer->teachables()->sync($request->course_ids);
+            } else if ($validatedData['role_id'] == 4) {
+                
+                Student::where('user_id', $user->id)->update([
+                    'firstname' => $validatedData['firstname'],
+                    'lastname' => $validatedData['lastname'],
+                    'middlename' => $validatedData['middlename'],
+                    'email' => $validatedData['email'],
+                    'username' => $validatedData['username']
+                ]);
             }
 
             activity()
