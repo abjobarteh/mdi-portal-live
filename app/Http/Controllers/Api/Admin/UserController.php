@@ -131,7 +131,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'address' => 'required',
             'role_id' => 'required',
-            'phonenumber' =>   ['required', 'regex:/^[2-7,9]\d{6}$/'],
+            'phonenumber' => ['required', 'regex:/^[2-7,9]\d{6}$/'],
             'password' => 'required|confirmed|min:6'
         ]);
 
@@ -151,7 +151,7 @@ class UserController extends Controller
             ]);
 
             if ($validatedData['role_id'] == 3) {
-                if (empty($request->course_ids)){
+                if (empty($request->course_ids)) {
                     return response()->json(['message' => "Teachable courses should not be empty"], 422);
                 }
 
@@ -219,16 +219,18 @@ class UserController extends Controller
             'middlename' => 'nullable',
             'username' => 'required|unique:users,username,' . $id,
             'email' => 'required|email|unique:users,email,' . $id,
-            'address' => 'required',
+            'address' => 'nullable',
             'role_id' => 'required',
-            'phonenumber' => ['required', 'regex:/^[2-7,9]\d{6}$/'],
+            'phonenumber' => ['nullable', 'regex:/^[2-7,9]\d{6}$/'],
         ]);
 
         DB::beginTransaction();
 
         try {
             $user = User::findOrFail($id);
-            $user->fill([
+
+
+            $user->update([
                 'firstname' => $validatedData['firstname'],
                 'lastname' => $validatedData['lastname'],
                 'middlename' => $validatedData['middlename'],
@@ -240,7 +242,7 @@ class UserController extends Controller
             ]);
 
 
-            $user->save();
+
 
             if ($validatedData['role_id'] == 3) {
                 $lecturer = Lecturer::where('user_id', $id)->first();
@@ -280,13 +282,14 @@ class UserController extends Controller
         }
     }
 
-    public function updateaccountsettings(Request $request, $id){
-        
-        $roleId = DB::table('users')
-        ->where('id', $id)
-        ->value('role_id');
+    public function updateaccountsettings(Request $request, $id)
+    {
 
-           $validatedData = $request->validate([
+        $roleId = DB::table('users')
+            ->where('id', $id)
+            ->value('role_id');
+
+        $validatedData = $request->validate([
             'firstname' => 'required|max:255',
             'lastname' => 'required',
             'username' => 'required|unique:users,username,' . $id,
@@ -307,7 +310,7 @@ class UserController extends Controller
 
             $user->save();
 
-            if ($roleId== 3) {
+            if ($roleId == 3) {
                 $lecturer = Lecturer::where('user_id', $id)->first();
 
                 if (!$lecturer) {
