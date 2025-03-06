@@ -12,8 +12,7 @@
           {{ item.lecturer.firstname }} {{ item.lecturer.lastname }}
         </template>
         <template v-slot:[`item.action`]="{ item }">
-          <v-checkbox :disabled="registrationStatus == 0  || (!item.can_register && waivestatus == 0)" v-model="item.course.registered"
-            @change="handleCheckboxChange(item)"></v-checkbox>
+          <v-checkbox v-model="item.course.registered" @change="handleCheckboxChange(item)"></v-checkbox>
         </template>
       </v-data-table>
       <v-pagination v-model="page" :length="pageCount" />
@@ -53,49 +52,86 @@ export default {
   },
 
   created() {
-    axios.get('/api/registerd-courses').then(response => {
-      console.log('response ', response)
-    })
-    console.log('View',this.getUserProfile.id)
+
     this.waiveData.student_id = this.studentInfo.id
-    axios.get(`/api/get-waive`, {
-      params: {
-        student_id: this.getUserProfile.id
-      }
-    })
-      .then(response => {
-        this.waivestatus=response.data.result
-        console.log('Waive Data:', this.waivestatus);
-      
-      })
-      .catch(error => {
-        console.error('Error fetching waive data:', error);
-      });
+    this.fetchData();
 
 
-    axios
-      .get('/api/registration-status')
-      .then(response => {
-        this.registrationStatus = response.data.result.registration_status
-        console.log('running courses', this.runnings)
-        console.log('running courses 2', this.registrationStatus)
-        this.pageCount = response.data.result.last_page
-      })
-      .catch(err => {
-        this.runnings = []
-        this.pageCount = 0
-      })
+    console.log('View', this.getUserProfile.id)
+
   },
 
   methods: {
-    handleCheckboxChange(item) {
-      console.log(item)
-      if (item.course.registered) {
-        this.showConfirmationDialog(item, 'Check')
-      } else {
-        this.showRemoveConfirmationDialog(item, 'Uncheck')
+    async fetchData() {
+      try {
+        this.waiveData.student_id = this.studentInfo.id;
+
+        // Fetch waive data
+        const waiveResponse = await axios.get('/api/get-waive', {
+          params: {
+            student_id: this.getUserProfile.id,
+          },
+        });
+        this.waivestatus = waiveResponse.data.result;
+        console.log('Waive Data:', this.waivestatus);
+
+        // Fetch registration status
+        const registrationResponse = await axios.get('/api/registration-status');
+        this.registrationStatus = registrationResponse.data.result.registration_status;
+        console.log('Registration Status:', this.registrationStatus);
+
+        // Fetch registered courses
+        const registeredCoursesResponse = await axios.get('/api/registerd-courses');
+        console.log('Registered Courses:', registeredCoursesResponse);
+
+        // Set loading to false once all data is fetched
+        this.loading = false;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Set loading to false even if there's an error so the UI doesn't stay stuck
+        this.loading = false;
       }
     },
+
+    handleCheckboxChange(item) {
+      console.log(item);
+      this.fetchData();
+
+      if (this.waivestatus == 0) {
+        swal
+          .fire({
+            title: 'Error!',
+            text: 'You Need To Be Waived Or Cleared By The Finance Department. Therefore You Cannot Register For Any Course.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+          .then(() => {
+            // Uncheck the checkbox by directly setting the model value to false
+            item.course.registered = false;
+          });
+      } else
+
+
+        if (this.registrationStatus == 0) {
+          console.log('See: ', this.registrationStatus)
+          swal
+            .fire({
+              title: 'Error!',
+              text: 'Registration Period Is Closed. Therefore You Cannot Register For Any Course.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            })
+            .then(() => {
+              // Uncheck the checkbox by directly setting the model value to false
+              item.course.registered = false;
+            });
+        } else if (item.course.registered) {
+          this.showConfirmationDialog(item, 'Check');
+        } else {
+          this.showRemoveConfirmationDialog(item, 'Uncheck');
+        }
+    }
+    ,
 
     showConfirmationDialog(item, action) {
       console.log('id ', item)
@@ -151,7 +187,7 @@ export default {
               })
           } else {
             // Checkbox state is reverted if confirmation is canceled
-            item.checked = !item.checked
+            item.course.registered = false;
           }
         })
     },
@@ -203,7 +239,7 @@ export default {
               })
           } else {
             // Checkbox state is reverted if confirmation is canceled
-            item.checked = !item.checked
+            item.course.registered = false;
           }
         })
     },

@@ -11,7 +11,15 @@
           <v-data-table :headers="headers" :items="deferments" :items-per-page="13" :search="search" class="elevation-1"
             hide-default-footer>
             <template v-slot:[`item.is_approved`]="{ item }">
-              <v-btn small color="success" @click="approveDeferment(item)">Approve</v-btn>
+
+              <v-btn v-if="item.is_approved === 0" small color="success" @click="approveDeferment(item)">
+                Approve
+              </v-btn>
+
+              <v-btn v-else-if="item.is_approved === 1" small color="primary" @click="reinstateDeferment(item)">
+                Reinstate
+              </v-btn>
+
             </template>
           </v-data-table>
           <v-pagination v-model="page" :length="pageCount" @input="getResults" />
@@ -68,7 +76,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-       
+
             console.log('Data: ', item.student_id)
             axios
               .post('/api/approve-deferment/' + item.student_id)
@@ -98,12 +106,55 @@ export default {
         })
     },
 
+
+    reinstateDeferment(item){
+      swal
+        .fire({
+          title: 'Are you sure?',
+          text: 'Do you want to Reinstate Student',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes!',
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+
+            console.log('Data: ', item.student_id)
+            axios
+              .post('/api/reinstate/' + item.student_id)
+              .then(result => {
+
+                // show success alert
+                swal.fire({
+                  title: 'Success!',
+                  text: 'Reinstated successfully.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                })
+              })
+              .then(res => {
+                this.getResults()
+              })
+              .catch(error => {
+                // show error alert
+                swal.fire({
+                  title: 'Error!',
+                  text: 'Failed to Reinstate.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                })
+              })
+          }
+        })
+    },
     getResults() {
       axios
         .get('/api/registrar-deferments')
         .then(response => {
           this.deferments = response.data.result.data
-          console.log('', this.deferments)
+          console.log('data: ', this.deferments)
           this.pageCount = response.data.result.last_page
         })
         .catch(err => {

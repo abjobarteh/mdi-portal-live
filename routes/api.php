@@ -74,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ///////////////////////////////////  REGISTRAR END POINTS  ////////////////////////////
     Route::middleware(['registrar-admin'])->group(function () {
 
-        Route::post('/update-student-grades', [CourseController::class,  'updateStudentMark']);
+        Route::post('/update-student-grades', [CourseController::class, 'updateStudentMark']);
         Route::get('/matriculation-status', [MatriculationStatusController::class, 'index']);
         //   Route::get('/get-matnumber/{id}', [MatriculationStatusController::class, 'getmat_number']);
         Route::post('/update-matriculation', [MatriculationStatusController::class, 'updateMatriculationStatus']);
@@ -162,6 +162,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/registrar-deferments', [RegistrarDefermentController::class, 'index']);
 
         Route::post('/approve-deferment/{id}', [RegistrarDefermentController::class, 'approveDeferment']);
+        Route::post('/reinstate/{id}', [RegistrarDefermentController::class, 'reinstate']);
     });
 
 
@@ -182,7 +183,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/announce-student', [ApplicationsController::class, 'studentannouncement']);
         Route::post('/announce-applicant', [ApplicationsController::class, 'applicantannouncement']);
         Route::post('/announce-lecturer', [ApplicationsController::class, 'lecturerannouncement']);
-        Route::post('/new-program',[ApplicationsController::class,'new']);
+        Route::post('/new-program', [ApplicationsController::class, 'new']);
         Route::get('/search-incoming-applicant', [ApplicationsController::class, 'searchIncomingApplicant']);
         Route::get('/search-accepted-applicant', [ApplicationsController::class, 'searchAcceptedapplicant']);
         Route::get('/search-rejected-applicant', [ApplicationsController::class, 'searchRejectedapplicant']);
@@ -199,7 +200,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::put('/block-user/{id}', [UserController::class, 'blockUser']);
         Route::put('/update-user/{id}', [UserController::class, 'update']);
         Route::put('/update-account-info/{id}', [UserController::class, 'updateaccountsettings']);
-      
+
         // Route::put('/unblock-user/{id}', [UserController::class, 'unBlockUser']);
         Route::get('/view-roles', [RolesController::class, 'index']);
         Route::get('/view-activities', [LogController::class, 'index']);
@@ -326,21 +327,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
-        
+
         // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
         Route::get('/view-student-payments', [StudentPaymentController::class, 'studentPayments']);
         Route::get('/view-program-durations', [ProgramDurationController::class, 'index']);
     });
- 
-   
+
+
 
 
     Route::middleware(['lecturer'])->group(function () {
 
         Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']);
         Route::get('/my-semester-courses', [MyCoursesController::class, 'courses']);
-        Route::post('/upload-lecturer-files', [MyCoursesController::class,  'uploadLecturerFiles']);
+        Route::post('/upload-lecturer-files', [MyCoursesController::class, 'uploadLecturerFiles']);
         Route::get('/my-courses', [StudentMarksController::class, 'myCourses']);
         Route::post('/save-student-test-marks', [StudentMarksController::class, 'takeTestMark']);
         Route::post('/save-student-exam-marks-and-submit', [StudentMarksController::class, 'saveExamMarkAndSubmit']);
@@ -349,7 +350,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    Route::post('/lecturer-files', [MyCoursesController::class,  'index']);
+    Route::post('/lecturer-files', [MyCoursesController::class, 'index']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

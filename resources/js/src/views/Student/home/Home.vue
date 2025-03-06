@@ -138,6 +138,50 @@
           </v-col>
         </v-row>
       </v-container>
+      
+      <v-container
+        v-else-if="
+          studentInfo.is_applicant == 1 &&
+          studentInfo.verified_at != null &&
+          studentInfo.application_completed == 1 && // completed by the user
+          studentInfo.accepted == 'rejected' // this is by the registrar
+        "
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style="margin-left: 22%; font-weight: bold">
+                Sorry Rejected
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-container
+        v-else-if="
+          studentInfo.is_applicant == 0 &&
+          studentInfo.verified_at != null &&
+          studentInfo.application_completed == 1 && // completed by the user
+          studentInfo.accepted == 'deferred' // this is by the registrar
+        "
+        class="d-flex justify-center align-center"
+        fill-height
+        style="background-color: #eae4f0"
+      >
+        <v-row align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div outlined class="text-center">
+              <v-card-title class="headline text-center mb-5" style=" font-weight: bold">
+               Your Deferment Request Has Been Approved !! To Be Re-instated Please Head Over To The Registry Office
+              </v-card-title>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
 
       <v-container
         v-else-if="
@@ -228,7 +272,7 @@ export default {
   watch: {
     getUserProfile: function () {
       this.studentInfo = this.getUserProfile
-      console.log(this.studentInfo)
+      console.log('Student Info',this.studentInfo)
       this.profile = {
         ...this.studentInfo,
         phone: this.studentInfo.phonenumber,

@@ -22,13 +22,14 @@ class RegistrarDefermentController extends Controller
             ->join('programs', 'students.program_id', '=', 'programs.id')
             ->select(
                 'deferments.student_id',
+                'deferments.is_approved',
                 'deferments.deferment_reason',
                 DB::raw("CONCAT(students.firstname, ' ', COALESCE(students.middlename, ''), ' ', students.lastname) as fullname"),
                 'students.mat_number',
                 'programs.name',
                 'semesters.semester_name'
             )
-            ->where('deferments.is_approved', 0)
+            
             ->paginate(13);
         return response()->json([
             'status' => 200,
@@ -77,10 +78,29 @@ class RegistrarDefermentController extends Controller
         StudentRegisteredCourse::where('student_id', Deferment::where('id', $id)->value('student_id'))
             ->where('semester_id', $currentSemesterId)
             ->delete();
+
+            Student::where('id',$id)->update([
+                'accepted' => 'deferred'
+            ]);
+    
         // 2. check if the student have made payment for this semester or full course payment, if yes then refund
         return response()->json([
             'status' => 200,
-            'result' => "updated successfully"
+            'result' => "Defered  Successfully"
+        ]);
+    }
+
+    public function reinstate($id){
+        
+        Deferment::where('student_id',$id)->delete();
+
+        Student::where('id',$id)->update([
+            'accepted' => 'accepted'
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'result' => "Reinstated Successfully"
         ]);
     }
 }
