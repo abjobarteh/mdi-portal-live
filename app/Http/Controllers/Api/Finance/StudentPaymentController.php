@@ -148,7 +148,7 @@ class StudentPaymentController extends Controller
                 case 9:
                     $department = Department::where('name', 'like', '%' . $advanceSearch . '%')->first(); // Adjust the column if needed
                     if ($department) {
-                        $query->where('department_id', '=',  $department->id);
+                        $query->where('department_id', '=', $department->id);
                     }
                     break;
                 default:
@@ -242,17 +242,12 @@ class StudentPaymentController extends Controller
         $waive = Student::where('id', $studentId)->value('waive');
 
         // Check if the waive status was found
-        if ($waive !== null) {
-            return response()->json([
-                'status' => 200,
-                'result' => $waive
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Student not found'
-            ], 404);
-        }
+
+        return response()->json([
+            'status' => 200,
+            'result' => $waive
+        ]);
+
     }
     public function viewSemesters(Request $request)
     {
@@ -350,32 +345,32 @@ class StudentPaymentController extends Controller
                 'semester_fee_completed' => 1
             ]);
         } /*else if (
-            
-            ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'])
-        ) {
-            if (is_null($studentPayment)) {
-                StudentPayment::create([
-                    'student_id' => $validatedData['student_id'],
-                    'semester_id' => $validatedData['semester_id'],
-                    'amount_paid' => $validatedData['amount_paid'],
-                    'payment_type' => 'Per semester installment',
-                    'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
-                ]);
-            } else if ($validatedData['amount_paid'] > $studentPayment['semester_fee_balance']) {
-                return response()->json(['message' => 'Please you should only pay ' .  'D' . $studentPayment['semester_fee_balance'] . ' to complete your balance'], 422);
-            } else if ($validatedData['amount_paid'] == $studentPayment['semester_fee_balance']) {
-                $studentPayment->update([
-                    'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
-                    'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
-                    'semester_fee_completed' => 1,
-                ]);
-            } else {
-                $studentPayment->update([
-                    'semester_fee_balance' => ($studentPayment['semester_fee_balance'] - $validatedData['amount_paid']),
-                    'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
-                ]);
-            }
-        } */ else if ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'] || $validatedData['amount_paid'] < $studentDepartmentFee->fee) {
+           
+           ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'])
+       ) {
+           if (is_null($studentPayment)) {
+               StudentPayment::create([
+                   'student_id' => $validatedData['student_id'],
+                   'semester_id' => $validatedData['semester_id'],
+                   'amount_paid' => $validatedData['amount_paid'],
+                   'payment_type' => 'Per semester installment',
+                   'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
+               ]);
+           } else if ($validatedData['amount_paid'] > $studentPayment['semester_fee_balance']) {
+               return response()->json(['message' => 'Please you should only pay ' .  'D' . $studentPayment['semester_fee_balance'] . ' to complete your balance'], 422);
+           } else if ($validatedData['amount_paid'] == $studentPayment['semester_fee_balance']) {
+               $studentPayment->update([
+                   'semester_fee_balance' => ($studentDepartmentFee['per_semester_fee'] - $validatedData['amount_paid']),
+                   'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
+                   'semester_fee_completed' => 1,
+               ]);
+           } else {
+               $studentPayment->update([
+                   'semester_fee_balance' => ($studentPayment['semester_fee_balance'] - $validatedData['amount_paid']),
+                   'amount_paid' => $studentPayment['amount_paid'] + $validatedData['amount_paid'],
+               ]);
+           }
+       } */ else if ($validatedData['amount_paid'] < $studentDepartmentFee['per_semester_fee'] || $validatedData['amount_paid'] < $studentDepartmentFee->fee) {
             StudentPayment::create([
                 'student_id' => $validatedData['student_id'],
                 'semester_id' => $validatedData['semester_id'],

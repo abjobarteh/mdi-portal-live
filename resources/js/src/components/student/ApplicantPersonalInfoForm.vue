@@ -8,7 +8,7 @@
         </v-card-title>
         <v-card-title>
       
-          <strong><span class="headline font-weight-medium" style="font-size: 15px;">  Upload Passport Size  (Any Other Photo Form Shall Result To Automatic Rejection) </span></strong>  
+          <strong><span class="headline font-weight-medium" style="font-size: 15px;">  Upload Passport Size  (Any Other Photo Form Shall Result To Automatic Rejection)!! DO NOT UPLOAD SELFIES  </span></strong>  
         </v-card-title>
 
         <v-row>

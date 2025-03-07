@@ -32,14 +32,7 @@ export default {
   data() {
     return {
       registrationStatus: '',
-      waivestatus: '',
       studentInfo: '',
-      waivestudents: [],
-      waiveData: {
-        amount_paid: '',
-        semester_id: '',
-        student_id: '',
-      },
       headers: [
         { text: 'Course Code', value: 'course_code' },
         { text: 'Course Name', value: 'course_name' },
@@ -52,52 +45,27 @@ export default {
   },
 
   created() {
+    axios.get('/api/registerd-courses').then(response => {
+      console.log('response ', response)
+    })
 
-    this.waiveData.student_id = this.studentInfo.id
-    this.fetchData();
-
-
-    console.log('View', this.getUserProfile.id)
-
+    axios
+      .get('/api/registration-status')
+      .then(response => {
+        this.registrationStatus = response.data.result.registration_status
+        console.log('running courses', this.runnings)
+        this.pageCount = response.data.result.last_page
+      })
+      .catch(err => {
+        this.runnings = []
+        this.pageCount = 0
+      })
   },
 
   methods: {
-    async fetchData() {
-      try {
-        this.waiveData.student_id = this.studentInfo.id;
-
-        // Fetch waive data
-        const waiveResponse = await axios.get('/api/get-waive', {
-          params: {
-            student_id: this.getUserProfile.id,
-          },
-        });
-        this.waivestatus = waiveResponse.data.result;
-        console.log('Waive Data:', this.waivestatus);
-
-        // Fetch registration status
-        const registrationResponse = await axios.get('/api/registration-status');
-        this.registrationStatus = registrationResponse.data.result.registration_status;
-        console.log('Registration Status:', this.registrationStatus);
-
-        // Fetch registered courses
-        const registeredCoursesResponse = await axios.get('/api/registerd-courses');
-        console.log('Registered Courses:', registeredCoursesResponse);
-
-        // Set loading to false once all data is fetched
-        this.loading = false;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Set loading to false even if there's an error so the UI doesn't stay stuck
-        this.loading = false;
-      }
-    },
-
     handleCheckboxChange(item) {
-      console.log(item);
-      this.fetchData();
-
-      if (this.waivestatus == 0) {
+      console.log('Check', item.waivestatus)
+      if (item.waivestatus == 0) {
         swal
           .fire({
             title: 'Error!',
@@ -109,29 +77,25 @@ export default {
             // Uncheck the checkbox by directly setting the model value to false
             item.course.registered = false;
           });
-      } else
-
-
-        if (this.registrationStatus == 0) {
-          console.log('See: ', this.registrationStatus)
-          swal
-            .fire({
-              title: 'Error!',
-              text: 'Registration Period Is Closed. Therefore You Cannot Register For Any Course.',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            })
-            .then(() => {
-              // Uncheck the checkbox by directly setting the model value to false
-              item.course.registered = false;
-            });
-        } else if (item.course.registered) {
-          this.showConfirmationDialog(item, 'Check');
+      } else if (item.registration_status == 0) {
+        swal
+          .fire({
+            title: 'Error!',
+            text: 'Registration Period Is Closed. Therefore You Cannot Register For Any Course.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            // Uncheck the checkbox by directly setting the model value to false
+            item.course.registered = false;
+          });
+      }
+      else
+        if (item.course.registered) {
+          this.showConfirmationDialog(item, 'Check')
         } else {
-          this.showRemoveConfirmationDialog(item, 'Uncheck');
+          this.showRemoveConfirmationDialog(item, 'Uncheck')
         }
-    }
-    ,
+    },
 
     showConfirmationDialog(item, action) {
       console.log('id ', item)
@@ -171,19 +135,15 @@ export default {
                   })
               })
               .catch(error => {
+                console.log(error.response.data.message)
+
                 // show error alert
-                swal
-                  .fire({
-                    title: 'Error!',
-                    text: error.response.data.message,
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                  })
-                  .then(() => {
-                    {
-                      window.location.reload() // this sometimes causes 419
-                    }
-                  })
+                swal.fire({
+                  title: 'Error!',
+                  text: error.response.data.message,
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                })
               })
           } else {
             // Checkbox state is reverted if confirmation is canceled
@@ -239,7 +199,7 @@ export default {
               })
           } else {
             // Checkbox state is reverted if confirmation is canceled
-            item.course.registered = false;
+            item.course.registered = true;
           }
         })
     },
@@ -259,6 +219,10 @@ export default {
       //final output from here
       return this.$store.getters.getUserProfile
     },
+  },
+
+  mounted() {
+    console.log('props running courses', this.runnings)
   },
 }
 </script>

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Deferment;
 use App\Models\GradingSystem;
 use App\Models\Program;
+use App\Models\RegistrationStatus;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
 use App\Models\Student;
@@ -228,6 +229,15 @@ class CourseController extends Controller
         // return $courseId;
 
         foreach ($runningCourses as $runningCourse) {
+
+            $waivestatus = Student::where('user_id',auth()->user()->id)->value('waive');
+
+            $admissionStatus = RegistrationStatus::all()->pluck('registration_status');
+           
+
+            $runningCourse["waivestatus"] = $waivestatus;
+            $runningCourse["registration_status"] = $admissionStatus;
+
             $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
             $courseId = Student::join('student_registered_courses', 'students.id', '=', 'student_registered_courses.student_id')
                 ->where('students.user_id', auth()->user()->id)->where('course_id', $runningCourse['course_id'])->where('student_registered_courses.semester_id', $currentSemesterId)->value('course_id');
@@ -240,6 +250,7 @@ class CourseController extends Controller
             } else if (StudentPayment::where('semester_id', $current_semester)->where('student_id', $student_id)->exists() || ((Student::where('user_id', auth()->user()->id)->value('payment_type') == 1 || Student::where('user_id', auth()->user()->id)->value('is_sponsored') == 1) && Student::where('user_id', auth()->user()->id)->value('remaining') != 0)) {
                 // can register
                 $runningCourse["can_register"] = true;
+
             } else {
                 $runningCourse["can_register"] = false;
             }
