@@ -17,7 +17,14 @@
         </div>
       </template>
       <template v-slot:item.student_count="{ item }">
-        {{ item.student_count }}
+        {{ item.male_student_count + item.female_student_count  }}
+      </template>
+      <template v-slot:item.male_student_count="{ item }">
+        {{ item.male_student_count }}
+      </template>
+
+      <template v-slot:item.female_student_count="{ item }">
+        {{ item.female_student_count }}
       </template>
       <template v-slot:no-data>
         <span>No department data available.</span>
@@ -64,6 +71,8 @@ export default {
     return {
       lecturers: [],
       counts: [],
+      malecounts: [],
+      femalecounts: [],
       headers: [
         { text: 'Name', value: 'fullname' },
         { text: 'PhoneNumber', value: 'phonenumber' },
@@ -72,23 +81,38 @@ export default {
       deptheaders: [
         { text: 'Department', value: 'department_name' },
         { text: 'Total Number Of Students', value: 'student_count' },
+        { text: 'Total Number Of Male Students', value: 'male_student_count' },
+        { text: 'Total Number Of Female Students', value: 'female_student_count' },
       ]
     }
   },
 
   methods: {
     fetchStatusCounts() {
-      axios
-        .get('/api/user-counts')
+      axios.get('/api/user-counts')
         .then(response => {
-          this.lecturers = response.data.lecturersWithMostCourses
-          this.counts = response.data.departmentCount
-          console.log('Lecturers ', this.lecturers)
-          console.log('DeptCount ', response.data.departmentCount)
+          const departments = response.data.departmentCount;
+          const maleCounts = response.data.maledepartmentCount;
+          const femaleCounts = response.data.femaledepartmentCount;
+
+          // Merge male and female counts into the main department count array
+          this.counts = departments.map(dept => {
+            const maleDept = maleCounts.find(m => m.department_name === dept.department_name);
+            const femaleDept = femaleCounts.find(f => f.department_name === dept.department_name);
+
+            return {
+              ...dept,
+              male_student_count: maleDept ? maleDept.male_student_count : 0,
+              female_student_count: femaleDept ? femaleDept.female_student_count : 0,
+            };
+          });
+
+          this.lecturers = response.data.lecturersWithMostCourses;
+          console.log('Merged Department Data:', this.counts);
         })
         .catch(error => {
-          console.error('Error fetching status counts:', error)
-        })
+          console.error('Error fetching status counts:', error);
+        });
     },
   },
 

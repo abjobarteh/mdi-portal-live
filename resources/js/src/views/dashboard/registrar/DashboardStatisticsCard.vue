@@ -13,7 +13,7 @@
     <v-card-text>
       <v-row>
         <!-- First instance -->
-        <v-col cols="6" md="3" class="d-flex align-center">
+        <v-col cols="6" md="4" class="d-flex align-center">
           <v-avatar
             size="44"
             :color="resolveStatisticsIconVariation(statisticsData[0].title).color"
@@ -35,7 +35,7 @@
         </v-col>
 
         <!-- Second instance -->
-        <v-col cols="6" md="3" class="d-flex align-center">
+        <v-col cols="6" md="4" class="d-flex align-center">
           <v-avatar
             size="44"
             :color="resolveStatisticsIconVariation(statisticsData[1].title).color"
@@ -57,7 +57,7 @@
         </v-col>
 
         <!-- Third instance -->
-        <v-col cols="6" md="3" class="d-flex align-center">
+        <v-col cols="6" md="4" class="d-flex align-center">
           <v-avatar
             size="44"
             :color="resolveStatisticsIconVariation(statisticsData[2].title).color"
@@ -79,7 +79,7 @@
         </v-col>
 
         <!-- Fourth instance -->
-        <v-col cols="6" md="3" class="d-flex align-center">
+        <v-col cols="6" md="4" class="d-flex align-center">
           <v-avatar
             size="44"
             :color="resolveStatisticsIconVariation(statisticsData[3].title).color"
@@ -96,6 +96,45 @@
             </p>
             <h3 class="text-xl font-weight-semibold">
               {{ statisticsData[3].total }}
+            </h3>
+          </div>
+        </v-col>
+        <v-col cols="6" md="4" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[3].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[3].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[4].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ statisticsData[4].total }}
+            </h3>
+          </div> </v-col
+        ><v-col cols="6" md="4" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[4].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[4].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[5].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ statisticsData[5].total }}
             </h3>
           </div>
         </v-col>
@@ -126,6 +165,14 @@ export default {
         },
         {
           title: 'Rejected Students',
+          total: '88',
+        },
+        {
+          title: 'Male Students',
+          total: '88',
+        },
+        {
+          title: 'Female Students',
           total: '88',
         },
       ],
@@ -159,6 +206,8 @@ export default {
           this.statisticsData[1].total = response.data.activeStudents
           this.statisticsData[2].total = response.data.acceptedStudents
           this.statisticsData[3].total = response.data.rejectedStudents
+          this.statisticsData[4].total = response.data.maleStudents
+          this.statisticsData[5].total = response.data.femaleStudents
         })
         .catch(error => {
           console.error('Error fetching status counts:', error)

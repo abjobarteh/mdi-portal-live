@@ -85,8 +85,20 @@ class DashboardController extends Controller
     {
         $acceptedStudents = Student::where('accepted', 'accepted')->count();
         $rejectedStudents = Student::where('accepted', 'rejected')->count();
-        $maleStudents = Student::where('accepted', 'accepted')->where('gender', 'male')->count();
-        $femaleStudents = Student::where('accepted', 'accepted')->where('gender', 'female')->count();
+
+        $maleStudents = Student::where('accepted', 'accepted')
+            ->where(function ($query) {
+                $query->where('gender', 'Male')
+                    ->orWhere('gender', 'male');
+            })
+            ->count();
+
+        $femaleStudents = Student::where('accepted', 'accepted')
+            ->where(function ($query) {
+                $query->where('gender', 'Female')
+                    ->orWhere('gender', 'female');
+            })
+            ->count();
 
         $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
 
@@ -133,14 +145,34 @@ class DashboardController extends Controller
             ->take(5) // Limit the results to the first 5 lecturers
             ->get();
 
-            $departmentCount = DB::select("
+        $departmentCount = DB::select("
             SELECT b.name AS department_name, COUNT(a.id) AS student_count
             FROM students a
             JOIN departments b ON a.department_id = b.id
             WHERE a.accepted = 'accepted'
             GROUP BY b.name
-            ORDER BY b.name
-        ");
+            ORDER BY b.name");
+
+
+        $maledepartmentCount = DB::select("
+            SELECT b.name AS department_name, COUNT(a.id) AS male_student_count
+            FROM students a
+            JOIN departments b ON a.department_id = b.id
+            WHERE a.accepted = 'accepted'
+            and a.gender = 'Male' or a.gender = 'male'
+            GROUP BY b.name
+            ORDER BY b.name");
+
+
+
+        $femaledepartmentCount = DB::select("
+            SELECT b.name AS department_name, COUNT(a.id) AS female_student_count
+            FROM students a
+            JOIN departments b ON a.department_id = b.id
+            WHERE a.accepted = 'accepted'
+            and a.gender = 'female' or a.gender = 'Female'
+            GROUP BY b.name
+            ORDER BY b.name");
 
         return response()->json([
             'acceptedStudents' => $acceptedStudents,
@@ -151,7 +183,9 @@ class DashboardController extends Controller
             'activeLecturers' => $activeLecturers, // lecturers who have taken courses this semester
             'weekyStudentLogins' => $counts,
             'lecturersWithMostCourses' => $lecturersWithMostCourses,
-            'departmentCount' => $departmentCount
+            'departmentCount' => $departmentCount,
+            'maledepartmentCount' => $maledepartmentCount,
+            'femaledepartmentCount' => $femaledepartmentCount
         ]);
     }
 
