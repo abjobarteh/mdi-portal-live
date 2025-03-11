@@ -113,6 +113,7 @@ export default {
       axios
         .post('/api/view-incoming-applications?page=' + this.page)
         .then(response => {
+          
           this.incomingApplications = response.data.result.data
           this.pageCount = response.data.result.last_page
         })
@@ -146,6 +147,7 @@ export default {
           if (response.data.result) {
             this.incomingApplications = response.data.result.data;
             this.pageCount = response.data.result.last_page;
+            console.log('Performing advanced search...look',this.incomingApplications);
           } else {
             this.students = [];
             this.pageCount = 0;

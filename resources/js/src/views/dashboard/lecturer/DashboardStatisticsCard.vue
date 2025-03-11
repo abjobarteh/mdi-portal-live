@@ -55,6 +55,49 @@
             </h3>
           </div>
         </v-col>
+
+        <v-col cols="6" md="3" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[2].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[2].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[2].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ mymalecount }}
+            </h3>
+          </div>
+        </v-col>
+
+         <v-col cols="6" md="3" class="d-flex align-center">
+          <v-avatar
+            size="44"
+            :color="resolveStatisticsIconVariation(statisticsData[3].title).color"
+            rounded
+            class="elevation-1"
+          >
+            <v-icon dark color="white" size="30">
+              {{ resolveStatisticsIconVariation(statisticsData[3].title).icon }}
+            </v-icon>
+          </v-avatar>
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ statisticsData[3].title }}
+            </p>
+            <h3 class="text-xl font-weight-semibold">
+              {{ myfemalecount }}
+            </h3>
+          </div>
+        </v-col>
+
       </v-row>
     </v-card-text>
   </v-card>
@@ -68,6 +111,8 @@ export default {
   data() {
     return {
       myStudentCount: '',
+      mymalecount: '',
+      myfemalecount: '',
       coursesCount: '',
 
       statisticsData: [
@@ -77,6 +122,14 @@ export default {
         },
         {
           title: 'Active students',
+          total: '12.5',
+        },
+        {
+          title: 'Total Male Students',
+          total: '245',
+        },
+        {
+          title: 'Active Female Students',
           total: '12.5',
         },
       ],
@@ -108,6 +161,8 @@ export default {
         .then(response => {
           this.courses = response.data.myCourses.data
           this.myStudentCount = response.data.myStudents
+          this.mymalecount = response.data.mymalestudents.length > 0 ? response.data.mymalestudents[0].malecount : 0;
+          this.myfemalecount = response.data.myfemalestudents.length > 0 ? response.data.myfemalestudents[0].femalecount : 0;
           this.coursesCount = response.data.myCourses.data.length
           console.log('count', this.myStudentCount)
         })

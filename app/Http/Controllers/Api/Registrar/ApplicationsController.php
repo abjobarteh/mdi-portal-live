@@ -38,7 +38,7 @@ class ApplicationsController extends Controller
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             // ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name','students.middlename')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name', 'students.middlename')
 
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'accepted')
@@ -61,7 +61,7 @@ class ApplicationsController extends Controller
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             // ->select('users.*', 'students.gender', 'students.id',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name','students.middlename')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name', 'students.middlename')
 
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'accepted')
@@ -101,7 +101,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
-            ->select('users.*', 'students.gender', 'students.profile_image', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name','students.middlename')
+            ->select('users.*', 'students.gender', 'students.profile_image', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name', 'students.middlename')
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'rejected')
             ->paginate(15);
@@ -122,7 +122,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.semester_name','students.middlename')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.semester_name', 'students.middlename')
             ->where('role_id', 4)
             ->where('application_completed', 1)->where('accepted', 'rejected')->where('students.user_id', $id)
             ->paginate(15);
@@ -143,7 +143,7 @@ class ApplicationsController extends Controller
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
-            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name','students.middlename')
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name', 'students.middlename')
             ->where('role_id', 4)
             ->where('application_completed', 1)
             ->where('accepted', 'pending')
@@ -248,84 +248,118 @@ class ApplicationsController extends Controller
 
     public function searchIncomingapplicant(Request $request)
     {
-        if (!$request->has('selectedItem') || !$request->has('advanceSearch')) {
-            return response()->json(['error' => 'Invalid search parameters'], 400);
-        }
+        $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
+            ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
+            ->leftJoin('programs', 'students.program_id', '=', 'programs.id')
+            ->select(
+                'users.*',
+                'students.gender',
+                'students.id AS studentId',
+                'students.phonenumber',
+                'students.dob',
+                'students.address',
+                'students.nationality',
+                'students.email',
+                'students.employment_status',
+                'students.user_id',
+                'students.is_applicant',
+                'programs.name as program_name',
+                'students.profile_image',
+                'students.application_completed',
+                'students.personal_info_completed',
+                'students.accepted',
+                'admission_code_verifications.verified_at',
+                'students.eme_name',
+                'students.eme_numbr',
+                'students.employee',
+                'students.empaddr',
+                'students.empcontact',
+                'students.semester_name',
+                'students.middlename'
+            )
+            ->where('role_id', 4)
+            ->where('application_completed', 1)
+            ->where('accepted', 'pending')
+            ->when($request->has('userId'), function ($query) use ($request) {
+                $query->where('users.id', $request->userId);
+            })
+            ->when($request->has('selectedItem') && $request->has('advanceSearch'), function ($query) use ($request) {
+                $searchColumnMap = [
+                    1 => 'users.username',
+                    2 => 'students.firstname',
+                    3 => 'students.middlename',
+                    4 => 'students.lastname',
+                    5 => 'students.email',
+                    6 => 'students.semester_name',
+                ];
 
-        $query = Student::where('application_completed', 1)
-            ->where('accepted', 'pending');
-
-        $selectedItem = $request->input('selectedItem');
-        $advanceSearch = $request->input('advanceSearch');
-
-        switch ($selectedItem) {
-            case 1:
-                $query->where('username', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 2:
-                $query->where('firstname', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 3:
-                $query->where('middlename', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 4:
-                $query->where('lastname', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 5:
-                $query->where('email', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 6:
-                $query->where('semester_name', 'like', '%' . $advanceSearch . '%');
-                break;
-            default:
-                return response()->json(['error' => 'Invalid search type'], 400);
-        }
-
-        $students = $query->paginate(13); // Paginate results
+                if (isset($searchColumnMap[$request->selectedItem])) {
+                    $query->where($searchColumnMap[$request->selectedItem], 'like', '%' . $request->advanceSearch . '%');
+                }
+            })
+            ->paginate(13);
 
         return response()->json([
             'status' => 200,
             'result' => $students
         ]);
+
     }
 
 
 
     public function searchAcceptedapplicant(Request $request)
     {
-        if (!$request->has('selectedItem') || !$request->has('advanceSearch')) {
-            return response()->json(['error' => 'Invalid search parameters'], 400);
-        }
+        $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
+            ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
+            ->leftJoin('programs', 'students.program_id', '=', 'programs.id')
+            ->select(
+                'users.*',
+                'students.gender',
+                'students.id AS studentId',
+                'students.phonenumber',
+                'students.dob',
+                'students.address',
+                'students.nationality',
+                'students.email',
+                'students.employment_status',
+                'students.user_id',
+                'students.is_applicant',
+                'programs.name as program_name',
+                'students.profile_image',
+                'students.application_completed',
+                'students.personal_info_completed',
+                'students.accepted',
+                'admission_code_verifications.verified_at',
+                'students.eme_name',
+                'students.eme_numbr',
+                'students.employee',
+                'students.empaddr',
+                'students.empcontact',
+                'students.semester_name',
+                'students.middlename'
+            )
+            ->where('role_id', 4)
+          
+            ->where('application_completed', 1)->where('accepted', 'accepted')
+            ->when($request->has('userId'), function ($query) use ($request) {
+                $query->where('users.id', $request->userId);
+            })
+            ->when($request->has('selectedItem') && $request->has('advanceSearch'), function ($query) use ($request) {
+                $searchColumnMap = [
+                    1 => 'users.username',
+                    2 => 'students.firstname',
+                    3 => 'students.middlename',
+                    4 => 'students.lastname',
+                    5 => 'students.email',
+                    6 => 'students.semester_name',
+                ];
 
-        $query = Student::where('application_completed', 1)->where('accepted', 'accepted');
-
-        $selectedItem = $request->input('selectedItem');
-        $advanceSearch = $request->input('advanceSearch');
-
-        switch ($selectedItem) {
-            case 1:
-                $query->where('username', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 2:
-                $query->where('firstname', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 3:
-                $query->where('middlename', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 4:
-                $query->where('lastname', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 5:
-                $query->where('email', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 6:
-                $query->where('semester_name', 'like', '%' . $advanceSearch . '%');
-                break;
-            default:
-                return response()->json(['error' => 'Invalid search type'], 400);
-        }
-
-        $students = $query->paginate(13); // Paginate results
+                if (isset($searchColumnMap[$request->selectedItem])) {
+                    $query->where($searchColumnMap[$request->selectedItem], 'like', '%' . $request->advanceSearch . '%');
+                }
+            })
+            ->paginate(13);
 
         return response()->json([
             'status' => 200,
@@ -338,39 +372,56 @@ class ApplicationsController extends Controller
 
     public function searchRejectedapplicant(Request $request)
     {
-        if (!$request->has('selectedItem') || !$request->has('advanceSearch')) {
-            return response()->json(['error' => 'Invalid search parameters'], 400);
-        }
+        $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
+            ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
+            ->leftJoin('programs', 'students.program_id', '=', 'programs.id')
+            ->select(
+                'users.*',
+                'students.gender',
+                'students.id AS studentId',
+                'students.phonenumber',
+                'students.dob',
+                'students.address',
+                'students.nationality',
+                'students.email',
+                'students.employment_status',
+                'students.user_id',
+                'students.is_applicant',
+                'programs.name as program_name',
+                'students.profile_image',
+                'students.application_completed',
+                'students.personal_info_completed',
+                'students.accepted',
+                'admission_code_verifications.verified_at',
+                'students.eme_name',
+                'students.eme_numbr',
+                'students.employee',
+                'students.empaddr',
+                'students.empcontact',
+                'students.semester_name',
+                'students.middlename'
+            )
+            ->where('role_id', 4)
+            ->where('application_completed', 1)
+            ->where('accepted', 'rejected')
+            ->when($request->has('userId'), function ($query) use ($request) {
+                $query->where('users.id', $request->userId);
+            })
+            ->when($request->has('selectedItem') && $request->has('advanceSearch'), function ($query) use ($request) {
+                $searchColumnMap = [
+                    1 => 'users.username',
+                    2 => 'students.firstname',
+                    3 => 'students.middlename',
+                    4 => 'students.lastname',
+                    5 => 'students.email',
+                    6 => 'students.semester_name',
+                ];;
 
-        $query = Student::where('application_completed', 1)->where('accepted', 'rejected');
-
-        $selectedItem = $request->input('selectedItem');
-        $advanceSearch = $request->input('advanceSearch');
-
-        switch ($selectedItem) {
-            case 1:
-                $query->where('username', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 2:
-                $query->where('firstname', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 3:
-                $query->where('middlename', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 4:
-                $query->where('lastname', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 5:
-                $query->where('email', 'like', '%' . $advanceSearch . '%');
-                break;
-            case 6:
-                $query->where('semester_name', 'like', '%' . $advanceSearch . '%');
-                break;
-            default:
-                return response()->json(['error' => 'Invalid search type'], 400);
-        }
-
-        $students = $query->paginate(13); // Paginate results
+                if (isset($searchColumnMap[$request->selectedItem])) {
+                    $query->where($searchColumnMap[$request->selectedItem], 'like', '%' . $request->advanceSearch . '%');
+                }
+            })
+            ->paginate(13);
 
         return response()->json([
             'status' => 200,
@@ -518,7 +569,7 @@ class ApplicationsController extends Controller
         // Generate the complete student number
         $studentNumber = $currentYear . $fifthDigit . sprintf('%04d', $lastNumber);
 
-        
+
         if (Student::where('mat_number', $studentNumber)->exists()) {
             $studentNumber = $currentYear . '1' . $fifthDigit . sprintf('%04d', $lastNumber);
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Registrar;
 
 use App\Http\Controllers\Controller;
+use App\Mail\DeferrmentMail;
 use App\Models\Deferment;
 use App\Models\Program;
 use App\Models\Semester;
@@ -11,6 +12,7 @@ use App\Models\StudentPayment;
 use App\Models\StudentRegisteredCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrarDefermentController extends Controller
 {
@@ -29,7 +31,7 @@ class RegistrarDefermentController extends Controller
                 'programs.name',
                 'semesters.semester_name'
             )
-            
+
             ->paginate(13);
         return response()->json([
             'status' => 200,
@@ -59,7 +61,8 @@ class RegistrarDefermentController extends Controller
                 } else {
                     // Handle the case where program fee is null
                 }
-            } elseif (($studentPayment->semester_id != $currentSemesterId && $studentPayment->payment_type == 'Full Course Payment') ||
+            } elseif (
+                ($studentPayment->semester_id != $currentSemesterId && $studentPayment->payment_type == 'Full Course Payment') ||
                 Student::where('id', Deferment::where('id', $id)->value('student_id'))->value('is_sponsored') == 1
             ) {
                 // his remaining balance will be added by the per_semester_fee ie he paid but not this semester
@@ -79,10 +82,10 @@ class RegistrarDefermentController extends Controller
             ->where('semester_id', $currentSemesterId)
             ->delete();
 
-            Student::where('id',$id)->update([
-                'accepted' => 'deferred'
-            ]);
-    
+        Student::where('id', $id)->update([
+            'accepted' => 'deferred'
+        ]);
+
         // 2. check if the student have made payment for this semester or full course payment, if yes then refund
         return response()->json([
             'status' => 200,
@@ -90,13 +93,24 @@ class RegistrarDefermentController extends Controller
         ]);
     }
 
-    public function reinstate($id){
-        
-        Deferment::where('student_id',$id)->delete();
+    public function reinstate($id)
+    {
 
-        Student::where('id',$id)->update([
+        // Deferment::where('student_id',$id)->delete();
+
+        Student::where('id', $id)->update([
             'accepted' => 'accepted'
         ]);
+
+        Deferment::where('student_id',$id)->update([
+            
+             'is_approved' => '2'
+        ]);
+
+        $student = Student::findOrFail($id);
+        $fullname = $student->firstname . ' ' . $student->middlename . ' ' . $student->lastname;
+
+        Mail::to($student->email)->send(new DeferrmentMail($student->id, $fullname, $student->mat_number));
 
         return response()->json([
             'status' => 200,

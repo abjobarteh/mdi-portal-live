@@ -129,7 +129,7 @@ export default {
                 // show success alert
                 swal.fire({
                   title: 'Success!',
-                  text: 'Reinstated successfully.',
+                  text: 'Reinstated successfully And New Acceptance Email Sent To Student.',
                   icon: 'success',
                   confirmButtonText: 'OK',
                 })

@@ -302,6 +302,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);
         Route::post('/allocate-location', [LocationController::class, 'allocate']);
         Route::get('/get-course-location/{id}', [LocationController::class, 'getlocations']);
+        Route::get('/department-statistics', [DashboardController::class, 'hodCounts']);
     });
 
 
@@ -313,6 +314,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/approve-courses-hod', [HodController::class, 'approveCoursesHod']);  // for the student middleware
         Route::get('/view-hod-students', [HodController::class, 'hodStudents']);
         Route::get('/hod-dashboard', [DashboardController::class, 'hodDashboardCounts']);
+        Route::get('/view-statistics', [DashboardController::class, 'hodCounts']);
+        Route::get('/get-hod-depts-stats/{id}', [DashboardController::class, 'hodsemestercounts']);
+
     });
 
 
@@ -324,6 +328,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-programs', [ProgramController::class, 'getprograms']);
         Route::get('/profit-status', [DashboardController::class, 'statusCount']);
         Route::get('/user-counts', [DashboardController::class, 'counts']);
+        Route::get('/department-count/{id}', [DashboardController::class, 'deptcounts']);
+        //  Route::get('/get-semester',[DashboardController::class, 'getsem']);
 
         Route::post('/department-courses', [DepartmentController::class, 'deparmentCourses']);
         Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
@@ -346,6 +352,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/save-student-test-marks', [StudentMarksController::class, 'takeTestMark']);
         Route::post('/save-student-exam-marks-and-submit', [StudentMarksController::class, 'saveExamMarkAndSubmit']);
         Route::get('/lecturer-dashboard', [DashboardController::class, 'lecturerDashboardCounts']);
+        Route::get('/department-count-lecturer/{id}', [DashboardController::class, 'lecturerCounts']);
     });
 
 

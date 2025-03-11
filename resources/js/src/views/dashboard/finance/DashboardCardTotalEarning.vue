@@ -16,7 +16,7 @@
         <h1 class="text-4xl font-weight-semibold">
           D{{
             Number(
-              totalEarning[0].currentSemesterSoldAdmissionCodes + totalEarning[1].currentSemesterTuitionPaid,
+              totalEarning[0].currentSemesterSoldAdmissionCodes + totalEarning[0].currentSemesterTuitionPaid,
             ).toFixed(2)
           }}
         </h1>
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <h4 class="mt-2 font-weight-medium">
+      <h4 class="mt-2 font-weight-semibold">
         Compared to D{{
           Number(totalEarning[0].lastSemesterSoldAdmissionCodes + totalEarning[1].lastSemesterTuitionPaid).toFixed(2)
         }}
@@ -79,7 +79,7 @@
 
           <div class="ms-1">
             <p class="text--primary font-weight-medium mb-1">
-              D{{ Number(totalEarning[1].currentSemesterTuitionPaid).toFixed(2) }}
+              {{ Number(totalEarning[0].currentSemesterTuitionPaid).toFixed(2) }}
             </p>
             <v-progress-linear :value="totalEarning[1].progress" :color="totalEarning[1].color"></v-progress-linear>
           </div>

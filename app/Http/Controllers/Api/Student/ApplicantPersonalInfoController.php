@@ -44,7 +44,8 @@ class ApplicantPersonalInfoController extends Controller
                         $fail('The date of birth must be at least 18 years ago.');
                     }
                 },
-            ],            'marital_status' => 'required',
+            ],
+            'marital_status' => 'required',
             'nationality' => 'required',
             'address' => 'required',
             'employment_status' => 'required',
@@ -52,10 +53,10 @@ class ApplicantPersonalInfoController extends Controller
                 'required',
                 'regex:/^[2-9][0-9]{6}$/',
             ],
-            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=590,min_height=590,max_width=610,max_height=610',
             'EmergencyContactName' => 'required',
             'EmergencyContactNumber' => 'required',
-           
+
         ]);
 
         $student = Student::where('user_id', $request->get('id'))->first();
@@ -68,6 +69,8 @@ class ApplicantPersonalInfoController extends Controller
         }
 
         $studentData = [
+            'firstname' => $request->get('firstname'),
+            'middlename' => $request->get('lastname'),
             'gender' => $request->get('gender'),
             'dob' => $request->get('dob'),
             'marital_status' => $request->get('marital_status'),
@@ -78,9 +81,9 @@ class ApplicantPersonalInfoController extends Controller
             'personal_info_completed' => 1,
             'eme_name' => $request->get('EmergencyContactName'),
             'eme_numbr' => $request->get('EmergencyContactNumber'),
-             'employee' => $request->get('employeename'),
-             'empaddr' => $request->get('employeeadresss'),
-             'empcontact' => $request->get('employeecontact')
+            'employee' => $request->get('employeename'),
+            'empaddr' => $request->get('employeeadresss'),
+            'empcontact' => $request->get('employeecontact')
         ];
 
         if ($request->hasFile('profile_image')) {

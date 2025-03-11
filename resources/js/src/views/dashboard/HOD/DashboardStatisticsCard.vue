@@ -79,6 +79,14 @@ export default {
           title: 'Active students',
           total: '12.5',
         },
+        {
+          title: 'Total Male Students',
+          total: '12.5',
+        },
+        {
+          title: 'Total Female Students',
+          total: '12.5',
+        },
       ],
 
       resolveStatisticsIconVariation: data => {

@@ -7,31 +7,30 @@
       <dashboard-statistics-card></dashboard-statistics-card>
     </v-col>
 
-    <v-col cols="12" sm="6" md="6">
-      <dashboard-weekly-overview></dashboard-weekly-overview>
-    </v-col>
+  
 
-    <v-col cols="12" md="6" sm="6">
-      <dashboard-card-total-earning></dashboard-card-total-earning>
+    <v-col cols="12">
+      <dashboard-datatable-statistics></dashboard-datatable-statistics>
     </v-col>
 
     <v-col cols="12">
       <dashboard-datatable></dashboard-datatable>
     </v-col>
+
   </v-row>
 </template>
 
 <script>
-// eslint-disable-next-line object-curly-newline
 import { mdiPoll, mdiLabelVariantOutline, mdiCurrencyUsd, mdiHelpCircleOutline } from '@mdi/js'
 import StatisticsCardVertical from '@/components/statistics-card/StatisticsCardVertical.vue'
 
-// demos
+// Import all required components
 import DashboardCongratulationJohn from './DashboardCongratulationJohn.vue'
 import DashboardStatisticsCard from './DashboardStatisticsCard.vue'
-import DashboardCardDepositAndWithdraw from './DashboardCardDepositAndWithdraw.vue'
-import DashboardCardSalesByCountries from './DashboardCardSalesByCountries.vue'
+
+import DashboardDatatableStatistics from './DashboardDatatableStatistics.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
+
 import 'vuetify/dist/vuetify.min.css'
 
 export default {
@@ -39,8 +38,8 @@ export default {
     StatisticsCardVertical,
     DashboardCongratulationJohn,
     DashboardStatisticsCard,
-    DashboardCardDepositAndWithdraw,
-    DashboardCardSalesByCountries,
+ 
+    DashboardDatatableStatistics, // ✅ Properly registered
     DashboardDatatable,
   },
   setup() {
@@ -62,7 +61,6 @@ export default {
       change: '-15%',
     }
 
-    // vertical card options
     const newProject = {
       statTitle: 'New Project',
       icon: mdiLabelVariantOutline,
@@ -73,7 +71,7 @@ export default {
     }
 
     const salesQueries = {
-      statTitle: 'Sales Quries',
+      statTitle: 'Sales Queries',
       icon: mdiHelpCircleOutline,
       color: 'warning',
       subtitle: 'Last week',

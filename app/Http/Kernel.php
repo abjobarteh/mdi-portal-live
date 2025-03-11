@@ -79,7 +79,7 @@ class Kernel extends HttpKernel
         'finance-vendor-admin' => \App\Http\Middleware\FinanceVendorAdminRegistrarMiddleware::class,
         'hod' => \App\Http\Middleware\HodMiddleware::class,
         'hod-admin-registrar-finance-student' => \App\Http\Middleware\HodAdminRegistrarStudentFinanceMiddleware::class,
-
+        \Fruitcake\Cors\HandleCors::class,
 
     ];
 }

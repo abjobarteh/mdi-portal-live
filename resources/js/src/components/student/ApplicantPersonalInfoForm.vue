@@ -4,43 +4,47 @@
       <v-card class="pa-6">
         <v-card-title>
           <span class="headline font-weight-medium">PERSONAL INFORMATION</span>
-        
+
         </v-card-title>
         <v-card-title>
-      
-          <strong><span class="headline font-weight-medium" style="font-size: 15px;">  Upload Passport Size  (Any Other Photo Form Shall Result To Automatic Rejection)!! DO NOT UPLOAD SELFIES  </span></strong>  
+          <strong>
+            <span class="headline font-weight-medium"
+              style="font-size: 13px; color: red; display: block; margin-bottom: 10px;">
+              Upload Passport Size!!
+            </span>
+          </strong>
         </v-card-title>
-
+        <v-card-title>
+          <strong>
+            <span class="headline font-weight-medium"
+              style="font-size: 13px; color: red; display: block; margin-bottom: 15px;">
+              2 x 2 inches (51 x 51 mm)
+            </span>
+          </strong>
+        </v-card-title>
         <v-row>
           <v-col class="pr-2">
             <!-- File Input for Image Upload -->
-            <v-file-input
-              v-model="applicantPersonalInfoData.profile_image"
-              @change="handleImageUpload"
-            ></v-file-input>
+            <v-file-input v-model="applicantPersonalInfoData.profile_image" @change="handleImageUpload"></v-file-input>
           </v-col>
 
-          <v-col class="text-right pl-2">
-            <!-- Image Preview -->
-            <v-img v-if="previewImage" :src="previewImage" alt="Profile Image" width="150" height="150"></v-img>
-          </v-col>
+        
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field
-              outlined
-              v-model="applicantPersonalInfoData.middlename"
-              label="Middle Name"
-              required
-            ></v-text-field>
+            <v-text-field outlined v-model="applicantPersonalInfoData.firstname" label="First Name"
+              required></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-select
-              outlined
-              v-model="applicantPersonalInfoData.gender"
-              :items="applicantPersonalInfoData.genderOptions"
-              required
-            >
+            <v-text-field outlined v-model="applicantPersonalInfoData.middlename" label="Middle Name"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field outlined v-model="applicantPersonalInfoData.lastname" label="Last Name"
+              required></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select outlined v-model="applicantPersonalInfoData.gender"
+              :items="applicantPersonalInfoData.genderOptions" required>
               <template v-slot:label>
                 <span class="required-field">Gender</span>
               </template>
@@ -51,23 +55,17 @@
 
         <v-row>
           <v-col cols="12" md="6">
-            <v-select
-              outlined
-              v-model="applicantPersonalInfoData.marital_status"
-              :items="applicantPersonalInfoData.maritalStatusOptions"
-              required
-              ><template v-slot:label>
+            <v-select outlined v-model="applicantPersonalInfoData.marital_status"
+              :items="applicantPersonalInfoData.maritalStatusOptions" required><template v-slot:label>
                 <span class="required-field">Marital Status</span>
-              </template></v-select
-            >
+              </template></v-select>
             <span v-if="errors.marital_status" class="error-message">{{ errors.marital_status[0] }}</span>
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field outlined label="Date of Birth *" type="date" required v-model="applicantPersonalInfoData.dob">
               <template v-slot:label>
                 <span class="required-field">Date of Birth</span>
-              </template></v-text-field
-            >
+              </template></v-text-field>
             <span v-if="errors.dob" class="error-message">{{ errors.dob[0] }}</span>
           </v-col>
         </v-row>
@@ -78,105 +76,75 @@
                 <span class="required-field">Nationality</span>
               </template></v-text-field
             > -->
-            <v-select
-              outlined
-              v-model="applicantPersonalInfoData.nationality"
-              :items="applicantPersonalInfoData.nationalityOptions"
-              required
-              ><template v-slot:label>
+            <v-select outlined v-model="applicantPersonalInfoData.nationality"
+              :items="applicantPersonalInfoData.nationalityOptions" required><template v-slot:label>
                 <span class="required-field">Nationality</span>
-              </template></v-select
-            >
+              </template></v-select>
             <span v-if="errors.nationality" class="error-message">{{ errors.nationality[0] }}</span>
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field outlined v-model="applicantPersonalInfoData.address" required>
               <template v-slot:label>
                 <span class="required-field">Address</span>
-              </template></v-text-field
-            >
+              </template></v-text-field>
             <span v-if="errors.address" class="error-message">{{ errors.address[0] }}</span>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field outlined v-model="applicantPersonalInfoData.phonenumber" required
-              ><template v-slot:label>
+            <v-text-field outlined v-model="applicantPersonalInfoData.phonenumber" required><template v-slot:label>
                 <span class="required-field">PhoneNumber</span>
-              </template></v-text-field
-            >
+              </template></v-text-field>
             <span v-if="errors.phonenumber" class="error-message">{{ errors.phonenumber[0] }}</span>
           </v-col>
           <v-col cols="12" md="6">
-            <v-select
-              outlined
-              v-model="applicantPersonalInfoData.employment_status"
-              :items="applicantPersonalInfoData.employmentStatusOptions"
-             
-              required
-            >
+            <v-select outlined v-model="applicantPersonalInfoData.employment_status"
+              :items="applicantPersonalInfoData.employmentStatusOptions" required>
               <template v-slot:label>
                 <span class="required-field">Employment Status</span>
-              </template></v-select
-            >
+              </template></v-select>
             <span v-if="errors.employment_status" class="error-message">{{ errors.employment_status[0] }}</span>
           </v-col>
-        
-        
-          
+
+
+
         </v-row>
         <v-row v-if="applicantPersonalInfoData.employment_status === 'Employed'">
-          <v-col cols="12" md="6" >
-            <v-text-field
-           v-if="applicantPersonalInfoData.employment_status === 'Employed'"
-              outlined
-              v-model="applicantPersonalInfoData.employeename"
-              label="Employer Name"
-              required
-            ></v-text-field>
+          <v-col cols="12" md="6">
+            <v-text-field v-if="applicantPersonalInfoData.employment_status === 'Employed'" outlined
+              v-model="applicantPersonalInfoData.employeename" label="Employer Name" required></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field
-            v-if="applicantPersonalInfoData.employment_status === 'Employed'"
-            
-              outlined
-              v-model="applicantPersonalInfoData.employeeadresss"
-              label="Employer Address"
-              required
-            ></v-text-field>
+            <v-text-field v-if="applicantPersonalInfoData.employment_status === 'Employed'" outlined
+              v-model="applicantPersonalInfoData.employeeadresss" label="Employer Address" required></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field
-              v-if="applicantPersonalInfoData.employment_status === 'Employed'"
-              outlined
-              v-model="applicantPersonalInfoData.employeecontact"
-              label="Employer Contact Number"
-              required
-            ></v-text-field>
+            <v-text-field v-if="applicantPersonalInfoData.employment_status === 'Employed'" outlined
+              v-model="applicantPersonalInfoData.employeecontact" label="Employer Contact Number"
+              required></v-text-field>
           </v-col>
         </v-row>
-          
+
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field outlined v-model="applicantPersonalInfoData.EmergencyContactName" required
-              ><template v-slot:label>
+            <v-text-field outlined v-model="applicantPersonalInfoData.EmergencyContactName" required><template
+                v-slot:label>
                 <span class="required-field">Emergency Contact Name</span>
-              </template></v-text-field
-            >
+              </template></v-text-field>
             <span v-if="errors.EmergencyContactName" class="error-message">{{ errors.EmergencyContactName[0] }}</span>
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field outlined v-model="applicantPersonalInfoData.EmergencyContactNumber" required
-              ><template v-slot:label>
+            <v-text-field outlined v-model="applicantPersonalInfoData.EmergencyContactNumber" required><template
+                v-slot:label>
                 <span class="required-field">Emergency Contact Number</span>
-              </template></v-text-field
-            >
-            <span v-if="errors.EmergencyContactNumber" class="error-message">{{ errors.EmergencyContactNumber[0] }}</span>
+              </template></v-text-field>
+            <span v-if="errors.EmergencyContactNumber" class="error-message">{{ errors.EmergencyContactNumber[0]
+            }}</span>
           </v-col>
         </v-row>
-       
+
         <v-card-actions class="d-flex justify-center">
           <v-btn color="primary" class="col-12" @click="submitForm()">Save</v-btn>
         </v-card-actions>
@@ -185,7 +153,7 @@
   </v-form>
 </template>
 
-  <script>
+<script>
 import 'vuetify/dist/vuetify.min.css'
 
 export default {
@@ -196,9 +164,9 @@ export default {
       showemployee: false,
       applicantPersonalInfoData: {
         middlename: '',
-        employeename:'',
-        employeeadresss:'',
-        employeecontact:'',
+        employeename: '',
+        employeeadresss: '',
+        employeecontact: '',
         phonenumber: '',
         gender: '',
         genderOptions: ['Male', 'Female', 'Other'],
@@ -209,210 +177,210 @@ export default {
 
         nationalityOptions: [
           "Gambia",
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Andorra",
-    "Angola",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia and Herzegovina",
-    "Botswana",
-    "Brazil",
-    "Brunei",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Cabo Verde",
-    "Cambodia",
-    "Cameroon",
-    "Canada",
-    "Central African Republic",
-    "Chad",
-    "Chile",
-    "China",
-    "Colombia",
-    "Comoros",
-    "Congo",
-    "Congo, Democratic Republic of the",
-    "Costa Rica",
-    "Croatia",
-    "Cuba",
-    "Cyprus",
-    "Czech Republic",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic",
-    "East Timor",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Estonia",
-    "Eswatini",
-    "Ethiopia",
-    "Fiji",
-    "Finland",
-    "France",
-    "Gabon",
-    "Gambia",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Greece",
-    "Grenada",
-    "Guatemala",
-    "Guinea",
-    "Guinea-Bissau",
-    "Guyana",
-    "Haiti",
-    "Honduras",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran",
-    "Iraq",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kiribati",
-    "Korea, North",
-    "Korea, South",
-    "Kosovo",
-    "Kuwait",
-    "Kyrgyzstan",
-    "Laos",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Marshall Islands",
-    "Mauritania",
-    "Mauritius",
-    "Mexico",
-    "Micronesia",
-    "Moldova",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Morocco",
-    "Mozambique",
-    "Myanmar",
-    "Namibia",
-    "Nauru",
-    "Nepal",
-    "Netherlands",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "North Macedonia",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palau",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Qatar",
-    "Romania",
-    "Russia",
-    "Rwanda",
-    "Saint Kitts and Nevis",
-    "Saint Lucia",
-    "Saint Vincent and the Grenadines",
-    "Samoa",
-    "San Marino",
-    "Sao Tome and Principe",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Slovakia",
-    "Slovenia",
-    "Solomon Islands",
-    "Somalia",
-    "South Africa",
-    "South Sudan",
-    "Spain",
-    "Sri Lanka",
-    "Sudan",
-    "Suriname",
-    "Sweden",
-    "Switzerland",
-    "Syria",
-    "Taiwan",
-    "Tajikistan",
-    "Tanzania",
-    "Thailand",
-    "Timor-Leste",
-    "Togo",
-    "Tonga",
-    "Trinidad and Tobago",
-    "Tunisia",
-    "Turkey",
-    "Turkmenistan",
-    "Tuvalu",
-    "Uganda",
-    "Ukraine",
-    "United Arab Emirates",
-    "United Kingdom",
-    "United States",
-    "Uruguay",
-    "Uzbekistan",
-    "Vanuatu",
-    "Vatican City",
-    "Venezuela",
-    "Vietnam",
-    "Yemen",
-    "Zambia",
-    "Zimbabwe"
-]
-,
+          "Afghanistan",
+          "Albania",
+          "Algeria",
+          "Andorra",
+          "Angola",
+          "Antigua and Barbuda",
+          "Argentina",
+          "Armenia",
+          "Australia",
+          "Austria",
+          "Azerbaijan",
+          "Bahamas",
+          "Bahrain",
+          "Bangladesh",
+          "Barbados",
+          "Belarus",
+          "Belgium",
+          "Belize",
+          "Benin",
+          "Bhutan",
+          "Bolivia",
+          "Bosnia and Herzegovina",
+          "Botswana",
+          "Brazil",
+          "Brunei",
+          "Bulgaria",
+          "Burkina Faso",
+          "Burundi",
+          "Cabo Verde",
+          "Cambodia",
+          "Cameroon",
+          "Canada",
+          "Central African Republic",
+          "Chad",
+          "Chile",
+          "China",
+          "Colombia",
+          "Comoros",
+          "Congo",
+          "Congo, Democratic Republic of the",
+          "Costa Rica",
+          "Croatia",
+          "Cuba",
+          "Cyprus",
+          "Czech Republic",
+          "Denmark",
+          "Djibouti",
+          "Dominica",
+          "Dominican Republic",
+          "East Timor",
+          "Ecuador",
+          "Egypt",
+          "El Salvador",
+          "Equatorial Guinea",
+          "Eritrea",
+          "Estonia",
+          "Eswatini",
+          "Ethiopia",
+          "Fiji",
+          "Finland",
+          "France",
+          "Gabon",
+          "Gambia",
+          "Georgia",
+          "Germany",
+          "Ghana",
+          "Greece",
+          "Grenada",
+          "Guatemala",
+          "Guinea",
+          "Guinea-Bissau",
+          "Guyana",
+          "Haiti",
+          "Honduras",
+          "Hungary",
+          "Iceland",
+          "India",
+          "Indonesia",
+          "Iran",
+          "Iraq",
+          "Ireland",
+          "Israel",
+          "Italy",
+          "Jamaica",
+          "Japan",
+          "Jordan",
+          "Kazakhstan",
+          "Kenya",
+          "Kiribati",
+          "Korea, North",
+          "Korea, South",
+          "Kosovo",
+          "Kuwait",
+          "Kyrgyzstan",
+          "Laos",
+          "Latvia",
+          "Lebanon",
+          "Lesotho",
+          "Liberia",
+          "Libya",
+          "Liechtenstein",
+          "Lithuania",
+          "Luxembourg",
+          "Madagascar",
+          "Malawi",
+          "Malaysia",
+          "Maldives",
+          "Mali",
+          "Malta",
+          "Marshall Islands",
+          "Mauritania",
+          "Mauritius",
+          "Mexico",
+          "Micronesia",
+          "Moldova",
+          "Monaco",
+          "Mongolia",
+          "Montenegro",
+          "Morocco",
+          "Mozambique",
+          "Myanmar",
+          "Namibia",
+          "Nauru",
+          "Nepal",
+          "Netherlands",
+          "New Zealand",
+          "Nicaragua",
+          "Niger",
+          "Nigeria",
+          "North Macedonia",
+          "Norway",
+          "Oman",
+          "Pakistan",
+          "Palau",
+          "Panama",
+          "Papua New Guinea",
+          "Paraguay",
+          "Peru",
+          "Philippines",
+          "Poland",
+          "Portugal",
+          "Qatar",
+          "Romania",
+          "Russia",
+          "Rwanda",
+          "Saint Kitts and Nevis",
+          "Saint Lucia",
+          "Saint Vincent and the Grenadines",
+          "Samoa",
+          "San Marino",
+          "Sao Tome and Principe",
+          "Saudi Arabia",
+          "Senegal",
+          "Serbia",
+          "Seychelles",
+          "Sierra Leone",
+          "Singapore",
+          "Slovakia",
+          "Slovenia",
+          "Solomon Islands",
+          "Somalia",
+          "South Africa",
+          "South Sudan",
+          "Spain",
+          "Sri Lanka",
+          "Sudan",
+          "Suriname",
+          "Sweden",
+          "Switzerland",
+          "Syria",
+          "Taiwan",
+          "Tajikistan",
+          "Tanzania",
+          "Thailand",
+          "Timor-Leste",
+          "Togo",
+          "Tonga",
+          "Trinidad and Tobago",
+          "Tunisia",
+          "Turkey",
+          "Turkmenistan",
+          "Tuvalu",
+          "Uganda",
+          "Ukraine",
+          "United Arab Emirates",
+          "United Kingdom",
+          "United States",
+          "Uruguay",
+          "Uzbekistan",
+          "Vanuatu",
+          "Vatican City",
+          "Venezuela",
+          "Vietnam",
+          "Yemen",
+          "Zambia",
+          "Zimbabwe"
+        ]
+        ,
         address: '',
         employment_status: '',
         employmentStatusOptions: ['Employed', 'Unemployed', 'Self-employed'],
         profile_image: null,
         EmergencyContactName: '',
-        EmergencyContactNumber:''
+        EmergencyContactNumber: ''
         // Store the selected file
       },
       errors: {}, // Add this line to store validation errors
@@ -433,16 +401,18 @@ export default {
         this.previewImage = null
       }
     },
-    selectemployee(){
-      if (this.applicantPersonalInfoData.employment_status=='Employed'){
-        
+    selectemployee() {
+      if (this.applicantPersonalInfoData.employment_status == 'Employed') {
+
       }
     },
     submitForm() {
       const formData = new FormData()
       this.applicantPersonalInfoData['id'] = this.studentInfo.user_id
-      formData.append('id', this.studentInfo.user_id) // Add other form fields as needed
-      formData.append('middlename', this.applicantPersonalInfoData.middlename) // Add other form fields as needed
+      formData.append('id', this.studentInfo.user_id)
+      formData.append('firstname', this.applicantPersonalInfoData.firstname)
+      formData.append('middlename', this.applicantPersonalInfoData.middlename)
+      formData.append('lastname', this.applicantPersonalInfoData.lastname)  // Add other form fields as needed
       formData.append('phonenumber', this.applicantPersonalInfoData.phonenumber) // Add other form fields as needed
       formData.append('gender', this.applicantPersonalInfoData.gender) // Add other form fields as needed
       formData.append('genderOptions', this.applicantPersonalInfoData.genderOptions) // Add other form fields as needed
@@ -534,11 +504,13 @@ export default {
   content: ' *';
   color: red;
 }
+
 .error-message {
   color: red;
   font-size: 14px;
   margin-top: -25px;
-  display: block; /* Ensure the error message is a block element */
+  display: block;
+  /* Ensure the error message is a block element */
   margin-bottom: 10px;
 }
 </style>
