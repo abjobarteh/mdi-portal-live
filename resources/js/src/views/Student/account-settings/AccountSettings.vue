@@ -22,6 +22,10 @@
         </v-tab-item>
 
         <v-tab-item>
+          <ApplyNewProgram></ApplyNewProgram>
+        </v-tab-item>
+
+        <v-tab-item>
           <registered-courses v-if="registeredCourses.length" :courses="courses"></registered-courses>
           <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Registered Courses</h6>
         </v-tab-item>
@@ -30,9 +34,6 @@
           <program-courses :courses="courses"></program-courses>
         </v-tab-item>
 
-        <v-tab-item>
-          <ApplyNewProgram></ApplyNewProgram>
-        </v-tab-item>
 
         <v-tab-item>
           <transcript></transcript>
@@ -68,11 +69,12 @@ export default {
   components: {
 
     RunningCourses,
+    ApplyNewProgram,
     ProgramCourses,
     Payments,
     Transcript,
     RegisteredCourses,
-    ApplyNewProgram,
+   
     Deferments,
   },
 
@@ -83,9 +85,9 @@ export default {
       tabs: [
     
         { title: 'Running Courses', icon: mdiAccountOutline },
+        { title: 'New Program Application', icon: mdiInformationOutline },
         { title: 'Registered Courses', icon: mdiLockOpenOutline },
         { title: 'Program Courses', icon: mdiLockOpenOutline },
-        { title: 'New Program Application', icon: mdiInformationOutline },
         { title: 'Transcript List', icon: mdiInformationOutline },
         { title: 'Tuition Payments', icon: mdiInformationOutline },
         { title: 'Deferments', icon: mdiInformationOutline },
