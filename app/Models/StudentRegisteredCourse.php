@@ -25,8 +25,7 @@ class StudentRegisteredCourse extends Model
         'total_mark',
         'semester_course_id',
         'order',
-
-
+        'program_id'
     ];
 
     public function course()

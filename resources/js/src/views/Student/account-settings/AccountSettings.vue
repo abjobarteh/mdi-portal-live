@@ -1,4 +1,4 @@
- <template>
+<template>
   <div class="container">
     <v-card id="account-setting-card">
       <!-- tabs -->
@@ -13,6 +13,9 @@
 
       <!-- tabs item -->
       <v-tabs-items v-model="tab">
+
+    
+
         <v-tab-item>
           <running-courses v-if="runnings.length" :runnings="runnings"></running-courses>
           <h6 style="color: green !important; margin-top: 15px; margin-bottom: 15px" v-else>No Running Courses</h6>
@@ -25,6 +28,10 @@
 
         <v-tab-item>
           <program-courses :courses="courses"></program-courses>
+        </v-tab-item>
+
+        <v-tab-item>
+          <ApplyNewProgram></ApplyNewProgram>
         </v-tab-item>
 
         <v-tab-item>
@@ -47,6 +54,7 @@
 import { mdiAccountOutline, mdiLockOpenOutline, mdiInformationOutline } from '@mdi/js'
 
 // demos
+import ApplyNewProgram from './ApplyNewProgram.vue'
 import RunningCourses from './RunningCourses.vue'
 import ProgramCourses from './ProgramCourses.vue'
 import RegisteredCourses from './RegisteredCourses.vue'
@@ -58,11 +66,13 @@ import 'vuetify/dist/vuetify.min.css'
 
 export default {
   components: {
+
     RunningCourses,
     ProgramCourses,
     Payments,
     Transcript,
     RegisteredCourses,
+    ApplyNewProgram,
     Deferments,
   },
 
@@ -71,9 +81,11 @@ export default {
       studentInfo: '',
       tab: '',
       tabs: [
+    
         { title: 'Running Courses', icon: mdiAccountOutline },
         { title: 'Registered Courses', icon: mdiLockOpenOutline },
         { title: 'Program Courses', icon: mdiLockOpenOutline },
+        { title: 'New Program Application', icon: mdiInformationOutline },
         { title: 'Transcript List', icon: mdiInformationOutline },
         { title: 'Tuition Payments', icon: mdiInformationOutline },
         { title: 'Deferments', icon: mdiInformationOutline },
@@ -101,6 +113,7 @@ export default {
         this.runnings = []
         this.pageCount = 0
       })
+    
     this.getResults()
   },
 
@@ -152,16 +165,17 @@ export default {
 
 <style>
 .container {
-  max-width: 1400px; /* Set the maximum width as you desire */
-  margin: 0 auto; /* Center the content */
+  max-width: 1400px;
+  /* Set the maximum width as you desire */
+  margin: 0 auto;
+  /* Center the content */
 }
 
 /* Media query for larger screens */
 @media (min-width: 1400px) {
   .container {
-    width: 100%; /* Remove the max-width constraint on larger screens */
+    width: 100%;
+    /* Remove the max-width constraint on larger screens */
   }
 }
 </style>
-
-
