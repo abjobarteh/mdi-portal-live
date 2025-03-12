@@ -81,7 +81,9 @@ export default {
         5: 'Finance',
         6: 'Agent',
         7: 'HOD',
-        8: 'Compliance'
+        8: 'Compliance',
+        9: 'Registrar Clerk',
+        10: 'Registrar Assistant'
       };
       return roles[roleId] || 'Unknown';
     },

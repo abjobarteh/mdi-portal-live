@@ -22,7 +22,7 @@ const routes = [
           next('/login'); // redirect to login if user role is undefined
         } else if (userRole === 1) {
           next('/admin-dashboard'); // redirect to admin dashboard for role 1
-        } else if (userRole === 2 || userRole=== 9 || userRole===10) {
+        } else if (userRole === 2 || userRole === 9 || userRole===10) {
           next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
         }
         else if (userRole === 3) {

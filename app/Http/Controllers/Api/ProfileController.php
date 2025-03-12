@@ -49,6 +49,12 @@ class ProfileController extends Controller
         }else if (auth()->user()->role_id == 8) {
             return User::where('id', auth()->user()->id)->first();
         }
+        else if (auth()->user()->role_id == 9) {
+            return User::where('id', auth()->user()->id)->first();
+        }
+        else if (auth()->user()->role_id == 10) {
+            return User::where('id', auth()->user()->id)->first();
+        }
     }
 
     public function studentDetail($id)
