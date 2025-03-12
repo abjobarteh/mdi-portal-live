@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Program;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Student;
+use App\Models\StudentPrograms;
 use Illuminate\Http\Request;
 use App\Models\StudentRegisteredCourse;
 
@@ -46,6 +47,18 @@ class ApplicantDeparmentInfoController extends Controller
             'department_id' => Program::where('id', $request->get('program_id'))->value('department_id'),
         ]);
 
+        StudentPrograms::updateOrCreate(
+            [
+                'student_id' => $student->id,
+                'program_id' => $request->get('program_id'),
+                 // Condition to check existing record
+            ],
+            [
+                'program_id' => $request->get('program_id'),
+                'semester_name' => $request->get('semester_name'),
+            ]
+        );
+        
         return response()->json([
             'success' => true,
             'data' => $student,
@@ -56,7 +69,7 @@ class ApplicantDeparmentInfoController extends Controller
     public function changeprogram(Request $request)
     {
 
-        
+
         $studentId = $request->input('studentId');
         $programId = $request->input('programId');
 
@@ -65,9 +78,9 @@ class ApplicantDeparmentInfoController extends Controller
             ->count();
 
 
-                 $checkprogramid = Program::where('id', $programId)
+        $checkprogramid = Program::where('id', $programId)
             ->count();
-        
+
         // Perform the update only if the count is not 10
 
         if ($registeredCoursesCount > 10) {
@@ -78,14 +91,14 @@ class ApplicantDeparmentInfoController extends Controller
             ]);
         }
 
-        if($checkprogramid == 0){
+        if ($checkprogramid == 0) {
             return response()->json([
                 'success' => false,
                 'error' => true,
                 'errorMessage' => 'Select Program'
             ]);
         }
-        
+
         $student = Student::where('id', $studentId)->first();
 
         if ($student) {

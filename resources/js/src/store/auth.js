@@ -1,5 +1,5 @@
-import Cookies from 'js-cookie';
-import router from '@/router';
+import Cookies from 'js-cookie'
+import router from '@/router'
 
 export default {
   state: {
@@ -9,92 +9,93 @@ export default {
   },
   mutations: {
     setUser(state, user) {
-      state.user = user;
+      state.user = user
     },
     setToken(state, token) {
-      state.token = token;
-      Cookies.set('token', token); // set the token in a cookie without an expiry date
+      state.token = token
+      Cookies.set('token', token) // set the token in a cookie without an expiry date
 
       // set a timer to remove the token and vuex state from storage after 30 seconds of inactivity
-      const inactivityTime = 240000; /// update to 5minutes
+      const inactivityTime = 240000 /// update to 5minutes
       let timer = setTimeout(() => {
-        Cookies.remove('token');
-        localStorage.removeItem('vuex');
-        window.location.href = '/login'; // redirect to login page after removing token and vuex state
-      }, inactivityTime);
+        Cookies.remove('token')
+        localStorage.removeItem('vuex')
+        window.location.href = '/login' // redirect to login page after removing token and vuex state
+      }, inactivityTime)
 
       // reset the timer on user activity (e.g. click, keypress)
       const resetTimer = () => {
-        clearTimeout(timer);
+        clearTimeout(timer)
         timer = setTimeout(() => {
-          Cookies.remove('token');
-          localStorage.removeItem('vuex');
-          window.location.href = '/login'; // redirect to login page after removing token and vuex state
-        }, inactivityTime);
-      };
-      window.addEventListener('click', resetTimer);
-      window.addEventListener('keypress', resetTimer);
+          Cookies.remove('token')
+          localStorage.removeItem('vuex')
+          window.location.href = '/login' // redirect to login page after removing token and vuex state
+        }, inactivityTime)
+      }
+      window.addEventListener('click', resetTimer)
+      window.addEventListener('keypress', resetTimer)
     },
 
     removeToken(state) {
-      state.token = null;
-      Cookies.remove('token'); // remove the token from the cookie
-      localStorage.removeItem('vuex'); // clear the local storage
+      state.token = null
+      Cookies.remove('token') // remove the token from the cookie
+      localStorage.removeItem('vuex') // clear the local storage
     },
 
     userProfileMutate(state, data) {
-      return (state.userProfileData = data);
+      return (state.userProfileData = data)
     },
   },
   actions: {
     async login({ commit, dispatch, state }, credentials) {
       try {
-        const response = await axios.post('/api/login', credentials);
-        commit('setToken', response.data);
-        await dispatch('fetchUser');
+        const response = await axios.post('/api/login', credentials)
+        commit('setToken', response.data)
+        await dispatch('fetchUser')
 
         // redirect based on the user role
         if (state.user.role_id == 1) {
-          router.push({ name: 'admin-dashboard' });
+          router.push({ name: 'admin-dashboard' })
         } else if (state.user.role_id == 2) {
-          router.push({ name: 'registrar-dashboard' });
+          router.push({ name: 'registrar-dashboard' })
+        } else if (state.user.role_id == 9) {
+          router.push({ name: 'registrar-dashboard' })
+        } else if (state.user.role_id == 10) {
+          router.push({ name: 'registrar-dashboard' })
         } else if (state.user.role_id == 4) {
-          router.push({ name: 'student' });
+          router.push({ name: 'student' })
         } else if (state.user.role_id == 5) {
-          router.push({ name: 'finance-dashboard' });
+          router.push({ name: 'finance-dashboard' })
         } else if (state.user.role_id == 3) {
-          router.push({ name: 'lecturer-dashboard' });
+          router.push({ name: 'lecturer-dashboard' })
         } else if (state.user.role_id == 6) {
           if (state.user.password_reset == 0) {
-            router.push({ name: 'password-reset' });
-          }
-          else {
-            router.push({ name: 'view-admission-codes-locations' });
+            router.push({ name: 'password-reset' })
+          } else {
+            router.push({ name: 'view-admission-codes-locations' })
           }
         } else if (state.user.role_id == 7) {
-          router.push({ name: 'hod-dashboard' });
-        }else if (state.user.role_id == 8) {
-          router.push({ name: 'compliance-dashboard' });
+          router.push({ name: 'hod-dashboard' })
+        } else if (state.user.role_id == 8) {
+          router.push({ name: 'compliance-dashboard' })
         }
-
-
       } catch (error) {
-        throw error;
+        throw error
       }
     },
 
     userProfile(context) {
       axios
-        .get("/api/profile")
+        .get('/api/profile')
 
         .then(response => {
           console.log(response.data)
-          context.commit("userProfileMutate", response.data); //categories will be run from mutation
+          context.commit('userProfileMutate', response.data) //categories will be run from mutation
         })
 
         .catch(() => {
-          console.log("Error........");
-        });
+          console.log('Error........')
+        })
     },
     async logout({ commit, state }) {
       try {
@@ -102,11 +103,11 @@ export default {
           headers: {
             Authorization: `Bearer ${state.token}`,
           },
-        });
-        commit('removeToken');
-        commit('setUser', null);
+        })
+        commit('removeToken')
+        commit('setUser', null)
       } catch (error) {
-        throw error;
+        throw error
       }
     },
     async fetchUser({ commit, state }) {
@@ -115,10 +116,10 @@ export default {
           headers: {
             Authorization: `Bearer ${state.token}`,
           },
-        });
-        commit('setUser', response.data);
+        })
+        commit('setUser', response.data)
       } catch (error) {
-        throw error;
+        throw error
       }
     },
     async isLoggedIn({ state }) {
@@ -128,22 +129,21 @@ export default {
             headers: {
               Authorization: `Bearer ${state.token}`,
             },
-          });
-          return true;
+          })
+          return true
         } catch (error) {
-          console.error(error);
-          return false;
+          console.error(error)
+          return false
         }
       } else {
-        return false;
+        return false
       }
     },
   },
   getters: {
     currentUser: state => state.user,
     getUserProfile(state) {
-      return state.userProfileData;
+      return state.userProfileData
     },
   },
-};
-
+}

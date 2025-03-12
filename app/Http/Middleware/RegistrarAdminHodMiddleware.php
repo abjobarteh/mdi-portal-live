@@ -19,7 +19,7 @@ class RegistrarAdminHodMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || ($user->role_id !== 2 && $user->role_id !== 1 && $user->role_id !== 7 && $user->role_id !== 8)) {
+        if (!$user || ($user->role_id !== 2 && $user->role_id !== 1 && $user->role_id !== 7 && $user->role_id !== 8 && $user->role_id !== 9 && $user->role_id !== 10)) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
         return $next($request);

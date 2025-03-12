@@ -37,7 +37,7 @@
               <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                 <v-btn medium style="flex: 1 1 auto;" color="primary" @click="showStudent(item)">View</v-btn>
                 <v-btn medium style="flex: 1 1 auto;" color="green" @click="showprogram(item)">Edit Student</v-btn>
-                <v-btn large style="flex: 1 1 auto;" color="error" @click="newprogram(item)">New Program</v-btn>
+       
               </div>
             </template>
             <template v-slot:[`item.fullname`]="{ item }">

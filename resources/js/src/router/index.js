@@ -22,7 +22,7 @@ const routes = [
           next('/login'); // redirect to login if user role is undefined
         } else if (userRole === 1) {
           next('/admin-dashboard'); // redirect to admin dashboard for role 1
-        } else if (userRole === 2) {
+        } else if (userRole === 2 || userRole=== 9 || userRole===10) {
           next('/registrar-dashboard'); // redirect to registrar dashboard for other roles
         }
         else if (userRole === 3) {
@@ -49,7 +49,7 @@ const routes = [
     component: () => import('@/views/dashboard/registrar/Dashboard.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2,8],
+      roles: [2,8,9,10],
     }
   },
 
@@ -218,7 +218,7 @@ const routes = [
     component: () => import('@/views/Registrar/employees/ViewEmployees.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2],
+      roles: [2,9,10],
     }
   },
   {
@@ -227,7 +227,7 @@ const routes = [
     component: () => import('@/views/Registrar/gradings/AddGrading.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
   },
   {
@@ -236,7 +236,7 @@ const routes = [
     component: () => import('@/views/Registrar/gradings/ViewGradings.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
   },
   {
@@ -255,7 +255,7 @@ const routes = [
     component: () => import('@/views/Registrar/departments/ViewDepartments.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5, 1],
+      roles: [2, 5, 1,9,10],
     }
 
   },
@@ -275,7 +275,7 @@ const routes = [
     component: () => import('@/views/Registrar/program-duration/ViewProgramDurations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5,1],
+      roles: [2, 5,1,9,10],
     }
   },
   {
@@ -295,7 +295,7 @@ const routes = [
     component: () => import('@/views/Registrar/programs/ViewPrograms.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 5, 1],
+      roles: [2, 5, 1,9,10],
     }
   },
   {
@@ -313,7 +313,7 @@ const routes = [
     component: () => import('@/views/Registrar/courses/ViewCourses.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
 
   },
@@ -346,7 +346,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes-locations/AdmissionCodesLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [5, 6, 1, 2,8],
+      roles: [5, 6, 1, 2,8,9,10],
     }
   },
 
@@ -366,7 +366,7 @@ const routes = [
     component: () => import('@/views/Registrar/admission-codes/AdmissionCodes.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 6, 1,8],
+      roles: [2, 6, 1,8,9,10],
     }
   },
 
@@ -376,7 +376,7 @@ const routes = [
     component: () => import('@/views/Registrar/sessions/ViewSessions.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
   },
   {
@@ -394,7 +394,7 @@ const routes = [
     component: () => import('@/views/Registrar/semesters/ViewSemesters.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1,8],
+      roles: [2, 1,8,9,10],
     }
   },
   {
@@ -403,7 +403,7 @@ const routes = [
     component: () => import('@/views/Registrar/Locations/ViewLocations.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
   },
   {
@@ -433,7 +433,7 @@ const routes = [
     component: () => import('@/views/Registrar/lecturers/ViewLecturers.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1,8],
+      roles: [2, 1,8,9,10],
     }
   },
 
@@ -453,7 +453,7 @@ const routes = [
     component: () => import('@/views/Registrar/deferments/ViewDeferments.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
   },
 
@@ -508,7 +508,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/IncomingApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1, 7],
+      roles: [2, 1, 7,9,10],
     }
   },
 
@@ -528,7 +528,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/AcceptedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1, 7,8],
+      roles: [2, 1, 7,8,9,10],
     }
 
   },
@@ -550,7 +550,7 @@ const routes = [
     component: () => import('@/views/Registrar/applications/RejectedApplications.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1, 7,8],
+      roles: [2, 1, 7,8,9,10],
     }
   },
   {
@@ -569,7 +569,7 @@ const routes = [
     component: () => import('@/views/Registrar/student/ApplicantDeclarationAndPreview.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1, 7],
+      roles: [2, 1, 7,9,10],
     }
 
   },
@@ -619,7 +619,7 @@ const routes = [
     component: () => import('@/views/Registrar/students/ViewStudents.vue'),
     meta: {
       requiresAuth: true,
-      roles: [2, 1],
+      roles: [2, 1,9,10],
     }
   },
 
@@ -844,7 +844,7 @@ router.beforeEach(async (to, from, next) => {
       next('/login'); // redirect to login if user role is undefined
     } else if (userRole === 1) {
       next('/admin-dashboard'); // redirect to admin dashboard for role 1
-    } else if (userRole === 2) {
+    } else if (userRole === 2 || userRole === 9 || userRole===10) {
       next('/registrar-dashboard'); // redirect to registrar for role 2
     } else if (userRole === 3) {
       next('/lecturer-dashboard'); // redirect to registrar for role 2

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
 use App\Models\StudentRegisteredCourse;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,7 @@ class RegisterCoursesController extends Controller
         $studentId = $validatedData['student_id'];
         $semesterId = $validatedData['semester_id'];
 
+        $student = Student::find($studentId);
         $totalRegisteredCourses = StudentRegisteredCourse::where([
             'student_id' => $studentId,
             'semester_id' => $semesterId,
@@ -40,7 +42,8 @@ class RegisterCoursesController extends Controller
             'lecturer_id' => $validatedData['lecturer_id'],
             'semester_id' => $semesterId,
             'course_id' => $validatedData['course_id'],
-            'semester_course_id' => $validatedData['semester_course_id']
+            'semester_course_id' => $validatedData['semester_course_id'],
+            'program_id' => $student->program_id
         ]);
 
         return response()->json(['message' => 'Program created successfully.']);

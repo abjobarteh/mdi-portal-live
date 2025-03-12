@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\Registrar\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Registrar\MatriculationStatusController;
+use App\Http\Controllers\Api\Student\NewProgramController;
 
 /*
 |--------------------------------------------------------------------------
@@ -226,7 +227,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
         Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
         Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
-
+        Route::post('/submit-new-application',[NewProgramController::class,'store']);
         Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
 
         Route::get('/running-courses', [CourseController::class, 'runningCourses']);
