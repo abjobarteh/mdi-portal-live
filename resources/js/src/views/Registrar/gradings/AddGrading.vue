@@ -9,43 +9,48 @@
       <v-form>
         <v-row>
           <v-col cols="12" md="6">
+            <v-text-field outlined label="Grade" v-model="formData.grade" class="rounded-input"></v-text-field>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.grade.$errors" :key="error.$uid">{{ error.$message }}</span>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-select outlined label="Grade Type" v-model="formData.grade_type" :items="['Old', 'New']"
+              class="rounded-input"></v-select>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.grade_type.$errors" :key="error.$uid">{{ error.$message }}</span>
+          </v-col>
+        </v-row>
+        
+        <v-row>
+          <v-col cols="12" md="6">
             <v-text-field outlined label="Mark From" v-model="formData.mark_from" class="rounded-input"></v-text-field>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.mark_from.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.mark_from.$errors" :key="error.$uid">{{ error.$message }}</span>
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field outlined label="Mark To" v-model="formData.mark_to" class="rounded-input"></v-text-field>
-            <span
-              style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-              v-for="error in v$.mark_to.$errors"
-              :key="error.$uid"
-              >{{ error.$message }}</span
-            >
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.mark_to.$errors" :key="error.$uid">{{ error.$message }}</span>
           </v-col>
         </v-row>
-        <v-text-field outlined label="Grade" v-model="formData.grade" class="rounded-input"></v-text-field>
-        <span
-          style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-          v-for="error in v$.grade.$errors"
-          :key="error.$uid"
-          >{{ error.$message }}</span
-        >
-        <v-text-field
-          outlined
-          label="Interpretation"
-          v-model="formData.interpretation"
-          class="rounded-input"
-        ></v-text-field>
-        <span
-          style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
-          v-for="error in v$.interpretation.$errors"
-          :key="error.$uid"
-          >{{ error.$message }}</span
-        >
+    
+
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field outlined label="GPA" v-model="formData.gpa" class="rounded-input"></v-text-field>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.gpa.$errors" :key="error.$uid">{{ error.$message }}</span>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field outlined label="Interpretation" v-model="formData.interpretation"
+              class="rounded-input"></v-text-field>
+            <span style="color: #e6676b; position: absolute; margin-top: -30px; margin-left: 10px"
+              v-for="error in v$.interpretation.$errors" :key="error.$uid">{{ error.$message }}</span>
+          </v-col>
+        </v-row>
+
         <v-btn color="primary" @click="submitForm" class="submit-btn">Submit</v-btn>
       </v-form>
     </v-container>
@@ -65,6 +70,8 @@ export default {
       mark_from: '',
       mark_to: '',
       grade: '',
+      gpa: '',
+      grade_type: '',
       interpretation: '',
     })
 
@@ -73,6 +80,8 @@ export default {
       mark_to: { required },
       grade: { required },
       interpretation: { required },
+      gpa: { required },
+      grade_type: { required }
     }
 
     const v$ = useVuelidate(rules, formData)
@@ -89,7 +98,9 @@ export default {
               text: 'grade added successfully.',
               icon: 'success',
               confirmButtonText: 'OK',
-            })
+            }).then(() => {
+      window.location.reload(); // Reload the page after clicking "OK"
+    });
           })
           .catch(error => {
             // show error alert
@@ -133,14 +144,14 @@ export default {
 
 <style>
 .rounded-input {
-  border-radius: 30px;
+  border-radius: 3px;
   background-color: var(--input-background-color);
   border-color: var(--input-border-color);
 }
 
 .submit-btn {
   margin-bottom: 10px;
-  border-radius: 30px;
+  border-radius: 5px;
   width: 100%;
   background-color: var(--button-background-color);
   color: var(--button-text-color);

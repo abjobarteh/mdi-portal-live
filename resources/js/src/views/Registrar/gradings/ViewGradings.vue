@@ -10,14 +10,8 @@
         </v-toolbar>
 
         <v-card-text>
-          <v-data-table
-            :headers="headers"
-            :items="filteredGradings"
-            :items-per-page="13"
-            :search="search"
-            class="elevation-1"
-            hide-default-footer
-          >
+          <v-data-table :headers="headers" :items="filteredGradings" :items-per-page="11" :search="search"
+            class="elevation-1" hide-default-footer>
             <template v-slot:[`item.action`]="{ item }">
               <v-btn small color="primary" @click="editGrading(item)">Edit</v-btn>
               <v-btn small color="error" @click="deleteGrading(item)">Delete</v-btn>
@@ -36,6 +30,11 @@
             <v-text-field outlined v-model="editGradingFormData.mark_from" label="Mark From"></v-text-field>
             <v-text-field outlined v-model="editGradingFormData.mark_to" label="Mark To"></v-text-field>
             <v-text-field outlined v-model="editGradingFormData.grade" label="Grade"></v-text-field>
+            <v-select outlined v-model="editGradingFormData.grade_type"
+              :items="types.map(type => ({ text: type.text, value: type.value }))" item-value="value" item-text="text"
+              label="Grade Type"></v-select>
+
+            <v-text-field outlined v-model="editGradingFormData.grade_point" label="Grade Point"></v-text-field>
             <v-text-field outlined v-model="editGradingFormData.interpretation" label="Interpretation"></v-text-field>
           </v-form>
         </v-card-text>
@@ -59,6 +58,7 @@ export default {
   name: 'GradingSystem',
   props: {},
   components: {},
+
   data() {
     return {
       customers: [],
@@ -66,10 +66,17 @@ export default {
         { text: 'Mark From', value: 'mark_from' },
         { text: 'Mark To', value: 'mark_to' },
         { text: 'Grade', value: 'grade' },
+        { text: 'Grade Point', value: 'grade_point' },
+        { text: 'Grade Type', value: 'grade_type' },
         { text: 'Interpretation', value: 'interpretation' },
         { text: 'Action', value: 'action', sortable: false },
       ],
       items: [],
+      types: [
+        // Your dropdown items here
+        { text: 'Old', value: 'Old' },
+        { text: 'New', value: 'New' },
+      ],
       editGradingDialog: false,
       editedIndex: -1,
       editGradingFormData: {
@@ -78,6 +85,8 @@ export default {
         mark_to: '',
         grade: '',
         interpretation: '',
+        grade_point: '',
+        grade_type: ''
       },
       page: 1,
       pageCount: 0,
@@ -210,21 +219,11 @@ export default {
           // grading.mark_from.toLowerCase().includes(this.search.toLowerCase()) ||
           // grading.mark_to.toLowerCase().includes(this.search.toLowerCase()) ||
           grading.grade.toLowerCase().includes(this.search.toLowerCase()) ||
-          grading.interpretation.toLowerCase().includes(this.search.toLowerCase())
+          grading.interpretation.toLowerCase().includes(this.search.toLowerCase())||
+          grading.grade_type.toLowerCase().includes(this.search.toLowerCase())
         )
       })
     },
   },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-

@@ -15,7 +15,7 @@ class GradingSystemController extends Controller
      */
     public function index()
     {
-        $gradings = GradingSystem::paginate(13);
+        $gradings = GradingSystem::paginate(11);
         return response()->json([
             'status' => 200,
             'result' => $gradings
@@ -45,14 +45,19 @@ class GradingSystemController extends Controller
             'mark_to' => 'required',
             'grade' => 'required',
             'interpretation' => 'required|min:4',
+            'grade_type' => 'required',
+            'gpa' => 'required'
         ]);
+
         GradingSystem::create([
             'mark_from' => $validatedData['mark_from'],
             'mark_to' => $validatedData['mark_to'],
             'grade' => $validatedData['grade'],
             'interpretation' => $validatedData['interpretation'],
-
+            'grade_type' => $validatedData['grade_type'],
+            'grade_point' => $validatedData['gpa']
         ]);
+
         activity()
             ->causedBy(auth()->user())
             ->withProperties(['attributes' => auth()->user()])
@@ -102,6 +107,8 @@ class GradingSystemController extends Controller
             'mark_to' => 'required',
             'grade' => 'required',
             'interpretation' => 'required|min:4',
+            'grade_type' => 'required',
+            'grade_point' => 'required'
         ]);
 
         $gradingSystem = GradingSystem::find($id);
@@ -114,6 +121,8 @@ class GradingSystemController extends Controller
             'mark_to' => $validatedData['mark_to'],
             'grade' => $validatedData['grade'],
             'interpretation' => $validatedData['interpretation'],
+            'grade_type' => $validatedData['grade_type'],
+            'grade_point' => $validatedData['grade_point']
         ]);
 
         activity()

@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GradingSystemSeeder::class);
         $this->call(RegistrationStatusSeeder::class);
         $this->call(AdmissionStatusSeeder::class);
+        $this->call(GradingSystemSeeder::class);
+
     }
 }
