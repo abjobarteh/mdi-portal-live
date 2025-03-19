@@ -230,10 +230,10 @@ class CourseController extends Controller
 
         foreach ($runningCourses as $runningCourse) {
 
-            $waivestatus = Student::where('user_id',auth()->user()->id)->value('waive');
+            $waivestatus = Student::where('user_id', auth()->user()->id)->value('waive');
 
             $admissionStatus = RegistrationStatus::all()->pluck('registration_status');
-           
+
 
             $runningCourse["waivestatus"] = $waivestatus;
             $runningCourse["registration_status"] = $admissionStatus;
@@ -294,24 +294,27 @@ class CourseController extends Controller
             ];
             $noOfCourses = 0;
             $sumOfMarks = 0;
+            $sumofgpas = 0;
             foreach ($courses as $course) {
                 $noOfCourses++;
                 $totalMark = $course->test_mark + $course->exam_mark;
                 $sumOfMarks += $totalMark;
+                $sumofgpas += $course->grade_point;
                 $courseTranscript = [
                     'CourseCode' => $course->course->course_code,
                     'CourseName' => $course->course->course_name,
                     'TestMark' => $course->test_mark,
                     'ExamMark' => $course->exam_mark,
+                    'Total' => $course->total_mark,
                     'StartDate' => $course->semester->session->start_date,
                     'EndDate' => $course->semester->session->end_date,
-                    'Grade' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('grade'),
-                    'GradePoint' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('grade_point'),
+                    'Grade' => $course->letter_grade,
+                    'GradePoint' => $course->grade_point,
                     'Interpretation' => GradingSystem::where('mark_from', '<=', $totalMark)->where('mark_to', '>=', $totalMark)->value('interpretation'),
                 ];
 
                 $semesterTranscript['Courses'][] = $courseTranscript;
-                $semesterTranscript['Average'] = $sumOfMarks / $noOfCourses;
+                $semesterTranscript['Average'] = $sumofgpas / $noOfCourses;
             }
 
             $totalCGPASum += $semesterTranscript['Average']; // Accumulate the semester averages for CGPA calculation
@@ -331,7 +334,7 @@ class CourseController extends Controller
         // i have to add approved later
         $activeSemesterCourses = SemesterCourse::with('course')->where('semester_id', $currentSemesterId)->where('submitted', 1)->where('approved', 1)->paginate(13); // ie the ones approved by hod
         foreach ($activeSemesterCourses as $activeSemesterCourse) {
-            $activeSemesterCourse['marks'] = StudentRegisteredCourse::with('student')->where('course_id', $activeSemesterCourse['course_id'])->get();
+            $activeSemesterCourse['marks'] = StudentRegisteredCourse::with('student')->whereNot('test_mark')->whereNot('exam_mark')->where('course_id', $activeSemesterCourse['course_id'])->get();
         }
 
         return response()->json([

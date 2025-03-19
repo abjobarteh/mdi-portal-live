@@ -227,7 +227,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-applicant-certificates', [ApplicantCertificateController::class, 'store']);
         Route::post('/submit-applicant-personal-info', [ApplicantPersonalInfoController::class, 'store']);
         Route::post('/submit-applicantion', [ApplicantDeclarationController::class, 'submitApplication']);
-        Route::post('/submit-new-application',[NewProgramController::class,'store']);
+        Route::post('/submit-new-application', [NewProgramController::class, 'store']);
         Route::post('/submit-applicant-department-info', [ApplicantDeparmentInfoController::class, 'store']);
 
         Route::get('/running-courses', [CourseController::class, 'runningCourses']);
@@ -279,14 +279,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
         // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
-        // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
+     Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
     });
 
     Route::middleware(['hod-admin-registrar-finance-student'])->group(function () {
         // Route::get('/registration-status', [RegistrationStatusController::class, 'index']);
         // Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         // Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
-        // Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
+         Route::get('student-detail/{id}', [ProfileController::class, 'studentDetail']);
         Route::get('/admission-status', [AdmissionStatusController::class, 'index']);
         Route::get('/view-semester', [StudentPaymentController::class, 'viewSemester']);
         Route::get('transcript-courses/{id}', [CourseController::class, 'studentTranscript']);
@@ -345,7 +345,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::middleware(['lecturer'])->group(function () {
-
+        Route::get('/get-students-export', [StudentMarksController::class, 'export']);
+        Route::post('/import-marks', [StudentMarksController::class, 'importMarks']);
+        Route::post('/submit-course-marks', [StudentMarksController::class, 'submitMarks']);
         Route::post('/manage-student-marks', [StudentMarksController::class, 'marks']);
         Route::get('/my-semester-courses', [MyCoursesController::class, 'courses']);
         Route::post('/upload-lecturer-files', [MyCoursesController::class, 'uploadLecturerFiles']);

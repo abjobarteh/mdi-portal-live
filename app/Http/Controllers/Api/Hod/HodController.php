@@ -64,11 +64,11 @@ class HodController extends Controller
 
         $currentSemesterId = Semester::where('is_current_semester', 1)->value('id');
         // i have to add approved later
-        $activeSemesterCourses = SemesterCourse::whereHas('course.program.department', function ($query) use ($departmentId) {
+        $activeSemesterCourses = SemesterCourse::where('submitted', 1)->whereHas('course.program.department', function ($query) use ($departmentId) {
             $query->where('id', $departmentId);
         })->where('semester_id', $currentSemesterId)->where('submitted', 1)->with('course')->paginate(13);
         foreach ($activeSemesterCourses as $activeSemesterCourse) {
-            $activeSemesterCourse['marks'] = StudentRegisteredCourse::with('student')->where('course_id', $activeSemesterCourse['course_id'])->get();
+            $activeSemesterCourse['marks'] = StudentRegisteredCourse::with('student')->whereNot('test_mark')->whereNot('exam_mark')->where('course_id', $activeSemesterCourse['course_id'])->get();
         }
 
         return response()->json([
@@ -81,7 +81,7 @@ class HodController extends Controller
     {
         SemesterCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
-            ->update(['approved' =>  1]);
+            ->update(['approved' => 1]);
 
         StudentRegisteredCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
@@ -124,10 +124,10 @@ class HodController extends Controller
                     $query->where('email', 'like', '%' . $advanceSearch . '%');
                     break;
                 case 3:
-                    
-                    $programid = Program::where('id', 'like', '%' . $advanceSearch . '%' );
-                        $query->where('program_id', '=','' . $programid . '');
-                        break;
+
+                    $programid = Program::where('id', 'like', '%' . $advanceSearch . '%');
+                    $query->where('program_id', '=', '' . $programid . '');
+                    break;
 
                 default:
                     break;
@@ -144,7 +144,7 @@ class HodController extends Controller
     {
         SemesterCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))
-            ->update(['approved' =>  1]);
+            ->update(['approved' => 1]);
 
         StudentRegisteredCourse::where('course_id', $request->get('course_id'))
             ->where('semester_id', Semester::where('is_current_semester', 1)->value('id'))

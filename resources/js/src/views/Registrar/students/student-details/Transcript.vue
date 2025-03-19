@@ -36,9 +36,12 @@ export default {
       headers: [
         { text: 'CourseCode', value: 'CourseCode' },
         { text: 'CourseName', value: 'CourseName' },
+        { text: 'Test Mark', value: 'TestMark' },
+        { text: 'Exam Mark', value: 'ExamMark' },
+        { text: 'Total Mark', value: 'Total' },
         { text: 'Grade', value: 'Grade' },
         { text: 'GradePoint', value: 'GradePoint' },
-        { text: 'Average', value: 'action' },
+      
       ],
       transcripts: [],
       registrationStatus: '',
@@ -190,7 +193,7 @@ export default {
         <div class="page-container">
           <div class="watermark-container">
             ${tableContent}
-            <img src="../../../../assets/images/logos/mdi_logo.png" class="watermark-image" />
+            <img src="../images/logos/mdi_logo.png" class="watermark-image" />
           </div>
       </div>
       </body>
@@ -204,7 +207,7 @@ export default {
 
       content += `
       <div class="transcript-title">
-      <h3 style="font-size: 13px;">REPUBLIC OF <span style="position: relative; top: -20px;"><img src="images/logos/mdi_logo.png" style="width: 70px; height: 70px; display: inline-block; vertical-align: middle;" /></span> THE GAMBIA</h3>
+      <h3 style="font-size: 13px;">REPUBLIC OF <span style="position: relative; top: -20px;"><img src="../images/logos/mdi_logo.png" style="width: 70px; height: 70px; display: inline-block; vertical-align: middle;" /></span> THE GAMBIA</h3>
       <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">MANAGEMENT DEVELOPMENT INSTITUTE</h3><br>
       <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">${this.studentInfo.program_name}</h3><br>
       <h3 style="font-size: 13px; border-bottom: 1px solid black; display: inline-block;">OFFICIAL TRANSCRIPT</h3>
@@ -219,11 +222,6 @@ export default {
           }</td>
           <td style='font-size: 14px'>STUDENT NO: ${this.studentInfo.mat_number}</td>
         </tr>
-        <tr>
-          <td style='font-size: 14px'>YEAR: ONE</td>
-          <td style='font-size: 14px'>SESSION: JULY - DECEMBER, 2019-JULY - DECEMBER - 2020</td>
-          <td style='font-size: 14px'>DATE OF ISSUE: ${this.getCurrentDate()}</td>
-        </tr>
       </table>
       `
 
@@ -233,11 +231,11 @@ export default {
             <table class="transcript-table">
               <thead>
                 <tr>
-                  <th style='font-size: 14px'>CourseCode</th>
-                  <th style='font-size: 14px' colspan="4">CourseName</th>
-                  <th style='font-size: 14px'>CREDIT HOURS</th>
-                  <th style='font-size: 14px'>GRADE</th>
-                  <th style='font-size: 14px'>GRADE POINT</th>
+                  <th style='font-size: 12px'>CourseCode</th>
+                  <th style='font-size: 12px' colspan="4">CourseName</th>
+                  <th style='font-size: 12px'>CREDIT HOURS</th>
+                  <th style='font-size: 12px'>GRADE</th>
+                  <th style='font-size: 12px'>GRADE POINT</th>
                 </tr>
               </thead>
               <tbody>

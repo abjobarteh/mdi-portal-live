@@ -1,67 +1,69 @@
-Copy code
 <template>
   <div>
     <v-card>
       <v-card-title> Select Semester and Course </v-card-title>
       <v-card-text>
         <v-row>
-          <v-col cols="6">
+          <v-col cols="4">
+            <v-select outlined v-model="selectedGradeType" :items="GradeTypes" label="Select Grade Type"></v-select>
+          </v-col>
+          <v-col cols="4">
             <!-- <v-select outlined v-model="selectedCourse" :items="courses" label="Select Course"></v-select> -->
-            <v-select
-              v-model="selectedCourse"
-              :items="myCourses.map(course => ({ id: course.id, name: course.course_name }))"
-              item-value="id"
-              item-text="name"
-              label="Select Course"
-              outlined
-            ></v-select>
+            <v-select v-model="selectedCourse"
+              :items="myCourses.map(course => ({ id: course.id, name: course.course_name }))" item-value="id"
+              item-text="name" label="Select Course" outlined></v-select>
           </v-col>
-          <v-col cols="6">
-            <v-select
-              outlined
-              v-model="selectedAssesmentType"
-              :items="assesmentTypes"
-              label="Select Assessment Type"
-            ></v-select>
+          <v-col cols="4">
+            <v-select outlined v-model="selectedAssesmentType" :items="assesmentTypes"
+              label="Select Assessment Type"></v-select>
           </v-col>
+
+
         </v-row>
+
+
+        <div class="d-flex align-center" style="width: 400px; justify-content: space-between;">
+          <v-file-input v-model="selectedFile" label="Upload Marks" class="mr-6"
+            style="margin-right: 10px;"></v-file-input>
+
+        </div>
+
+        <div class="d-flex align-center" style="width: 400px; justify-content: space-between;">
+          <v-btn @click="handleFile" color="success" style="margin-right: 10px;" :disabled="!isuploadEnabled">Handle
+            File</v-btn>
+          <v-btn @click="export_template" color="primary" :disabled="!isButtonEnabled"
+            style="margin-right: 10px;">Generate Upload Mark
+            Template</v-btn>
+          <v-btn @click="submit_mark" color="secondary" :disabled="!isButtonEnabled">Submit Marks</v-btn>
+        </div>
+
       </v-card-text>
     </v-card>
 
     <v-card class="mt-3">
       <v-card-title>
         <span class="mr-auto">Add Grades</span>
-        <v-card-title>
-          <div class="d-flex align-center" style="width: 400px">
-            <v-file-input v-model="selectedFile" label="Upload Marks" class="mr-4"></v-file-input>
-            <v-btn @click="handleFile">Handle File</v-btn>
-          </div>
-        </v-card-title>
+
       </v-card-title>
 
       <v-card-text>
-        <v-data-table
-          v-if="selectedAssesmentType == 'Continuous Assessment'"
-          :headers="tableHeaders.filter(header => header.text !== 'Exam Mark')"
-          :items="students"
-          :items-per-page="10"
-          class="elevation-1"
-        >
+        <v-data-table v-if="selectedAssesmentType == 'Continuous Assessment'"
+          :headers="tableHeaders.filter(header => header.text !== 'Exam Mark')" :items="students" :items-per-page="10"
+          class="elevation-1">
           <template v-slot:item.name="{ item }">
             <span>{{ item.student.firstname + ' ' + item.student.lastname }}</span>
           </template>
           <template v-slot:item.testMark="{ item }">
-            <v-text-field v-model="item.test_mark" outlined dense class="mt-3"></v-text-field>
+            <v-text-field v-model="item.test" outlined dense class="mt-5"></v-text-field>
+          </template>
+          <template v-slot:item.assignmentMark="{ item }">
+            <v-text-field v-model="item.assignment" outlined dense class="mt-5"></v-text-field>
           </template>
         </v-data-table>
 
-        <v-data-table
-          v-if="selectedAssesmentType == 'Exam'"
-          :headers="tableHeaders.filter(header => header.text !== 'Test Mark')"
-          :items="students"
-          :items-per-page="10"
-          class="elevation-1"
-        >
+        <v-data-table v-if="selectedAssesmentType == 'Exam'"
+          :headers="tableHeaders.filter(header => header.text !== 'Test Mark')" :items="students" :items-per-page="10"
+          class="elevation-1">
           <template v-slot:item.name="{ item }">
             <span>{{ item.student.firstname + ' ' + item.student.lastname }}</span>
           </template>
@@ -73,24 +75,13 @@ Copy code
       <v-card-actions>
         <v-row>
           <v-col cols="12" v-if="selectedAssesmentType == 'Continuous Assessment'">
-            <v-btn
-              block
-              color="success"
-              :disabled="
-                selectedCourse === null || selectedAssesmentType !== 'Continuous Assessment' || isTestMarkInvalid
-              "
-              @click="saveGrades"
-              >Save</v-btn
-            >
+            <v-btn block color="success" :disabled="selectedCourse === null || selectedAssesmentType !== 'Continuous Assessment' || isTestMarkInvalid || selectedGradeType == null
+              " @click="saveGrades">Save</v-btn>
           </v-col>
           <v-col cols="12" v-if="selectedAssesmentType == 'Exam'">
-            <v-btn
-              block
-              color="success"
-              :disabled="selectedCourse == null || selectedAssesmentType !== 'Exam' || isExamMarkInvalid"
-              @click="saveExamAndSubmitGrades"
-              >Submit</v-btn
-            >
+            <v-btn block color="success"
+              :disabled="selectedCourse == null || selectedAssesmentType !== 'Exam' || isExamMarkInvalid || selectedGradeType == null"
+              @click="saveExamAndSubmitGrades">Save</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -107,16 +98,20 @@ export default {
     return {
       selectedFile: null,
       jsonData: [],
-
       myCourses: [],
+      course_id: null,
       selectedAssesmentType: null,
       selectedCourse: null,
+      selectedGradeType: null,
+      grade_type: null,
+      GradeTypes: ['Old', 'New'],
       assesmentTypes: ['Continuous Assessment', 'Exam'],
       courses: ['Course 1', 'Course 2', 'Course 3'],
       students: [],
       tableHeaders: [
         { text: 'Student Name', value: 'name' },
-        { text: 'Test Mark', value: 'testMark' },
+        { text: 'Test Mark (25%)', value: 'testMark' },
+        { text: 'Assignment Mark (25%)', value: 'assignmentMark' },
         { text: 'Exam Mark', value: 'examMark' },
       ],
     }
@@ -137,14 +132,28 @@ export default {
 
   computed: {
     isTestMarkInvalid() {
-      return this.students.some(
-        item =>
-          item.test_mark < 0 ||
-          item.test_mark > 50 ||
-          item.test_mark == null ||
-          item.test_mark == '' ||
-          isNaN(item.test_mark),
-      )
+      return this.students.some(item =>
+        item.test < 0 ||
+        item.test > 25 ||
+        item.test == null ||
+        item.test === '' ||
+        isNaN(item.test) ||
+
+        item.assignment < 0 ||
+        item.assignment > 25 ||
+        item.assignment == null ||
+        item.assignment === '' ||
+        isNaN(item.assignment)
+      );
+    }
+    ,
+    isButtonEnabled() {
+      this.course_id = this.selectedCourse;
+      console.log('Selected Course', this.course_id)
+      return this.selectedCourse !== null;
+    },
+    isuploadEnabled() {
+      return this.selectedCourse !== null && this.selectedGradeType !== null;
     },
     isExamMarkInvalid() {
       return this.students.some(
@@ -160,55 +169,98 @@ export default {
 
   methods: {
     handleFile() {
-      if (this.selectedFile) {
-        readXlsxFile(this.selectedFile)
-          .then(rows => {
-            // rows is an array of arrays representing the Excel data
-            console.log('rows:', rows)
+      if (!this.selectedFile) return;
 
-            console.log('Excel Data:', rows[0][0])
-            this.jsonData = rows
-            console.log('hh', this.jsonData[0][1])
+      let formData = new FormData();
+      formData.append("file", this.selectedFile);
+      formData.append("course_id", this.selectedCourse);
+      formData.append("grade_type", this.selectedGradeType);
 
-            if (this.jsonData[0][1] == 'Continuous Assessment') {
-              for (let i = 1; i < this.students.length + 1; i++) {
-                // Check if the names match
-                if (
-                  this.jsonData[i][0] ===
-                  this.students[i - 1].student.firstname + ' ' + this.students[i - 1].student.lastname
-                ) {
-                  // If the names match, assign the test mark
-                  this.students[i - 1].test_mark = this.jsonData[i][1]
-                }
-              }
-            } else if (this.jsonData[0][1] == 'Exam') {
-              for (let i = 1; i < this.students.length + 1; i++) {
-                // Check if the names match
-                if (
-                  this.jsonData[i][0] ===
-                  this.students[i - 1].student.firstname + ' ' + this.students[i - 1].student.lastname
-                ) {
-                  // If the names match, assign the test mark
-                  this.students[i - 1].exam_mark = this.jsonData[i][1]
-                }
-              }
-            } else {
-              alert('Upload the correct file format')
-            }
+      axios.post("/api/import-marks", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+        .then(response => {
+          swal.fire({
+            icon: 'success',
+            title: 'Marks uploaded successfully!',
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            window.location.reload()
           })
-          .catch(error => {
-            console.error('Error reading Excel file:', error)
-          })
-      } else {
-        swal.fire({
-          title: 'Error!',
-          text: 'Please select an excel file',
-          icon: 'error',
-          confirmButtonText: 'OK',
         })
-      }
+        .catch(error => {
+          if (error.response && error.response.data.error) {
+            // Show error message using SweetAlert2
+            swal.fire({
+              icon: 'error',
+              title: 'Error Uploading File',
+              text: error.response.data.error,
+            });
+
+          } else {
+            // General error handling
+            swal.fire({
+              icon: 'error',
+              title: 'Error Uploading File',
+            });
+          }
+        });
     },
 
+    submit_mark() {
+      swal
+        .fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes!',
+        })
+        .then(result => {
+          axios.
+          post('/api/submit-course-marks', {
+              course_id: this.course_id
+          }).then(response => {
+            swal
+              .fire({
+                title: 'Success!',
+                text: 'Marks Submitted Successfully',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              })
+              .then(() => {
+                window.location.reload()
+              })
+          })
+            .catch(error => {
+              console.error("Mark Submission Failed", error);
+            });
+        });
+    },
+    export_template() {
+      axios.get('/api/get-students-export', {
+        params: {
+          course_id: this.course_id
+        },
+        responseType: 'blob' // Ensures correct file handling
+      })
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'MARK_UPLOAD_TEMPLATE_FILE.xlsx'); // Set download file name
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        })
+        .catch(error => {
+          console.error("Export failed:", error);
+        });
+    }
+    ,
     getMyCourses() {
       axios.get('/api/my-courses').then(result => {
         this.myCourses = result.data.result
@@ -218,6 +270,7 @@ export default {
     getMarks(courseId) {
       axios.post('/api/manage-student-marks', { course_id: courseId }).then(result => {
         this.students = result.data.result
+
         // this.students[0].student.firstname == 'Baba'
         //   ? (this.students[0].test_mark = 50)
         //   : (his.students[0].test_mark = 40)
@@ -241,8 +294,9 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
+
             axios
-              .post('/api/save-student-test-marks', { student: this.students })
+              .post('/api/save-student-test-marks', { student: this.students, grade_type: this.selectedGradeType })
               .then(response => {
                 console.log('Success:', response.data)
                 swal
@@ -277,7 +331,7 @@ export default {
         .then(result => {
           if (result.isConfirmed) {
             axios
-              .post('/api/save-student-exam-marks-and-submit', { student: this.students })
+              .post('/api/save-student-exam-marks-and-submit', { student: this.students, grade_type: this.selectedGradeType })
               .then(response => {
                 console.log('Success:', response.data)
                 swal

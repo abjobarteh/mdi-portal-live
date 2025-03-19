@@ -9,11 +9,10 @@
             <td style="font-size: 16px">{{ transcript.Average.toFixed(3) }}</td>
             <!-- Add more columns for other average values if needed -->
           </tr>
-        </template></v-data-table
-      >
+        </template></v-data-table>
     </v-card>
     <p style="font-size: 16px">CGPA {{ this.cgpa.toFixed(3) }}</p>
-    <v-btn @click="generatePDF" class="mt-2" block color="light-green">Generate PDF</v-btn>
+    <!-- <v-btn @click="generatePDF" class="mt-2" block color="light-green">Generate PDF</v-btn> -->
   </div>
 </template>
 
@@ -35,11 +34,13 @@ export default {
       cgpa: 0,
       count: 0,
       headers: [
-        { text: 'CourseCode', value: 'CourseCode', width: '20%' },
-        { text: 'CourseName', value: 'CourseName', width: '35%' },
-        { text: 'Grade', value: 'Grade', width: '25%' },
+        { text: 'CourseCode', value: 'CourseCode' },
+        { text: 'CourseName', value: 'CourseName' },
+        { text: 'Test Mark', value: 'TestMark' },
+        { text: 'Exam Mark', value: 'ExamMark' },
+        { text: 'Total Mark', value: 'Total' },
+        { text: 'Grade', value: 'Grade' },
         { text: 'GradePoint', value: 'GradePoint' },
-        { text: 'Average', value: 'action' },
       ],
       transcripts: [],
       registrationStatus: '',
@@ -87,92 +88,57 @@ export default {
         <head>
           <style>
 
-              .semester-heading {
-                text-align: center;
-                margin-bottom: 5px;
-                font-size: 15px;
+                          .semester-heading {
+                  text-align: center;
+                  margin-bottom: 5px;
+                  font-size: 15px;
+              }
 
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-              }
-              th, td {
-                border: 1px solid #ddd;
-                padding: 4px;
-                text-align: left;
-              }
               .transcript-title {
-                text-align: center;
-                margin-bottom: 10px;
-                margin-top: 10px;
+                  text-align: center;
+                  margin: 10px 0;
               }
 
-              .transcript-table {
-                table-layout: fixed;
-                width: 100%;
+              /* Table Styles */
+              table {
+                  width: 100%;
+                  border-collapse: separate;
+                  border-spacing: 1px;
+                  border: 1px ridge #ccc;
               }
 
-              .transcript-table td,
-              .transcript-table th {
-                word-wrap: break-word;
-                text-align: center; /* Add this line */
+              th, td {
+                  border: 2px ridge #ccc;
+                  padding: 4px;
+                  text-align: center; /* Ensure consistent text alignment */
+                  word-wrap: break-word;
               }
 
-              /* Watermark styles */
-              .watermark-container {
-                position: relative;
-              }
-
-              // .watermark-image {
-              //   position: absolute;
-              //   top: 60%;
-              //   left: 50%;
-              //   transform: translate(-50%, -50%);
-              //   width: 100%;
-              //   height: 100%;
-              //   opacity: 0.09; /* Adjust the opacity as needed */
-              //   z-index: -1;
-              // }
-
+              /* Watermark Styling */
               .watermark-image {
-                position: fixed; /* Use fixed position to make it centered on the page */
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 45%;
-                height: 75%;
-                opacity: 0.09; /* Adjust the opacity as needed */
-                z-index: -1;
+                  position: fixed;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  width: 45%;
+                  height: 75%;
+                  opacity: 0.07; /* Reduce opacity for a better effect */
+                  z-index: -1;
+                  pointer-events: none; /* Prevents interference */
+                  user-select: none;
               }
 
-            table {
-                border-collapse: separate;
-                border-spacing: 1px;
-                width: 100%;
-                border: 1px ridge #CCCCCC;
+              /* Page Container */
+              .page-container {
+                  padding: 10px;
               }
 
-              td {
-                border: 2px ridge #CCCCCC;
-                padding: 3px;
-                text-align: left;
+              /* Body Styling */
+              body {
+                  margin: 0;
+                  padding: 0;
               }
 
-              /* Add style for the page container to give it a border */
-            .page-container {
-              // margin: 25px;
-              // border: 0.7px solid #000; /* Set the border width and color for the page */
-              padding: 10px; /* Add some padding to create space around the content */
-              // height: auto;
-            }
-
-            /* Add style for the body element to remove any default margin and padding */
-            body {
-              margin: 0;
-              padding: 0;
-            }
 
           </style>
         </head>
@@ -211,9 +177,8 @@ export default {
       content += `
       <table>
         <tr>
-          <td style='font-size: 13px' colspan="2">NAME: ${
-            this.studentInfo.firstname.toUpperCase() + ' ' + this.studentInfo.lastname.toUpperCase()
-          }</td>
+          <td style='font-size: 13px' colspan="2">NAME: ${this.studentInfo.firstname.toUpperCase() + ' ' + this.studentInfo.lastname.toUpperCase()
+        }</td>
           <td style='font-size: 13px'>STUDENT NO: ${this.studentInfo.mat_number}</td>
         </tr>
         <tr>
@@ -235,9 +200,8 @@ export default {
               <thead>
                 <td style="font-size: 13px; background-color: #f0f0f0; text-align: left;"  colspan="8">YEAR: TWO</td>
                 <tr>
-                  <th style='font-size: 13px'>${
-                    transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
-                  }</th>
+                  <th style='font-size: 13px'>${transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
+            }</th>
                   <th style='font-size: 13px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
                   <th style='font-size: 13px'>CREDIT HOURS</th>
                   <th style='font-size: 13px'>GRADE</th>
@@ -251,9 +215,8 @@ export default {
             <table class="transcript-table">
               <thead>
                 <tr>
-                  <th style='font-size: 14px'>${
-                    transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
-                  }</th>
+                  <th style='font-size: 14px'>${transcript.SemesterSession.split(' ')[0] + ' ' + transcript.SemesterSession.split(' ')[1]
+            }</th>
                   <th style='font-size: 13px' colspan="4">SESSION: ${session.slice(1, -1)}</th>
                   <th style='font-size: 13px'>CREDIT HOURS</th>
                   <th style='font-size: 13px'>GRADE</th>
@@ -267,7 +230,7 @@ export default {
           content += `
               <tr>
                 <td style='font-size: 13px'>${course.CourseCode}</td>
-                <td colspan="4"  style='font-size: 13px; font-style: italic;'>${course.CourseName}</td>
+                <td colspan="4"  style='font-size: 13px;'>${course.CourseName}</td>
                 <td style='font-size: 13px'>3</td>
                 <td style='font-size: 13px'>${course.Grade}</td>
                 <td style='font-size: 13px'>${course.GradePoint}</td>
@@ -366,4 +329,3 @@ export default {
   },
 }
 </script>
-

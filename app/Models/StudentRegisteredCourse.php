@@ -25,6 +25,10 @@ class StudentRegisteredCourse extends Model
         'total_mark',
         'semester_course_id',
         'order',
+        'grade_point',
+        'assignment',
+        'test',
+        'letter_grade',
         'program_id'
     ];
 
