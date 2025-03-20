@@ -37,11 +37,15 @@
               <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                 <v-btn medium style="flex: 1 1 auto;" color="primary" @click="showStudent(item)">View</v-btn>
                 <v-btn medium style="flex: 1 1 auto;" color="green" @click="showprogram(item)">Edit Student</v-btn>
-       
+
               </div>
             </template>
             <template v-slot:[`item.fullname`]="{ item }">
-              <span style="font-size: small">{{ item.firstname + ' ' + item.lastname }} </span></template>
+              <span style="font-size: small">
+                {{ item.firstname + ' ' + (item.middlename ? item.middlename + ' ' : '') + item.lastname }}
+              </span>
+            </template>
+
 
             <template v-slot:[`item.program`]="{ item }">
               <span style="font-size: smaller">{{ item.program ? item.program.name : 'N/A' }}</span>
