@@ -212,7 +212,7 @@ export default {
 
               swal.fire({
                 title: "Error!",
-                text: "There was an error submitting your application.",
+                text: error.response.data.errors,
                 icon: "error",
                 confirmButtonColor: "#d33",
               });
