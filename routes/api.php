@@ -170,6 +170,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ///////////////////////////////////  REGISTRAR ADMIN END POINTS  ////////////////////////////
     Route::middleware(['registrar-admin-hod'])->group(function () {
         Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
+        Route::get('/view-accepted-per-semester/{id}', [ApplicationsController::class, 'acceptedApplicationsPerSemester']);
         Route::post('/view-accepted-application-detail', [ApplicationsController::class, 'viewAceptedApplicationDetails']);
         Route::post('/get-prog-dept', [ApplicationsController::class, 'getprogdept']);
         Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);

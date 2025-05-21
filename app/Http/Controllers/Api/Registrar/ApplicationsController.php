@@ -22,7 +22,7 @@ use App\Models\AdmissionCode;
 use App\Models\AdmissionCodeVerification;
 use Illuminate\Support\Facades\DB;
 
-
+use App\Models\Semester;
 
 class ApplicationsController extends Controller
 {
@@ -34,13 +34,15 @@ class ApplicationsController extends Controller
     public function acceptedApplications(Request $request)
     {
 
+        $currentsemester = Semester::where('is_current_semester', 1)->get()->first();
+
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
             ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
             // ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
             ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name', 'students.middlename')
-
             ->where('role_id', 4)
+            ->where('semester_name', $currentsemester->semester_name)
             ->where('application_completed', 1)->where('accepted', 'accepted')
             ->paginate(10);
         foreach ($students as $student) {
@@ -50,12 +52,14 @@ class ApplicationsController extends Controller
 
         return response()->json([
             'status' => 200,
-            'result' => $students
+            'result' => $students,
+            'semester' => $currentsemester->semester_name
         ]);
     }
 
     public function viewAceptedApplicationDetails(Request $request)
     {
+
 
         $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
             ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
@@ -79,6 +83,29 @@ class ApplicationsController extends Controller
     }
 
 
+    public function acceptedApplicationsPerSemester($id)
+    {
+        $currentsemester = Semester::where('semester_name', $id)->get()->first();
+
+        $students = User::leftJoin('students', 'users.id', '=', 'students.user_id')
+            ->leftJoin('admission_code_verifications', 'users.id', '=', 'admission_code_verifications.user_id')
+            ->leftJoin('programs', 'students.program_id', '=', 'programs.id') // Join the departments table
+            // ->select('users.*', 'students.gender',  'students.phonenumber',  'students.dob',  'students.address',  'students.nationality', 'students.email',  'students.employment_status', 'students.user_id', 'students.is_applicant', 'students.profile_image', 'programs.name as program_name', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at',)
+            ->select('users.*', 'students.gender', 'students.id AS studentId', 'students.phonenumber', 'students.dob', 'students.address', 'students.nationality', 'students.email', 'students.employment_status', 'students.user_id', 'students.is_applicant', 'programs.name as program_name', 'students.profile_image', 'students.application_completed', 'students.personal_info_completed', 'students.accepted', 'admission_code_verifications.verified_at', 'students.eme_name', 'students.eme_numbr', 'students.employee', 'students.empaddr', 'students.empcontact', 'students.semester_name', 'students.middlename')
+            ->where('role_id', 4)
+            ->where('semester_name', $currentsemester->semester_name)
+            ->where('application_completed', 1)->where('accepted', 'accepted')
+            ->paginate(10);
+        foreach ($students as $student) {
+            $student['education'] = ApplicantEducation::where('user_id', $student->id)->get();
+            $student['certificates'] = ApplicantCertificate::where('user_id', $student->id)->get();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'result' => $students,
+        ]);
+    }
     public function getprogdept(Request $request)
     {
 
@@ -340,7 +367,7 @@ class ApplicationsController extends Controller
                 'students.middlename'
             )
             ->where('role_id', 4)
-          
+
             ->where('application_completed', 1)->where('accepted', 'accepted')
             ->when($request->has('userId'), function ($query) use ($request) {
                 $query->where('users.id', $request->userId);
@@ -415,7 +442,8 @@ class ApplicationsController extends Controller
                     4 => 'students.lastname',
                     5 => 'students.email',
                     6 => 'students.semester_name',
-                ];;
+                ];
+                ;
 
                 if (isset($searchColumnMap[$request->selectedItem])) {
                     $query->where($searchColumnMap[$request->selectedItem], 'like', '%' . $request->advanceSearch . '%');
