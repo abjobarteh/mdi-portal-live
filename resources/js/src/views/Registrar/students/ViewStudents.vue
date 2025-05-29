@@ -9,6 +9,12 @@
           <v-btn icon @click="showSearchDialog">
             <fas icon="search"></fas>
           </v-btn>
+          <v-spacer></v-spacer>
+
+          <v-select v-model="selectedSemester" :items="programs" item-value="id" item-text="name"
+            label="Select To View All Students Under Program" dense hide-details solo-inverted flat class="mx-3"
+            style="max-width: 500px" @change="onSemesterChange"></v-select>
+
           <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
           <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
         </v-toolbar>
@@ -103,6 +109,7 @@ export default {
       editstudentprog: false,
       searchDialog: false,
       selectedItem: null,
+      selectedSemester: null,
       deptcourses: [],
       depts: [],
       studentid: '',
@@ -168,11 +175,18 @@ export default {
       // Update the label with the text associated with the selected value
       this.advanceSearchLabel = selectedItemObject ? 'search by ' + selectedItemObject.text.toLowerCase() : ''
     },
+    selectedSemester(newValue) {
+      if (!newValue) {
+        this.page = 1
+        this.getResults()
+      }
+    }
   },
 
   created() {
     this.setupValidation()
     this.getResults()
+    this.fetchSemesters()
   },
   computed: {
     // Add a computed property to map the acceptance status
@@ -189,6 +203,92 @@ export default {
     }
   },
   methods: {
+    fetchSemesters() {
+      axios.get('/api/get-programs')
+        .then(response => {
+          this.programs = response.data.result.data
+        })
+        .catch(err => {
+          console.error('Error fetching semesters:', err)
+        })
+    },
+
+    onSemesterChange() {
+      this.page = 1
+      this.fetchSemesterResults()
+    },
+    fetchSemesterResults() {
+      axios.get(`/api/view-students-per-program/${this.selectedSemester}?page=${this.page}`)
+        .then(response => {
+          this.students = response.data.result.data
+          this.pageCount = response.data.result.last_page
+
+          if (this.students.length > 0) {
+            swal
+              .fire({
+                title: "Filter Complete",
+                text: "Do you want to export the filtered results to Excel?",
+                icon: "info",
+                buttons: {
+                  cancel: "No",
+                  confirm: {
+                    text: "Yes, export",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary",
+                    closeModal: true
+                  }
+                }
+              }).then((willExport) => {
+                if (willExport) {
+                  axios.get(`/api/export-students-per-program/${this.selectedSemester}`, {
+                    responseType: 'blob'
+                  })
+                    .then(response => {
+                      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+                      let programName = 'Program';
+                      if (this.students.length > 0 && this.students[0].program?.name) {
+                        programName = this.students[0].program.name.replace(/\s+/g, '_');
+                      }
+
+                      const filename = `ALL STUDENTS TAKING ${programName}.xlsx`;
+
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.setAttribute('download', filename);
+                      document.body.appendChild(link);
+                      link.click();
+                      link.remove();
+                      window.URL.revokeObjectURL(url);
+                      swal.fire({
+                        title: 'Success!',
+                        text: 'Students exported successfully',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                      })
+
+                    })
+                    .catch(error => {
+                      console.error('Error exporting students:', error)
+                    })
+
+                  //this.exportResults()
+                }
+              })
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching semester data:', error)
+          this.students = []
+          this.pageCount = 0
+        })
+    }
+    ,
+    exportResults() {
+      const exportUrl = `/api/export-students-per-program/${this.selectedSemester}`
+      window.location.href = exportUrl
+    },
     showSearchDialog() {
       this.searchDialog = true
     },

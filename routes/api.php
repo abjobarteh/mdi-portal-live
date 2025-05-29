@@ -171,6 +171,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['registrar-admin-hod'])->group(function () {
         Route::post('/view-accepted-applications', [ApplicationsController::class, 'acceptedApplications']);
         Route::get('/view-accepted-per-semester/{id}', [ApplicationsController::class, 'acceptedApplicationsPerSemester']);
+        Route::get('view-students-per-program/{id}', [ApplicationsController::class, 'studentsPerProgram']);
+                Route::get('export-students-per-program/{id}', [ApplicationsController::class, 'exportstudentsPerProgram']);
         Route::post('/view-accepted-application-detail', [ApplicationsController::class, 'viewAceptedApplicationDetails']);
         Route::post('/get-prog-dept', [ApplicationsController::class, 'getprogdept']);
         Route::post('/view-rejected-applications', [ApplicationsController::class, 'rejectedApplications']);
@@ -298,7 +300,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/remove-course-lect', [SemesterCourseController::class, 'removelectcourse']);  // hod also needs this
         Route::post('/allocate-semester-available-courses', [SemesterCourseController::class, 'allocateSemesterCourses']);
         Route::post('/deallocate-lecturer-courses', [SemesterCourseController::class, 'deallocateLecturerCourses']);
-
+       
         Route::post('/add-location', [LocationController::class, 'store']);
         Route::post('/update-location/{id}', [LocationController::class, 'update']);
         Route::post('/delete-location/{id}', [LocationController::class, 'destroy']);

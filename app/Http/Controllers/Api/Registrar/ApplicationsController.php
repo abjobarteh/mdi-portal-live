@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers\Api\Registrar;
 
-use App\Http\Controllers\Controller;
-use App\Mail\EnrollmentApplicationEmail;
+use App\Exports\StudentsProgramExport;
 use App\Http\ConditionalApplicationEmail;
+use App\Http\Controllers\Controller;
 use App\Mail\AcceptedApplicationEmail;
+use App\Mail\EnrollmentApplicationEmail;
+use App\Mail\LecturerAnnounceMail;
 use App\Mail\RejectedApplicationEmail;
 use App\Mail\RevertApplicationMail;
+use App\Mail\StudentAnounceMail;
+use App\Models\AdmissionCode;
+use App\Models\AdmissionCodeVerification;
 use App\Models\ApplicantCertificate;
 use App\Models\ApplicantEducation;
 use App\Models\Lecturer;
+use App\Models\Program;
+use App\Models\Semester;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\StudentAnounceMail;
-use App\Mail\LecturerAnnounceMail;
-use App\Models\AdmissionCode;
-use App\Models\AdmissionCodeVerification;
-use Illuminate\Support\Facades\DB;
 
-use App\Models\Semester;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ApplicationsController extends Controller
 {
@@ -82,6 +86,22 @@ class ApplicationsController extends Controller
         ]);
     }
 
+
+    public function studentsPerProgram($id)
+    {
+        $query = Student::with('payments.semester', 'department')->where('accepted', 'accepted')->where('program_id', $id);
+        $courses = $query->paginate(13);
+        return response()->json([
+            'status' => 200,
+            'result' => $courses
+        ]);
+    }
+
+    public function exportstudentsPerProgram($id)
+    {
+        $program = Program::findOrFail($id);
+       return Excel::download(new StudentsProgramExport($id), 'ALL STUDENTS TAKING '.strtoupper($program->name).'.xlsx');
+    }
 
     public function acceptedApplicationsPerSemester($id)
     {
@@ -330,7 +350,6 @@ class ApplicationsController extends Controller
             'status' => 200,
             'result' => $students
         ]);
-
     }
 
 
@@ -392,7 +411,6 @@ class ApplicationsController extends Controller
             'status' => 200,
             'result' => $students
         ]);
-
     }
 
 
@@ -442,8 +460,7 @@ class ApplicationsController extends Controller
                     4 => 'students.lastname',
                     5 => 'students.email',
                     6 => 'students.semester_name',
-                ];
-                ;
+                ];;
 
                 if (isset($searchColumnMap[$request->selectedItem])) {
                     $query->where($searchColumnMap[$request->selectedItem], 'like', '%' . $request->advanceSearch . '%');
@@ -455,7 +472,6 @@ class ApplicationsController extends Controller
             'status' => 200,
             'result' => $students
         ]);
-
     }
 
     public function new(Request $request)
@@ -503,7 +519,6 @@ class ApplicationsController extends Controller
             'status' => 200,
             'result' => 'Student Can Now Apply For A New Program',
         ]);
-
     }
 
     public function lecturerannouncement(Request $request)
