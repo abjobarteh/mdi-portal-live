@@ -12,8 +12,8 @@
           <v-spacer></v-spacer>
 
           <v-select v-model="selectedSemester" :items="programs" item-value="id" item-text="name"
-            label="Select To View All Students Under Program" dense hide-details solo-inverted flat class="mx-3"
-            style="max-width: 500px" @change="onSemesterChange"></v-select>
+            label="Select To View And Export All Students Under Program" dense hide-details solo-inverted flat class="mx-3"
+            style="max-width: 1000px" @change="onSemesterChange"></v-select>
 
           <v-btn color="purple darken-2" small class="white--text" @click="exportToExcel">Export to Excel</v-btn>
           <v-btn color="red" small class="white--text" @click="announce">Announcements</v-btn>
