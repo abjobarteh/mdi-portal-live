@@ -28,7 +28,7 @@
             <v-file-input v-model="applicantPersonalInfoData.profile_image" @change="handleImageUpload"></v-file-input>
           </v-col>
 
-        
+
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
@@ -141,7 +141,7 @@
                 <span class="required-field">Emergency Contact Number</span>
               </template></v-text-field>
             <span v-if="errors.EmergencyContactNumber" class="error-message">{{ errors.EmergencyContactNumber[0]
-            }}</span>
+              }}</span>
           </v-col>
         </v-row>
 
@@ -164,6 +164,8 @@ export default {
       showemployee: false,
       applicantPersonalInfoData: {
         middlename: '',
+        firstname: '',
+        lastname: '',
         employeename: '',
         employeeadresss: '',
         employeecontact: '',

@@ -70,7 +70,8 @@ class ApplicantPersonalInfoController extends Controller
 
         $studentData = [
             'firstname' => $request->get('firstname'),
-            'middlename' => $request->get('lastname'),
+            'lastname' => $request->get('lastname'),
+            'middlename' => $request->get('middlename'),
             'gender' => $request->get('gender'),
             'dob' => $request->get('dob'),
             'marital_status' => $request->get('marital_status'),
